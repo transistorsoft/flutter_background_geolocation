@@ -1,6 +1,6 @@
-# flutter_background_geolocation
+# flutter_background_geolocation (Coming sooon)
 
-A new flutter package project.
+Advanced background location-tracking and geofencing plugin with automatic motion-based tracking.
 
 ## Getting Started
 
