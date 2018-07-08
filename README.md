@@ -1,6 +1,6 @@
 # flutter_background_geolocation (Coming August 2018)
 
-Advanced background location-tracking and geofencing plugin with automatic motion-based tracking.
+Advanced background location-tracking and geofencing plugin with automatic motion-based tracking.  A Flutter implementation of [background-geolocation](https://github.com/transistorsoft/background-geolocation-lt)
 
 ## Getting Started
 
