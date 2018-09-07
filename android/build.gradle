@@ -1,0 +1,54 @@
+group 'com.transistorsoft.flutter.backgroundgeolocation'
+version '1.0-SNAPSHOT'
+
+def DEFAULT_COMPILE_SDK_VERSION     = 27
+def DEFAULT_PLAY_SERVICES_VERSION   = "15.0.1"
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.1.2'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven {
+            url "./libs"
+        }
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
+
+    defaultConfig {
+        minSdkVersion 16
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+}
+
+dependencies {
+    def googlePlayServicesVersion = (rootProject.hasProperty('googlePlayServicesVersion')) ? rootProject.ext.googlePlayServicesVersion : DEFAULT_PLAY_SERVICES_VERSION
+    
+    implementation fileTree(include: '*.aar', dir: 'libs')
+    implementation "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation 'org.slf4j:slf4j-api:1.7.21'
+    implementation 'com.github.tony19:logback-android:1.1.1-9'
+    // android-permissions
+    implementation 'com.intentfilter:android-permissions:0.1.6'
+
+}
