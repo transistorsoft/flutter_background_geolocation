@@ -49,7 +49,7 @@ class Sensors {
 }
 
 class BackgroundGeolocation {
-  // MethodChanne
+  // MethodChannel
   static const MethodChannel _methodChannel = const MethodChannel(METHOD_CHANNEL_NAME);
   // EventChannels
   static const EventChannel _eventChannelMotionChange = const EventChannel(EVENT_CHANNEL_MOTIONCHANGE);
@@ -66,7 +66,7 @@ class BackgroundGeolocation {
   static const EventChannel _eventChannelEnabledChange = const EventChannel(EVENT_CHANNEL_ENABLEDCHANGE);
   // Event Subscriptions
   static List<Subscription> _subscriptions = new List();
-
+  // Stream Listeners
   static Stream<Location>                 _eventsLocation;
   static Stream<Location>                 _eventsMotionChange;
   static Stream<ActivityChangeEvent>      _eventsActivityChange;
@@ -96,7 +96,7 @@ class BackgroundGeolocation {
   }
   
   static Future<BGState> reset([BGConfig config]) async {
-    Map state = await _methodChannel.invokeMethod('reset', config.toMap());
+    Map state = await _methodChannel.invokeMethod('reset', (config != null) ? config.toMap() : null);
     return new BGState(state);
   }
 
@@ -146,29 +146,24 @@ class BackgroundGeolocation {
     Map<String, dynamic> extras
   }) async {
     Map<String,dynamic> options = {};
-    if (timeout != null) options['timeout'] = timeout;
-    if (maximumAge != null) options['maximumAge'] = maximumAge;
-    if (persist != null) options['persist'] = persist;
-    if (desiredAccuracy != null) options['desiredAccuracy'] = desiredAccuracy;
-    if (extras != null) options['extras'] = extras;
+    if (timeout != null)          options['timeout'] = timeout;
+    if (maximumAge != null)       options['maximumAge'] = maximumAge;
+    if (persist != null)          options['persist'] = persist;
+    if (desiredAccuracy != null)  options['desiredAccuracy'] = desiredAccuracy;
+    if (extras != null)           options['extras'] = extras;
 
-    Completer completer = new Completer();
+    Map data = await _methodChannel.invokeMethod('getCurrentPosition', options);
 
-    _methodChannel.invokeMethod('getCurrentPosition', options).then((dynamic data) {
-      completer.complete(new Location(data));
-    }).catchError((e) {
-      completer.completeError(e);
-    });
-    return await completer.future;
-
+    return new Location(data);
   }
 
   static Future<double> getOdometer() async {
     return await _methodChannel.invokeMethod('getOdometer');
   }
 
-  static Future<bool> setOdometer(double value) async {
-    return await _methodChannel.invokeMethod('setOdometer', value);
+  static Future<Location> setOdometer(double value) async {
+    Map data = await _methodChannel.invokeMethod('setOdometer', value);
+    return new Location(data);
   }
   static Future<String> platformVersion() async {
     return await _methodChannel.invokeMethod('getPlatformVersion');
@@ -205,12 +200,7 @@ class BackgroundGeolocation {
   }
 
   static Future<bool> addGeofences(List<Geofence>geofences) async {
-    List<Map<String, dynamic>> rs = [];
-
-    geofences.forEach((Geofence geofence) {
-      rs.add(geofence.toMap());
-    });
-
+    List<Map<String,dynamic>> rs = geofences.map((Geofence geofence) => geofence.toMap());
     return await _methodChannel.invokeMethod('addGeofences', rs);
   }
 
@@ -222,29 +212,21 @@ class BackgroundGeolocation {
     return await _methodChannel.invokeMethod('removeGeofences');
   }
 
-  static Future<List> getGeofences() async {
-    Completer completer = new Completer();
-
-    _methodChannel.invokeMethod('getGeofences').then((dynamic geofences) {
-      List<Geofence> rs = [];
-      geofences.forEach((Map<String,dynamic> data) {
-        rs.add(new Geofence(
-            identifier: data['identifier'],
-            radius: data['radius'],
-            latitude: data['latitude'],
-            longitude: data['longitude'],
-            notifyOnEntry: data['notifyOnEntry'],
-            notifyOnExit: data['notifyOnExit'],
-            notifyOnDwell: data['notifyOnDwell'],
-            loiteringDelay: data['loiteringDelay'],
-            extras: data['extras']
-        ));
-      });
-      completer.complete(rs);
-    }).catchError((e) {
-      completer.completeError(e);
+  static Future<List<Geofence>> getGeofences() async {
+    List<dynamic> geofences = await _methodChannel.invokeMethod('getGeofences');
+    return geofences.map((dynamic data) {
+      return new Geofence(
+          identifier: data['identifier'],
+          radius: data['radius'],
+          latitude: data['latitude'],
+          longitude: data['longitude'],
+          notifyOnEntry: data['notifyOnEntry'],
+          notifyOnExit: data['notifyOnExit'],
+          notifyOnDwell: data['notifyOnDwell'],
+          loiteringDelay: data['loiteringDelay'],
+          extras: data['extras']
+      );
     });
-    return completer.future;
   }
 
   /**

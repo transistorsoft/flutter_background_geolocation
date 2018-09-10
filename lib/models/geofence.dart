@@ -8,7 +8,7 @@ class Geofence {
   bool notifyOnEntry;
   bool notifyOnExit;
   bool notifyOnDwell;
-  double loiteringDelay;
+  int loiteringDelay;
   Map<String, dynamic> extras;
 
   Geofence({
@@ -19,7 +19,7 @@ class Geofence {
     bool notifyOnEntry,
     bool notifyOnExit,
     bool notifyOnDwell,
-    double loiteringDelay,
+    int loiteringDelay,
     Map<String, dynamic> extras
   }) {
     this.identifier = identifier;
@@ -29,7 +29,7 @@ class Geofence {
     this.notifyOnEntry = notifyOnEntry;
     this.notifyOnExit = notifyOnExit;
     this.notifyOnDwell = notifyOnDwell;
-    this.loiteringDelay = (loiteringDelay != null) ? loiteringDelay*1.0 : 0.0;
+    this.loiteringDelay = loiteringDelay;
     this.extras = extras;
   }
 

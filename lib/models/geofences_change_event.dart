@@ -9,6 +9,10 @@ class GeofencesChangeEvent {
     this.on = new List<Geofence>();
 
     on.forEach((dynamic data) {
+      dynamic loiteringDelay = data['loiteringDelay'];
+      if (loiteringDelay.runtimeType == double) {
+        loiteringDelay = loiteringDelay.toInt();
+      }
       this.on.add(new Geofence(
         identifier: data['identifier'],
         radius: data['radius']*1.0,
@@ -17,7 +21,7 @@ class GeofencesChangeEvent {
         notifyOnEntry: data['notifyOnEntry'],
         notifyOnExit: data['notifyOnExit'],
         notifyOnDwell: data['notifyOnDwell'],
-        loiteringDelay: data['loiteringDelay']*1.0
+        loiteringDelay: loiteringDelay
       ));
     });
   }

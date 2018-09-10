@@ -1,21 +1,5 @@
 #import "FLTBackgroundGeolocationPlugin.h"
 
-#import "MotionChangeStreamHandler.h"
-#import "LocationStreamHandler.h"
-#import "ActivityChangeStreamHandler.h"
-#import "ProviderChangeStreamHandler.h"
-#import "GeofenceStreamHandler.h"
-#import "GeofencesChangeStreamHandler.h"
-#import "HeartbeatStreamHandler.h"
-#import "HttpStreamHandler.h"
-#import "ScheduleStreamHandler.h"
-#import "PowerSaveChangeStreamHandler.h"
-#import "ConnectivityChangeStreamHandler.h"
-#import "EnabledChangeStreamHandler.h"
-
-#import <CoreLocation/CoreLocation.h>
-#import <UIKit/UIKit.h>
-
 static NSString *const PLUGIN_PATH = @"com.transistorsoft/flutter_background_geolocation";
 static NSString *const METHOD_CHANNEL_NAME      = @"methods";
 
@@ -72,7 +56,7 @@ static NSString *const ACTION_PLAY_SOUND = @"playSound";
     [HttpStreamHandler register:registrar];
     [ScheduleStreamHandler register:registrar];
     [GeofencesChangeStreamHandler register:registrar];
-    [GeofencesChangeStreamHandler register:registrar];
+    [GeofenceStreamHandler register:registrar];
     [HeartbeatStreamHandler register:registrar];
     [PowerSaveChangeStreamHandler register:registrar];
     [ConnectivityChangeStreamHandler register:registrar];

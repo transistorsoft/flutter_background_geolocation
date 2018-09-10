@@ -90,13 +90,15 @@ class _MyAppState extends State<MyApp> {
     BackgroundGeolocation.onPowerSaveChange((bool enabled) {
       print('********* [powersavechange] enabled? ' + enabled.toString());
     });
-
+    
     //BackgroundGeolocation.removeListener(myCallback);
     //BackgroundGeolocation.removeListeners();
 
     BGConfig config = new BGConfig(
         reset: true,
         distanceFilter: 10.0,
+        stopOnTerminate: false,
+        startOnBoot: true,
         debug: true,
         logLevel: 5
     );
@@ -166,7 +168,7 @@ class _MyAppState extends State<MyApp> {
     BackgroundGeolocation.getCurrentPosition(
       persist: true,
       desiredAccuracy: 0,
-      timeout: 0,
+      timeout: 10000,
       samples: 3
     ).then((Location location) {
       print('[getCurrentPosition] - ' + location.toString());
@@ -175,15 +177,29 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _onClickGetOdometer() async {
+    double odometer = await BackgroundGeolocation.getOdometer() / 1000;
+    print ('[getOdometer] $odometer km');
+  }
+
+  void _onClickResetOdometer() async {
+    Location location = await BackgroundGeolocation.setOdometer(0.0);
+    print('[resetOdometer] - $location');
+    _onClickGetOdometer()
+  }
+
   void _onClickSetConfig() {
-    BackgroundGeolocation.setConfig(new BGConfig(
-      distanceFilter: 100.0,
-      stopTimeout: 1.0,
-      debug: true,
-      logLevel: 5
-    )).then((BGState state) {
+    BGConfig config = new BGConfig(
+        distanceFilter: 100.0,
+        stopTimeout: 1,
+        debug: true,
+        logLevel: 5,
+        geofenceProximityRadius: 1001
+    );
+    BackgroundGeolocation.setConfig(config).then((BGState state) {
       print('[setConfig] success: ' + state.distanceFilter.toString());
     }).catchError((error) {
+
       print('[setConfig] ERROR: ' + error.toString());
     });
   }
@@ -196,8 +212,9 @@ class _MyAppState extends State<MyApp> {
     });
 
     BackgroundGeolocation.reset(new BGConfig(
+      desiredAccuracy: BGConfig.DESIRED_ACCURACY_NAVIGATION,
       distanceFilter:1.0,
-      logLevel: 5,
+      logLevel: BGConfig.LOG_LEVEL_VERBOSE,
       debug:true
     )).then((BGState state) {
       print('[reset] success - distanceFilter: ' + state.distanceFilter.toString());
@@ -206,6 +223,10 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _onClickGetState() async {
+    BGState state = await BackgroundGeolocation.getState();
+    print('[getState] ' + state.map.toString());
+  }
   void _onClickGetCount() {
     BackgroundGeolocation.getCount().then((int count) {
       print('[getCount] - ' + count.toString());
@@ -299,6 +320,12 @@ class _MyAppState extends State<MyApp> {
             ),
             new Row(
               children: <Widget>[
+                new RaisedButton(onPressed: _onClickGetOdometer, child: new Text('getOdometer')),
+                new RaisedButton(onPressed: _onClickResetOdometer, child: new Text('resetOdometer'))
+              ]
+            ),
+            new Row(
+              children: <Widget>[
                 new RaisedButton(
                   onPressed: _onClickSetConfig,
                   child: new Text('setConfig')
@@ -306,6 +333,10 @@ class _MyAppState extends State<MyApp> {
                 new RaisedButton(
                   onPressed: _onClickReset,
                   child: new Text('reset')
+                ),
+                new RaisedButton(
+                  onPressed: this._onClickGetState,
+                  child: new Text('getState')
                 )
               ]
             ),
@@ -325,19 +356,20 @@ class _MyAppState extends State<MyApp> {
                 )
               ],
             ),
+            new Text('Geofences'),
             new Row(
                 children: <Widget>[
                   new RaisedButton(
                       onPressed: _onClickAddGeofence,
-                      child: new Text('addGeofence')
+                      child: new Text('add')
                   ),
                   new RaisedButton(
                       onPressed: _onClickRemoveGeofence,
-                      child: new Text('removeGeofence')
+                      child: new Text('remove')
                   ),
                   new RaisedButton(
                       onPressed: _onClickRemoveGeofences,
-                      child: new Text('removeGeofences')
+                      child: new Text('remove all')
                   )
                 ]
             )

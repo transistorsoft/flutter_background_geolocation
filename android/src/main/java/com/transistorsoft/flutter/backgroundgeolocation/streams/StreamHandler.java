@@ -31,5 +31,4 @@ class StreamHandler implements EventChannel.StreamHandler{
     public void onCancel(Object args) {
         BackgroundGeolocation.getInstance(mContext).removeListener(mEvent, this);
     }
-
 }
