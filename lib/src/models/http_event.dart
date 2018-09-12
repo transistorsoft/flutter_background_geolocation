@@ -10,4 +10,12 @@ class HttpEvent {
     this.status = params['status'];
     this.responseText = params['responseText'];
   }
+
+  Map<String,dynamic> toMap() {
+    return {
+      'success': success,
+      'status': status,
+      'responseText': responseText
+    };
+  }
 }

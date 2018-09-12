@@ -93,4 +93,8 @@ class Location {
   String toString() {
     return '[Location ' + this.map.toString() + ']';
   }
+
+  Map toMap() {
+    return map;
+  }
 }

@@ -11,4 +11,13 @@ class ProviderChangeEvent {
   String toString() {
     return '[ProviderChangeEvent enabled:$enabled, status: $status, network: $network, gps: $gps]';
   }
+
+  Map<String,dynamic> toMap() {
+    return {
+      'enabled': enabled,
+      'status': status,
+      'network': network,
+      'gps': gps
+    };
+  }
 }

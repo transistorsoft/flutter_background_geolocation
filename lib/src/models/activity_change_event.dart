@@ -9,4 +9,11 @@ class ActivityChangeEvent {
   String toString() {
     return "[ActivityChangeEvent " + this.activity.toString() + " (" + this.confidence.toString() + "%)]";
   }
+
+  Map<String,dynamic> toMap() {
+    return {
+      'activity': activity,
+      'confidence': confidence
+    };
+  }
 }
