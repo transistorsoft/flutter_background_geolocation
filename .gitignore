@@ -5,3 +5,8 @@
 .packages
 .pub/
 packages
+*.iml
+pubspec.lock
+build/
+ios/.generated
+

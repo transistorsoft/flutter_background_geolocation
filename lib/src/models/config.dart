@@ -1,6 +1,6 @@
 part of flt_background_geolocation;
 
-class BGConfig {
+class Config {
   static const int LOG_LEVEL_OFF     =  0;
   static const int LOG_LEVEL_ERROR   =  1;
   static const int LOG_LEVEL_WARNING =  2;
@@ -26,6 +26,12 @@ class BGConfig {
   static const int NOTIFICATION_PRIORITY_LOW           =-1;
   static const int NOTIFICATION_PRIORITY_MAX           = 2;
   static const int NOTIFICATION_PRIORITY_MIN           =-2;
+
+  // For iOS #activityType
+  static const int ACTIVITY_TYPE_OTHER                 = 1;
+  static const int ACTIVITY_TYPE_AUTOMOTIVE_NAVIGATION = 2;
+  static const int ACTIVITY_TYPE_FITNESS               = 3;
+  static const int ACTIVITY_TYPE_OTHER_NAVIGATION      = 4;
 
   ////
   // Common Options
@@ -124,7 +130,7 @@ class BGConfig {
   String notificationLargeIcon;
   String notificationChannelName;
 
-  BGConfig({
+  Config({
     // Geolocation Options
     this.desiredAccuracy,
     this.distanceFilter,
@@ -316,7 +322,7 @@ class BGConfig {
   }
 }
 
-class BGState extends BGConfig {
+class State extends Config {
   Map map;
   // State
   bool enabled;
@@ -324,7 +330,7 @@ class BGState extends BGConfig {
   double odometer;
   int trackingMode;
 
-  BGState(dynamic data):super(
+  State(dynamic data):super(
     // Common Options
     desiredAccuracy: (data['desiredAccuracy'].runtimeType == double) ? data['desiredAccuracy'].round() : data['desiredAccuracy'],
     distanceFilter: data['distanceFilter'],

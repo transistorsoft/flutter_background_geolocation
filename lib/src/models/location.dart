@@ -46,6 +46,7 @@ class Activity {
 
 
 class Location {
+
   dynamic map;
   String timestamp;
   String event;
@@ -73,9 +74,8 @@ class Location {
     this.uuid = params['uuid'];
     this.odometer = params['odometer']*1.0;
 
-    if (params['sample'] != null) {
-      this.sample = params['sample'];
-    }
+    this.sample = (params['sample'] != null) ? params['sample'] : false;
+
     if (params['event'] != null) {
       this.event = params['event'];
     }
