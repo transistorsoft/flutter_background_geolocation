@@ -1,5 +1,8 @@
 part of flt_background_geolocation_example;
 
+// For pretty-printing location JSON
+JsonEncoder encoder = new JsonEncoder.withIndent("     ");
+
 class HomeView extends StatefulWidget {
   @override
   State createState() => HomeViewState();
@@ -8,106 +11,84 @@ class HomeView extends StatefulWidget {
 class HomeViewState extends State<HomeView> {
   bool _isMoving;
   bool _enabled;
-  double _odometer;
+  String _motionActivity;
+  String _odometer;
+  String _content;
 
   @override
   void initState() {
-    super.initState();
+    _isMoving = false;
+    _enabled = false;
+    _content = '';
+    _motionActivity = 'UNKNOWN';
+    _odometer = '0';
 
-    bg.BackgroundGeolocation.onMotionChange((bg.Location location) {
-      print("[motionchange] - " + location.toString());
-      _isMoving = location.isMoving;
-    });
+    initPlatformState();
+  }
 
-    bg.BackgroundGeolocation.onLocation((bg.Location location) {
-      print("[location] - " + location.toString());
-      if (!location.sample) {
-        _odometer = location.odometer;
-      }
-    });
+  Future<Null> initPlatformState() async {
+    Map deviceParams = await bg.Config.deviceParams;
 
-    bg.BackgroundGeolocation.onActivityChange((bg.ActivityChangeEvent event) {
-      print('$event');
-    });
+    // 1.  Listen to events (See docs for all 12 available events).
+    bg.BackgroundGeolocation.onLocation(_onLocation);
+    bg.BackgroundGeolocation.onMotionChange(_onMotionChange);
+    bg.BackgroundGeolocation.onActivityChange(_onActivityChange);
+    bg.BackgroundGeolocation.onProviderChange(_onProviderChange);
+    bg.BackgroundGeolocation.onConnectivityChange(_onConnectivityChange);
 
-    bg.BackgroundGeolocation.onGeofence((bg.GeofenceEvent event) {
-      print('$event');
-    });
-
-    bg.BackgroundGeolocation.onGeofencesChange((bg.GeofencesChangeEvent event) {
-      print('$event');
-    });
-
-    bg.BackgroundGeolocation.onHeartbeat((bg.HeartbeatEvent event) {
-      print('$event');
-    });
-
-    bg.BackgroundGeolocation.onProviderChange((bg.ProviderChangeEvent event) {
-      print('$event');
-    });
-
-    bg.BackgroundGeolocation.onConnectivityChange((bg.ConnectivityChangeEvent event) {
-      print('$event');
-    });
-
-    bg.BackgroundGeolocation.onEnabledChange((bool enabled) {
-      print('[enabledchange] - ' + enabled.toString());
-      _enabled = enabled;
-    });
-
-    bg.BackgroundGeolocation.onPowerSaveChange((bool enabled) {
-      print('[powersavechange] - ' + enabled.toString());
-    });
-
-    bg.Config config = new bg.Config(
-        reset: true,
-        distanceFilter: 50.0,
-        activityType: bg.Config.ACTIVITY_TYPE_OTHER,
-        stopTimeout: 1,
+    // 2.  Configure the plugin
+    bg.BackgroundGeolocation.ready(bg.Config(
+        desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
+        distanceFilter: 10.0,
         stopOnTerminate: false,
         startOnBoot: true,
-        foregroundService: true,
-        notificationChannelName: 'Background Geolocation',
-        notificationTitle: 'Flutter Background Geolocation',
         debug: true,
-        logLevel: bg.Config.LOG_LEVEL_VERBOSE
-    );
-
-    bg.BackgroundGeolocation.ready(config).then((bg.State state) {
-      print("[ready] success -" + state.toString());
-
+        autoSync: true,
+        url: 'http://tracker.transistorsoft.com/locations/transistor-flutter',
+        params: deviceParams,
+        logLevel: bg.Config.LOG_LEVEL_VERBOSE,
+        reset: true
+    )).then((bg.State state) {
       setState(() {
         _enabled = state.enabled;
         _isMoving = state.isMoving;
       });
     });
   }
+  void _onClickMenu() async {
+    int soundId = defaultTargetPlatform == TargetPlatform.android ? 89 : 1104;
+    bg.BackgroundGeolocation.playSound(soundId);
+  }
 
-  void _onClickEnable(bool enabled) {
-    print("- onClickEnable: " + enabled.toString());
-    setState(() {
-      _enabled = enabled;
-    });
+  void _onClickEnable(enabled) {
     if (enabled) {
-      bg.BackgroundGeolocation.start();
+      bg.BackgroundGeolocation.start().then((bg.State state) {
+        print('[start] success $state');
+        setState(() {
+          _enabled = state.enabled;
+          _isMoving = state.isMoving;
+        });
+      });
     } else {
-      bg.BackgroundGeolocation.stop();
+      bg.BackgroundGeolocation.setOdometer(0.0);
+      bg.BackgroundGeolocation.stop().then((bg.State state) {
+        print('[stop] success: $state');
+        // Reset odometer.
+        setState(() {
+          _odometer = '0.0';
+          _enabled = state.enabled;
+          _isMoving = state.isMoving;
+        });
+      });
     }
   }
-  void _onClickMenu() {
-    print("- onClickMenu");
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SettingsView())
-    );
-  }
 
+  // Manually toggle the tracking state:  moving vs stationary
   void _onClickChangePace() {
-    print("- onClickChangePace -> !$_isMoving");
-
     setState(() {
       _isMoving = !_isMoving;
     });
+    print("[onClickChangePace] -> $_isMoving");
 
     bg.BackgroundGeolocation.changePace(_isMoving).then((bool isMoving) {
       print('[changePace] success $isMoving');
@@ -116,142 +97,104 @@ class HomeViewState extends State<HomeView> {
     });
   }
 
+  // Manually fetch the current position.
   void _onClickGetCurrentPosition() {
-
     bg.BackgroundGeolocation.getCurrentPosition(
-        persist: true,
-        desiredAccuracy: 0,
-        timeout: 30000,
-        samples: 3
+        persist: false,     // <-- do not persist this location
+        desiredAccuracy: 0, // <-- desire best possible accuracy
+        timeout: 30000,     // <-- wait 30s before giving up.
+        samples: 3          // <-- sample 3 location before selecting best.
     ).then((bg.Location location) {
-      print('[getCurrentPosition] - ' + location.toString());
+      print('[getCurrentPosition] - $location');
     }).catchError((error) {
-      print('[getCurrentPosition] ERROR: ' + error.code);
+      print('[getCurrentPosition] ERROR: $error');
     });
+  }
+
+  ////
+  // Event handlers
+  //
+
+  void _onLocation(bg.Location location) {
+    print('[location] - $location');
+
+    String odometerKM = (location.odometer / 1000.0).toStringAsFixed(1);
+
+    setState(() {
+      _content = encoder.convert(location.toMap());
+      _odometer = odometerKM;
+    });
+  }
+
+  void _onMotionChange(bg.Location location) {
+    print('[motionchange] - $location');
+  }
+
+  void _onActivityChange(bg.ActivityChangeEvent event) {
+    print('[activitychange] - $event');
+    setState(() {
+      _motionActivity = event.activity;
+    });
+  }
+
+  void _onProviderChange(bg.ProviderChangeEvent event) {
+    print('$event');
+
+    setState(() {
+      _content = encoder.convert(event.toMap());
+    });
+  }
+
+  void _onConnectivityChange(bg.ConnectivityChangeEvent event) {
+    print('$event');
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-          title: const Text('Background Geolocation'),
-          actions: <Widget>[
-            new Switch(
-              value: _enabled,
-              onChanged: _onClickEnable,
-              activeColor: COLOR_GREEN,
-            ),
 
-          ]
+    Widget body = (defaultTargetPlatform == TargetPlatform.iOS)
+        ? SingleChildScrollView(child: Text('$_content'))
+        : new MapView();
+
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Background Geolocation'),
+        actions: <Widget>[
+          Switch(
+            value: _enabled,
+            onChanged: _onClickEnable
+          ),
+        ]
       ),
-
-      body: MapView(),
+      body: body,
       bottomNavigationBar: BottomAppBar(
-          color: Theme.of(context).bottomAppBarColor,
-          child: Container(
-            padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-            child: new Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.gps_fixed),
-                    onPressed: _onClickGetCurrentPosition,
-                  ),
-                  MaterialButton(
-                      minWidth: 50.0,
-                      child: new Icon((_isMoving) ? Icons.pause : Icons.play_arrow, color: Colors.white),
-                      color: (_isMoving) ? Colors.red : Colors.green,
-                      onPressed: _onClickChangePace
-                  )
-                ]
-            )
+        child: Container(
+          padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              IconButton(
+                icon: Icon(Icons.gps_fixed),
+                onPressed: _onClickGetCurrentPosition,
+              ),
+              Text('$_motionActivity · $_odometer km'),
+              MaterialButton(
+                minWidth: 50.0,
+                child: Icon((_isMoving) ? Icons.pause : Icons.play_arrow, color: Colors.white),
+                color: (_isMoving) ? Colors.red : Colors.green,
+                onPressed: _onClickChangePace
+              )
+            ]
           )
+        )
       ),
       floatingActionButton: new FloatingActionButton(
         onPressed: _onClickMenu,
         tooltip: 'Menu',
         child: new Icon(Icons.add),
       ),
-    );
-  }
-}
-
-/**
- * GoogleMap View
- */
-class MapView extends StatefulWidget {
-  @override
-  State createState() => MapViewState();
-}
-
-class MapViewState extends State<MapView> {
-  static const double DEFAULT_ZOOM = 18.0;
-
-  GoogleMapController _mapController;
-
-
-  @override
-  Widget build(BuildContext context) {
-    bg.BackgroundGeolocation.onEnabledChange((enabled) {
-      if (!enabled) { _removeMarkers(); }
-    });
-
-    bg.BackgroundGeolocation.onMotionChange((bg.Location location) {
-      _setCenter(location, DEFAULT_ZOOM);
-    });
-
-    bg.BackgroundGeolocation.onLocation((bg.Location location) {
-      if (!location.sample) {
-        _addMarker(location);
-      }
-      _setCenter(location, DEFAULT_ZOOM);
-    });
-
-    return GoogleMap(
-      onMapCreated: _onMapCreated,
-    );
-  }
-
-  void _onMapCreated(GoogleMapController controller) {
-    setState(() { _mapController = controller; });
-  }
-
-  void _addMarker(bg.Location location) {
-    _mapController.addMarker(MarkerOptions(
-      position: LatLng(location.coords.latitude, location.coords.longitude
-      ),
-    ));
-  }
-
-  void _removeMarkers() {
-    _mapController.markers.forEach((Marker marker) => _mapController.removeMarker(marker));
-  }
-
-  void _setCenter(bg.Location location, double zoom) {
-    CameraPosition position;
-    position = new CameraPosition(
-        target: LatLng(location.coords.latitude, location.coords.longitude),
-        zoom: zoom
-    );
-
-    _mapController.updateMapOptions(GoogleMapOptions(
-        cameraPosition: position
-    ));
-  }
-}
-
-
-class SettingsView extends StatefulWidget {
-  @override
-  State createState() => SettingsViewState();
-}
-
-class SettingsViewState extends State<SettingsView> {
-  @override
-  Widget build(BuildContext context) {
-    return new Container(
-      child: new Text('SettingsView')
     );
   }
 }

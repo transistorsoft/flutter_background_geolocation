@@ -1,14 +1,17 @@
 library flt_background_geolocation_example;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
-part 'home_view.dart';
+part 'map_view.dart';
 part 'test_buttons.dart';
-part 'constants.dart';
+part 'home_view.dart';
+part 'settings_view.dart';
 
 void main() => runApp(new MyApp());
 
@@ -47,8 +50,8 @@ class _MyAppState extends State<MyApp> {
     return new MaterialApp(
       theme: Theme.of(context).copyWith(
         accentColor: Colors.black,
-        primaryColor: COLOR_GOLD,
-        bottomAppBarColor: COLOR_GOLD,
+        primaryColor: Color.fromRGBO(254, 221, 30, 1.0),
+        bottomAppBarColor: Color.fromRGBO(254, 221, 30, 1.0),
         primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
             bodyColor: Colors.black,
         )

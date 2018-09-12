@@ -3,6 +3,7 @@ library flt_background_geolocation;
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:device_info/device_info.dart';
 
 part 'src/background_geolocation.dart';
 part 'src/models/location.dart';

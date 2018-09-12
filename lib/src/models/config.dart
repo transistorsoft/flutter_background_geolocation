@@ -320,6 +320,43 @@ class Config {
 
     return config;
   }
+
+  static final DeviceInfoPlugin deviceInfo = new DeviceInfoPlugin();
+  
+  // Returns a Map suitable for attaching to #params and posting to tracker.transistorsoft.com
+  static Future<Map<String,dynamic>> get deviceParams async {
+    try {
+      if (defaultTargetPlatform == TargetPlatform.android) {
+        AndroidDeviceInfo info = await deviceInfo.androidInfo;
+        return {
+          'device': {
+            'uuid': info.id,
+            'model': info.model,
+            'platform': 'Android',
+            'manufacturer': info.manufacturer,
+            'version': info.version.release,
+            'framework': 'Flutter'
+          }
+        };
+      } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+        IosDeviceInfo info = await deviceInfo.iosInfo;
+        return {
+          'device': {
+            'uuid': info.identifierForVendor,
+            'model': info.model,
+            'platform': 'iOS',
+            'manufacturer': 'Apple',
+            'version': info.systemVersion,
+            'framework': 'Flutter'
+          }
+        };
+      }
+    } on PlatformException {
+      return {
+        'Error:': 'Failed to get platform version.'
+      };
+    }
+  }
 }
 
 class State extends Config {

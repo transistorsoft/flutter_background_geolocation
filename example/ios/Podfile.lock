@@ -5,6 +5,8 @@ PODS:
   - CocoaLumberjack/Default (3.4.2)
   - CocoaLumberjack/Extensions (3.4.2):
     - CocoaLumberjack/Default
+  - device_info (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_background_geolocation (0.0.1):
     - CocoaLumberjack (~> 3.0)
@@ -19,6 +21,7 @@ PODS:
     - GoogleMaps/Base
 
 DEPENDENCIES:
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - flutter_background_geolocation (from `.symlinks/plugins/flutter_background_geolocation/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
@@ -29,6 +32,8 @@ SPEC REPOS:
     - GoogleMaps
 
 EXTERNAL SOURCES:
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
   flutter_background_geolocation:
@@ -38,6 +43,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   CocoaLumberjack: db7cc9e464771f12054c22ff6947c5a58d43a0fd
+  device_info: 76ce0b32e13034d1883be4a382433648f9dcee63
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
   flutter_background_geolocation: ec306376f07d2d399c1df2508dcb2348476b4772
   google_maps_flutter: 6449d5918d3f1a69a37dc9c557bbad7bb9bcf0e9
