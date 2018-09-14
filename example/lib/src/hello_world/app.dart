@@ -68,7 +68,7 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
     bg.BackgroundGeolocation.onActivityChange(_onActivityChange);
     bg.BackgroundGeolocation.onProviderChange(_onProviderChange);
     bg.BackgroundGeolocation.onConnectivityChange(_onConnectivityChange);
-
+    
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
