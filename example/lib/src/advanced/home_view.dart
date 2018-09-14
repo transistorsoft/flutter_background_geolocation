@@ -53,16 +53,17 @@ class HomeViewState extends State<HomeView> {
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
-        desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
+        desiredAccuracy: bg.Config.DESIRED_ACCURACY_NAVIGATION,
         distanceFilter: 10.0,
         stopOnTerminate: false,
         startOnBoot: true,
+        foregroundService: true,
+        stopTimeout: 1,
         debug: true,
         autoSync: true,
         url: 'http://tracker.transistorsoft.com/locations/$username',
         params: deviceParams,
-        logLevel: bg.Config.LOG_LEVEL_VERBOSE,
-        reset: true
+        logLevel: bg.Config.LOG_LEVEL_VERBOSE
     )).then((bg.State state) {
       setState(() {
         _enabled = state.enabled;
