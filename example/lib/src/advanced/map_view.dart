@@ -1,4 +1,7 @@
-part of flt_background_geolocation_example;
+import 'package:flutter/material.dart';
+
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
 /**
  * GoogleMap View
