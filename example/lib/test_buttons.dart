@@ -1,4 +1,5 @@
-part of flt_background_geolocation_example;
+import 'package:flutter/material.dart';
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
 class TestButtons extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class TestButtonsState extends State<TestButtons> {
 
   @override
   void initState() {
+    super.initState();
     bg.BackgroundGeolocation.getState().then((bg.State state) {
       _isMoving = state.isMoving;
     });

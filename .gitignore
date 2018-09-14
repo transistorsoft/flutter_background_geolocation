@@ -9,4 +9,4 @@ packages
 pubspec.lock
 build/
 ios/.generated
-
+.gradle

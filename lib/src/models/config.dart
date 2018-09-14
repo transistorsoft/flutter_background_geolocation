@@ -33,6 +33,8 @@ class Config {
   static const int ACTIVITY_TYPE_FITNESS               = 3;
   static const int ACTIVITY_TYPE_OTHER_NAVIGATION      = 4;
 
+  Map _map;
+
   ////
   // Common Options
   //
@@ -224,7 +226,18 @@ class Config {
     this.notificationChannelName
   });
 
+  Config set(String key, dynamic value) {
+    if (_map == null) {
+      _map = new Map<String, dynamic>();
+    }
+    _map[key] = value;
+    return this;
+  }
+
   Map toMap() {
+    if (_map != null) {
+      return _map;
+    }
     Map config = {};
     // Geolocation Options
     if(desiredAccuracy != null) config['desiredAccuracy'] = desiredAccuracy;
@@ -467,6 +480,6 @@ class State extends Config {
   }
 
   String toString() {
-    return '[BGState enabled: $enabled, isMoving: $isMoving, trackingMode: $trackingMode, odometer: $odometer, schedulerEnabled: $schedulerEnabled], foregroundService: $foregroundService';
+    return '[BGState enabled: $enabled, isMoving: $isMoving, trackingMode: $trackingMode, desiredAccuracy: $desiredAccuracy, distanceFilter: $distanceFilter, odometer: $odometer, schedulerEnabled: $schedulerEnabled, foregroundService: $foregroundService]';
   }
 }

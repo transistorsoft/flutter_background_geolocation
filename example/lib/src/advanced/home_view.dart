@@ -1,4 +1,13 @@
-part of flt_background_geolocation_example;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+
+import '../app.dart';
+import 'map_view.dart';
 
 // For pretty-printing location JSON
 JsonEncoder encoder = new JsonEncoder.withIndent("     ");
@@ -9,6 +18,7 @@ class HomeView extends StatefulWidget {
 }
 
 class HomeViewState extends State<HomeView> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool _isMoving;
   bool _enabled;
   String _motionActivity;
@@ -17,6 +27,7 @@ class HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
+    super.initState();
     _isMoving = false;
     _enabled = false;
     _content = '';
@@ -27,7 +38,11 @@ class HomeViewState extends State<HomeView> {
   }
 
   Future<Null> initPlatformState() async {
+    final SharedPreferences prefs = await _prefs;
+    String username = prefs.getString("username");
+
     Map deviceParams = await bg.Config.deviceParams;
+
 
     // 1.  Listen to events (See docs for all 12 available events).
     bg.BackgroundGeolocation.onLocation(_onLocation);
@@ -44,7 +59,7 @@ class HomeViewState extends State<HomeView> {
         startOnBoot: true,
         debug: true,
         autoSync: true,
-        url: 'http://tracker.transistorsoft.com/locations/transistor-flutter',
+        url: 'http://tracker.transistorsoft.com/locations/$username',
         params: deviceParams,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
         reset: true
@@ -54,10 +69,6 @@ class HomeViewState extends State<HomeView> {
         _isMoving = state.isMoving;
       });
     });
-  }
-  void _onClickMenu() async {
-    int soundId = defaultTargetPlatform == TargetPlatform.android ? 89 : 1104;
-    bg.BackgroundGeolocation.playSound(soundId);
   }
 
   void _onClickEnable(enabled) {
@@ -111,6 +122,13 @@ class HomeViewState extends State<HomeView> {
     });
   }
 
+  // Go back to HomeApp
+  void _onClickHome() {
+    bg.BackgroundGeolocation.stop();
+    bg.BackgroundGeolocation.removeListeners();
+    runApp(HomeApp());
+  }
+
   ////
   // Event handlers
   //
@@ -152,18 +170,21 @@ class HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
 
-    Widget body = (defaultTargetPlatform == TargetPlatform.iOS)
-        ? SingleChildScrollView(child: Text('$_content'))
-        : new MapView();
-
+    Widget body;
+    // iOS doesn't yet support maps.
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      body = SingleChildScrollView(child: Text('$_content'));
+    } else {
+      body = new MapView();
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Background Geolocation'),
+        leading: IconButton(onPressed: _onClickHome, icon: Icon(Icons.home, color: Colors.black)),
+        backgroundColor: Theme.of(context).bottomAppBarColor,
         actions: <Widget>[
-          Switch(
-            value: _enabled,
-            onChanged: _onClickEnable
+          Switch(value: _enabled, onChanged: _onClickEnable
           ),
         ]
       ),
@@ -190,11 +211,8 @@ class HomeViewState extends State<HomeView> {
           )
         )
       ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _onClickMenu,
-        tooltip: 'Menu',
-        child: new Icon(Icons.add),
-      ),
     );
   }
+
+
 }

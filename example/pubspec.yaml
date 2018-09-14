@@ -8,6 +8,9 @@ dependencies:
      git:
        url: git://github.com/flutter/plugins
        path: packages/google_maps_flutter
+  unicorndial: ^1.1.4
+  shared_preferences: ^0.4.2
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
