@@ -6,9 +6,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:flutter_background_geolocation_example/main.dart';
 
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+
+void main() {
+
+}
 /*
 void main() {
   testWidgets('Verify Platform version', (WidgetTester tester) async {
@@ -24,5 +28,4 @@ void main() {
         findsOneWidget);
   });
 }
-
 */

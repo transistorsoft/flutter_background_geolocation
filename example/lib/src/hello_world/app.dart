@@ -12,6 +12,7 @@ import 'dart:convert';
 JsonEncoder encoder = new JsonEncoder.withIndent("     ");
 
 class HelloWorldApp extends StatelessWidget {
+  static const String NAME = 'hello_world';
 
   // This widget is the root of your application.
   @override

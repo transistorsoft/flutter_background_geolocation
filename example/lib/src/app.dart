@@ -234,10 +234,10 @@ class _HomeViewState extends State<_HomeView> {
 
     Widget app;
     switch(appName) {
-      case 'hello_world':
+      case HelloWorldApp.NAME:
         app = new HelloWorldApp();
         break;
-      case 'advanced':
+      case AdvancedApp.NAME:
         app = new AdvancedApp();
         break;
       default:

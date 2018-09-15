@@ -189,19 +189,21 @@ class BackgroundGeolocation {
 
   static Future<List<Geofence>> getGeofences() async {
     List<dynamic> geofences = await _methodChannel.invokeMethod('getGeofences');
-    return geofences.map((dynamic data) {
-      return new Geofence(
-          identifier: data['identifier'],
-          radius: data['radius'],
-          latitude: data['latitude'],
-          longitude: data['longitude'],
-          notifyOnEntry: data['notifyOnEntry'],
-          notifyOnExit: data['notifyOnExit'],
-          notifyOnDwell: data['notifyOnDwell'],
-          loiteringDelay: data['loiteringDelay'],
-          extras: data['extras']
-      );
+    List<Geofence> rs = [];
+    geofences.forEach((dynamic data) {
+      rs.add(new Geofence(
+        identifier: data['identifier'],
+        radius: data['radius'],
+        latitude: data['latitude'],
+        longitude: data['longitude'],
+        notifyOnEntry: data['notifyOnEntry'],
+        notifyOnExit: data['notifyOnExit'],
+        notifyOnDwell: data['notifyOnDwell'],
+        loiteringDelay: data['loiteringDelay'],
+        extras: data['extras']
+      ));
     });
+    return rs;
   }
 
   /**

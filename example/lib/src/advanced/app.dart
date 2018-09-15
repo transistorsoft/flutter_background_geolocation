@@ -9,6 +9,8 @@ import 'main_menu_button.dart';
 const COLOR_GOLD = Color.fromRGBO(254, 221, 30, 1.0);
 
 class AdvancedApp extends StatefulWidget {
+  static const String NAME = 'advanced';
+
   @override
   _AdvancedAppState createState() => new _AdvancedAppState();
 }

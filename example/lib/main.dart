@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'src/app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,10 +13,10 @@ void main() async {
   Widget app;
 
   switch(appName) {
-    case 'advanced':
+    case AdvancedApp.NAME:
       app = new AdvancedApp();
       break;
-    case 'hello_world':
+    case HelloWorldApp.NAME:
       app = new HelloWorldApp();
       break;
     default:
