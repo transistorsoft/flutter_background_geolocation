@@ -123,9 +123,9 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Widget _buildField(Map<String, Object> setting) {
-    print("[buildField]: " + setting['name']);
-
+    String name = setting['name'];
     String inputType = setting['inputType'];
+    print('[buildField] - $name: $inputType');
     Widget field;
     switch(inputType) {
       case INPUT_TYPE_SELECT:
@@ -135,10 +135,10 @@ class _SettingsViewState extends State<SettingsView> {
         field = _buildSwitchField(setting);
         break;
       case INPUT_TYPE_TEXT:
-        field = new Text('Unsupported type: ' + setting['inputType']);
+        field = new Text('field: $name - Unsupported inputType: $inputType');
         break;
       default:
-        field = new Text('Unsupported type: ' + setting['inputType']);
+        field = new Text('field: $name - Unsupported inputType: $inputType');
         break;
     }
     return field;
@@ -167,17 +167,16 @@ class _SettingsViewState extends State<SettingsView> {
     }
     return InputDecorator(
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(top:5.0, left:5.0, bottom:5.0),
-        labelStyle: TextStyle(color: Colors.blue, fontSize: 16.0),
+        contentPadding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0),
+        labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
         labelText: name,
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton(
           isDense: true,
-          style: TextStyle(color: Colors.black, fontSize: 14.0),
           value: value.toString(),
           items: menuItems,
-          onChanged: _createSelectChangeHandler(name)
+          onChanged: _createSelectChangeHandler(setting)
         )
       )
     );
@@ -188,7 +187,7 @@ class _SettingsViewState extends State<SettingsView> {
     bool value = _state.map[name];
     return InputDecorator(
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(top:2.0, left:5.0, bottom:2.0),
+          contentPadding: EdgeInsets.only(top:7.0, left:10.0, bottom:7.0),
           labelStyle: TextStyle(color: Colors.blue),
           //labelText: name
         ),
@@ -210,14 +209,23 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Text _buildLabel(String label) {
-    return Text(label, style: TextStyle(color: Colors.blue, fontSize: 12.0));
+    return Text(label, style: TextStyle(color: Colors.blue, fontSize: 15.0));
   }
 
-  Function(String) _createSelectChangeHandler(String field) {
+  Function(String) _createSelectChangeHandler(Map<String,Object> setting) {
+    String type = setting['dataType'];
+    String name = setting['name'];
     return (String value) {
-      print("*** select value: $field: $value");
-
-      bg.Config config = new bg.Config().set(field, value);
+      bg.Config config = new bg.Config();
+      print("select value: $name: $value");
+      switch(type) {
+        case 'integer':
+          config.set(name, int.parse(value));
+          break;
+        default:
+          config.set(name, value);
+          break;
+      }
       bg.BackgroundGeolocation.setConfig(config).then((bg.State state) {
         setState(() {
           _state = state;
@@ -239,9 +247,9 @@ class _SettingsViewState extends State<SettingsView> {
 
   Widget _buildFieldSeparator(String label) {
     return Container(
-        //color: Color.fromRGBO(220, 220, 220, 0.5),
-        color: Colors.amber,
-        padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 10.0),
+        color: Color.fromRGBO(220, 220, 220, 0.5),
+        //color: Colors.amber,
+        padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0),
         child: Text(label, style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold))
     );
   }
@@ -274,7 +282,7 @@ const PLUGIN_SETTINGS = {
     {'name': 'heartbeatInterval', 'group': 'application', 'dataType': 'integer', 'inputType': 'select', 'values': [-1, 60, (2*60), (5*60), (15*60)], 'defaultValue': 60},
     // Logging & Debug
     {'name': 'debug', 'group': 'debug', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': true},
-    {'name': 'logLevel', 'group': 'debug', 'dataType': 'string', 'inputType': 'select', 'values': [0, 1, 2, 3, 4, 5], 'labels': ['OFF', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'VERBOSE'], 'defaultValue': 'VERBOSE'},
+    {'name': 'logLevel', 'group': 'debug', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 1, 2, 3, 4, 5], 'labels': ['OFF', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'VERBOSE'], 'defaultValue': 'VERBOSE'},
     {'name': 'logMaxDays', 'group': 'debug', 'dataType': 'integer', 'inputType': 'select', 'values': [1, 2, 3, 4, 5, 6, 7], 'defaultValue': 3}
   ],
   'ios': [
