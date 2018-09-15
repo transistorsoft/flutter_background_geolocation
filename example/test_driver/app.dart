@@ -1,6 +1,7 @@
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
@@ -36,16 +37,16 @@ void main() {
   ));
 
   enableFlutterDriverExtension(handler: (String command) async {
-    print("FlutterDriverExtendsion Rx: $command");
+    print("FlutterDriverExtension Rx: $command");
 
     switch(command) {
       case 'getState':
         bg.State state = await bg.BackgroundGeolocation.getState();
-        return state.toString();
+        return jsonEncode(state.toMap());
         break;
       case 'getCurrentPosition':
         bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
-        return location.toString();
+        return jsonEncode(location.toMap());
         break;
       case 'addGeofence':
         Completer completer = new Completer<String>();
@@ -69,7 +70,11 @@ void main() {
         break;
       case 'getGeofences':
         List<bg.Geofence> geofences = await bg.BackgroundGeolocation.getGeofences();
-        return geofences.toString();
+        List<Map> rs = [];
+        geofences.forEach((bg.Geofence geofence) {
+          rs.add(geofence.toMap());
+        });
+        return jsonEncode(rs);
         break;
       default:
         return "404";

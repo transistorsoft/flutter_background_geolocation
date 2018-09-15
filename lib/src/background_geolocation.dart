@@ -191,6 +191,7 @@ class BackgroundGeolocation {
     List<dynamic> geofences = await _methodChannel.invokeMethod('getGeofences');
     List<Geofence> rs = [];
     geofences.forEach((dynamic data) {
+      dynamic loiteringDelay = data['loiteringDelay'];
       rs.add(new Geofence(
         identifier: data['identifier'],
         radius: data['radius'],
@@ -199,8 +200,8 @@ class BackgroundGeolocation {
         notifyOnEntry: data['notifyOnEntry'],
         notifyOnExit: data['notifyOnExit'],
         notifyOnDwell: data['notifyOnDwell'],
-        loiteringDelay: data['loiteringDelay'],
-        extras: data['extras']
+        loiteringDelay: (loiteringDelay.runtimeType == double) ? loiteringDelay.round() : loiteringDelay,
+        extras: data['extras'].cast<String,dynamic>()
       ));
     });
     return rs;
