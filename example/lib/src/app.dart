@@ -15,6 +15,8 @@ import 'hello_world/app.dart';
 import 'advanced/app.dart';
 import 'advanced/dialog.dart' as util;
 
+const TRACKER_HOST = 'http://tracker.transistorsoft.com/locations/';
+
 class HomeApp extends StatefulWidget {
   @override
   _HomeAppState createState() => new _HomeAppState();
@@ -220,6 +222,13 @@ class _HomeViewState extends State<_HomeView> {
       _showDialog();
       return;
     }
+    // Apply tracker url with username & device params for recognition by tracker server.
+    Map<String, dynamic> deviceParams = await bg.Config.deviceParams;
+    bg.BackgroundGeolocation.setConfig(bg.Config(
+      url: TRACKER_HOST + _username,
+      params: deviceParams
+    ));
+
     final SharedPreferences prefs = await _prefs;
     prefs.setString("app", appName);
 

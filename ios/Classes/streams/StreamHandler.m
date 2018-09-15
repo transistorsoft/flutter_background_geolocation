@@ -22,8 +22,8 @@ static NSString *const EVENT_PATH = @"com.transistorsoft/flutter_background_geol
     return nil;
 }
 
-- (FlutterError*)onCancelWithArguments:(id)arguments {
-    [[TSLocationManager sharedInstance] removeListener:_event callback: _callback];
+- (FlutterError*)onCancelWithArguments:(id)arguments {    
+    [[TSLocationManager sharedInstance] removeListener: self.event callback: _callback];
     return nil;
 }
 
