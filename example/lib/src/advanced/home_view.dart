@@ -151,6 +151,9 @@ class HomeViewState extends State<HomeView> {
 
   void _onMotionChange(bg.Location location) {
     print('[motionchange] - $location');
+    setState(() {
+      _isMoving = location.isMoving;
+    });
   }
 
   void _onActivityChange(bg.ActivityChangeEvent event) {
@@ -162,7 +165,6 @@ class HomeViewState extends State<HomeView> {
 
   void _onProviderChange(bg.ProviderChangeEvent event) {
     print('$event');
-
     setState(() {
       _content = encoder.convert(event.toMap());
     });

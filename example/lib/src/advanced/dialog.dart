@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:async';
 
 const SOUND_MAP = {
   "ios": {
@@ -33,6 +34,7 @@ class Dialog {
   static void confirm(BuildContext context, String title, String message, Function(bool) callback) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
@@ -61,6 +63,7 @@ class Dialog {
   static void alert(BuildContext context, String title, String message, [Function callback]) {
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
@@ -81,6 +84,15 @@ class Dialog {
     );
   }
 
+  static Future<CircularProgressIndicator> showLoading(BuildContext context, String message) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return CircularProgressIndicator();
+      }
+    );
+  }
   static int getSoundId(String key) {
     key = key.toUpperCase();
     int soundId = -1;
