@@ -11,8 +11,6 @@ import '../app.dart';
 import 'dart:convert';
 JsonEncoder encoder = new JsonEncoder.withIndent("     ");
 
-const COLOR_GOLD = Color.fromRGBO(254, 221, 30, 1.0);
-
 class HelloWorldApp extends StatelessWidget {
 
   // This widget is the root of your application.
@@ -22,7 +20,7 @@ class HelloWorldApp extends StatelessWidget {
       title: 'BackgroundGeolocation Demo',
       theme: Theme.of(context).copyWith(
           accentColor: Colors.black,
-          bottomAppBarColor: COLOR_GOLD,
+          bottomAppBarColor: Colors.amberAccent,
           primaryTextTheme: Theme
               .of(context)
               .primaryTextTheme

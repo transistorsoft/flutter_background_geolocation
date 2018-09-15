@@ -3,6 +3,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
+import 'dialog.dart' as util;
+
+const INPUT_TYPE_SELECT = "select";
+const INPUT_TYPE_TOGGLE = "toggle";
+const INPUT_TYPE_TEXT   = "text";
+
 class SettingsView extends StatefulWidget {
   @override
   State createState() => _SettingsViewState();
@@ -40,9 +46,14 @@ class _SettingsViewState extends State<SettingsView> {
     });
   }
 
+  _onClickClose() {
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("CLOSE"));
+    Navigator.of(context).pop();
+  }
   _onClickAbout() {
-
-
+    // TODO
+    print("[onClickAbout] - NO IMPLEMENTATION");
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("FLOURISH"));
   }
 
   @override
@@ -92,6 +103,7 @@ class _SettingsViewState extends State<SettingsView> {
 
     return new Scaffold(
       appBar: new AppBar(
+        leading: IconButton(onPressed: _onClickClose, icon: Icon(Icons.close), color: Colors.black),
         title: const Text('Settings'),
         backgroundColor: Theme.of(context).bottomAppBarColor,
         iconTheme: IconThemeData(color: Colors.black),
@@ -111,22 +123,25 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Widget _buildField(Map<String, Object> setting) {
+    print("[buildField]: " + setting['name']);
+
+    String inputType = setting['inputType'];
     Widget field;
-    switch(setting['inputType']) {
-      case 'select':
+    switch(inputType) {
+      case INPUT_TYPE_SELECT:
         field = _buildSelectField(setting);
         break;
-      case 'toggle':
+      case INPUT_TYPE_TOGGLE:
         field = _buildSwitchField(setting);
+        break;
+      case INPUT_TYPE_TEXT:
+        field = new Text('Unsupported type: ' + setting['inputType']);
         break;
       default:
         field = new Text('Unsupported type: ' + setting['inputType']);
         break;
     }
-    return new Container(
-        padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 0.0),
-        child: field
-    );
+    return field;
   }
 
   Widget _buildSelectField(Map<String, Object> setting) {
@@ -139,59 +154,69 @@ class _SettingsViewState extends State<SettingsView> {
     }
 
     List<DropdownMenuItem<String>> menuItems = new List();
+    bool foundCurrentValue = false;
     values.forEach((dynamic item) {
-      String value = item.toString();
-      String label = (labels != null) ? labels[values.indexOf(item)] : value;
-      menuItems.add(new DropdownMenuItem(child: new Text(label), value: value));
+      if (item == value) { foundCurrentValue = true; }
+      String itemValue = item.toString();
+      String itemLabel = (labels != null) ? labels[values.indexOf(item)] : itemValue;
+      menuItems.add(new DropdownMenuItem(child: new Text(itemLabel), value: itemValue));
     });
-
-    print("$name: " + value.toString() + ", values: $values");
-
-    return Row(
-        children: <Widget>[
-          Expanded(
-              flex: 2,
-              child: Text(setting['name'])
-          ),
-          Expanded(
-              flex: 1,
-              child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                      value: value.toString(),
-                      items: menuItems,
-                      onChanged: _createSelectChangeHandler(setting['name'])
-                  )
-              )
-          )
-        ]
+    // Ensure currently configured value exists as DropdownMenuItem or an exception blows up:
+    if (!foundCurrentValue) {
+      menuItems.add(new DropdownMenuItem(child: new Text(value.toString()), value: value.toString()));
+    }
+    return InputDecorator(
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.only(top:5.0, left:5.0, bottom:5.0),
+        labelStyle: TextStyle(color: Colors.blue, fontSize: 16.0),
+        labelText: name,
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          isDense: true,
+          style: TextStyle(color: Colors.black, fontSize: 14.0),
+          value: value.toString(),
+          items: menuItems,
+          onChanged: _createSelectChangeHandler(name)
+        )
+      )
     );
   }
 
   Widget _buildSwitchField(Map<String, Object> setting) {
     String name = setting['name'];
     bool value = _state.map[name];
-
-    return Row(
-        children: <Widget>[
-          Expanded(
-              flex: 2,
-              child: new Text(setting['name'])
-          ),
-          Expanded(
-              flex: 1,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Switch(value: value, onChanged: _createSwitchChangeHandler(name))
-                  ]
+    return InputDecorator(
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.only(top:2.0, left:5.0, bottom:2.0),
+          labelStyle: TextStyle(color: Colors.blue),
+          //labelText: name
+        ),
+        child: Row(
+            children: <Widget>[
+              Expanded(flex: 3, child: _buildLabel(name)),
+              Expanded(
+                  flex: 1,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Switch(value: value, onChanged: _createSwitchChangeHandler(name))
+                      ]
+                  )
               )
-          )
-        ]
+            ]
+        )
     );
+  }
+
+  Text _buildLabel(String label) {
+    return Text(label, style: TextStyle(color: Colors.blue, fontSize: 12.0));
   }
 
   Function(String) _createSelectChangeHandler(String field) {
     return (String value) {
+      print("*** select value: $field: $value");
+
       bg.Config config = new bg.Config().set(field, value);
       bg.BackgroundGeolocation.setConfig(config).then((bg.State state) {
         setState(() {
@@ -214,8 +239,9 @@ class _SettingsViewState extends State<SettingsView> {
 
   Widget _buildFieldSeparator(String label) {
     return Container(
-        color: Color.fromRGBO(200, 200, 200, 0.5),
-        padding: EdgeInsets.all(20.0),
+        //color: Color.fromRGBO(220, 220, 220, 0.5),
+        color: Colors.amber,
+        padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 10.0),
         child: Text(label, style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold))
     );
   }
@@ -254,7 +280,7 @@ const PLUGIN_SETTINGS = {
   'ios': [
     // Geolocation
     {'name': 'stationaryRadius', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 25, 50, 100, 500, 1000, 5000], 'defaultValue': 25 },
-    {'name': 'activityType', 'group': 'geolocation', 'dataType': 'string', 'inputType': 'select', 'values': ['Other', 'AutomotiveNavigation', 'Fitness', 'OtherNavigation'], 'defaultValue': 'Other'},
+    {'name': 'activityType', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [1, 2, 3, 4], 'labels': ['OTHER', 'AUTOMOTIVE_NAVIGATION', 'FITNESS', 'OTHER_NAVIGATION'], 'defaultValue': 'OTHER'},
     {'name': 'useSignificantChangesOnly', 'group': 'geolocation', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     // Application
     {'name': 'preventSuspend', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},

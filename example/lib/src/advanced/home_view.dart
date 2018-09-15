@@ -8,6 +8,7 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
 
 import '../app.dart';
 import 'map_view.dart';
+import 'dialog.dart' as util;
 
 // For pretty-printing location JSON
 JsonEncoder encoder = new JsonEncoder.withIndent("     ");
@@ -73,6 +74,8 @@ class HomeViewState extends State<HomeView> {
   }
 
   void _onClickEnable(enabled) {
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
+
     if (enabled) {
       bg.BackgroundGeolocation.start().then((bg.State state) {
         print('[start] success $state');
@@ -125,6 +128,7 @@ class HomeViewState extends State<HomeView> {
 
   // Go back to HomeApp
   void _onClickHome() {
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("CLOSE"));
     bg.BackgroundGeolocation.stop();
     bg.BackgroundGeolocation.removeListeners();
     runApp(HomeApp());

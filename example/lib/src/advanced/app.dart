@@ -33,7 +33,8 @@ class _AdvancedAppState extends State<AdvancedApp> {
     return new MaterialApp(
       theme: Theme.of(context).copyWith(
         accentColor: Colors.black,
-        bottomAppBarColor: COLOR_GOLD,
+        bottomAppBarColor: Colors.amberAccent,
+        hintColor: Colors.black12,
         primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
           bodyColor: Colors.black,
         )

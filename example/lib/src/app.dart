@@ -9,12 +9,11 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
 import 'hello_world/app.dart';
 import 'advanced/app.dart';
-
-const COLOR_GOLD = Color.fromRGBO(254, 221, 30, 1.0);
-const COLOR_GREY = Color.fromRGBO(200, 200, 200, 0.6);
+import 'advanced/dialog.dart' as util;
 
 class HomeApp extends StatefulWidget {
   @override
@@ -119,6 +118,7 @@ class _HomeViewState extends State<_HomeView> {
   }
 
   _onSelectUsername() async {
+
     if (_usernameIsValid(_usernameRaw)) {
       setState(() {
         _username = _usernameRaw;
@@ -131,7 +131,7 @@ class _HomeViewState extends State<_HomeView> {
   }
 
   bool _usernameIsValid(String username) {
-    return new RegExp(USERNAME_REGEXP).hasMatch(username) && (username.length > 0);
+    return (username != null) && new RegExp(USERNAME_REGEXP).hasMatch(username) && (username.length > 0);
   }
 
   @override
@@ -139,7 +139,7 @@ class _HomeViewState extends State<_HomeView> {
     return Scaffold(
         appBar: AppBar(
             title: const Text('Background Geolocation'),
-            backgroundColor: COLOR_GOLD
+            backgroundColor: Colors.amberAccent
         ),
         body: Container(
             color: Colors.black87,
@@ -211,7 +211,7 @@ class _HomeViewState extends State<_HomeView> {
     return MaterialButton(
         onPressed: onPressed,
         child: Text(text, style: TextStyle(fontSize: 18.0)),
-        color: COLOR_GOLD,
+        color: Colors.amber,
         height: 50.0);
   }
 
@@ -235,6 +235,7 @@ class _HomeViewState extends State<_HomeView> {
         return;
         break;
     }
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("OPEN"));
     runApp(app);
   }
 }

@@ -4,9 +4,21 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
 import 'package:unicorndial/unicorndial.dart';
 
 import 'settings_view.dart';
-import '../app.dart';
+import 'dialog.dart' as util;
 
 class MainMenuButton extends StatelessWidget {
+  BuildContext _context;
+
+  void _onClickMenu() {
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("OPEN"));
+  }
+
+  void _onClickSettings() {
+    Navigator.of(_context).push(MaterialPageRoute<Null>(fullscreenDialog: true, builder: (BuildContext context) {
+      bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("OPEN"));
+      return SettingsView();
+    }));
+  }
 
   void _onClickResetOdometer() {
     bg.BackgroundGeolocation.setOdometer(0.0);
@@ -16,19 +28,42 @@ class MainMenuButton extends StatelessWidget {
     bg.BackgroundGeolocation.emailLog('christocracy@gmail.com');
   }
 
-  void _onClickSync() {
-    bg.BackgroundGeolocation.sync();
+  void _onClickSync() async {
+    int count = await bg.BackgroundGeolocation.getCount();
+    if (count == 0) {
+      util.Dialog.alert(_context, "Sync", "Database is empty");
+      return;
+    }
+
+    util.Dialog.confirm(_context, "Confirm", "Upload $count locations?", (bool confirm) {
+      if (!confirm) { return; }
+      // TODO show spinner.
+      bg.BackgroundGeolocation.sync().then((List records) {
+        // TODO hide spinner.
+        bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("MESSAGE_SENT"));
+      });
+    });
   }
 
-  void _onClickDestroyLocations() {
-    bg.BackgroundGeolocation.destroyLocations();
+  void _onClickDestroyLocations() async {
+    int count = await bg.BackgroundGeolocation.getCount();
+    util.Dialog.confirm(_context, "Confirm", "Destroy $count locations?", (bool confirm) {
+      // TODO show spinner
+      if (!confirm) { return; }
+      bg.BackgroundGeolocation.destroyLocations().then((bool success) {
+        // TODO hide spinner.
+        bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId((success) ? "MESSAGE_SENT" : "ERROR"));
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return Container(
       padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 50.0),
       child: UnicornDialer(
+          onMainButtonPressed: _onClickMenu,
           hasBackground: false,
           parentButtonBackground: Colors.black,
           orientation: UnicornOrientation.VERTICAL,
@@ -39,13 +74,6 @@ class MainMenuButton extends StatelessWidget {
 
   List<UnicornButton> _buildMenuItems(BuildContext context) {
     Color bgColor = Theme.of(context).bottomAppBarColor;
-
-    // Home-button click handler with context.
-    Function onClickSettings = () {
-      Navigator.of(context).push(MaterialPageRoute<Null>(fullscreenDialog: true, builder: (BuildContext context) {
-        return SettingsView();
-      }));
-    };
 
     return <UnicornButton>[
       UnicornButton(
@@ -83,7 +111,7 @@ class MainMenuButton extends StatelessWidget {
       ),
       UnicornButton(
           hasLabel: true,
-          labelText: "Reset odometerrr",
+          labelText: "Reset odometer",
           currentButton: FloatingActionButton(
               heroTag: "reset odometer",
               backgroundColor: bgColor,
@@ -101,7 +129,7 @@ class MainMenuButton extends StatelessWidget {
               foregroundColor: Colors.black,
               mini: true,
               child: Icon(Icons.settings),
-              onPressed: onClickSettings)
+              onPressed: _onClickSettings)
       )
     ];
   }
