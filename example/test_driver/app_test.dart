@@ -1,6 +1,7 @@
 // Imports the Flutter Driver API
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
+import 'dart:convert';
 
 void main() {
   group('Test App', () {
@@ -51,8 +52,11 @@ void main() {
 
     test('getGeofences', () async {
       String response = await driver.requestData("getGeofences", timeout: Duration(seconds: 30));
-      print ("********* response: $response");
-      expect(true, true);
+      List<dynamic> geofences = jsonDecode(response);
+      Map geofence = geofences.first;
+      String identifier = geofence['identifier'];
+      print ("********* response: $geofences");
+      expect(identifier, 'test');
     });
   });
 }
