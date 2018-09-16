@@ -8,24 +8,6 @@ import 'package:colorize/colorize.dart';
 FlutterDriver driver;
 
 void main() {
-
-  void _group(String name, Function callback) async {
-    setUpAll(() async {
-      Colorize header = Colorize("[Test Group] - $name");
-      header.green();
-      print(header);
-      driver = await FlutterDriver.connect();
-
-    });
-    // Close the connection to the driver after the tests have completed
-    tearDownAll(() async {
-      if (driver != null) {
-        driver.close();
-      }
-    });
-    callback();
-  }
-
   _group('Test BackgroundGeolocation API', () {
     _test('getState', (String response) async {
       expect(response.contains("State"), true);
@@ -83,7 +65,7 @@ void main() {
     });
   });
 
-  group('Test Geofencing', () {
+  _group('Test Geofencing', () {
     _test('getGeofences', (String response) async {
       List<dynamic> geofences = jsonDecode(response);
       Map geofence = geofences.first;
@@ -93,7 +75,7 @@ void main() {
     });
   });
 
-  group('Test BackgroundGeolocation persistence', () {
+  _group('Test BackgroundGeolocation persistence', () {
     _test('getCount', (String response) async {
       expect(response, "1");
     });
@@ -103,6 +85,23 @@ void main() {
     });
 
   });
+}
+
+void _group(String name, Function callback) async {
+  setUpAll(() async {
+    Colorize header = Colorize("[Test Group] - $name");
+    header.green();
+    print(header);
+    driver = await FlutterDriver.connect();
+
+  });
+  // Close the connection to the driver after the tests have completed
+  tearDownAll(() async {
+    if (driver != null) {
+      driver.close();
+    }
+  });
+  group(name, callback);
 }
 
 void _test(String action, Function(String) callback, [int timeout]) async {
