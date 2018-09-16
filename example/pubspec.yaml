@@ -21,7 +21,7 @@ dev_dependencies:
     sdk: flutter
   flutter_driver:
     sdk: flutter
-
+  colorize: ^2.0.0
   flutter_background_geolocation:
     path: ../
 
