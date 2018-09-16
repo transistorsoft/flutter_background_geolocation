@@ -338,10 +338,11 @@ class Config {
   
   // Returns a Map suitable for attaching to #params and posting to tracker.transistorsoft.com
   static Future<Map<String,dynamic>> get deviceParams async {
+    Map<String,dynamic> response;
     try {
       if (defaultTargetPlatform == TargetPlatform.android) {
         AndroidDeviceInfo info = await deviceInfo.androidInfo;
-        return {
+        response = {
           'device': {
             'uuid': info.id,
             'model': info.model,
@@ -353,7 +354,7 @@ class Config {
         };
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         IosDeviceInfo info = await deviceInfo.iosInfo;
-        return {
+        response = {
           'device': {
             'uuid': info.identifierForVendor,
             'model': info.utsname.machine,
@@ -365,10 +366,11 @@ class Config {
         };
       }
     } on PlatformException {
-      return {
+      response = {
         'Error:': 'Failed to get platform version.'
       };
     }
+    return response;
   }
 }
 
