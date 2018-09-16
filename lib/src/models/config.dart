@@ -356,7 +356,7 @@ class Config {
         return {
           'device': {
             'uuid': info.identifierForVendor,
-            'model': info.model,
+            'model': info.model + ' ' + info.utsname.machine,
             'platform': 'iOS',
             'manufacturer': 'Apple',
             'version': info.systemVersion,
@@ -480,6 +480,6 @@ class State extends Config {
   }
 
   String toString() {
-    return '[BGState enabled: $enabled, isMoving: $isMoving, trackingMode: $trackingMode, desiredAccuracy: $desiredAccuracy, distanceFilter: $distanceFilter, odometer: $odometer, schedulerEnabled: $schedulerEnabled, foregroundService: $foregroundService]';
+    return '[State enabled: $enabled, isMoving: $isMoving, trackingMode: $trackingMode, desiredAccuracy: $desiredAccuracy, distanceFilter: $distanceFilter, odometer: $odometer, schedulerEnabled: $schedulerEnabled, foregroundService: $foregroundService]';
   }
 }

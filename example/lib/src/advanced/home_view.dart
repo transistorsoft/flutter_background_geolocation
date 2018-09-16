@@ -54,6 +54,7 @@ class HomeViewState extends State<HomeView> {
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
+        reset: true,
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_NAVIGATION,
         distanceFilter: 10.0,
         stopOnTerminate: false,

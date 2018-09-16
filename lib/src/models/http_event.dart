@@ -15,7 +15,11 @@ class HttpEvent {
     return {
       'success': success,
       'status': status,
-      'responseText': responseText
+      'responseText': (responseText.length > 100) ? (responseText.substring(0, 100) + '...') : responseText
     };
+  }
+
+  String toString() {
+    return "[HttpEvent " + toMap().toString() + "]";
   }
 }
