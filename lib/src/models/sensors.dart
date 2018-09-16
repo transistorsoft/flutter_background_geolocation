@@ -6,5 +6,6 @@ class Sensors {
   bool gyroscope;
   bool magentometer;
   bool motionHardware;
-  Sensors(this.platform, this.accelerometer, this.gyroscope, this.magentometer, this.motionHardware);
+  Sensors(this.platform, this.accelerometer, this.gyroscope, this.magentometer,
+      this.motionHardware);
 }
