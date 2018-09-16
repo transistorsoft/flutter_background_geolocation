@@ -356,7 +356,7 @@ class Config {
         return {
           'device': {
             'uuid': info.identifierForVendor,
-            'model': info.model + ' ' + info.utsname.machine,
+            'model': info.utsname.machine,
             'platform': 'iOS',
             'manufacturer': 'Apple',
             'version': info.systemVersion,
