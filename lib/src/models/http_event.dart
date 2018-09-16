@@ -11,11 +11,13 @@ class HttpEvent {
     this.responseText = params['responseText'];
   }
 
-  Map<String,dynamic> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'success': success,
       'status': status,
-      'responseText': (responseText.length > 100) ? (responseText.substring(0, 100) + '...') : responseText
+      'responseText': (responseText.length > 100)
+          ? (responseText.substring(0, 100) + '...')
+          : responseText
     };
   }
 

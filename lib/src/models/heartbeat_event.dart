@@ -7,7 +7,7 @@ class HeartbeatEvent {
     if (event['location'] != null) {
       try {
         this.location = new Location(event['location']);
-      } catch(e) {
+      } catch (e) {
         print(e.toString());
       }
     }

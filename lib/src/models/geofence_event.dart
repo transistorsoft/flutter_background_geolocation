@@ -12,9 +12,9 @@ class GeofenceEvent {
     locationData.remove("geofence");
 
     this.identifier = params['identifier'];
-    this.action     = params['action'];
-    this.location   = new Location(locationData);
-    this.extras     = params['extras'];
+    this.action = params['action'];
+    this.location = new Location(locationData);
+    this.extras = params['extras'];
   }
 
   String toString() {

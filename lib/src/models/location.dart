@@ -11,12 +11,12 @@ class Coords {
   double altitudeAccuracy;
 
   Coords(dynamic coords) {
-    this.latitude = coords['latitude']*1.0;
-    this.longitude = coords['longitude']*1.0;
-    this.accuracy = coords['accuracy']*1.0;
-    this.altitude = coords['altitude']*1.0;
-    this.heading = coords['heading']*1.0;
-    this.speed = coords['speed']*1.0;
+    this.latitude = coords['latitude'] * 1.0;
+    this.longitude = coords['longitude'] * 1.0;
+    this.accuracy = coords['accuracy'] * 1.0;
+    this.altitude = coords['altitude'] * 1.0;
+    this.heading = coords['heading'] * 1.0;
+    this.speed = coords['speed'] * 1.0;
     if (coords['altitude_accuracy'] != null) {
       this.altitudeAccuracy = coords['altitude_accuracy'] * 1.0;
     }
@@ -30,7 +30,7 @@ class Battery {
 
   Battery(dynamic battery) {
     this.isCharging = battery['is_charging'];
-    this.level = battery['level']*1.0;
+    this.level = battery['level'] * 1.0;
   }
 }
 
@@ -44,9 +44,7 @@ class Activity {
   }
 }
 
-
 class Location {
-
   dynamic map;
   String timestamp;
   String event;
@@ -65,14 +63,14 @@ class Location {
 
   Location(dynamic params) {
     this.map = params;
-    this.coords   = new Coords(params['coords']);
-    this.battery  = new Battery(params['battery']);
+    this.coords = new Coords(params['coords']);
+    this.battery = new Battery(params['battery']);
     this.activity = new Activity(params['activity']);
 
     this.timestamp = params['timestamp'];
     this.isMoving = params['is_moving'];
     this.uuid = params['uuid'];
-    this.odometer = params['odometer']*1.0;
+    this.odometer = params['odometer'] * 1.0;
 
     this.sample = (params['sample'] != null) ? params['sample'] : false;
 

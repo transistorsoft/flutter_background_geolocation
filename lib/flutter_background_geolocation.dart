@@ -18,4 +18,3 @@ part 'src/models/provider_change_event.dart';
 part 'src/models/connectivity_change_event.dart';
 part 'src/models/config.dart';
 part 'src/models/sensors.dart';
-
