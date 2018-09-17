@@ -146,6 +146,14 @@ class _SettingsViewState extends State<SettingsView> {
         }
         break;
       case 'destroyLog':
+        util.Dialog.confirm(context, "Confirm", "Destroy logs?", (bool confirm) {
+          if (!confirm) { return; }
+          bg.BackgroundGeolocation.destroyLog().then((bool success) {
+            print('destroyLog] success');
+          }).catchError((error) {
+            print("[destroyLog] ERROR: $error");
+          });
+        });
         break;
     }
   }
