@@ -188,7 +188,8 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
               icon: Icon(Icons.home, color: Colors.black),
               onPressed: _onClickHome
           ),
-          title: const Text('BG Geo - Hello World'),
+          title: const Text('BG Geo'),
+          brightness: Brightness.light,
           actions: <Widget>[
             Switch(
                 value: _enabled,

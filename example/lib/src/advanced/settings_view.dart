@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
 import 'dialog.dart' as util;
@@ -18,26 +19,62 @@ class _SettingsViewState extends State<SettingsView> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   bg.State _state;
-  List<Map> _platformSettings;
+
+  // Categorized field-lists.
+  List<Map> _geolocationSettings = [];
+  List<Map> _activityRecognitionSettings = [];
+  List<Map> _httpSettings = [];
+  List<Map> _applicationSettings = [];
+  List<Map> _debugSettings = [];
 
   void initState() {
     super.initState();
 
     // Build list of available settings by plaform.
-    _platformSettings = [];
+    List<Map> settings = [];
     PLUGIN_SETTINGS['common'].forEach((Map item) {
-      _platformSettings.add(item);
+      settings.add(item);
     });
 
     if (defaultTargetPlatform == TargetPlatform.android) {
       PLUGIN_SETTINGS['android'].forEach((Map item) {
-        _platformSettings.add(item);
+        settings.add(item);
       });
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
       PLUGIN_SETTINGS['ios'].forEach((Map item) {
-        _platformSettings.add(item);
+        settings.add(item);
       });
     }
+
+    settings.where((Map item) {
+      return item['group'] == 'geolocation';
+    }).forEach((Map item) {
+      _geolocationSettings.add(item);
+    });
+
+    settings.where((Map item) {
+      return item['group'] == 'activity recognition';
+    }).forEach((Map item) {
+      _activityRecognitionSettings.add(item);
+    });
+
+    settings.where((Map item) {
+      return item['group'] == 'http';
+    }).forEach((Map item) {
+      _httpSettings.add(item);
+    });
+
+    settings.where((Map item) {
+      return item['group'] == 'application';
+    }).forEach((Map item) {
+      _applicationSettings.add(item);
+    });
+
+    settings.where((Map item) {
+      return item['group'] == 'debug';
+    }).forEach((Map item) {
+      _debugSettings.add(item);
+    });
 
     bg.BackgroundGeolocation.getState().then((bg.State state) {
       setState(() {
@@ -56,6 +93,63 @@ class _SettingsViewState extends State<SettingsView> {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("FLOURISH"));
   }
 
+  _onSelectMenu(String action) async {
+    switch(action) {
+      case 'resetOdometer':
+        bg.BackgroundGeolocation.setOdometer(0.0);
+        break;
+      case 'sync':
+        int count = await bg.BackgroundGeolocation.getCount();
+        if (count < 1) {
+          util.Dialog.alert(context, "Sync", "Database is empty");
+          break;
+        }
+        util.Dialog.confirm(context, "Confirm", "Upload $count records?", (bool confirm) {
+          if (!confirm) { return;}
+
+          bg.BackgroundGeolocation.sync().then((List<dynamic> records) {
+            print("[sync] SUCCESS (" + records.length.toString() + " records)");
+          }).catchError((error) {
+            print("[sync] ERROR: $error");
+          });
+        });
+        break;
+      case 'destroyLocations':
+        int count = await bg.BackgroundGeolocation.getCount();
+        if (count < 1) {
+          util.Dialog.alert(context, "Destroy locations", "Database is empty");
+          break;
+        }
+        util.Dialog.confirm(context, "Confirm", "Destroy $count records?", (bool confirm) {
+          if (!confirm) { return;}
+          bg.BackgroundGeolocation.destroyLocations().then((bool success) {
+            print("[destroyLocations] SUCCESS");
+          }).catchError((error) {
+            print("[destroyLocations] ERROR: $error");
+          });
+        });
+        break;
+      case 'emailLog':
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String email = prefs.getString("email");
+        if (email == null) {
+          email = "";
+        }
+        email = await util.Dialog.prompt(context, title: "Email log", labelText: 'Email', value: email);
+        if (email.length > 0) {
+          prefs.setString("email", email);
+          bg.BackgroundGeolocation.emailLog(email).then((bool success) {
+            print('[emailLog] success');
+          }).catchError((error) {
+            util.Dialog.alert(context, 'Email log Error', error.toString());
+          });
+        }
+        break;
+      case 'destroyLog':
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_state == null) {
@@ -63,46 +157,10 @@ class _SettingsViewState extends State<SettingsView> {
         body: new Text('Loading...')
       );
     }
-
-    List<Widget> fields = [];
-
-    fields.add(_buildFieldSeparator('GEOLOCATION'));
-    _platformSettings.where((Map item) {
-      return item['group'] == 'geolocation';
-    }).forEach((Map item) {
-      fields.add(_buildField(item));
-    });
-
-    fields.add(_buildFieldSeparator("ACTIVITY RECOGNITION"));
-    _platformSettings.where((Map item) {
-      return item['group'] == 'activity recognition';
-    }).forEach((Map item) {
-      fields.add(_buildField(item));
-    });
-
-    fields.add(_buildFieldSeparator("HTTP & PERSISTENCE"));
-    _platformSettings.where((Map item) {
-      return item['group'] == 'http';
-    }).forEach((Map item) {
-      fields.add(_buildField(item));
-    });
-
-    fields.add(_buildFieldSeparator("APPLICATION"));
-    _platformSettings.where((Map item) {
-      return item['group'] == 'application';
-    }).forEach((Map item) {
-      fields.add(_buildField(item));
-    });
-
-    fields.add(_buildFieldSeparator("DEBUG"));
-    _platformSettings.where((Map item) {
-      return item['group'] == 'debug';
-    }).forEach((Map item) {
-      fields.add(_buildField(item));
-    });
-
+    
     return new Scaffold(
       appBar: new AppBar(
+        brightness: Brightness.light,
         leading: IconButton(onPressed: _onClickClose, icon: Icon(Icons.close), color: Colors.black),
         title: const Text('Settings'),
         backgroundColor: Theme.of(context).bottomAppBarColor,
@@ -111,14 +169,56 @@ class _SettingsViewState extends State<SettingsView> {
           new FlatButton(onPressed: _onClickAbout, child: new Text('About'))
         ]
       ),
-      body: new Container(
-        child: new Form(
-          key: this._formKey,
-          child: new ListView(
-            children: fields
-          ),
-        )
+      body: new CustomScrollView(
+        slivers: <Widget>[
+          _buildListHeader("Geolocation", <PopupMenuItem<String>>[
+            const PopupMenuItem<String>(value: 'resetOdometer', child: Text('Reset odometer'))
+          ]),
+          _buildList(_geolocationSettings),
+
+          _buildListHeader("Activity Recognition"),
+          _buildList(_activityRecognitionSettings),
+
+          _buildListHeader("HTTP & Persistence", <PopupMenuItem<String>>[
+            const PopupMenuItem<String>(value: 'sync', child: Text('Sync')),
+            const PopupMenuItem<String>(value: 'destroyLocations', child: Text('Destroy locations'))
+          ]),
+          _buildList(_httpSettings),
+
+          _buildListHeader("Application"),
+          _buildList(_applicationSettings),
+
+          _buildListHeader("Debug", <PopupMenuItem<String>>[
+            const PopupMenuItem<String>(value: 'emailLog', child: Text('Email log')),
+            const PopupMenuItem<String>(value: 'destroyLog', child: Text('Destroy log')),
+          ]),
+          _buildList(_debugSettings)
+        ],
+      )
+    );
+  }
+
+  SliverAppBar _buildListHeader(String title, [List<PopupMenuItem<String>> menu]) {
+    return new SliverAppBar(
+      title: new Text(title),
+      centerTitle: true,
+      actions: (menu != null) ? [PopupMenuButton<String>(onSelected: _onSelectMenu, itemBuilder: (BuildContext context) => menu)] : null,
+      iconTheme: IconThemeData(
+        color: Colors.black
       ),
+      backgroundColor: Color.fromRGBO(230, 230, 230, 1.0),
+      leading: Container(),
+      snap: true,
+      floating: true,
+    );
+  }
+
+  Widget _buildList(List<Map> list) {
+    return new SliverFixedExtentList(
+      delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+        return _buildField(list[index]);
+      }, childCount: list.length),
+      itemExtent: 60.0,
     );
   }
 
@@ -135,7 +235,7 @@ class _SettingsViewState extends State<SettingsView> {
         field = _buildSwitchField(setting);
         break;
       case INPUT_TYPE_TEXT:
-        field = new Text('field: $name - Unsupported inputType: $inputType');
+        field = _buildTextField(setting);
         break;
       default:
         field = new Text('field: $name - Unsupported inputType: $inputType');
@@ -167,7 +267,7 @@ class _SettingsViewState extends State<SettingsView> {
     }
     return InputDecorator(
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0),
+        contentPadding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
         labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
         labelText: name,
       ),
@@ -187,7 +287,7 @@ class _SettingsViewState extends State<SettingsView> {
     bool value = _state.map[name];
     return InputDecorator(
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(top:7.0, left:10.0, bottom:7.0),
+          contentPadding: EdgeInsets.only(top:0.0, left:10.0, bottom:0.0),
           labelStyle: TextStyle(color: Colors.blue),
           //labelText: name
         ),
@@ -197,6 +297,7 @@ class _SettingsViewState extends State<SettingsView> {
               Expanded(
                   flex: 1,
                   child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: <Widget>[
                         Switch(value: value, onChanged: _createSwitchChangeHandler(name))
@@ -205,6 +306,31 @@ class _SettingsViewState extends State<SettingsView> {
               )
             ]
         )
+    );
+  }
+
+  Widget _buildTextField(Map<String, Object> setting) {
+    String name = setting['name'];
+    String value = _state.map[name];
+
+    return GestureDetector(
+      onTap: () async {
+        value = await util.Dialog.prompt(context, title: "Edit $name", labelText: name, hintText: "", value: value);
+        bg.Config config = bg.Config().set(name, value);
+        bg.BackgroundGeolocation.setConfig(config).then((bg.State state) {
+          setState(() {
+            _state = state;
+          });
+        });
+      },
+      child: InputDecorator(
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 20.0),
+            labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
+            labelText: name,
+          ),
+          child: Text(value)
+      )
     );
   }
 
@@ -243,15 +369,6 @@ class _SettingsViewState extends State<SettingsView> {
         });
       });
     };
-  }
-
-  Widget _buildFieldSeparator(String label) {
-    return Container(
-        color: Color.fromRGBO(220, 220, 220, 0.5),
-        //color: Colors.amber,
-        padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0),
-        child: Text(label, style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold))
-    );
   }
 }
 
