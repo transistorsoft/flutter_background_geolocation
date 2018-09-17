@@ -235,6 +235,10 @@ class BackgroundGeolocation {
     return await _methodChannel.invokeMethod('emailLog', email);
   }
 
+  static Future<bool> destroyLog() async {
+    return await _methodChannel.invokeMethod('destroyLog');
+  }
+
   static Future<bool> isPowerSaveMode() async {
     return await _methodChannel.invokeMethod('isPowerSaveMode');
   }
