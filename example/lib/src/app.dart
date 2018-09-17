@@ -1,10 +1,9 @@
-/**
- * NOTE:  There's nothing particularly interesting in this class for BackgroundGeolocation.
- * This is just a bootstrap app for selecting
- * an app to run (Hello World App, Advanced App).
- *
- * Go look at the source for those apps instead.
- */
+///
+/// NOTE:  There's nothing particularly interesting in this class for BackgroundGeolocation.
+/// This is just a bootstrap app for selecting app to run (Hello World App, Advanced App).
+///
+/// Go look at the source for those apps instead.
+///
 
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -141,7 +140,8 @@ class _HomeViewState extends State<_HomeView> {
     return Scaffold(
         appBar: AppBar(
             title: const Text('Background Geolocation'),
-            backgroundColor: Colors.amberAccent
+            backgroundColor: Colors.amberAccent,
+            brightness: Brightness.light,
         ),
         body: Container(
             color: Colors.black87,

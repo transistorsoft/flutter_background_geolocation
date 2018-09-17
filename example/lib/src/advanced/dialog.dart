@@ -84,6 +84,63 @@ class Dialog {
     );
   }
 
+  static Future<String> prompt(BuildContext context, {String title, String labelText, String hintText, String value}) {
+    TextEditingController controller = new TextEditingController(text: value);
+
+    Completer completer = new Completer<String>();
+
+    String submittedValue = value;
+
+    showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: Text(title),
+          contentPadding: const EdgeInsets.all(16.0),
+          content: SizedBox(
+            height: 100.0,
+            child: Column(
+                children: <Widget>[
+                  //new Text(''),  TODO could add some paragrah here before text-field.
+                  new Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: new TextField(
+                          controller: controller,
+                          onChanged: (String value) {
+                            submittedValue = value;
+                          },
+                          autofocus: true,
+                          decoration: new InputDecoration(
+                              labelText: labelText, hintText: hintText,
+                        ),
+                      ))
+                    ],
+                  ),
+                ]
+            ),
+          ),
+          actions: <Widget>[
+            new RaisedButton(
+                child: const Text('Cancel'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }
+            ),
+            new RaisedButton(
+                child: const Text('Submit'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  completer.complete(submittedValue);
+                }
+            )
+          ],
+        );
+      },
+    );
+    return completer.future;
+  }
+
   static Future<CircularProgressIndicator> showLoading(BuildContext context, String message) {
     return showDialog(
       context: context,

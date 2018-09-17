@@ -34,8 +34,14 @@ class _AdvancedAppState extends State<AdvancedApp> {
   Widget build(BuildContext context) {
     return new MaterialApp(
       theme: Theme.of(context).copyWith(
+        brightness: Brightness.light,
         accentColor: Colors.black,
+
+        accentIconTheme: IconThemeData(
+          color: Colors.white
+        ),
         bottomAppBarColor: Colors.amberAccent,
+
         hintColor: Colors.black12,
         primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
           bodyColor: Colors.black,

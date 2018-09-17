@@ -44,7 +44,6 @@ class HomeViewState extends State<HomeView> {
 
     Map deviceParams = await bg.Config.deviceParams;
 
-
     // 1.  Listen to events (See docs for all 12 available events).
     bg.BackgroundGeolocation.onLocation(_onLocation);
     bg.BackgroundGeolocation.onMotionChange(_onMotionChange);
@@ -54,7 +53,6 @@ class HomeViewState extends State<HomeView> {
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
-        reset: true,
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_NAVIGATION,
         distanceFilter: 10.0,
         stopOnTerminate: false,
@@ -191,6 +189,7 @@ class HomeViewState extends State<HomeView> {
         title: const Text('Background Geolocation'),
         leading: IconButton(onPressed: _onClickHome, icon: Icon(Icons.home, color: Colors.black)),
         backgroundColor: Theme.of(context).bottomAppBarColor,
+        brightness: Brightness.light,
         actions: <Widget>[
           Switch(value: _enabled, onChanged: _onClickEnable
           ),
