@@ -1,9 +1,9 @@
 part of flt_background_geolocation;
 
 /// Event object provided to [BackgroundGeolocation.onGeofencesChange].
-/// 
+///
 /// Expresses a change in the list of actively monitored geofences by the native geofencing API.
-/// 
+///
 class GeofencesChangeEvent {
   List<String> off;
   List<Geofence> on;

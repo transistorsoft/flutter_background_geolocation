@@ -45,8 +45,8 @@ class _Activity {
 }
 
 /// Geolocation event object provided to [BackgroundGeolocation.onLocation] and [BackgroundGeolocation.onMotionChange].
-/// 
-/// 
+///
+///
 class Location {
   dynamic map;
   String timestamp;

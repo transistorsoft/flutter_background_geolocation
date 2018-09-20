@@ -1,7 +1,7 @@
 part of flt_background_geolocation;
 
 /// Event object provided to [BackgroundGeolocation.onHeartbeat].
-/// 
+///
 class HeartbeatEvent {
   Location location;
 

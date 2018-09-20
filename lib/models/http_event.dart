@@ -1,10 +1,10 @@
 part of flt_background_geolocation;
 
 /// Event object provided to [BackgroundGeolocation.onHttp].
-/// 
+///
 class HttpEvent {
   bool success;
-  int  status;
+  int status;
   String responseText;
 
   HttpEvent(dynamic params) {
