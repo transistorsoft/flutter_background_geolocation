@@ -28,10 +28,7 @@ The **[Android module](http://www.transistorsoft.com/shop/products/flutter-backg
 ![Settings](https://dl.dropboxusercontent.com/s/8oad228siog49kt/settings-framed-350.png?dl=1)
 
 # Contents
-- ### :books: [API Documentation](./docs/README.md)
-  - :wrench: [Configuration Options](./docs/README.md#wrench-configuration-options-1)
-  - :zap: [Events](./docs/README.md#zap-events-1)
-  - :small_blue_diamond: [Methods](./docs/README.md#large_blue_diamond-methods)        
+- ### :books: [API Documentation](https://pub.dartlang.org/documentation/flutter_background_geolocation/latest/flt_background_geolocation/flt_background_geolocation-library.html)
 - ### [Installing the Plugin](#large_blue_diamond-installing-the-plugin)
 - ### [Setup Guides](#large_blue_diamond-setup-guides)
 - ### [Using the plugin](#large_blue_diamond-using-the-plugin)
@@ -78,9 +75,9 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
 
 There are three main steps to using `BackgroundGeolocation`:
 
-1. Wire up [event-listeners](./docs/README.md#zap-events-1)
-2. [Configure](./docs/README.md#readyconfig-successfn-failurefn) the plugin
-3. [`#start`](./docs/README.md#startsuccessfn-failurefn) the plugin
+1. Wire up event-listeners.
+2. Configure the plugin with `#ready`.
+3. `#start` the plugin.
 
 ```dart
 

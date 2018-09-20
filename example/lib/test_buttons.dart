@@ -12,7 +12,7 @@ class TestButtonsState extends State<TestButtons> {
   @override
   void initState() {
     super.initState();
-    bg.BackgroundGeolocation.getState().then((bg.State state) {
+    bg.BackgroundGeolocation.state.then((bg.State state) {
       _isMoving = state.isMoving;
     });
 
@@ -46,7 +46,7 @@ class TestButtonsState extends State<TestButtons> {
   }
 
   void _onClickGetOdometer() async {
-    double odometer = await bg.BackgroundGeolocation.getOdometer() / 1000;
+    double odometer = await bg.BackgroundGeolocation.odometer / 1000;
     print ('[getOdometer] $odometer km');
   }
 
@@ -92,17 +92,17 @@ class TestButtonsState extends State<TestButtons> {
   }
 
   void _onClickGetState() async {
-    bg.State state = await bg.BackgroundGeolocation.getState();
+    bg.State state = await bg.BackgroundGeolocation.state;
     print('[getState] ' + state.map.toString());
   }
   void _onClickGetCount() {
-    bg.BackgroundGeolocation.getCount().then((int count) {
+    bg.BackgroundGeolocation.count.then((int count) {
       print('[getCount] - ' + count.toString());
     });
   }
 
   void _onClickGetLocations() {
-    bg.BackgroundGeolocation.getLocations().then((List<dynamic> rs) {
+    bg.BackgroundGeolocation.locations.then((List<dynamic> rs) {
       rs.forEach((dynamic item) {
         var coords = item['coords'];
         print('- location: ' + coords.toString());

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the didUpdateWidget method from the HomeViewState class, for the Dart programming language.">
+  <title>didUpdateWidget method - HomeViewState class - home_view library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">flutter_background_geolocation_example</a></li>
+    <li><a href="advanced_home_view/advanced_home_view-library.html">home_view</a></li>
+    <li><a href="advanced_home_view/HomeViewState-class.html">HomeViewState</a></li>
+    <li class="self-crumb">didUpdateWidget method</li>
+  </ol>
+  <div class="self-name">didUpdateWidget</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>HomeViewState class</h5>
+    <ol>
+      <li class="section-title"><a href="advanced_home_view/HomeViewState-class.html#constructors">Constructors</a></li>
+      <li><a href="advanced_home_view/HomeViewState/HomeViewState.html">HomeViewState</a></li>
+    
+      <li class="section-title inherited">
+        <a href="advanced_home_view/HomeViewState-class.html#instance-properties">Properties</a>
+      </li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/context.html">context</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/mounted.html">mounted</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/runtimeType.html">runtimeType</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/widget.html">widget</a></li>
+    
+      <li class="section-title"><a href="advanced_home_view/HomeViewState-class.html#instance-methods">Methods</a></li>
+      <li><a href="advanced_home_view/HomeViewState/build.html">build</a></li>
+      <li><a href="advanced_home_view/HomeViewState/initPlatformState.html">initPlatformState</a></li>
+      <li><a href="advanced_home_view/HomeViewState/initState.html">initState</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/deactivate.html">deactivate</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/debugFillProperties.html">debugFillProperties</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/didChangeDependencies.html">didChangeDependencies</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/didUpdateWidget.html">didUpdateWidget</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/dispose.html">dispose</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/reassemble.html">reassemble</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/setState.html">setState</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/toDiagnosticsNode.html">toDiagnosticsNode</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/toString.html">toString</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/toStringShort.html">toStringShort</a></li>
+    
+      <li class="section-title inherited"><a href="advanced_home_view/HomeViewState-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="advanced_home_view/HomeViewState/operator_equals.html">operator ==</a></li>
+    
+    
+    
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>didUpdateWidget method</h1>
+
+    <section class="multi-line-signature">
+      <div>
+        <ol class="annotation-list">
+          <li>@mustCallSuper</li>
+          <li>@protected</li>
+        </ol>
+      </div>
+      <span class="returntype">void</span>
+      <span class="name ">didUpdateWidget</span>
+(<wbr><span class="parameter" id="didUpdateWidget-param-oldWidget"><span class="type-annotation"><a href="advanced_home_view/HomeView-class.html">HomeView</a></span> <span class="parameter-name">oldWidget</span></span>)
+    </section>
+    <section class="desc markdown">
+      <p>Called whenever the widget configuration changes.</p>
+<p>If the parent widget rebuilds and request that this location in the tree
+update to display a new widget with the same <code>runtimeType</code> and
+<code>Widget.key</code>, the framework will update the <a href="test_buttons/TestButtonsState/widget.html">widget</a> property of this
+<code>State</code> object to refer to the new widget and then call this method
+with the previous widget as an argument.</p>
+<p>Override this method to respond when the <a href="test_buttons/TestButtonsState/widget.html">widget</a> changes (e.g., to start
+implicit animations).</p>
+<p>The framework always calls <a href="advanced_home_view/HomeViewState/build.html">build</a> after calling <a href="test_buttons/TestButtonsState/didUpdateWidget.html">didUpdateWidget</a>, which
+means any calls to <a href="test_buttons/TestButtonsState/setState.html">setState</a> in <a href="test_buttons/TestButtonsState/didUpdateWidget.html">didUpdateWidget</a> are redundant.</p>
+<p>If a <code>State</code>'s <a href="advanced_home_view/HomeViewState/build.html">build</a> method depends on an object that can itself change
+state, for example a <code>ChangeNotifier</code> or <code>Stream</code>, or some other object to
+which one can subscribe to receive notifications, then the <code>State</code> should
+subscribe to that object during <a href="advanced_home_view/HomeViewState/initState.html">initState</a>, unsubscribe from the old
+object and subscribe to the new object when it changes in
+<a href="test_buttons/TestButtonsState/didUpdateWidget.html">didUpdateWidget</a>, and then unsubscribe from the object in <a href="test_buttons/TestButtonsState/dispose.html">dispose</a>.</p>
+<p>If you override this, make sure your method starts with a call to
+super.didUpdateWidget(oldWidget).</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">@mustCallSuper
+@protected
+void didUpdateWidget(covariant T oldWidget) { }</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flutter_background_geolocation_example 0.0.0-unknown
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>

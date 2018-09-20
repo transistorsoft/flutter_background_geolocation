@@ -1,7 +1,10 @@
 package com.transistorsoft.flutter.backgroundgeolocation;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -10,16 +13,17 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import io.flutter.plugin.common.EventChannel;
+import io.flutter.plugin.common.JSONMethodCodec;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
+import io.flutter.view.FlutterNativeView;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ActivityChangeStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ConnectivityChangeStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.EnabledChangeStreamHandler;
@@ -49,9 +53,10 @@ import org.json.JSONObject;
 
 /**
  * FlutterBackgroundGeolocationPlugin
- * TODO EventChannel https://medium.com/@svenasse/flutter-event-channels-89623ce6c017
+ * TODO android headless:  https://github.com/flutter/plugins/pull/642/commits/0808e48317936b4e659ce453c972e5ff4104c5a2
+ * FlutterIsolteStartedEvent
  */
-public class FLTBackgroundGeolocationPlugin implements MethodCallHandler {
+public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Application.ActivityLifecycleCallbacks, PluginRegistry.ViewDestroyListener {
     public static final String PLUGIN_ID                  = "com.transistorsoft/flutter_background_geolocation";
     public static final String METHOD_CHANNEL_NAME         = PLUGIN_ID + "/methods";
     public static final String EVENT_CHANNEL_MOTIONCHANGE  = "com.transistorsoft/flutter_background_geolocation/events/motionchange";
@@ -74,22 +79,30 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler {
 
     private static final String JOB_SERVICE_CLASS         = "HeadlessJobService";
 
+    private boolean mIsInitialized;
     private final Intent mLaunchIntent;
     private final Context mContext;
     private final PluginRegistry.Registrar mRegistrar;
 
     /** Plugin registration. */
     public static void registerWith(Registrar registrar) {
+        FLTBackgroundGeolocationPlugin plugin = new FLTBackgroundGeolocationPlugin(registrar);
         final MethodChannel channel = new MethodChannel(registrar.messenger(), METHOD_CHANNEL_NAME);
-        channel.setMethodCallHandler(new FLTBackgroundGeolocationPlugin(registrar, channel));
+        channel.setMethodCallHandler(plugin);
+        registrar.addViewDestroyListener(plugin);
     }
 
-    private FLTBackgroundGeolocationPlugin(PluginRegistry.Registrar registrar, MethodChannel channel) {
+    private FLTBackgroundGeolocationPlugin(PluginRegistry.Registrar registrar) {
+        Activity activity = registrar.activity();
+        mIsInitialized = false;
         mRegistrar = registrar;
         mContext = registrar.context().getApplicationContext();
-        mLaunchIntent = registrar.activity().getIntent();
+        mLaunchIntent = activity.getIntent();
 
         BackgroundGeolocation.getInstance(mContext, mLaunchIntent);
+
+        // We need to know when activity is created / destroyed.
+        activity.getApplication().registerActivityLifecycleCallbacks(this);
 
         // Init stream-handlers
         new LocationStreamHandler().register(registrar);
@@ -112,11 +125,34 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler {
         config.updateWithBuilder()
                 .setHeadlessJobService(getClass().getPackage().getName() + "." + JOB_SERVICE_CLASS)
                 .commit();
-
     }
 
-    private String eventChannelName(String event) {
-        return PLUGIN_ID + "/events/" + event;
+    private void initializeLocationManager(Activity activity) {
+        mIsInitialized = true;
+
+        if (activity == null) {
+            return;
+        }
+
+        if (mLaunchIntent.hasExtra("forceReload")) {
+            activity.moveTaskToBack(true);
+        }
+        // Handle play-services connect errors.
+        BackgroundGeolocation.getInstance(mContext, mLaunchIntent).onPlayServicesConnectError((new TSPlayServicesConnectErrorCallback() {
+            @Override
+            public void onPlayServicesConnectError(int errorCode) {
+                handlePlayServicesConnectError(errorCode);
+            }
+        }));
+    }
+
+    // Shows Google Play Services error dialog prompting user to install / update play-services.
+    private void handlePlayServicesConnectError(Integer errorCode) {
+        Activity activity = mRegistrar.activity();
+        if (activity == null) {
+            return;
+        }
+        GoogleApiAvailability.getInstance().getErrorDialog(activity, errorCode, 1001).show();
     }
 
     @SuppressWarnings("unchecked")
@@ -192,9 +228,19 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler {
             isPowerSaveMode(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_PLAY_SOUND)) {
             playSound((int) call.arguments, result);
+        } else if (call.method.equalsIgnoreCase("registerHeadlessTask")) {
+            registerHeadlessTask((Long) call.arguments, result);
         } else {
             result.notImplemented();
         }
+    }
+
+    // experimental Flutter Headless (NOT READY)
+    private void registerHeadlessTask(Long callbackId, Result result) {
+        final MethodChannel bgChannel = new MethodChannel(mRegistrar.messenger(), PLUGIN_ID + "/headless", JSONMethodCodec.INSTANCE);
+        bgChannel.setMethodCallHandler(this);
+        HeadlessTask.register(mContext, callbackId, bgChannel);
+        result.success(true);
     }
 
     private void getState(Result result) {
@@ -675,5 +721,39 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler {
             e.printStackTrace();
             result.error(e.getMessage(), null, null);
         }
+    }
+
+    @Override
+    // TODO this is part of attempt to implement Flutter Headless callbacks.  Not yet working.
+    public boolean onViewDestroy(FlutterNativeView nativeView) {
+        return HeadlessTask.setSharedFlutterView(nativeView);
+    }
+
+    @Override
+    public void onActivityCreated(Activity activity, Bundle bundle) { }
+    @Override
+    public void onActivityPaused(Activity activity) {
+    }
+
+    @Override
+    public void onActivityResumed(Activity activity) {
+
+    }
+    @Override
+    public void onActivityStarted(Activity activity) {
+        if (!mIsInitialized) {
+            initializeLocationManager(activity);
+        }
+    }
+    @Override
+    public void onActivityStopped(Activity activity) {}
+
+    @Override
+    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {}
+
+    @Override
+    public void onActivityDestroyed(Activity activity) {
+        activity.getApplication().unregisterActivityLifecycleCallbacks(this);
+        BackgroundGeolocation.getInstance(mContext).onActivityDestroy();
     }
 }
