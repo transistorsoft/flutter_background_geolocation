@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## [0.1.3] - 2018-09-20
+- Implementing Dart-style docs with `dartdoc`
+- Re-organize `/lib` dir; remove `/src` folder (hides classes from `dartdoc`).
+
 ## [0.1.2] - 2018-09-17
 - Implementing advanced example app.
 - Fix missing `removeListener` methods for `enabledchange`, `connectivitychange`

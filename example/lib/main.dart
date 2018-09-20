@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'src/app.dart';
-import 'src/advanced/app.dart';
-import 'src/hello_world/app.dart';
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+import 'package:flutter_background_geolocation_example/app.dart';
+import 'advanced/app.dart';
+import 'hello_world/app.dart';
 
 void main() async {
 
@@ -25,4 +25,11 @@ void main() async {
       break;
   }
   runApp(app);
+
+  /* TODO Android headless implementation
+  bg.BackgroundGeolocation.registerHeadlessTask((String result) async {
+    bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
+  });
+  */
+
 }

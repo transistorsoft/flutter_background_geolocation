@@ -60,7 +60,7 @@ Future<String> testHandler(String command) async {
 
     switch(command) {
       case 'getState':
-        bg.State state = await bg.BackgroundGeolocation.getState();
+        bg.State state = await bg.BackgroundGeolocation.state;
         action.result = state;
         app.addAction(action);
         return state.toString();
@@ -81,7 +81,7 @@ Future<String> testHandler(String command) async {
             extras: {"foo":"bar"}
         );
         await bg.BackgroundGeolocation.addGeofence(geofence);
-        List<bg.Geofence> geofences = await bg.BackgroundGeolocation.getGeofences();
+        List<bg.Geofence> geofences = await bg.BackgroundGeolocation.geofences;
         List<Map> rs = [];
         geofences.forEach((bg.Geofence geofence) {
           rs.add(geofence.toMap());
@@ -206,7 +206,7 @@ Future<String> testHandler(String command) async {
       case 'getCount':
         await bg.BackgroundGeolocation.destroyLocations();
         await bg.BackgroundGeolocation.getCurrentPosition(samples: 1, persist: true);
-        int count = await bg.BackgroundGeolocation.getCount();
+        int count = await bg.BackgroundGeolocation.count;
         action.result = count;
         app.addAction(action);
         return count.toString();
@@ -215,7 +215,7 @@ Future<String> testHandler(String command) async {
         await bg.BackgroundGeolocation.getCurrentPosition(samples: 1, persist: true);
         bool result = await bg.BackgroundGeolocation.destroyLocations();
         print("destroyLocations: " + result.toString());
-        int count = await bg.BackgroundGeolocation.getCount();
+        int count = await bg.BackgroundGeolocation.count;
         action.result = count;
         app.addAction(action);
         return count.toString();
@@ -300,8 +300,8 @@ class _TestAppState extends State<TestApp> {
               //crossAxisAlignment: CrossAxisAlignment.stretch,
               child: new ListView.builder(
                   itemCount: _actions.length,
-                  itemBuilder: (BuildContext context, int Index) {
-                    Action action = _actions[Index];
+                  itemBuilder: (BuildContext context, int index) {
+                    Action action = _actions[index];
                     return InputDecorator(
                         decoration: InputDecoration(
                             contentPadding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 10.0),

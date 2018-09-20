@@ -4,7 +4,7 @@
 
 Flutter seems to have a problem with 3rd-party Android libraries which merge their own `AndroidManifest.xml` into the application, particularly the `android:label` attribute.
 
-:open_file_folder: `android/app/src/main/AndroidManifest.xml`:
+##### :open_file_folder: `android/app/src/main/AndroidManifest.xml`:
 
 ```diff
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,7 +20,7 @@ Flutter seems to have a problem with 3rd-party Android libraries which merge the
 
 ```
 
-:warning: Failure to perform the step above will result in a **build error**
+##### :warning: Failure to perform the step above will result in a **build error**
 
 ```
 Execution failed for task ':app:processDebugManifest'.
