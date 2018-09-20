@@ -1,12 +1,11 @@
 ///[![](https://dl.dropboxusercontent.com/s/nm4s5ltlug63vv8/logo-150-print.png?dl=1)](https://www.transistorsoft.com)
 /// -------------------------------------------------------------------------------
-/// 
+///
 library flt_background_geolocation;
 
 import 'dart:async';
 import 'dart:ui';
 import 'dart:io';
-
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';

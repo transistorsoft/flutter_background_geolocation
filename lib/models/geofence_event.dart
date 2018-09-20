@@ -1,7 +1,7 @@
 part of flt_background_geolocation;
 
 /// Geofence transition event provided to [BackgroundGeolocation.onGeofence]
-/// 
+///
 class GeofenceEvent {
   String identifier;
   String action;

@@ -1,7 +1,7 @@
 part of flt_background_geolocation;
 
 /// Circular Geofence class provided to [BackgroundGeolocation.addGeofence]
-/// 
+///
 class Geofence {
   String identifier;
   double radius;
