@@ -8,9 +8,11 @@ import com.transistorsoft.locationmanager.logger.TSLog;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import io.flutter.plugin.common.JSONMethodCodec;
+import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.view.FlutterCallbackInformation;
@@ -19,87 +21,118 @@ import io.flutter.view.FlutterMain;
 import io.flutter.view.FlutterNativeView;
 import io.flutter.view.FlutterRunArguments;
 
-public class HeadlessTask {
+public class HeadlessTask implements MethodChannel.MethodCallHandler {
     // Hard-coded time-limit for headless-tasks is 30000 @todo configurable?
     private static int TASK_TIMEOUT = 30000;
-
-    private static MethodChannel sChannel;
-    private static FlutterNativeView sSharedFlutterView;
-    private static long sCallbackId;
-    private String mAppBundlePath;
-    private static Callback sCallback;
     private static PluginRegistry.PluginRegistrantCallback sPluginRegistrantCallback;
+    private static Long sRegistrationCallbackId;
+    private static Long sClientCallbackId;
+    private static FlutterNativeView sBackgroundFlutterView;
+    private static MethodChannel sDispatchChannelChannel;
+    private static final AtomicBoolean sHeadlessTaskRegistered = new AtomicBoolean(false);
 
-    public Bundle mEvent;
+    private Callback mCallback;
+    private Bundle mEvent;
 
-    static boolean setSharedFlutterView(FlutterNativeView view) {
-        if (sSharedFlutterView != null && sSharedFlutterView != view) {
-            TSLog.logger.info(TSLog.info("[HeadlessTask] setSharedFlutterView tried to overwrite an existing FlutterNativeView"));
+    // Called by Application#onCreate
+    public static void setPluginRegistrant(PluginRegistry.PluginRegistrantCallback callback) {
+        sPluginRegistrantCallback = callback;
+    }
+
+    // Called by FLTBackgroundGeolocationPlugin
+    static boolean register(List<Long> callbacks) {
+        if (sRegistrationCallbackId != null) {
             return false;
         }
-        sSharedFlutterView = view;
+        sRegistrationCallbackId = callbacks.get(0);
+        sClientCallbackId = callbacks.get(1);
         return true;
     }
 
-    static void register(Context context, long callbackId, MethodChannel channel) {
-        /* TODO FlutterRunArguments doesn't seem ready for this.
-        sCallbackId = callbackId;
-        sChannel = channel;
+    HeadlessTask(Context context, Bundle event, Callback callback) {
+        String eventName = event.getString("event");
+        TSLog.logger.debug("\uD83D\uDC80 [HeadlessTask " + hashCode() + "] event: " + eventName);
 
         FlutterMain.ensureInitializationComplete(context, null);
-        String mAppBundlePath = FlutterMain.findAppBundlePath(context);
-        FlutterCallbackInformation cb = FlutterCallbackInformation.lookupCallbackInformation(callbackId);
-        if (cb == null) {
-            TSLog.logger.debug("HeadlessTask#register: Fatal: failed to find callback");
-            return;
-        }
-        sSharedFlutterView = new FlutterNativeView(context.getApplicationContext(), true);
-        if (mAppBundlePath != null ) {
-            TSLog.logger.debug("HeadlessTask#register: Registered HeadlessTask");
 
-            FlutterRunArguments args = new FlutterRunArguments();
-            args.bundlePath = mAppBundlePath;
-            args.entrypoint = cb.callbackName;
-            args.libraryPath = cb.callbackLibraryPath;
-            sSharedFlutterView.runFromBundle(args);
-
-            sPluginRegistrantCallback.registerWith(sSharedFlutterView.getPluginRegistry());
-        }
-        */
-    }
-
-    HeadlessTask(Context context, Bundle event, Callback callback) {
-        sCallback = callback;
+        mCallback = callback;
         mEvent = event;
 
-        String eventName = event.getString("event");
+        if (sBackgroundFlutterView == null) {
+            FlutterCallbackInformation callbackInfo = FlutterCallbackInformation.lookupCallbackInformation(sRegistrationCallbackId);
+            if (callbackInfo == null) {
+                TSLog.logger.error(TSLog.error("Fatal: failed to find callback"));
+                finish();
+                return;
+            }
+            sBackgroundFlutterView = new FlutterNativeView(context, true);
 
-        TSLog.logger.debug("\uD83D\uDC80 [HeadlessTask] event: " + eventName + " (TODO: Flutter headless callback implementation)");
+            // Create the Transmitter channel
+            sDispatchChannelChannel = new MethodChannel(sBackgroundFlutterView, FLTBackgroundGeolocationPlugin.PLUGIN_ID + "/headless", JSONMethodCodec.INSTANCE);
+            sDispatchChannelChannel.setMethodCallHandler(this);
 
-        // TODO want to execute a headless Dart callback here.  Not yet sure how
-        //sChannel.invokeMethod("", new Object[]{sCallbackId});
+            sPluginRegistrantCallback.registerWith(sBackgroundFlutterView.getPluginRegistry());
 
-        try {
-            JSONObject params = new JSONObject(event.getString("params"));
-            TSLog.logger.debug(params.toString());
-            finish();
-        } catch (JSONException e) {
-            TSLog.logger.error(TSLog.error(e.getMessage()));
-            finish();
-            e.printStackTrace();
+            // Dispatch back to client for initialization.
+            FlutterRunArguments args = new FlutterRunArguments();
+            args.bundlePath = FlutterMain.findAppBundlePath(context);
+            args.entrypoint = callbackInfo.callbackName;
+            args.libraryPath = callbackInfo.callbackLibraryPath;
+            sBackgroundFlutterView.runFromBundle(args);
+        }
+
+        // Create the Receiver channel for receiving calls to #finsh
+        String channelName = FLTBackgroundGeolocationPlugin.PLUGIN_ID + "/headless/" + hashCode();
+        new MethodChannel(sBackgroundFlutterView, channelName, JSONMethodCodec.INSTANCE).setMethodCallHandler(this);
+
+        synchronized(sHeadlessTaskRegistered) {
+            if (!sHeadlessTaskRegistered.get()) {
+                // Queue up geofencing events while background isolate is starting
+                TSLog.logger.debug("[HeadlessTask] waiting for client to initialize");
+            } else {
+                // Callback method name is intentionally left blank.
+                dispatchEvent();
+            }
         }
     }
 
-    public Bundle getEvent() {
-        return mEvent;
+    @Override
+    public void onMethodCall(MethodCall call, MethodChannel.Result result) {
+        TSLog.logger.debug("$ " + call.method);
+        if (call.method.equalsIgnoreCase("initialized")) {
+            synchronized(sHeadlessTaskRegistered) {
+                sHeadlessTaskRegistered.set(true);
+            }
+            dispatchEvent();
+        } else if (call.method.equalsIgnoreCase("finish")) {
+            finish();
+        } else {
+            result.notImplemented();
+        }
     }
 
+    // Client callbacks signal completion of jobs by calling #finish.
     public void finish() {
-        sCallback.onComplete();
+        TSLog.logger.debug("\uD83D\uDC80 [HeadlessTask " + hashCode() + "] ❌");
+        mCallback.onComplete();
+    }
+
+    // Send event to Client.
+    private void dispatchEvent() {
+        JSONObject response = new JSONObject();
+        try {
+            response.put("taskId", String.valueOf(hashCode()));
+            response.put("callbackId", sClientCallbackId);
+            response.put("event", mEvent.getString("event"));
+            response.put("params", new JSONObject(mEvent.getString("params")));
+            sDispatchChannelChannel.invokeMethod("", response);
+        } catch (JSONException e) {
+            TSLog.logger.error(TSLog.error(e.getMessage()));
+            e.printStackTrace();
+        }
     }
 
     public interface Callback {
         void onComplete();
     }
-
 }

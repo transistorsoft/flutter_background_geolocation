@@ -80,9 +80,9 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     private static final String JOB_SERVICE_CLASS         = "HeadlessJobService";
 
     private boolean mIsInitialized;
-    private final Intent mLaunchIntent;
-    private final Context mContext;
-    private final PluginRegistry.Registrar mRegistrar;
+    private Intent mLaunchIntent;
+    private Context mContext;
+    private PluginRegistry.Registrar mRegistrar;
 
     /** Plugin registration. */
     public static void registerWith(Registrar registrar) {
@@ -94,37 +94,42 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
 
     private FLTBackgroundGeolocationPlugin(PluginRegistry.Registrar registrar) {
         Activity activity = registrar.activity();
-        mIsInitialized = false;
-        mRegistrar = registrar;
+
         mContext = registrar.context().getApplicationContext();
-        mLaunchIntent = activity.getIntent();
 
-        BackgroundGeolocation.getInstance(mContext, mLaunchIntent);
+        if (activity != null) {
+            mIsInitialized = false;
+            mRegistrar = registrar;
 
-        // We need to know when activity is created / destroyed.
-        activity.getApplication().registerActivityLifecycleCallbacks(this);
+            mLaunchIntent = activity.getIntent();
 
-        // Init stream-handlers
-        new LocationStreamHandler().register(registrar);
-        new MotionChangeStreamHandler().register(registrar);
-        new ActivityChangeStreamHandler().register(registrar);
-        new GeofencesChangeStreamHandler().register(registrar);
-        new GeofenceStreamHandler().register(registrar);
-        new HeartbeatStreamHandler().register(registrar);
-        new HttpStreamHandler().register(registrar);
-        new ScheduleStreamHandler().register(registrar);
-        new ConnectivityChangeStreamHandler().register(registrar);
-        new EnabledChangeStreamHandler().register(registrar);
-        new ProviderChangeStreamHandler().register(registrar);
-        new PowerSaveChangeStreamHandler().register(registrar);
+            BackgroundGeolocation.getInstance(mContext, mLaunchIntent);
 
-        // Allow desiredAccuracy configuration as CLLocationAccuracy
-        TSConfig config = TSConfig.getInstance(registrar.context().getApplicationContext());
-        config.useCLLocationAccuracy(true);
+            // We need to know when activity is created / destroyed.
+            activity.getApplication().registerActivityLifecycleCallbacks(this);
 
-        config.updateWithBuilder()
-                .setHeadlessJobService(getClass().getPackage().getName() + "." + JOB_SERVICE_CLASS)
-                .commit();
+            // Init stream-handlers
+            new LocationStreamHandler().register(registrar);
+            new MotionChangeStreamHandler().register(registrar);
+            new ActivityChangeStreamHandler().register(registrar);
+            new GeofencesChangeStreamHandler().register(registrar);
+            new GeofenceStreamHandler().register(registrar);
+            new HeartbeatStreamHandler().register(registrar);
+            new HttpStreamHandler().register(registrar);
+            new ScheduleStreamHandler().register(registrar);
+            new ConnectivityChangeStreamHandler().register(registrar);
+            new EnabledChangeStreamHandler().register(registrar);
+            new ProviderChangeStreamHandler().register(registrar);
+            new PowerSaveChangeStreamHandler().register(registrar);
+
+            // Allow desiredAccuracy configuration as CLLocationAccuracy
+            TSConfig config = TSConfig.getInstance(registrar.context().getApplicationContext());
+            config.useCLLocationAccuracy(true);
+
+            config.updateWithBuilder()
+                    .setHeadlessJobService(getClass().getPackage().getName() + "." + JOB_SERVICE_CLASS)
+                    .commit();
+        }
     }
 
     private void initializeLocationManager(Activity activity) {
@@ -229,18 +234,19 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_PLAY_SOUND)) {
             playSound((int) call.arguments, result);
         } else if (call.method.equalsIgnoreCase("registerHeadlessTask")) {
-            registerHeadlessTask((Long) call.arguments, result);
+            registerHeadlessTask((List<Long>) call.arguments, result);
         } else {
             result.notImplemented();
         }
     }
 
     // experimental Flutter Headless (NOT READY)
-    private void registerHeadlessTask(Long callbackId, Result result) {
-        final MethodChannel bgChannel = new MethodChannel(mRegistrar.messenger(), PLUGIN_ID + "/headless", JSONMethodCodec.INSTANCE);
-        bgChannel.setMethodCallHandler(this);
-        HeadlessTask.register(mContext, callbackId, bgChannel);
-        result.success(true);
+    private void registerHeadlessTask(List<Long> callbacks, Result result) {
+        if (HeadlessTask.register(callbacks)) {
+            result.success(true);
+        } else {
+            result.error("HEADLESS_TASK_ALREADY_REGISTERED", "Only one HeadlessTask may be registered", null);
+        }
     }
 
     private void getState(Result result) {
@@ -726,7 +732,8 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     @Override
     // TODO this is part of attempt to implement Flutter Headless callbacks.  Not yet working.
     public boolean onViewDestroy(FlutterNativeView nativeView) {
-        return HeadlessTask.setSharedFlutterView(nativeView);
+        //return HeadlessTask.setSharedFlutterView(nativeView);
+        return true;
     }
 
     @Override

@@ -3,43 +3,20 @@ part of flt_background_geolocation;
 const _PLUGIN_PATH = "com.transistorsoft/flutter_background_geolocation";
 const _METHOD_CHANNEL_NAME = "$_PLUGIN_PATH/methods";
 
-const _EVENT_CHANNEL_LOCATION = "$_PLUGIN_PATH/events/location";
-const _EVENT_CHANNEL_MOTIONCHANGE = "$_PLUGIN_PATH/events/motionchange";
-const _EVENT_CHANNEL_ACTIVITYCHANGE = "$_PLUGIN_PATH/events/activitychange";
-const _EVENT_CHANNEL_PROVIDERCHANGE = "$_PLUGIN_PATH/events/providerchange";
-const _EVENT_CHANNEL_GEOFENCESCHANGE = "$_PLUGIN_PATH/events/geofenceschange";
-const _EVENT_CHANNEL_GEOFENCE = "$_PLUGIN_PATH/events/geofence";
-const _EVENT_CHANNEL_HEARTBEAT = "$_PLUGIN_PATH/events/heartbeat";
-const _EVENT_CHANNEL_HTTP = "$_PLUGIN_PATH/events/http";
-const _EVENT_CHANNEL_SCHEDULE = "$_PLUGIN_PATH/events/schedule";
-const _EVENT_CHANNEL_POWERSAVECHANGE = "$_PLUGIN_PATH/events/powersavechange";
+const _EVENT_CHANNEL_LOCATION = "$_PLUGIN_PATH/events/" + Event.LOCATION;
+const _EVENT_CHANNEL_MOTIONCHANGE = "$_PLUGIN_PATH/events/" + Event.MOTIONCHANGE;
+const _EVENT_CHANNEL_ACTIVITYCHANGE = "$_PLUGIN_PATH/events/" + Event.ACTIVITYCHANGE;
+const _EVENT_CHANNEL_PROVIDERCHANGE = "$_PLUGIN_PATH/events/" + Event.PROVIDERCHANGE;
+const _EVENT_CHANNEL_GEOFENCESCHANGE = "$_PLUGIN_PATH/events/" + Event.GEOFENCESCHANGE;
+const _EVENT_CHANNEL_GEOFENCE = "$_PLUGIN_PATH/events/" + Event.GEOFENCE;
+const _EVENT_CHANNEL_HEARTBEAT = "$_PLUGIN_PATH/events/" + Event.HEARTBEAT;
+const _EVENT_CHANNEL_HTTP = "$_PLUGIN_PATH/events/" + Event.HTTP;
+const _EVENT_CHANNEL_SCHEDULE = "$_PLUGIN_PATH/events/" + Event.SCHEDULE;
+const _EVENT_CHANNEL_POWERSAVECHANGE = "$_PLUGIN_PATH/events/" + Event.POWERSAVECHANGE;
 const _EVENT_CHANNEL_CONNECTIVITYCHANGE =
-    "$_PLUGIN_PATH/events/connectivitychange";
-const _EVENT_CHANNEL_ENABLEDCHANGE = "$_PLUGIN_PATH/events/enabledchange";
+    "$_PLUGIN_PATH/events/" + Event.CONNECTIVITYCHANGE;
+const _EVENT_CHANNEL_ENABLEDCHANGE = "$_PLUGIN_PATH/events/" + Event.ENABLEDCHANGE;
 
-void _headlessCallbackDispatcher() {
-  const MethodChannel _headlessChannel =
-      const MethodChannel("$_PLUGIN_PATH/headless", const JSONMethodCodec());
-
-  final Map<String, Function> _callbackCache = new Map<String, Function>();
-  WidgetsFlutterBinding.ensureInitialized();
-
-  _headlessChannel.setMethodCallHandler((MethodCall call) async {
-    final args = call.arguments;
-    print("****************** _headlessCallbackDispatcher $args");
-
-    final CallbackHandle handle = new CallbackHandle.fromRawHandle(args[0]);
-    // PluginUtilities.getCallbackFromHandle performs a lookup based on the
-    // callback handle and returns a tear-off of the original callback.
-    Function closure = PluginUtilities.getCallbackFromHandle(handle);
-    if (closure == null) {
-      print('Fatal: could not find callback');
-      exit(-1);
-    }
-    closure();
-  });
-  print("********* HeadlessCallbackDispatcher initialized");
-}
 
 class _Subscription {
   final StreamSubscription<dynamic> subscription;
@@ -50,7 +27,26 @@ class _Subscription {
 
 /// Primary plugin API.
 ///
-/// # Example
+/// ## Events
+/// 
+/// [BackgroundGeolocation] is event-based.
+/// 
+/// | Method                 | Description                             |
+/// |------------------------|-----------------------------------------|
+/// | [onLocation]           | Fired with each recorded [Location]     |
+/// | [onMotionChange]       | Fired when the plugin changes state between *moving* / *stationary* |
+/// | [onHttp]               | Fired with each HTTP response from your server.  (see [Config.url]). |
+/// | [onActivityChange]     | Fired with each change in device motion-activity.                    |
+/// | [onProviderChange]     | Fired after changes to device location-services configuration.       |
+/// | [onHeartbeat]          | Periodic timed events.  See [Config.heartbeatInterval].  iOS requires [Config.preventSuspend]. |
+/// | [onGeofence]           | Fired with each [Geofence] transition event (`ENTER, EXIT, DWELL`).  |
+/// | [onGeofencesChange]    | Fired when the list of actively-monitored geofences changed.  See [Config.geofenceProximityRadius]. |
+/// | [onSchedule]           | Fired for [Config.schedule] events.                                  |
+/// | [onConnectivityChange] | Fired when network-connectivity changes (connected / disconnected).  |
+/// | [onPowerSaveChange]    | Fired when state of operating-system's "power-saving" feature is enabled / disabld. |
+/// | [onEnabledChange]      | Fired when the plugin is enabled / disabled via its [start] / [stop] methods.        |
+/// 
+/// ## Example
 ///
 ///  **NOTE**: `import '...' as bg`
 /// This is to namespace the plugin's classes, a number of which use common names,
@@ -102,7 +98,6 @@ class _Subscription {
 /// }
 /// ```
 ///
-
 class BackgroundGeolocation {
   // MethodChannel
   static const MethodChannel _methodChannel =
@@ -264,7 +259,8 @@ class BackgroundGeolocation {
   ///   print('[start] success - $state');
   /// });
   /// ```
-  /// For more information, see [Philosophy of Operation](../../../wiki/Philosophy-of-Operation)
+  /// For more information, see [Philosophy of Operation](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Philosophy-of-Operation)
+  ///
   static Future<State> start() async {
     Map state = await _methodChannel.invokeMethod('start');
     return new State(state);
@@ -284,6 +280,7 @@ class BackgroundGeolocation {
   /// // Later when you want to stop the Scheduler (eg: user logout)
   /// BackgroundGeolocation.stopSchedule();
   /// ```
+  /// 
   static Future<State> stop() async {
     Map state = await _methodChannel.invokeMethod('stop');
     return new State(state);
@@ -401,7 +398,7 @@ class BackgroundGeolocation {
   ///
   /// When provided a value of  **`true`**, the plugin will engage location-services and begin aggressively tracking the device's location *immediately*, bypassing stationary monitoring.
   ///
-  /// If you were making a "Jogging" application, this would be your **[Start Workout]** button to immediately begin location-tracking.  Send **`false`** to turn **off** location-services and return the plugin to the **stationary** state.
+  /// If you were making a "Jogging" application, this would be your **`[Start Workout]`** button to immediately begin location-tracking.  Send **`false`** to turn **off** location-services and return the plugin to the **stationary** state.
   ///
   /// ## Example
   ///
@@ -418,7 +415,7 @@ class BackgroundGeolocation {
   ///
   /// This method instructs the native code to fetch exactly one location using maximum power & accuracy.  The native code will persist the fetched location to
   /// its SQLite database just as any other location in addition to POSTing to your configured [Config.url].
-  /// If an error occurs while fetching the location, `catchError` will be provided with an **`Integer`** [Error Code](../../../wiki/Location-Error-Codes).
+  /// If an error occurs while fetching the location, `catchError` will be provided with an **`Integer`** [Error Code](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Location-Error-Codes).
   ///
   /// ## Options
   ///
@@ -576,7 +573,7 @@ class BackgroundGeolocation {
   /// });
   ///
   /// ```
-  ///  **NOTE:**For more information, see [HTTP Guide](http.md)
+  ///  __NOTE:__ For more information, see the __HTTP Guide__ at [HttpEvent].
   ///
   static Future<List> sync() async {
     return await _methodChannel.invokeMethod('sync');
@@ -611,9 +608,9 @@ class BackgroundGeolocation {
   //// });
   /// ```
   ///
-  ///  **NOTE:** When adding a list-of-geofences, it's about **10 times faster** to use [addGeofences] instead.
-  ///
-  ///  **NOTE:** See [Geofencing Guide](./geofencing.md) for more information.
+  /// __Note:__
+  /// - When adding a list-of-geofences, it's about **10 times faster** to use [addGeofences] instead.
+  /// - See [GeofenceEvent] for more information.
   ///
   static Future<bool> addGeofence(Geofence geofence) async {
     return await _methodChannel.invokeMethod('addGeofence', geofence.toMap());
@@ -848,7 +845,7 @@ class BackgroundGeolocation {
 
     _methodChannel.invokeMethod('getSensors').then((dynamic data) {
       completer.complete(new Sensors(data['platform'], data['accelerometer'],
-          data['gyroscope'], data['magnetometer'], data['motion_hardware']));
+          data['gyroscope'], data['magnetometer'], data['motion_hardware'], data['significant_motion']));
     }).catchError((e) {
       completer.completeError(e);
     });
@@ -1028,7 +1025,7 @@ class BackgroundGeolocation {
   ///
   /// It's when this list of monitored geofences *changes*, that the plugin will fire the `onGeofencesChange` event.
   ///
-  /// **Note:** For more information, see [Geofencing Guide](./geofencing.md)
+  /// **Note:** For more information, see __Geofencing Guide__ at [GeofenceEvent].
   ///
   /// ## Example
   ///
@@ -1155,13 +1152,13 @@ class BackgroundGeolocation {
   ///  **NOTE:** The plugin always force-fires an `onProviderChange` event whenever the app is launched (right after the [ready] method is executed), regardless of current state, so you can learn the the current state of location-services with each boot of your application.
   ///
   /// ## [ProviderChangeEvent.status]:
-  /// | Name | Value | Platform |
-  /// |------|-------|----------|
-  /// | `AUTHORIZATION_STATUS_NOT_DETERMINED` | `0` | iOS only |
-  /// | `AUTHORIZATION_STATUS_RESTRICTED` | `1` | iOS only |
-  /// | `AUTHORIZATION_STATUS_DENIED` | `2` | iOS & Android |
-  /// | `AUTHORIZATION_STATUS_ALWAYS` | `3` | iOS & Android |
-  /// | `AUTHORIZATION_STATUS_WHEN_IN_USE` | `4` | iOS only |
+  /// | Name                                                      | Platform      |
+  /// |-----------------------------------------------------------|---------------|
+  /// | [ProviderChangeEvent.AUTHORIZATION_STATUS_NOT_DETERMINED] | iOS only      |
+  /// | [ProviderChangeEvent.AUTHORIZATION_STATUS_RESTRICTED]     | iOS only      |
+  /// | [ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED]         | iOS & Android |
+  /// | [ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS]         | iOS & Android |
+  /// | [ProviderChangeEvent.AUTHORIZATION_STATUS_WHEN_IN_USE]    | iOS only      |
   ///
   /// ---------------------------------------------------------------------------------
   ///
@@ -1169,7 +1166,7 @@ class BackgroundGeolocation {
   ///
   /// [ProviderChangeEvent.status] == [ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS],
   ///
-  ///  otherwise, [ProviderChangeEvent.AUTHORIZATION_DENIED].
+  ///  otherwise, [ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED].
   ///
   /// ## Example
   ///
@@ -1284,14 +1281,129 @@ class BackgroundGeolocation {
     _registerSubscription(_eventsPowerSaveChange.listen(callback), callback);
   }
 
-  static Future<bool> registerHeadlessTask(Function(String) callback) async {
-    print('[#registerHeadlessTask');
+  /// Registers a function to receive events from __`BackgroundGeolocation`__ while in the *terminated* ("Headless") state.
+  /// 
+  /// __Note:__ Requires [Config.enableHeadless]:true.
+  /// 
+  /// In **`main.dart`**, create a global function beside `void main() {}` (**Must** be defined as a distinct function, not an anonymous callback).  This `function` will receive *all* events from `BackgroundGeolocation` in the headless state, and provided with a [HeadlessEvent] containing a [HeadlessEvent.name] and [HeadlessEvent.event].
+  /// 
+  /// After running your app with `runApp`, register your headless-task with [registerHeadlessTask].  Within your `callback`, you're free to interact with the complete `BackgroundGeolocation` API.
+  /// 
+  /// After completion of your headless-task, you must signal to the native-code with [HeadlessEvent.finish].  __WARNING__:  Failure to do so can cause the OS to punish your app for spending too much time in the background by throttling future events.
+  /// 
+  /// ## Example
+  /// 
+  /// __`main.dart`__
+  /// ```dart
+  /// 
+  /// /// Receives all events from BackgroundGeolocation while app is terminated:
+  /// void headlessTask(HeadlessEvent headlessEvent) async {
+  ///   print('[HeadlessTask]: $headlessEvent');
+  /// 
+  ///   switch(headlessEvent.name) {
+  ///     case Event.TERMINATE:
+  ///       State state = headlessEvent.event;
+  ///       break;
+  ///     case Event.HEARTBEAT:
+  ///       HeartbeatEvent event = headlessEvent.event;
+  ///       Location location = await BackgroundGeolocation.getCurrentPosition(
+  ///         samples:1
+  ///       );
+  ///       break;
+  ///     case Event.LOCATION:
+  ///       Location location = headlessEvent.event;
+  ///       break;
+  ///     case Event.MOTIONCHANGE:
+  ///       Location location = headlessEvent.event;
+  ///       break;
+  ///     case Event.HEARTBEAT:
+  ///       HttpEvent response = headlessEvent.event;
+  ///       break;
+  ///     case Event.SCHEDULE:
+  ///       State state = headlessEvent.event;
+  ///       break;
+  ///     case Event.GEOFENCE:
+  ///       GeofenceEvent event = headlessEvent.event;
+  ///       break;
+  ///     case Event.GEOFENCESCHANGE:
+  ///       GeofencesChangeEvent event = headlessEvent.event;
+  ///       break;
+  ///     case Event.ACTIVITYCHANGE:
+  ///       ActivityChangeEvent event = headlessEvent.event;
+  ///       break;
+  ///     case Event.CONNECTIVITYCHANGE:
+  ///       ConnectivityChangeEvent event = headlessEvent.event;
+  ///       break;
+  ///     case Event.ENABLEDCHANGE:
+  ///       bool enabled = headlessEvent.event;
+  ///       break;
+  ///     case Event.PROVIDERCHANGE:
+  ///       ProviderChangeEvent event = headlessEvent.event;
+  ///       break;
+  ///   }
+  ///   // IMPORTANT:  Signal completion of you HeadlessEvent:
+  ///   headlessEvent.finish();  // <-- REQUIRED
+  /// }
+  /// 
+  /// void main() {
+  ///   runApp(HelloWorld());
+  ///   
+  ///   // Register your headlessTask:
+  ///   BackgroundGeolocation.registerHeadlessTask(headlessTask);
+  /// }
+  /// ```
+  /// 
+  /// __Note__: The [HeadlessEvent.event] is of the same class as provided by `BackgroundGeolocation's` main event-listeners.  You can manually cast this instance as shown in the `switch` above.
+  /// 
+  /// - [onLocation]
+  /// - [onMotionChange]
+  /// - [onHttp]
+  /// - [onActivityChange]
+  /// - [onProviderChange]
+  /// - [onHeartbeat]
+  /// - [onGeofence]
+  /// - [onGeofencesChange]
+  /// - [onEnabledChange]
+  /// - [onConnectivityChange]
+  /// 
+  /// __WARNING__:  
+  /// 
+  /// - Be sure to signal completion of your headless-task with [HeadlessEvent.finish].
+  /// - You **cannot** register more than **one** headless-task.
+  /// - You **cannot** reference your UI within your headless-task.  There is no UI.
+  /// 
+  /// - Do **not** register an inline `function` to [registerHeadlessTask] -- the Flutter framework will **fail** to address it:
+  /// 
+  /// ```dart
+  /// // NO!  This will not work.
+  /// BackgroundGeolocation.registerHeadlessTask((HeadlessEvent event) {
+  ///   print('$event');
+  /// });
+  /// 
+  /// // YES!
+  /// void myHeadlessTask(HeadlessEvent headlessEvent) async {
+  ///   print('$event');
+  /// }
+  /// 
+  /// BackgroundGeolocation.registerHeadlessTask(myHeadlessTask);
+  /// 
+  /// ```
+  /// 
+  static Future<bool> registerHeadlessTask(void Function(HeadlessEvent) callback) async {
+    Completer completer = new Completer<bool>();
 
-    CallbackHandle handle =
-        PluginUtilities.getCallbackHandle(_headlessCallbackDispatcher);
-
-    return await _methodChannel.invokeMethod(
-        'registerHeadlessTask', handle.toRawHandle());
+    // Two callbacks:  the provided headless-task + _headlessRegistrationCallback
+    List<int> args = [
+      PluginUtilities.getCallbackHandle(_headlessCallbackDispatcher).toRawHandle(),
+      PluginUtilities.getCallbackHandle(callback).toRawHandle()
+    ];
+    _methodChannel.invokeMethod('registerHeadlessTask', args).then((dynamic success) {
+      completer.complete(true);
+    }).catchError((error) {
+      print('[BackgroundGeolocation registerHeadlessTask] ‼️ ${error.code}');
+      completer.complete(false);
+    });
+    return completer.future;
   }
 
   static void _registerSubscription(
@@ -1299,3 +1411,30 @@ class BackgroundGeolocation {
     _subscriptions.add(new _Subscription(sub, callback));
   }
 }
+
+/// Headless Callback Dispatcher
+///
+void _headlessCallbackDispatcher() {
+  WidgetsFlutterBinding.ensureInitialized();
+  const MethodChannel _headlessChannel = MethodChannel("$_PLUGIN_PATH/headless", JSONMethodCodec());
+
+  _headlessChannel.setMethodCallHandler((MethodCall call) async {
+    final args = call.arguments;
+
+    // Run the headless-task.
+    try {
+      final Function callback = PluginUtilities.getCallbackFromHandle(CallbackHandle.fromRawHandle(args['callbackId']));
+      if (callback == null) {
+        print('[BackgroundGeolocation _headlessCallbackDispatcher] ERROR: Failed to get callback from handle: $args');
+        return;
+      }
+      callback(new HeadlessEvent(args['event'], args['params'], args['taskId']));
+    } catch (e, stacktrace) {
+      print('[BackgroundGeolocation _headlessCallbackDispather] ‼️ Callback error: ' + e.toString());
+      print(stacktrace);
+    }
+  });
+  // Signal to native side that the client dispatcher is ready to receive events.
+  _headlessChannel.invokeMethod('initialized');
+}
+

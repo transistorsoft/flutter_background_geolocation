@@ -5,6 +5,8 @@ import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.os.Bundle;
 
+import com.transistorsoft.locationmanager.logger.TSLog;
+
 @TargetApi(21)
 public class HeadlessJobService extends JobService {
 
@@ -22,6 +24,7 @@ public class HeadlessJobService extends JobService {
     }
     @Override
     public boolean onStopJob(JobParameters params) {
+        TSLog.logger.debug(TSLog.ICON_WARN + " onStopJob");
         jobFinished(params, false);
         return true;
     }

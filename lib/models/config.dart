@@ -138,7 +138,7 @@ class Config {
   ///
   /// ![](https://dl.dropboxusercontent.com/s/vnio90swhs6xmqm/screenshot-ios-stationary-exit.png?dl=1)
   ///
-  ///  **NOTE:** For more information, see [Philosophy of Operation](../../../wiki/Philosophy-of-Operation)
+  ///  **NOTE:** For more information, see [Philosophy of Operation](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Philosophy-of-Operation)
   ///
   ///  **WARNING:** iOS will not detect the exact moment the device moves out of the stationary-radius.  In normal conditions, it will typically take **~200 meters** before the plugin begins tracking.
   ///
@@ -177,7 +177,7 @@ class Config {
   /// The default and *minimum* is `1000` meters.  **@see** releated event [BackgroundGeolocation.onGeofencesChange].  When using Geofences, the plugin activates only thoses in proximity (the maximim geofences allowed to be simultaneously monitored is limited by the platform, where **iOS** allows only 20 and **Android**.  However, the plugin allows you to create as many geofences as you wish (thousands even).  It stores these in its database and uses spatial queries to determine which **20** or **100** geofences to activate.
   ///
   ///  **NOTE:**
-  /// - [See Geofencing Guide](geofencing.md)
+  /// - See [GeofenceEvent]
   /// - [View animation of this behaviour](https://www.transistorsoft.com/shop/products/assets/images/background-geolocation-infinite-geofencing.gif)
   ///
   /// ![](https://dl.dropboxusercontent.com/s/7sggka4vcbrokwt/geofenceProximityRadius_iphone6_spacegrey_portrait.png?dl=1)
@@ -220,7 +220,7 @@ class Config {
   ///
   /// Defaults to `5` minutes.  When in the *moving* state, specifies the number of minutes to wait before turning off location-services and transitioning to *stationary* state after the ActivityRecognition System detects the device is `STILL`.  An example use-case for this configuration is to delay GPS OFF while in a car waiting at a traffic light.
   ///
-  /// **Note:** [Philosophy of Operation](../../../wiki/Philosophy-of-Operation)
+  /// **Note:** [Philosophy of Operation](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Philosophy-of-Operation)
   ///
   /// **WARNING:** Setting a value > 15 min is **not** recommended, particularly for Android.
   ///
@@ -309,7 +309,7 @@ class Config {
   /// ));
   /// ```
   ///
-  /// __See also:__ See [HTTP Guide](http.md) for more information.
+  /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
   /// __WARNING:__ It is highly recommended to let the plugin manage uploading locations to your server, **particularly for Android** when configured with **`stopOnTerminate: false`**, since your Cordova app (where your Javascript lives) *will* terminate &mdash; only the plugin's native Android background service will continue to operate, recording locations and uploading to your server.  The plugin's native HTTP service *is* better at this task than Javascript Ajax requests, since the plugin will automatically retry on server failure.
   String url;
@@ -329,7 +329,7 @@ class Config {
 
   /// The root property of the JSON schema where location-data will be attached.
   ///
-  ///  **Note:** See [HTTP Guide](http.md) for more information.
+  ///  **Note:** See __HTTP Guide__ at [HttpEvent] for more information.
   ///
   /// __See also:__
   /// - [locationTemplate]
@@ -439,7 +439,7 @@ class Config {
 
   /// Optional arbitrary key/values `{}` applied to each recorded location.
   ///
-  ///  **Note:**  See [HTTP Guide](http.md) for more information.
+  ///  **Note:**  See [HttpEvent] for more information.
   ///
   /// ## Example
   ///
@@ -480,7 +480,7 @@ class Config {
 
   /// Immediately upload each recorded location to your configured [url].
   ///
-  /// Default is `true`.  If you've enabeld HTTP feature by configuring an [url], the plugin will attempt to HTTP POST each location to your server **as it is recorded**.  If you set [autoSync], it's up to you to **manually** execute the [sync] method to initate the HTTP POST.
+  /// Default is `true`.  If you've enabeld HTTP feature by configuring an [url], the plugin will attempt to HTTP POST each location to your server **as it is recorded**.  If you set [autoSync], it's up to you to **manually** execute the [BackgroundGeolocation.sync] method to initate the HTTP POST.
   ///
   /// __Note:__ The plugin will continue to persist **every** recorded location in the SQLite database until you execute [BackgroundGeolocation.sync].
   ///
@@ -522,7 +522,7 @@ class Config {
   /// ```
   ///
   ///  **See also:**
-  /// - [HTTP Guide](http.md)
+  /// - __HTTP Guide__ at [HttpEvent].
   /// - [geofenceTemplate]
   /// - [httpRootProperty]
   ///
@@ -605,7 +605,7 @@ class Config {
   /// | `altitude_accuracy`   | `Float`  | Meters      |
   /// | `timestamp`           | `String` |ISO-8601     |
   /// | `uuid`                | `String` |Unique ID    |
-  /// | `event`               | `String` |`motionchange,geofence,heartbeat` |
+  /// | `event`               | `String` |`motionchange,geofence,heartbeat,providerchange` |
   /// | `odometer`            | `Float`  | Meters      |
   /// | `activity.type`       | `String` | `still,on_foot,running,on_bicycle,in_vehicle,unknown`|
   /// | `activity.confidence` | `Integer`| 0-100%      |
@@ -625,7 +625,7 @@ class Config {
   /// ```
   ///
   ///  **See also:**
-  /// - [HTTP Guide](http.md)
+  /// - [HttpEvent]
   /// - [locationTemplate]
   /// - [httpRootProperty]
   ///
@@ -687,7 +687,7 @@ class Config {
   /// | `altitude_accuracy`   | `Float`  | Meters      |
   /// | `timestamp`           | `String` |ISO-8601     |
   /// | `uuid`                | `String` |Unique ID    |
-  /// | `event`               | `String` |`motionchange,geofence,heartbeat` |
+  /// | `event`               | `String` |`motionchange,geofence,heartbeat,providerchange` |
   /// | `odometer`            | `Float`  | Meters      |
   /// | `activity.type`       | `String` | `still,on_foot,running,on_bicycle,in_vehicle,unknown`|
   /// | `activity.confidence` | `Integer`| 0-100%      |
@@ -755,7 +755,7 @@ class Config {
   /// Unlike iOS, the Android plugin's tracking will **not** pause at all when user terminates the app.  However, only the plugin's native background service continues to operate, **"headless"** (in this case, you should configure an [url] in order for the background-service to continue uploading locations to your server).
   ///
   ///  **See also:**
-  /// - [Android Headless Mode](../../../wiki/Android-Headless-Mode)
+  /// - [Android Headless Mode](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode)
   /// - [enableHeadless]
   ///
   bool stopOnTerminate;
@@ -810,7 +810,7 @@ class Config {
   ///
   int heartbeatInterval;
 
-  /// Configures an automated, cron-like schedule for the plugin to [BackgroundGeolocation.start](start) / [BackgroundGeolocation.stop](stop) tracking at pre-defined times.
+  /// Configures an automated, cron-like schedule for the plugin to [BackgroundGeolocation.start] / [BackgroundGeolocation.stop] tracking at pre-defined times.
   ///
   /// ```dart
   ///   "{DAY(s)} {START_TIME}-{END_TIME}"
@@ -924,7 +924,7 @@ class Config {
   ///
   /// ![](https://dl.dropboxusercontent.com/s/fl7exx3g8whot9f/enable-background-audio.png?dl=1)\
   ///
-  ///  **See also:** [Debugging Sounds](../../../wiki/Debug-Sounds)
+  ///  **See also:** [Debugging Sounds](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Debug-Sounds)
   ///
   bool debug;
 
@@ -1001,7 +1001,7 @@ class Config {
   /// ```
   ///
   ///  **See also:**
-  /// - [BackgroundGeolocation.getLog]
+  /// - [BackgroundGeolocation.log]
   /// - [BackgroundGeolocation.emailLog]
   /// - [logMaxDays]
   ///
@@ -1267,7 +1267,7 @@ class Config {
   ///
   bool allowIdenticalLocations;
 
-  /// [Android-only] Enable extra timestamp meta data to be appended to each recorded location, including system-time.
+  /// __`[Android-only]`__ Enable extra timestamp meta data to be appended to each recorded location, including system-time.
   ///
   /// Some developers have reported GPS [Location.timestamp] issues with some Android devices.  This option will append extra meta-data related to the device's system time.
   ///
@@ -1291,7 +1291,7 @@ class Config {
 
   // Activity Recognition Options
 
-  /// [Android-only] Configures a comma-separated list of motion-activities which are allow to trigger location-tracking.
+  /// __`[Android-only]`__ Configures a comma-separated list of motion-activities which are allow to trigger location-tracking.
   ///
   /// These are the comma-delimited list of [activity-names](https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity) returned by the `ActivityRecognition` API which will trigger a state-change from **stationary** to **moving**.  By default, the plugin will trigger on **any** of the **moving-states**:
   ///
@@ -1326,14 +1326,89 @@ class Config {
 
   /// __`[Android only]`__ Enables "Headless" operation allowing you to respond to events after you app has been terminated with [stopOnTerminate]:false.
   ///
-  /// Defaults to `false`.  In this Android terminated state, where only the plugin's foreground-service remains running, you can respond to all the plugin's events with your own Dart callback.  For more information, see the wiki for [Android Headless Mode](../../../wiki/Android-Headless-Mode).
-  ///
-  ///  **Note:** "Headless" mode is an alternartive to using the **`forceReloadOnXXX`** configuration options:
-  /// - [forceReloadOnLocationChange]
-  /// - [forceReloadOnMotionChange]
-  /// - [forceReloadOnGeofence]
-  /// - [forceReloadOnBoot]
-  /// - [forceReloadOnHeartbeat]
+  /// Defaults to __`false`__.  In this Android terminated state, where only the plugin's foreground-service remains running, you can respond to all the plugin's events with your own Dart callback.
+  /// 
+  /// __Note__:  
+  /// - Requires [stopOnTerminate]:false.
+  /// - If you've configured [stopOnTerminate]:false, [BackgroundGeolocation] will continue to record locations (and post them to your configured [url]) *regardless of* __`enabledHeadless: true`__.  You should enable this option *only if* you have to perform some custom work during the headless state (for example, posting a local notification).
+  /// - With __`enableHeadless: true`__, you **must** also register a `function` to be executed in headless-state with [BackgroundGeolocation.registerHeadlessTask].
+  /// 
+  /// For more information, see:
+  /// - [BackgroundGeolocation.registerHeadlessTask]
+  /// - Wiki [Android Headless Mode](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode).
+  ///  
+  /// ## Android Setup
+  /// 
+  /// Create either `Application.kt` or `Application.java` in the same directory as `MainActivity`.
+  /// 
+  /// For `Application.kt`, use the following:
+  /// 
+  /// ```java
+  /// import com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask;
+  /// 
+  /// class Application : FlutterApplication(), PluginRegistrantCallback {
+  ///   override fun onCreate() {
+  ///     super.onCreate();
+  ///     HeadlessTask.setPluginRegistrant(this);
+  ///   }
+  /// 
+  ///   override fun registerWith(registry: PluginRegistry) {
+  ///     GeneratedPluginRegistrant.registerWith(registry);
+  ///   }
+  /// }
+  /// ```
+  /// 
+  /// For `Application.java`, use the following:
+  /// 
+  /// ```java
+  /// import com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask;
+  /// 
+  /// public class Application extends FlutterApplication implements PluginRegistrantCallback {
+  ///   @Override
+  ///   public void onCreate() {
+  ///     super.onCreate();
+  ///     HeadlessTask.setPluginRegistrant(this);
+  ///   }
+  /// 
+  ///   @Override
+  ///   public void registerWith(PluginRegistry registry) {
+  ///     GeneratedPluginRegistrant.registerWith(registry);
+  ///   }
+  /// }
+  /// ```
+  /// 
+  /// Which must also be referenced in `AndroidManifest.xml`:
+  /// 
+  /// ```xml
+  ///     <application
+  ///         android:name=".Application"
+  ///         ...
+  /// ```
+  /// 
+  /// Finally, in your `main.dart`, [BackgroundGeolocation.registerHeadlessTask]:
+  /// 
+  /// ```dart
+  /// /// Receives all events from BackgroundGeolocation while app is terminated:
+  /// void headlessTask(HeadlessEvent headlessEvent) async {
+  ///   print('[HeadlessTask]: $headlessEvent');
+  ///  
+  ///   switch(event.name) {
+  ///     case Event.HEARTBEAT:
+  ///       break;
+  ///     .
+  ///     .
+  ///     .
+  ///   }
+  ///   headlessEvent.finish();  // <-- REQUIRED
+  /// }
+  /// 
+  /// void main() {
+  ///   runApp(HelloWorld());
+  ///   
+  ///   // Register your headlessTask:
+  ///   BackgroundGeolocation.registerHeadlessTask(headlessTask);
+  /// }
+  /// ```
   ///
   bool enableHeadless;
 
@@ -1772,7 +1847,26 @@ class Config {
 
   static final DeviceInfoPlugin deviceInfo = new DeviceInfoPlugin();
 
-  // Returns a Map suitable for attaching to #params and posting to tracker.transistorsoft.com
+  /// Returns a Map suitable for attaching to [params] and posting to the Transistor Software Demo Server at `http://tracker.transistorsoft.com`.
+  /// 
+  /// 
+  /// ## Example
+  /// 
+  /// ```dart
+  /// // Required by Demo Server.
+  /// Map deviceParams = await bg.Config.deviceParams;
+  /// String username = 'my-unique-username'; // Eg Github username
+  /// 
+  /// BackgroundGeolocation.ready(Config(
+  ///   url: 'http://tracker.transistorsoft.com/locations/$username',
+  ///   params: deviceParams
+  /// ));
+  /// ```
+  /// 
+  /// View your tracking at [http://tracker.transistorsoft.com/my-unique-username](http://tracker.transistorsoft.com/my-unique-username).
+  /// 
+  /// ![](https://dl.dropboxusercontent.com/s/3abuyyhioyypk8c/screenshot-tracker-transistorsoft.png?dl=1)
+  /// 
   static Future<Map<String, dynamic>> get deviceParams async {
     Map<String, dynamic> response;
     try {
@@ -1805,148 +1899,5 @@ class Config {
       response = {'Error:': 'Failed to get platform version.'};
     }
     return response;
-  }
-}
-
-/// Expresses the current state of the plugin, including all [Config] options.
-///
-class State extends Config {
-  Map map;
-  // State
-  bool enabled;
-  bool schedulerEnabled;
-  double odometer;
-  int trackingMode;
-
-  State(dynamic data)
-      : super(
-            // Common Options
-            desiredAccuracy: (data['desiredAccuracy'].runtimeType == double)
-                ? data['desiredAccuracy'].round()
-                : data['desiredAccuracy'],
-            distanceFilter: data['distanceFilter'],
-            stationaryRadius: (data['stationaryRadius'].runtimeType == int)
-                ? data['stationaryRadius'] * 1.0
-                : data['stationaryRadius'],
-            locationTimeout: (data['locationTimeout'].runtimeType == double)
-                ? data['locationTimeout'].round()
-                : data['locationTimeout'],
-            disableElasticity: data['disableElasticity'],
-            elasticityMultiplier: data['elasticityMultiplier'],
-            stopAfterElapsedMinutes:
-                (data['stopAfterElapsedMinutes'].runtimeType == double)
-                    ? data['stopAfterElapsedMinutes'].round()
-                    : data['stopAfterElapsedMinutes'],
-            geofenceProximityRadius:
-                (data['geofenceProximityRadius'].runtimeType == double)
-                    ? data['geofenceProximityRadius'].round()
-                    : data['geofenceProximityRadius'],
-            geofenceInitialTriggerEntry: data['geofenceInitialTriggerEntry'],
-            desiredOdometerAccuracy: data['desiredOdometerAccuracy'],
-            // ActivityRecognition
-            isMoving: data['isMoving'],
-            stopTimeout: (data['stopTimeout'].runtimeType == double)
-                ? data['stopTimeout'].round()
-                : data['stopTimeout'],
-            activityRecognitionInterval:
-                (data['activityRecognitionInterval'].runtimeType == double)
-                    ? data['activityRecognitionInterval'].round()
-                    : data['activityRecognitionInterval'],
-            minimumActivityRecognitionConfidence:
-                data['minimumActivityRecognitionConfidence'],
-            disableStopDetection: data['disableStopDetection'],
-            stopOnStationary: data['stopOnStationary'],
-            // HTTP & Persistence
-            url: data['url'],
-            method: data['method'],
-            httpRootProperty: data['httpRootProperty'],
-            params: data['params'].cast<String, dynamic>(),
-            headers: data['headers'].cast<String, dynamic>(),
-            extras: data['extras'].cast<String, dynamic>(),
-            autoSync: data['autoSync'],
-            autoSyncThreshold: data['autoSyncThreshold'],
-            batchSync: data['batchSync'],
-            maxBatchSize: data['maxBatchSize'],
-            locationTemplate: data['locationTemplate'],
-            geofenceTemplate: data['geofenceTemplate'],
-            maxDaysToPersist: data['maxDaysToPersist'],
-            maxRecordsToPersist: data['maxRecordsToPersist'],
-            locationsOrderDirection: data['locationsOrderDirection'],
-            httpTimeout: data['httpTimeout'],
-            // Application
-            stopOnTerminate: data['stopOnTerminate'],
-            startOnBoot: data['startOnBoot'],
-            heartbeatInterval: (data['heartbeatInterval'].runtimeType == double)
-                ? data['heartbeatInterval'].round()
-                : data['heartbeatInterval'],
-            schedule: data['schedule'].cast<String>(),
-            // Logging & Debug
-            debug: data['debug'],
-            logLevel: data['logLevel'],
-            logMaxDays: data['logMaxDays'],
-
-            ////
-            // iOS Options
-            //
-
-            // Geolocation Options
-            useSignificantChangesOnly: data['useSignificantChangesOnly'],
-            pausesLocationUpdatesAutomatically:
-                data['pausesLocationUpdatesAutomatically'],
-            locationAuthorizationRequest: data['locationAuthorizationRequest'],
-            locationAuthorizationAlert:
-                (data['locationAuthorizationAlert'] != null)
-                    ? data['locationAuthorizationAlert'].cast<String, dynamic>()
-                    : null,
-            disableLocationAuthorizationAlert:
-                data['disableLocationAuthorizationAlert'],
-            // Activity Recognition Options
-            activityType: data['activityType'],
-            stopDetectionDelay:
-                (data['stopDetectionDelay'].runtimeType == double)
-                    ? data['stopDetectionDelay'].round()
-                    : data['stopDetectionDelay'],
-            disableMotionActivityUpdates: data['disableMotionActivityUpdates'],
-            // Application Options
-            preventSuspend: data['preventSuspend'],
-
-            ////
-            // Android Options
-            //
-
-            // Geolocation Options
-            locationUpdateInterval: data['locationUpdateInterval'],
-            fastestLocationUpdateInterval:
-                data['fastestLocationUpdateInterval'],
-            deferTime: data['deferTime'],
-            allowIdenticalLocations: data['allowIdenticalLocations'],
-            enableTimestampMeta: data['enableTimestampMeta'],
-            // Activity Recognition Options
-            triggerActivities: data['triggerActivities'],
-            // Application Options
-            enableHeadless: data['enableHeadless'],
-            foregroundService: data['foregroundService'],
-            forceReloadOnLocationChange: data['forceReloadOnLocationChange'],
-            forceReloadOnMotionChange: data['forceReloadOnMotionChange'],
-            forceReloadOnGeofence: data['forceReloadOnGeofence'],
-            forceReloadOnBoot: data['forceReloadOnBoot'],
-            forceReloadOnHeartbeat: data['forceReloadOnHeartbeat'],
-            forceReloadOnSchedule: data['forceReloadOnSchedule'],
-            notificationPriority: data['notificationPriority'],
-            notificationTitle: data['notificationTitle'],
-            notificationText: data['notificationText'],
-            notificationColor: data['notificationColor'],
-            notificationSmallIcon: data['notificationSmallIcon'],
-            notificationLargeIcon: data['notificationLargeIcon'],
-            notificationChannelName: data['notificationChannelName']) {
-    enabled = data['enabled'];
-    trackingMode = data['trackingMode'];
-    schedulerEnabled = data['schedulerEnabled'];
-    odometer = data['odometer'];
-    map = data;
-  }
-
-  String toString() {
-    return '[State enabled: $enabled, isMoving: $isMoving, trackingMode: $trackingMode, desiredAccuracy: $desiredAccuracy, distanceFilter: $distanceFilter, odometer: $odometer, schedulerEnabled: $schedulerEnabled, foregroundService: $foregroundService]';
   }
 }

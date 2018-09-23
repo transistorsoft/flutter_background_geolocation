@@ -49,17 +49,56 @@ class _Activity {
 ///
 class Location {
   dynamic map;
+  /// Timestamp in __`ISO 8601` (UTC) format.
+  /// 
+  /// Eg: `2018-01-01T12:00:01.123Z'.
+  /// 
   String timestamp;
+
+  /// Event which caused this location to be recorded.
+  /// 
+  /// `motionchange | heartbeat | providerchange | geofence`
+  /// 
   String event;
+
+  /// __`[Android only]`__ `true` if the location was provided by a Mock location app.
   bool mock;
+
+  /// `true` if this Location is just 1 of several samples before settling upon a final location.
+  /// 
+  /// Multiple samples are requested when using [BackgroundGeolocation.getCurrentPosition] or when the plugin is performing a [BackgroundGeolocation.onMotionChange].
+  /// If you're manually uploading locations to your server, you should __ignore__ those with `location.sample == true`.
+  /// 
   bool sample;
+
+  /// The current distance travelled.
+  /// 
+  /// __See also:__
+  /// - [BackgroundGeolocation.setOdometer]
+  /// - [BackgroundGeolocation.odometer]
+  /// 
   double odometer;
+
+  /// `true` if this `Location` was recored while the device was in-motion.
+  /// 
   bool isMoving;
+
+  /// Universally Unique Identifier.
+  /// 
+  /// This property is helpful for debugging location issues.  It can be used to match locations recorded at your server with those within the plugin's [BackgroundGeolocation.log].
+  /// 
   String uuid;
 
+  /// Location coordinates.
   _Coords coords;
+
+  /// Corresponding [GeofenceEvent] if this location was recorded due to a [Geofence] transition.
   GeofenceEvent geofence;
+
+  /// Device battery-level when this 'Location' was recorded.
   _Battery battery;
+
+  /// Device motion-activity when this `Location` was recorded.
   _Activity activity;
 
   Map extras;
