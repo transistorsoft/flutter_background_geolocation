@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.1.4] - 2018-09-25
+- [Added] Android Headless mode.  See docs for `enableHeadless`.
+- [Added] an "event list" screen to "AdvancedApp" example.
+- [Added] `error` callback for `BackgroundGeolocation.onLocation`.
+- [Fixed] Issue #5 podspec property `s.static_framework = true` to allow the plugin to work in apps where `use_frameworks!` directive is applied in `Podfile` (Thanks to @vova-beloded).
+
 ## [0.1.3] - 2018-09-20
 - Implementing Dart-style docs with `dartdoc`
 - Re-organize `/lib` dir; remove `/src` folder (hides classes from `dartdoc`).

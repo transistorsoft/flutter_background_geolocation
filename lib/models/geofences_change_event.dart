@@ -5,7 +5,16 @@ part of flt_background_geolocation;
 /// Expresses a change in the list of actively monitored geofences by the native geofencing API.
 ///
 class GeofencesChangeEvent {
+  /// List of [Geofence.identifier] which stopped being monitored.
+  ///
+  /// The plugin ceases active-monitoring upon those [Geofence] whose center coordinate lies outside of [Config.geofenceProximityRadius].  `off` is a list of those [Geofence.identifier].
+  ///
   List<String> off;
+
+  /// List of [Geofence] which the plugin has just begun active-monitoring upon.
+  ///
+  /// The plugin active-monitors only those [Geofence] whose center coordinate lies within [Config.geofenceProximityRadius].  `on` is a list of those [Geofence].
+  ///
   List<Geofence> on;
 
   GeofencesChangeEvent(List on, List off) {
@@ -29,7 +38,13 @@ class GeofencesChangeEvent {
     });
   }
 
-  String toString() {
-    return '[GeofencesChangeEvent off: $off, on: $on]';
+  String toString({compact: bool}) {
+    if (compact == true) {
+      List<String> identifiersOn = [];
+      on.forEach((Geofence geofence) => identifiersOn.add(geofence.identifier));
+      return 'on: $identifiersOn, off: $off';
+    } else {
+      return '[GeofencesChangeEvent off: $off, on: $on]';
+    }
   }
 }

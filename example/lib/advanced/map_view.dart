@@ -11,10 +11,13 @@ class MapView extends StatefulWidget {
   State createState() => MapViewState();
 }
 
-class MapViewState extends State<MapView> {
+class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<MapView> {
   static const double DEFAULT_ZOOM = 18.0;
 
   GoogleMapController _mapController;
+
+  @override
+  bool get wantKeepAlive { return true; }
 
   @override
   void initState() {

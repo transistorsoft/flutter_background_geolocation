@@ -14,6 +14,7 @@ public class HeadlessBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle event = intent.getExtras();
+        if (event == null) { return; }
         new HeadlessTask(context.getApplicationContext(), event, new HeadlessTask.Callback() {
             @Override
             public void onComplete() {

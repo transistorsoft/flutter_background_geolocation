@@ -37,15 +37,29 @@ static NSString *const ACTION_LOG = @"log";
 static NSString *const ACTION_GET_SENSORS = @"getSensors";
 static NSString *const ACTION_IS_POWER_SAVE_MODE = @"isPowerSaveMode";
 static NSString *const ACTION_PLAY_SOUND = @"playSound";
+static NSString *const ACTION_REGISTER_HEADLESS_TASK = @"registerHeadlessTask";
+static NSString *const ACTION_INITIALIZED = @"initialized";
+
+#import <TSBackgroundFetch/TSBackgroundFetch.h>
 
 @implementation FLTBackgroundGeolocationPlugin 
 
+-(BOOL)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
+{
+    NSLog(@"FLTBackgroundgeolocation AppDelegate received fetch event");
+    TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
+    [fetchManager performFetchWithCompletionHandler:completionHandler applicationState:application.applicationState];
+    return YES;
+}
+
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+
     // Method Channel
     NSString *path = [NSString stringWithFormat:@"%@/%@", PLUGIN_PATH, METHOD_CHANNEL_NAME];
     FlutterMethodChannel* channel = [FlutterMethodChannel methodChannelWithName:path binaryMessenger:[registrar messenger]];
     
     FLTBackgroundGeolocationPlugin* instance = [[FLTBackgroundGeolocationPlugin alloc] init];
+    [registrar addApplicationDelegate:instance];
     [registrar addMethodCallDelegate:instance channel:channel];
     
     // Event Channels
@@ -133,7 +147,7 @@ static NSString *const ACTION_PLAY_SOUND = @"playSound";
     } else if ([self method:ACTION_GET_LOG is:action]) {
         [self getLog:result];
     } else if ([self method:ACTION_EMAIL_LOG is:action]) {
-        [self emailLog:[call.arguments stringValue] result:result];
+        [self emailLog:call.arguments result:result];
     } else if ([self method:ACTION_LOG is:action]) {
         NSString *level = [call.arguments objectForKey:@"level"];
         NSString *message = [call.arguments objectForKey:@"message"];
@@ -146,6 +160,11 @@ static NSString *const ACTION_PLAY_SOUND = @"playSound";
         [self playSound:[call.arguments intValue] result:result];
     } else if ([@"getPlatformVersion" isEqualToString:call.method]) {
         result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
+    } else if ([self method:ACTION_REGISTER_HEADLESS_TASK is:action]) {
+        [self registerHeadlessTask:call.arguments result:result];
+    } else if ([self method:ACTION_INITIALIZED is:action]) {
+        // Headless task initialization ignored on iOS.
+        result(@YES);
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -453,6 +472,10 @@ static NSString *const ACTION_PLAY_SOUND = @"playSound";
 - (void) playSound:(int) soundId result:(FlutterResult)result {
      [_locationManager playSound: soundId];
     result(@(YES));
+}
+
+- (void) registerHeadlessTask:(NSArray*)callbacks result:(FlutterResult)result {
+    // iOS:  No implementation should be necessary.
 }
 
 #pragma mark Util Methods

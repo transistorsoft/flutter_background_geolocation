@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
 import 'dialog.dart' as util;
+import 'actions.dart';
 
 const INPUT_TYPE_SELECT = "select";
 const INPUT_TYPE_TOGGLE = "toggle";
@@ -87,6 +87,7 @@ class _SettingsViewState extends State<SettingsView> {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("CLOSE"));
     Navigator.of(context).pop();
   }
+
   _onClickAbout() {
     // TODO
     print("[onClickAbout] - NO IMPLEMENTATION");
@@ -95,65 +96,23 @@ class _SettingsViewState extends State<SettingsView> {
 
   _onSelectMenu(String action) async {
     switch(action) {
-      case 'resetOdometer':
+      case Actions.RESET_ODOMETER:
         bg.BackgroundGeolocation.setOdometer(0.0);
         break;
-      case 'sync':
-        int count = await bg.BackgroundGeolocation.count;
-        if (count < 1) {
-          util.Dialog.alert(context, "Sync", "Database is empty");
-          break;
-        }
-        util.Dialog.confirm(context, "Confirm", "Upload $count records?", (bool confirm) {
-          if (!confirm) { return;}
-
-          bg.BackgroundGeolocation.sync().then((List<dynamic> records) {
-            print("[sync] SUCCESS (" + records.length.toString() + " records)");
-          }).catchError((error) {
-            print("[sync] ERROR: $error");
-          });
-        });
+      case Actions.SYNC:
+        Actions.sync(context);
         break;
-      case 'destroyLocations':
-        int count = await bg.BackgroundGeolocation.count;
-        if (count < 1) {
-          util.Dialog.alert(context, "Destroy locations", "Database is empty");
-          break;
-        }
-        util.Dialog.confirm(context, "Confirm", "Destroy $count records?", (bool confirm) {
-          if (!confirm) { return;}
-          bg.BackgroundGeolocation.destroyLocations().then((bool success) {
-            print("[destroyLocations] SUCCESS");
-          }).catchError((error) {
-            print("[destroyLocations] ERROR: $error");
-          });
-        });
+      case Actions.DESTROY_LOCATIONS:
+        Actions.destroyLocations(context);
         break;
-      case 'emailLog':
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        String email = prefs.getString("email");
-        if (email == null) {
-          email = "";
-        }
-        email = await util.Dialog.prompt(context, title: "Email log", labelText: 'Email', value: email);
-        if (email.length > 0) {
-          prefs.setString("email", email);
-          bg.BackgroundGeolocation.emailLog(email).then((bool success) {
-            print('[emailLog] success');
-          }).catchError((error) {
-            util.Dialog.alert(context, 'Email log Error', error.toString());
-          });
-        }
+      case Actions.EMAIL_LOG:
+        Actions.emailLog(context);
         break;
-      case 'destroyLog':
-        util.Dialog.confirm(context, "Confirm", "Destroy logs?", (bool confirm) {
-          if (!confirm) { return; }
-          bg.BackgroundGeolocation.destroyLog().then((bool success) {
-            print('destroyLog] success');
-          }).catchError((error) {
-            print("[destroyLog] ERROR: $error");
-          });
-        });
+      case Actions.DESTROY_LOG:
+        Actions.destroyLog(context);
+        break;
+      case 'about':
+        _onClickAbout();
         break;
     }
   }
@@ -174,33 +133,38 @@ class _SettingsViewState extends State<SettingsView> {
         backgroundColor: Theme.of(context).bottomAppBarColor,
         iconTheme: IconThemeData(color: Colors.black),
         actions: [
-          new FlatButton(onPressed: _onClickAbout, child: new Text('About'))
+          new PopupMenuButton(
+              itemBuilder: (_) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(value: Actions.RESET_ODOMETER, child: ListTile(title: Text('Reset odometer'), leading: Icon(Icons.av_timer))),
+                const PopupMenuItem<String>(value: Actions.SYNC, child: ListTile(title: Text('Sync'), leading: Icon(Icons.cloud_upload))),
+                const PopupMenuItem<String>(value: Actions.DESTROY_LOCATIONS, child: ListTile(title: Text('Destroy locations'), leading: Icon(Icons.delete))),
+                const PopupMenuDivider(),
+                const PopupMenuItem<String>(value: Actions.EMAIL_LOG, child: ListTile(title: Text('Email log'), leading: Icon(Icons.email))),
+                const PopupMenuItem<String>(value: Actions.DESTROY_LOG, child: ListTile(title: Text('Destroy log'), leading: Icon(Icons.delete))),
+                const PopupMenuDivider(),
+                const PopupMenuItem<String>(value: "about", child: ListTile(title: Text('About'), leading: Icon(Icons.help)))
+              ],
+              onSelected: _onSelectMenu)
         ]
       ),
       body: new CustomScrollView(
         slivers: <Widget>[
-          _buildListHeader("Geolocation", <PopupMenuItem<String>>[
-            const PopupMenuItem<String>(value: 'resetOdometer', child: Text('Reset odometer'))
-          ]),
+          _buildListHeader("Geolocation"),
           _buildList(_geolocationSettings),
 
           _buildListHeader("Activity Recognition"),
           _buildList(_activityRecognitionSettings),
 
-          _buildListHeader("HTTP & Persistence", <PopupMenuItem<String>>[
-            const PopupMenuItem<String>(value: 'sync', child: Text('Sync')),
-            const PopupMenuItem<String>(value: 'destroyLocations', child: Text('Destroy locations'))
-          ]),
+          _buildListHeader("HTTP & Persistence"),
           _buildList(_httpSettings),
 
           _buildListHeader("Application"),
           _buildList(_applicationSettings),
 
-          _buildListHeader("Debug", <PopupMenuItem<String>>[
-            const PopupMenuItem<String>(value: 'emailLog', child: Text('Email log')),
-            const PopupMenuItem<String>(value: 'destroyLog', child: Text('Destroy log')),
-          ]),
-          _buildList(_debugSettings)
+          _buildListHeader("Debug"),
+          _buildList(_debugSettings),
+
+          _buildListHeader("Geofencing"),
         ],
       )
     );
@@ -214,7 +178,8 @@ class _SettingsViewState extends State<SettingsView> {
       iconTheme: IconThemeData(
         color: Colors.black
       ),
-      backgroundColor: Color.fromRGBO(230, 230, 230, 1.0),
+      backgroundColor: Color.fromRGBO(230, 230, 230, 0.5),
+      //backgroundColor: Colors.white,
       leading: Container(),
       snap: true,
       floating: true,

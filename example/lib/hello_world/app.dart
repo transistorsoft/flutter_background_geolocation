@@ -62,7 +62,7 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
 
   Future<Null> _initPlatformState() async {
     // 1.  Listen to events (See docs for all 12 available events).
-    bg.BackgroundGeolocation.onLocation(_onLocation);
+    bg.BackgroundGeolocation.onLocation(_onLocation, _onLocationError);
     bg.BackgroundGeolocation.onMotionChange(_onMotionChange);
     bg.BackgroundGeolocation.onActivityChange(_onActivityChange);
     bg.BackgroundGeolocation.onProviderChange(_onProviderChange);
@@ -82,6 +82,8 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
         _enabled = state.enabled;
         _isMoving = state.isMoving;
       });
+    }).catchError((error) {
+      print('[ready] ERROR: $error');
     });
   }
 
@@ -94,6 +96,8 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
           _enabled = state.enabled;
           _isMoving = state.isMoving;
         });
+      }).catchError((error) {
+        print('[start] ERROR: $error');
       });
     } else {
       bg.BackgroundGeolocation.stop().then((bg.State state) {
@@ -155,6 +159,10 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
       _content = encoder.convert(location.toMap());
       _odometer = odometerKM;
     });
+  }
+
+  void _onLocationError(bg.LocationError error) {
+    print('[location] ERROR - $error');
   }
 
   void _onMotionChange(bg.Location location) {

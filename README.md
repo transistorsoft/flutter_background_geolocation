@@ -6,7 +6,7 @@
 
 The *most* sophisticated background **location-tracking & geofencing** module with battery-conscious motion-detection intelligence for **iOS** and **Android**.
 
-The plugin's [Philosophy of Operation](../../wiki/Philosophy-of-Operation) is to use **motion-detection** APIs (using accelerometer, gyroscope and magnetometer) to detect when the device is *moving* and *stationary*.  
+The plugin's [Philosophy of Operation](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Philosophy-of-Operation) is to use **motion-detection** APIs (using accelerometer, gyroscope and magnetometer) to detect when the device is *moving* and *stationary*.  
 
 - When the device is detected to be **moving**, the plugin will *automatically* start recording a location according to the configured `distanceFilter` (meters).  
 
@@ -33,7 +33,7 @@ The **[Android module](http://www.transistorsoft.com/shop/products/flutter-backg
 - ### [Setup Guides](#large_blue_diamond-setup-guides)
 - ### [Using the plugin](#large_blue_diamond-using-the-plugin)
 - ### [Example](#large_blue_diamond-example)
-- ### [Debugging](../../wiki/Debugging)
+- ### [Debugging](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Debugging)
 - ### [Demo Application](#large_blue_diamond-demo-application)
 - ### [Testing Server](#large_blue_diamond-simple-testing-server)
 
@@ -58,8 +58,8 @@ dependencies:
 
 ## :large_blue_diamond: Setup Guides
 
-- [iOS](docs/INSTALL-IOS.md)
-- [Android](docs/INSTALL-ANDROID.md)
+- [iOS](https://github.com/transistorsoft/flutter_background_geolocation/blob/master/docs/INSTALL-IOS.md)
+- [Android](https://github.com/transistorsoft/flutter_background_geolocation/blob/master/docs/INSTALL-ANDROID.md)
 
 
 ## :large_blue_diamond: Using the plugin ##

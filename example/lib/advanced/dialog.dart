@@ -1,10 +1,9 @@
-/// Util class for performing dialogs
-///
-
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
 
+/// Simple Map of iOS / Android sound ID compatible with [BackgroundGeolocation.playSound].
+///
 const SOUND_MAP = {
   "ios": {
     "LONG_PRESS_ACTIVATE": 1113,
@@ -30,6 +29,12 @@ const SOUND_MAP = {
   }
 };
 
+/// Util class for launching dialogs.
+/// - [confim]
+/// - [alert]
+/// - [prompt]
+/// - [showLoading]
+///
 class Dialog {
   static void confirm(BuildContext context, String title, String message, Function(bool) callback) {
     showDialog(

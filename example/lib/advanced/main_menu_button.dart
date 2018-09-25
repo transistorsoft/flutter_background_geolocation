@@ -5,8 +5,8 @@ import 'package:flutter/foundation.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 import 'package:unicorndial/unicorndial.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import 'actions.dart';
 import 'settings_view.dart';
 import 'dialog.dart' as util;
 
@@ -28,52 +28,16 @@ class MainMenuButton extends StatelessWidget {
     bg.BackgroundGeolocation.setOdometer(0.0);
   }
 
-  /// TODO wrap emailLog and/or fetching email from SharedPreferences into a static Util class.
-  /// There's a similar function in SettingsView.
   void _onClickEmailLog() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String email = prefs.getString("email");
-    if (email == null) {
-      email = "";
-    }
-    email = await util.Dialog.prompt(_context, title: "Email log", labelText: 'Email', value: email);
-    if (email.length > 0) {
-      prefs.setString("email", email);
-      bg.BackgroundGeolocation.emailLog(email).then((bool success) {
-        print('[emailLog] success');
-      }).catchError((error) {
-        util.Dialog.alert(_context, 'Email log Error', error.toString());
-      });
-    }
+    Actions.emailLog(_context);
   }
 
   void _onClickSync() async {
-    int count = await bg.BackgroundGeolocation.count;
-    if (count == 0) {
-      util.Dialog.alert(_context, "Sync", "Database is empty");
-      return;
-    }
-
-    util.Dialog.confirm(_context, "Confirm", "Upload $count locations?", (bool confirm) {
-      if (!confirm) { return; }
-      // TODO show spinner.
-      bg.BackgroundGeolocation.sync().then((List records) {
-        // TODO hide spinner.
-        bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("MESSAGE_SENT"));
-      });
-    });
+    Actions.sync(_context);
   }
 
   void _onClickDestroyLocations() async {
-    int count = await bg.BackgroundGeolocation.count;
-    util.Dialog.confirm(_context, "Confirm", "Destroy $count locations?", (bool confirm) {
-      // TODO show spinner
-      if (!confirm) { return; }
-      bg.BackgroundGeolocation.destroyLocations().then((bool success) {
-        // TODO hide spinner.
-        bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId((success) ? "MESSAGE_SENT" : "ERROR"));
-      });
-    });
+    Actions.destroyLocations(_context);
   }
 
   @override
