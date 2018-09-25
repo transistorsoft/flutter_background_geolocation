@@ -3,21 +3,21 @@ part of flt_background_geolocation;
 /// Event object provided to [BackgroundGeolocation.onHttp].
 ///
 /// # HTTP Features
-/// 
+///
 /// ## JSON Request Templates
-/// 
+///
 /// The plugin supports customizable JSON request schemas with the following config options:
-/// 
+///
 /// | Option             | Type       | Default     | Description |
 /// |--------------------|------------|-------------|-------------|
 /// |[Config.httpRootProperty]  | `String`   | `location`  | The root key in the JSON to render records |
 /// |[Config.locationTemplate]  | `String`   | `undefined` | Optional template to render [Location] data |
 /// |[Config.geofenceTemplate]  | `String`   | `undefined` | Optional template to render [GeofenceEvent] data |
-/// 
+///
 /// ### [Config.httpRootProperty]
-/// 
+///
 /// Traditionally, the plugin had a hard-coded "Location Data Schema", where it automatically appended location-data to the `location` key in the JSON data, eg:
-/// 
+///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
 ///   url: 'http://my_url',
@@ -26,7 +26,7 @@ part of flt_background_geolocation;
 ///   }
 /// ));
 /// ```
-/// 
+///
 /// ```dart
 /// POST /my_url
 /// {
@@ -41,9 +41,9 @@ part of flt_background_geolocation;
 ///   }
 /// }
 /// ```
-/// 
+///
 /// With [Config.httpRootProperty], you can now customize this key:
-/// 
+///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
 ///   url: 'http://my_url',
@@ -53,7 +53,7 @@ part of flt_background_geolocation;
 ///   }
 /// ));
 /// ```
-/// 
+///
 /// ```dart
 /// POST /my_url
 /// {
@@ -68,11 +68,11 @@ part of flt_background_geolocation;
 ///   }
 /// }
 /// ```
-/// 
+///
 /// #### [Config.httpRootProperty]: "."
-/// 
+///
 /// If you'd rather POST your data *as* the root of the JSON, use **[Config.httpRootProperty]: "."**:
-/// 
+///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
 ///   url: 'http://my_url',
@@ -82,7 +82,7 @@ part of flt_background_geolocation;
 ///   }
 /// ))
 /// ```
-/// 
+///
 /// ```dart
 /// POST /my_url
 /// {
@@ -95,17 +95,17 @@ part of flt_background_geolocation;
 ///   }
 /// }
 /// ```
-/// 
+///
 /// ### [Config.locationTemplate] & [Config.geofenceTemplate]
-/// 
+///
 /// If you wish to provide your own custom HTTP JSON schema, you can configure distinct templates for both [Location] and [GeofenceEvent] data.  Evaluate variables in your template using Ruby `erb`-style tags:
-/// 
+///
 /// ```erb
 /// <%= variable_name %>
 /// ```
-/// 
+///
 /// ## Example:
-/// 
+///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
 ///   url: 'http://my_url',
@@ -119,7 +119,7 @@ part of flt_background_geolocation;
 ///   }
 /// ))
 /// ```
-/// 
+///
 /// ```dart
 /// POST /my_url
 /// {
@@ -133,13 +133,13 @@ part of flt_background_geolocation;
 ///   }
 /// }
 /// ```
-/// 
+///
 /// ### Template Tags
-/// 
+///
 /// #### Common Tags
-/// 
+///
 /// The following template tags are common to both **[Config.locationTemplate]** and **[Config.geofenceTemplate]**:
-/// 
+///
 /// | Tag | Type | Description |
 /// |-----|------|-------------|
 /// | `latitude` | `Float` ||
@@ -157,54 +157,54 @@ part of flt_background_geolocation;
 /// | `activity.confidence` | `Integer` | 0-100%|
 /// | `battery.level` | `Float` | 0-100%|
 /// | `battery.is_charging` | `Boolean` | Is device plugged in?|
-/// 
+///
 /// #### Geofence Tags
-/// 
+///
 /// The following template tags are specific to **[Config.geofenceTemplate]** only:
-/// 
+///
 /// | Tag | Type | Description |
 /// |-----|------|-------------|
 /// | `geofence_identifier` | `String` | Which geofence?|
 /// | `geofence_action` | `String` | `ENTER,EXIT,DWELL`|
-/// 
+///
 /// #### Quoting String Values
-/// 
+///
 /// You're completely responsible for `"quoting"` your own `String` values.  The following will generate a JSON parsing error:
-/// 
+///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
 ///   locationTemplate: '{ "event":<%= event %> }',
 /// ));
 /// ```
-/// 
+///
 /// In the logs, you'll find:
 /// ```
 /// ‼️-[TSLocation templateError:template:] locationTemplate error: Invalid value around character 10.
 /// { "event":<%= event %> }
 /// ```
-/// 
+///
 /// To fix this, the `String` tag `<%= event %>` must be wrapped in `""`:
-/// 
+///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
 ///   locationTemplate: '{ "event":"<%= event %>" }',
 /// ));
 /// ```
-/// 
+///
 /// #### `bool`, `double` and `int` Values
-/// 
+///
 /// `bool`, `double` and `int` values do **not** require quoting:
-/// 
+///
 /// ```
 /// BackgroundGeolocation.ready(Config(
 ///   locationTemplate: '{ "is_moving":<%= is_moving %>, "odometer":<%= odometer %> }',
 /// ));
 /// ```
-/// 
+///
 /// #### Array Templates
-/// 
+///
 /// You're not forced to define your templates as an **`{Object}`** &mdash; You can define them as an **`[Array]`** too.
-/// 
+///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
 ///   url: 'http://my_url',
@@ -218,7 +218,7 @@ part of flt_background_geolocation;
 ///   }
 /// ))
 /// ```
-/// 
+///
 /// ```dart
 /// POST /my_url
 /// {
@@ -232,13 +232,13 @@ part of flt_background_geolocation;
 ///   }
 /// }
 /// ```
-/// 
+///
 /// :exclamation: `#extras` are automatically appened to the last element of the array as an `{Object}`.
-/// 
+///
 /// #### Array Template with `httpRootProperty: "."`
-/// 
+///
 /// :warning: This case is tricky and should probably be avoided, particularly if you have configured [Config.params], since there no place in the request JSON to append them.
-/// 
+///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
 ///   url: 'http://my_url',
@@ -252,7 +252,7 @@ part of flt_background_geolocation;
 ///   }
 /// ))
 /// ```
-/// 
+///
 /// ```dart
 /// - POST /my_url
 ///  [  // <-- #params are lost.  There's no place in the data-structure to append them.
@@ -267,8 +267,10 @@ part of flt_background_geolocation;
 class HttpEvent {
   /// `true` if the HTTP response was successful (`200`, `201`, `204`).
   bool success;
+
   /// HTTP response status.
   int status;
+
   /// HTTP response text.
   String responseText;
 

@@ -4,13 +4,13 @@ part of flt_background_geolocation;
 ///
 class HeartbeatEvent {
   /// Last known position of the device.
-  /// 
+  ///
   /// __Note:__ [BackgroundGeolocation] does not actively request the current position during each [BackgroundGeolocation.onHeartbeat] event.  This is only the last known position.
-  /// 
+  ///
   /// If you wish for the current position, you can choose to request in your [BackgroundGeolocation.onHeartbeat] callback.
-  /// 
+  ///
   /// ## Example
-  /// 
+  ///
   /// ```dart
   /// BackgroundGeolocation.onHeartbeat((HeartbeatEvent event) {
   ///   Location location = BackgroundGeolocation.getCurrentPosition(

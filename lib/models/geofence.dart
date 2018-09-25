@@ -5,18 +5,24 @@ part of flt_background_geolocation;
 class Geofence {
   /// Unique identifier.
   String identifier;
+
   /// Circular geofence radius.
   double radius;
   double latitude;
   double longitude;
+
   /// Set `true` to fire on entering the geofence.
   bool notifyOnEntry;
+
   /// Set `true` fire on exiting the geofence.
   bool notifyOnExit;
+
   /// Set `true` to fire only after remaining withing geofence for [loiteringDelay] milliseconds.
   bool notifyOnDwell;
+
   /// The number of milliseconds the device must remain within geofence before firing [notifyOnDwell] event.
   int loiteringDelay;
+
   /// Arbitrary key/values to append to the recorded geofence record.
   Map<String, dynamic> extras;
 

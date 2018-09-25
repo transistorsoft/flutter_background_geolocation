@@ -4,19 +4,24 @@ const _PLUGIN_PATH = "com.transistorsoft/flutter_background_geolocation";
 const _METHOD_CHANNEL_NAME = "$_PLUGIN_PATH/methods";
 
 const _EVENT_CHANNEL_LOCATION = "$_PLUGIN_PATH/events/" + Event.LOCATION;
-const _EVENT_CHANNEL_MOTIONCHANGE = "$_PLUGIN_PATH/events/" + Event.MOTIONCHANGE;
-const _EVENT_CHANNEL_ACTIVITYCHANGE = "$_PLUGIN_PATH/events/" + Event.ACTIVITYCHANGE;
-const _EVENT_CHANNEL_PROVIDERCHANGE = "$_PLUGIN_PATH/events/" + Event.PROVIDERCHANGE;
-const _EVENT_CHANNEL_GEOFENCESCHANGE = "$_PLUGIN_PATH/events/" + Event.GEOFENCESCHANGE;
+const _EVENT_CHANNEL_MOTIONCHANGE =
+    "$_PLUGIN_PATH/events/" + Event.MOTIONCHANGE;
+const _EVENT_CHANNEL_ACTIVITYCHANGE =
+    "$_PLUGIN_PATH/events/" + Event.ACTIVITYCHANGE;
+const _EVENT_CHANNEL_PROVIDERCHANGE =
+    "$_PLUGIN_PATH/events/" + Event.PROVIDERCHANGE;
+const _EVENT_CHANNEL_GEOFENCESCHANGE =
+    "$_PLUGIN_PATH/events/" + Event.GEOFENCESCHANGE;
 const _EVENT_CHANNEL_GEOFENCE = "$_PLUGIN_PATH/events/" + Event.GEOFENCE;
 const _EVENT_CHANNEL_HEARTBEAT = "$_PLUGIN_PATH/events/" + Event.HEARTBEAT;
 const _EVENT_CHANNEL_HTTP = "$_PLUGIN_PATH/events/" + Event.HTTP;
 const _EVENT_CHANNEL_SCHEDULE = "$_PLUGIN_PATH/events/" + Event.SCHEDULE;
-const _EVENT_CHANNEL_POWERSAVECHANGE = "$_PLUGIN_PATH/events/" + Event.POWERSAVECHANGE;
+const _EVENT_CHANNEL_POWERSAVECHANGE =
+    "$_PLUGIN_PATH/events/" + Event.POWERSAVECHANGE;
 const _EVENT_CHANNEL_CONNECTIVITYCHANGE =
     "$_PLUGIN_PATH/events/" + Event.CONNECTIVITYCHANGE;
-const _EVENT_CHANNEL_ENABLEDCHANGE = "$_PLUGIN_PATH/events/" + Event.ENABLEDCHANGE;
-
+const _EVENT_CHANNEL_ENABLEDCHANGE =
+    "$_PLUGIN_PATH/events/" + Event.ENABLEDCHANGE;
 
 class _Subscription {
   final StreamSubscription<dynamic> subscription;
@@ -28,9 +33,9 @@ class _Subscription {
 /// Primary plugin API.
 ///
 /// ## Events
-/// 
+///
 /// [BackgroundGeolocation] is event-based.
-/// 
+///
 /// | Method                 | Description                             |
 /// |------------------------|-----------------------------------------|
 /// | [onLocation]           | Fired with each recorded [Location]     |
@@ -45,7 +50,7 @@ class _Subscription {
 /// | [onConnectivityChange] | Fired when network-connectivity changes (connected / disconnected).  |
 /// | [onPowerSaveChange]    | Fired when state of operating-system's "power-saving" feature is enabled / disabld. |
 /// | [onEnabledChange]      | Fired when the plugin is enabled / disabled via its [start] / [stop] methods.        |
-/// 
+///
 /// ## Example
 ///
 ///  **NOTE**: `import '...' as bg`
@@ -281,7 +286,7 @@ class BackgroundGeolocation {
   /// // Later when you want to stop the Scheduler (eg: user logout)
   /// BackgroundGeolocation.stopSchedule();
   /// ```
-  /// 
+  ///
   static Future<State> stop() async {
     Map state = await _methodChannel.invokeMethod('stop');
     return new State(state);
@@ -473,9 +478,16 @@ class BackgroundGeolocation {
     if (desiredAccuracy != null) options['desiredAccuracy'] = desiredAccuracy;
     if (extras != null) options['extras'] = extras;
 
-    Map data = await _methodChannel.invokeMethod('getCurrentPosition', options);
+    Completer completer = new Completer<Location>();
 
-    return new Location(data);
+    _methodChannel
+        .invokeMethod('getCurrentPosition', options)
+        .then((dynamic data) {
+      completer.complete(new Location(data));
+    }).catchError((error) {
+      completer.completeError(new LocationError(error));
+    });
+    return completer.future;
   }
 
   /// Retrieve the current distance-travelled ("odometer").
@@ -845,8 +857,13 @@ class BackgroundGeolocation {
     Completer completer = new Completer();
 
     _methodChannel.invokeMethod('getSensors').then((dynamic data) {
-      completer.complete(new Sensors(data['platform'], data['accelerometer'],
-          data['gyroscope'], data['magnetometer'], data['motion_hardware'], data['significant_motion']));
+      completer.complete(new Sensors(
+          data['platform'],
+          data['accelerometer'],
+          data['gyroscope'],
+          data['magnetometer'],
+          data['motion_hardware'],
+          data['significant_motion']));
     }).catchError((e) {
       completer.completeError(e);
     });
@@ -964,19 +981,19 @@ class BackgroundGeolocation {
   /// | 2     | Network error               |
   /// | 408   | Location timeout            |
   ///
-  static void onLocation(Function(Location) success, [Function(LocationError) failure]) {
+  static void onLocation(Function(Location) success,
+      [Function(LocationError) failure]) {
     if (_eventsLocation == null) {
       _eventsLocation = _eventChannelLocation
           .receiveBroadcastStream()
           .handleError((dynamic error) {
-            if (failure != null) {
-              failure(new LocationError(error));
-            } else {
-              print('[BackgroundGeolocation onLocation] ‼️ Uncaught location error: $error.  You should provide a failure callback as 2nd argument.');
-            }
-          })
-          .map((dynamic event) => new Location(event)
-      );
+        if (failure != null) {
+          failure(new LocationError(error));
+        } else {
+          print(
+              '[BackgroundGeolocation onLocation] ‼️ Uncaught location error: $error.  You should provide a failure callback as 2nd argument.');
+        }
+      }).map((dynamic event) => new Location(event));
     }
     _registerSubscription(_eventsLocation.listen(success), success);
   }
@@ -1144,8 +1161,8 @@ class BackgroundGeolocation {
   ///
   static void onSchedule(Function(State) callback) {
     if (_eventsSchedule == null) {
-      _eventsSchedule =
-          _eventChannelSchedule.receiveBroadcastStream()
+      _eventsSchedule = _eventChannelSchedule
+          .receiveBroadcastStream()
           .map((dynamic event) => new State(event));
     }
     _registerSubscription(_eventsSchedule.listen(callback), callback);
@@ -1288,24 +1305,24 @@ class BackgroundGeolocation {
   }
 
   /// Registers a function to receive events from __`BackgroundGeolocation`__ while in the *terminated* ("Headless") state.
-  /// 
+  ///
   /// __Note:__ Requires [Config.enableHeadless]:true.
-  /// 
+  ///
   /// In **`main.dart`**, create a global function beside `void main() {}` (**Must** be defined as a distinct function, not an anonymous callback).  This `function` will receive *all* events from `BackgroundGeolocation` in the headless state, and provided with a [HeadlessEvent] containing a [HeadlessEvent.name] and [HeadlessEvent.event].
-  /// 
+  ///
   /// After running your app with `runApp`, register your headless-task with [registerHeadlessTask].  Within your `callback`, you're free to interact with the complete `BackgroundGeolocation` API.
-  /// 
+  ///
   /// After completion of your headless-task, you must signal to the native-code with [HeadlessEvent.finish].  __WARNING__:  Failure to do so can cause the OS to punish your app for spending too much time in the background by throttling future events.
-  /// 
+  ///
   /// ## Example
-  /// 
+  ///
   /// __`main.dart`__
   /// ```dart
-  /// 
+  ///
   /// /// Receives all events from BackgroundGeolocation while app is terminated:
   /// void headlessTask(HeadlessEvent headlessEvent) async {
   ///   print('[HeadlessTask]: $headlessEvent');
-  /// 
+  ///
   ///   switch(headlessEvent.name) {
   ///     case Event.TERMINATE:
   ///       State state = headlessEvent.event;
@@ -1350,17 +1367,17 @@ class BackgroundGeolocation {
   ///   // IMPORTANT:  Signal completion of you HeadlessEvent:
   ///   headlessEvent.finish();  // <-- REQUIRED
   /// }
-  /// 
+  ///
   /// void main() {
   ///   runApp(HelloWorld());
-  ///   
+  ///
   ///   // Register your headlessTask:
   ///   BackgroundGeolocation.registerHeadlessTask(headlessTask);
   /// }
   /// ```
-  /// 
+  ///
   /// __Note__: The [HeadlessEvent.event] is of the same class as provided by `BackgroundGeolocation's` main event-listeners.  You can manually cast this instance as shown in the `switch` above.
-  /// 
+  ///
   /// - [onLocation]
   /// - [onMotionChange]
   /// - [onHttp]
@@ -1371,39 +1388,43 @@ class BackgroundGeolocation {
   /// - [onGeofencesChange]
   /// - [onEnabledChange]
   /// - [onConnectivityChange]
-  /// 
-  /// __WARNING__:  
-  /// 
+  ///
+  /// __WARNING__:
+  ///
   /// - Be sure to signal completion of your headless-task with [HeadlessEvent.finish].
   /// - You **cannot** register more than **one** headless-task.
   /// - You **cannot** reference your UI within your headless-task.  There is no UI.
-  /// 
+  ///
   /// - Do **not** register an inline `function` to [registerHeadlessTask] -- the Flutter framework will **fail** to address it:
-  /// 
+  ///
   /// ```dart
   /// // NO!  This will not work.
   /// BackgroundGeolocation.registerHeadlessTask((HeadlessEvent event) {
   ///   print('$event');
   /// });
-  /// 
+  ///
   /// // YES!
   /// void myHeadlessTask(HeadlessEvent headlessEvent) async {
   ///   print('$event');
   /// }
-  /// 
+  ///
   /// BackgroundGeolocation.registerHeadlessTask(myHeadlessTask);
-  /// 
+  ///
   /// ```
-  /// 
-  static Future<bool> registerHeadlessTask(void Function(HeadlessEvent) callback) async {
+  ///
+  static Future<bool> registerHeadlessTask(
+      void Function(HeadlessEvent) callback) async {
     Completer completer = new Completer<bool>();
 
     // Two callbacks:  the provided headless-task + _headlessRegistrationCallback
     List<int> args = [
-      PluginUtilities.getCallbackHandle(_headlessCallbackDispatcher).toRawHandle(),
+      PluginUtilities.getCallbackHandle(_headlessCallbackDispatcher)
+          .toRawHandle(),
       PluginUtilities.getCallbackHandle(callback).toRawHandle()
     ];
-    _methodChannel.invokeMethod('registerHeadlessTask', args).then((dynamic success) {
+    _methodChannel
+        .invokeMethod('registerHeadlessTask', args)
+        .then((dynamic success) {
       completer.complete(true);
     }).catchError((error) {
       String message = error.toString();
@@ -1426,25 +1447,30 @@ class BackgroundGeolocation {
 ///
 void _headlessCallbackDispatcher() {
   WidgetsFlutterBinding.ensureInitialized();
-  const MethodChannel _headlessChannel = MethodChannel("$_PLUGIN_PATH/headless", JSONMethodCodec());
+  const MethodChannel _headlessChannel =
+      MethodChannel("$_PLUGIN_PATH/headless", JSONMethodCodec());
 
   _headlessChannel.setMethodCallHandler((MethodCall call) async {
     final args = call.arguments;
 
     // Run the headless-task.
     try {
-      final Function callback = PluginUtilities.getCallbackFromHandle(CallbackHandle.fromRawHandle(args['callbackId']));
+      final Function callback = PluginUtilities.getCallbackFromHandle(
+          CallbackHandle.fromRawHandle(args['callbackId']));
       if (callback == null) {
-        print('[BackgroundGeolocation _headlessCallbackDispatcher] ERROR: Failed to get callback from handle: $args');
+        print(
+            '[BackgroundGeolocation _headlessCallbackDispatcher] ERROR: Failed to get callback from handle: $args');
         return;
       }
-      callback(new HeadlessEvent(args['event'], args['params'], args['taskId']));
+      callback(
+          new HeadlessEvent(args['event'], args['params'], args['taskId']));
     } catch (e, stacktrace) {
-      print('[BackgroundGeolocation _headlessCallbackDispather] ‼️ Callback error: ' + e.toString());
+      print(
+          '[BackgroundGeolocation _headlessCallbackDispather] ‼️ Callback error: ' +
+              e.toString());
       print(stacktrace);
     }
   });
   // Signal to native side that the client dispatcher is ready to receive events.
   _headlessChannel.invokeMethod('initialized');
 }
-

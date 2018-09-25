@@ -4,21 +4,25 @@ part of flt_background_geolocation;
 ///
 class State extends Config {
   Map map;
+
   /// Whether the plugin is current stopped or started ([BackgroundGeolocation.stop] / [BackgroundGeolocation.start]).
-  /// 
+  ///
   bool enabled;
+
   /// Whether the plugin's [Config.schedule] has been activated with [BackgroundGeolocation.startSchedule].
-  /// 
+  ///
   bool schedulerEnabled;
+
   /// Current distance travelled.
-  /// 
+  ///
   /// __See also:__
   /// - [BackgroundGeolocation.setOdometer].
   /// - [BackgroundGeolocation.odometer].
-  /// 
+  ///
   double odometer;
+
   /// Whether the plugin is in the location-tracking mode ([BackgroundGeolocation.start] or geofences-only mode ([BackgroundGeolocation.startGeofences]).
-  /// 
+  ///
   int trackingMode;
 
   State(dynamic data)
@@ -27,7 +31,9 @@ class State extends Config {
             desiredAccuracy: (data['desiredAccuracy'].runtimeType == double)
                 ? data['desiredAccuracy'].round()
                 : data['desiredAccuracy'],
-            distanceFilter: (data['distanceFilter'].runtimeType == int) ? data['distanceFilter'] * 1.0 : data['distanceFilter'],
+            distanceFilter: (data['distanceFilter'].runtimeType == int)
+                ? data['distanceFilter'] * 1.0
+                : data['distanceFilter'],
             stationaryRadius: (data['stationaryRadius'].runtimeType == int)
                 ? data['stationaryRadius'] * 1.0
                 : data['stationaryRadius'],
@@ -38,27 +44,24 @@ class State extends Config {
             elasticityMultiplier: (data['elasticityMultiplier'].runtimeType == int)
                 ? data['elasticityMultiplier'] * 1.0
                 : data['elasticityMultiplier'],
-            stopAfterElapsedMinutes:
-                (data['stopAfterElapsedMinutes'].runtimeType == double)
-                    ? data['stopAfterElapsedMinutes'].round()
-                    : data['stopAfterElapsedMinutes'],
-            geofenceProximityRadius:
-                (data['geofenceProximityRadius'].runtimeType == double)
-                    ? data['geofenceProximityRadius'].round()
-                    : data['geofenceProximityRadius'],
+            stopAfterElapsedMinutes: (data['stopAfterElapsedMinutes'].runtimeType == double)
+                ? data['stopAfterElapsedMinutes'].round()
+                : data['stopAfterElapsedMinutes'],
+            geofenceProximityRadius: (data['geofenceProximityRadius'].runtimeType == double)
+                ? data['geofenceProximityRadius'].round()
+                : data['geofenceProximityRadius'],
             geofenceInitialTriggerEntry: data['geofenceInitialTriggerEntry'],
             desiredOdometerAccuracy: (data['desiredOdometerAccuracy'].runtimeType == int)
-                    ? data['desiredOdometerAccuracy'] * 1.0
-                    : data['desiredOdometerAccuracy'],
+                ? data['desiredOdometerAccuracy'] * 1.0
+                : data['desiredOdometerAccuracy'],
             // ActivityRecognition
             isMoving: data['isMoving'],
             stopTimeout: (data['stopTimeout'].runtimeType == double)
                 ? data['stopTimeout'].round()
                 : data['stopTimeout'],
-            activityRecognitionInterval:
-                (data['activityRecognitionInterval'].runtimeType == double)
-                    ? data['activityRecognitionInterval'].round()
-                    : data['activityRecognitionInterval'],
+            activityRecognitionInterval: (data['activityRecognitionInterval'].runtimeType == double)
+                ? data['activityRecognitionInterval'].round()
+                : data['activityRecognitionInterval'],
             minimumActivityRecognitionConfidence:
                 data['minimumActivityRecognitionConfidence'],
             disableStopDetection: data['disableStopDetection'],
@@ -101,18 +104,16 @@ class State extends Config {
             pausesLocationUpdatesAutomatically:
                 data['pausesLocationUpdatesAutomatically'],
             locationAuthorizationRequest: data['locationAuthorizationRequest'],
-            locationAuthorizationAlert:
-                (data['locationAuthorizationAlert'] != null)
-                    ? data['locationAuthorizationAlert'].cast<String, dynamic>()
-                    : null,
+            locationAuthorizationAlert: (data['locationAuthorizationAlert'] != null)
+                ? data['locationAuthorizationAlert'].cast<String, dynamic>()
+                : null,
             disableLocationAuthorizationAlert:
                 data['disableLocationAuthorizationAlert'],
             // Activity Recognition Options
             activityType: data['activityType'],
-            stopDetectionDelay:
-                (data['stopDetectionDelay'].runtimeType == double)
-                    ? data['stopDetectionDelay'].round()
-                    : data['stopDetectionDelay'],
+            stopDetectionDelay: (data['stopDetectionDelay'].runtimeType == double)
+                ? data['stopDetectionDelay'].round()
+                : data['stopDetectionDelay'],
             disableMotionActivityUpdates: data['disableMotionActivityUpdates'],
             // Application Options
             preventSuspend: data['preventSuspend'],
@@ -123,8 +124,7 @@ class State extends Config {
 
             // Geolocation Options
             locationUpdateInterval: data['locationUpdateInterval'],
-            fastestLocationUpdateInterval:
-                data['fastestLocationUpdateInterval'],
+            fastestLocationUpdateInterval: data['fastestLocationUpdateInterval'],
             deferTime: data['deferTime'],
             allowIdenticalLocations: data['allowIdenticalLocations'],
             enableTimestampMeta: data['enableTimestampMeta'],
@@ -149,7 +149,9 @@ class State extends Config {
     enabled = data['enabled'];
     trackingMode = data['trackingMode'];
     schedulerEnabled = data['schedulerEnabled'];
-    odometer = (data['odometer'].runtimeType == int) ? (data['odometer'] * 1.0) : data['odometer'];
+    odometer = (data['odometer'].runtimeType == int)
+        ? (data['odometer'] * 1.0)
+        : data['odometer'];
     map = data;
   }
 

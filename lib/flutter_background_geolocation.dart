@@ -1,9 +1,9 @@
 ///[![](https://dl.dropboxusercontent.com/s/nm4s5ltlug63vv8/logo-150-print.png?dl=1)](https://www.transistorsoft.com)
 /// -------------------------------------------------------------------------------
 /// # [BackgroundGeolocation]
-/// 
+///
 /// The primary APIs for the plugin are exposed through the two classes [BackgroundGeolocation] and [Config].
-/// 
+///
 library flt_background_geolocation;
 
 import 'dart:async';

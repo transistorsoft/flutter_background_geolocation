@@ -50,11 +50,11 @@ SPEC CHECKSUMS:
   CocoaLumberjack: db7cc9e464771f12054c22ff6947c5a58d43a0fd
   device_info: 76ce0b32e13034d1883be4a382433648f9dcee63
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
-  flutter_background_geolocation: ec306376f07d2d399c1df2508dcb2348476b4772
+  flutter_background_geolocation: 73258bcb6cd5aefc6bcb70612a2d4b736779a0ad
   google_maps_flutter: 6449d5918d3f1a69a37dc9c557bbad7bb9bcf0e9
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
   shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
 
-PODFILE CHECKSUM: 1e5af4103afd21ca5ead147d7b81d06f494f51a2
+PODFILE CHECKSUM: 412af0b770baf0c510169b7be52baea1e495427c
 
 COCOAPODS: 1.5.3

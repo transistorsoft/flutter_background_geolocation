@@ -1327,71 +1327,71 @@ class Config {
   /// __`[Android only]`__ Enables "Headless" operation allowing you to respond to events after you app has been terminated with [stopOnTerminate]:false.
   ///
   /// Defaults to __`false`__.  In this Android terminated state, where only the plugin's foreground-service remains running, you can respond to all the plugin's events with your own Dart callback.
-  /// 
-  /// __Note__:  
+  ///
+  /// __Note__:
   /// - Requires [stopOnTerminate]:false.
   /// - If you've configured [stopOnTerminate]:false, [BackgroundGeolocation] will continue to record locations (and post them to your configured [url]) *regardless of* __`enabledHeadless: true`__.  You should enable this option *only if* you have to perform some custom work during the headless state (for example, posting a local notification).
   /// - With __`enableHeadless: true`__, you **must** also register a `function` to be executed in headless-state with [BackgroundGeolocation.registerHeadlessTask].
-  /// 
+  ///
   /// For more information, see:
   /// - [BackgroundGeolocation.registerHeadlessTask]
   /// - Wiki [Android Headless Mode](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode).
-  ///  
+  ///
   /// ## Android Setup
-  /// 
+  ///
   /// Create either `Application.kt` or `Application.java` in the same directory as `MainActivity`.
-  /// 
+  ///
   /// For `Application.kt`, use the following:
-  /// 
+  ///
   /// ```java
   /// import com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask;
-  /// 
+  ///
   /// class Application : FlutterApplication(), PluginRegistrantCallback {
   ///   override fun onCreate() {
   ///     super.onCreate();
   ///     HeadlessTask.setPluginRegistrant(this);
   ///   }
-  /// 
+  ///
   ///   override fun registerWith(registry: PluginRegistry) {
   ///     GeneratedPluginRegistrant.registerWith(registry);
   ///   }
   /// }
   /// ```
-  /// 
+  ///
   /// For `Application.java`, use the following:
-  /// 
+  ///
   /// ```java
   /// import com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask;
-  /// 
+  ///
   /// public class Application extends FlutterApplication implements PluginRegistrantCallback {
   ///   @Override
   ///   public void onCreate() {
   ///     super.onCreate();
   ///     HeadlessTask.setPluginRegistrant(this);
   ///   }
-  /// 
+  ///
   ///   @Override
   ///   public void registerWith(PluginRegistry registry) {
   ///     GeneratedPluginRegistrant.registerWith(registry);
   ///   }
   /// }
   /// ```
-  /// 
+  ///
   /// Which must also be referenced in `AndroidManifest.xml`:
-  /// 
+  ///
   /// ```xml
   ///     <application
   ///         android:name=".Application"
   ///         ...
   /// ```
-  /// 
+  ///
   /// Finally, in your `main.dart`, [BackgroundGeolocation.registerHeadlessTask]:
-  /// 
+  ///
   /// ```dart
   /// /// Receives all events from BackgroundGeolocation while app is terminated:
   /// void headlessTask(HeadlessEvent headlessEvent) async {
   ///   print('[HeadlessTask]: $headlessEvent');
-  ///  
+  ///
   ///   switch(event.name) {
   ///     case Event.HEARTBEAT:
   ///       break;
@@ -1401,10 +1401,10 @@ class Config {
   ///   }
   ///   headlessEvent.finish();  // <-- REQUIRED
   /// }
-  /// 
+  ///
   /// void main() {
   ///   runApp(HelloWorld());
-  ///   
+  ///
   ///   // Register your headlessTask:
   ///   BackgroundGeolocation.registerHeadlessTask(headlessTask);
   /// }
@@ -1848,25 +1848,25 @@ class Config {
   static final DeviceInfoPlugin deviceInfo = new DeviceInfoPlugin();
 
   /// Returns a Map suitable for attaching to [params] and posting to the Transistor Software Demo Server at `http://tracker.transistorsoft.com`.
-  /// 
-  /// 
+  ///
+  ///
   /// ## Example
-  /// 
+  ///
   /// ```dart
   /// // Required by Demo Server.
   /// Map deviceParams = await bg.Config.deviceParams;
   /// String username = 'my-unique-username'; // Eg Github username
-  /// 
+  ///
   /// BackgroundGeolocation.ready(Config(
   ///   url: 'http://tracker.transistorsoft.com/locations/$username',
   ///   params: deviceParams
   /// ));
   /// ```
-  /// 
+  ///
   /// View your tracking at [http://tracker.transistorsoft.com/my-unique-username](http://tracker.transistorsoft.com/my-unique-username).
-  /// 
+  ///
   /// ![](https://dl.dropboxusercontent.com/s/3abuyyhioyypk8c/screenshot-tracker-transistorsoft.png?dl=1)
-  /// 
+  ///
   static Future<Map<String, dynamic>> get deviceParams async {
     Map<String, dynamic> response;
     try {

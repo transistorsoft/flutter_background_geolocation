@@ -13,7 +13,7 @@ class ProviderChangeEvent {
   bool enabled;
 
   /// `AUTORIZATION_STATUS`
-  /// 
+  ///
   /// Expresses a change in the configuration of native location-services (eg: disabled, GPS off, etc).
   ///
   /// | Name                                  | Platform      |

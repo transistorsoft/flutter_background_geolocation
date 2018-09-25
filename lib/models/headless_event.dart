@@ -4,11 +4,11 @@ part of flt_background_geolocation;
 ///
 /// ## Example
 /// __`main.dart`
-/// 
+///
 /// ```dart
 /// void myHeadlessTask(HeadlessEvent headlesseEvent) async {
 ///   String name = headlessEvent.name;
-///   
+///
 ///   switch(name) {
 ///     case Event.TERMINATE:
 ///       break;
@@ -20,10 +20,10 @@ part of flt_background_geolocation;
 ///   }
 ///   headlessEvent.finish(); // <-- REQUIRED
 /// }
-/// 
+///
 /// void main() {
 ///   runApp(HelloWorld());
-///   
+///
 ///   // Register your headlessTask:
 ///   BackgroundGeolocation.registerHeadlessTask(myHeadlessTask);
 /// }
@@ -31,13 +31,13 @@ part of flt_background_geolocation;
 ///
 class HeadlessEvent {
   /// The name of the [Event]
-  /// 
+  ///
   String name;
 
   /// The corresponding event-object.
-  /// 
+  ///
   /// This `event` object can be cast according to those provided by [BackgroundGeolocation]'s primary event-listener'
-  /// 
+  ///
   /// | Event `name`                 | `event` Class                         |
   /// |------------------------------|---------------------------------------|
   /// | [Event.LOCATION]             | [Location]                            |
@@ -52,22 +52,24 @@ class HeadlessEvent {
   /// | [Event.CONNECTIVITYCHANGE]   | [ConnectivityChangeEvent]             |
   /// | [Event.POWERSAVECHANGE]      | `bool enabled`                        |
   /// | [Event.ENABLEDCHANGE]        | `bool enabled`                        |
-  ///   
+  ///
   dynamic event;
 
   /// Addresses the native Android `HeadlessTask` instance running this task.
-  /// 
+  ///
   String _taskId;
+
   /// Method channel for communicating with the Android `HeadlessTask` referenced by [taskId].
-  /// 
+  ///
   /// Used by [finish] for signalling completion of the `HeadlessTask`.
-  /// 
+  ///
   MethodChannel _channel;
 
   HeadlessEvent(String name, Map params, String taskId) {
     this.name = name;
     this._taskId = taskId;
-    this._channel = MethodChannel(_PLUGIN_PATH + "/headless/" + taskId, JSONMethodCodec());
+    this._channel =
+        MethodChannel(_PLUGIN_PATH + "/headless/" + taskId, JSONMethodCodec());
     try {
       switch (name) {
         case Event.TERMINATE:
@@ -81,7 +83,8 @@ class HeadlessEvent {
           event = new Location(params["location"]);
           break;
         case Event.ACTIVITYCHANGE:
-          event = new ActivityChangeEvent(params['activity'], params['confidence']);
+          event =
+              new ActivityChangeEvent(params['activity'], params['confidence']);
           break;
         case Event.GEOFENCE:
           event = new GeofenceEvent(params);
@@ -94,10 +97,10 @@ class HeadlessEvent {
           break;
         case Event.HTTP:
           event = new HttpEvent(params);
-          break;        
+          break;
         case Event.PROVIDERCHANGE:
-          event = new ProviderChangeEvent(
-              params['enabled'], params['status'], params['network'], params['gps']);
+          event = new ProviderChangeEvent(params['enabled'], params['status'],
+              params['network'], params['gps']);
           break;
         case Event.CONNECTIVITYCHANGE:
           event = new ConnectivityChangeEvent(params['connected']);
@@ -109,7 +112,7 @@ class HeadlessEvent {
           event = params;
           break;
       }
-    } catch(e, stacktrace) {
+    } catch (e, stacktrace) {
       print('[HeadlessEvent] ‼️ ERROR DECODING EVENT: $e');
       print(params.toString());
       print(stacktrace);

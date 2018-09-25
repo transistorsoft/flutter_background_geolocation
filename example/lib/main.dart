@@ -13,12 +13,20 @@ void headlessTask(bg.HeadlessEvent headlessEvent) async {
 
   switch(headlessEvent.name) {
     case bg.Event.TERMINATE:
-      bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
-      print('[getCurrentPosition] Headless: $location');
+      try {
+        bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
+        print('[getCurrentPosition] Headless: $location');
+      } catch (error) {
+        print('[getCurrentPosition] Headless ERROR: $error');
+      }
       break;
     case bg.Event.HEARTBEAT:
-      bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
-      print('[getCurrentPosition] Headless: $location');
+      try {
+        bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
+        print('[getCurrentPosition] Headless: $location');
+      } catch (error) {
+        print('[getCurrentPosition] Headless ERROR: $error');
+      }
       break;
     case bg.Event.LOCATION:
       bg.Location location = headlessEvent.event;
