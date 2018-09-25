@@ -75,8 +75,10 @@ class HeadlessEvent {
           event = new State(params);
           break;
         case Event.LOCATION:
-        case Event.MOTIONCHANGE:
           event = new Location(params);
+          break;
+        case Event.MOTIONCHANGE:
+          event = new Location(params["location"]);
           break;
         case Event.ACTIVITYCHANGE:
           event = new ActivityChangeEvent(params['activity'], params['confidence']);
@@ -109,6 +111,7 @@ class HeadlessEvent {
       }
     } catch(e, stacktrace) {
       print('[HeadlessEvent] ‼️ ERROR DECODING EVENT: $e');
+      print(params.toString());
       print(stacktrace);
     }
   }

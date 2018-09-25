@@ -75,7 +75,7 @@ class GeofenceEvent {
     this.extras = params['extras'];
   }
 
-  String toString() {
-    return '[GeofenceEvent identifier: $identifier, action: $action]';
+  String toString({compact: bool}) {
+    return (compact) ? '$action: $identifier' : '[GeofenceEvent identifier: $identifier, action: $action]';
   }
 }

@@ -8,10 +8,10 @@ import 'hello_world/app.dart';
 
 /// Receives events from BackgroundGeolocation in Headless state.
 ///
-void headlessTask(bg.HeadlessEvent event) async {
-  print('📬 --> $event');
+void headlessTask(bg.HeadlessEvent headlessEvent) async {
+  print('📬 --> $headlessEvent');
 
-  switch(event.name) {
+  switch(headlessEvent.name) {
     case bg.Event.TERMINATE:
       bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
       print('[getCurrentPosition] Headless: $location');
@@ -20,29 +20,61 @@ void headlessTask(bg.HeadlessEvent event) async {
       bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
       print('[getCurrentPosition] Headless: $location');
       break;
+    case bg.Event.LOCATION:
+      bg.Location location = headlessEvent.event;
+      break;
+    case bg.Event.MOTIONCHANGE:
+      bg.Location location = headlessEvent.event;
+      break;
+    case bg.Event.GEOFENCE:
+      bg.GeofenceEvent geofenceEvent = headlessEvent.event;
+      break;
+    case bg.Event.GEOFENCESCHANGE:
+      bg.GeofencesChangeEvent event = headlessEvent.event;
+      break;
+    case bg.Event.SCHEDULE:
+      bg.State state = headlessEvent.event;
+      break;
+    case bg.Event.ACTIVITYCHANGE:
+      bg.ActivityChangeEvent event = headlessEvent.event;
+      break;
+    case bg.Event.HTTP:
+      bg.HttpEvent response = headlessEvent.event;
+      break;
+    case bg.Event.POWERSAVECHANGE:
+      bool enabled = headlessEvent.event;
+      break;
+    case bg.Event.CONNECTIVITYCHANGE:
+      bg.ConnectivityChangeEvent event = headlessEvent.event;
+      break;
+    case bg.Event.ENABLEDCHANGE:
+      bool enabled = headlessEvent.event;
+      break;
   }
-  event.finish();
+  // Important:  must signal completion of our headless task to native code.
+  headlessEvent.finish();
 }
 
-void main() async {
-
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  String appName = prefs.getString("app");
-
-  Widget app;
-
-  switch(appName) {
-    case AdvancedApp.NAME:
-      app = new AdvancedApp();
-      break;
-    case HelloWorldApp.NAME:
-      app = new HelloWorldApp();
-      break;
-    default:
-      app = HomeApp();
-      break;
-  }
-  runApp(app);
+void main() {
+  /// Application selection:  Select the app to boot:
+  /// - AdvancedApp
+  /// - HelloWorldAp
+  /// - HomeApp
+  ///
+  SharedPreferences.getInstance().then((SharedPreferences prefs) {
+    String appName = prefs.getString("app");
+    switch(appName) {
+      case AdvancedApp.NAME:
+        runApp(new AdvancedApp());
+        break;
+      case HelloWorldApp.NAME:
+        runApp(new HelloWorldApp());
+        break;
+      default:
+        // Default app.  Renders the application selector home page.
+        runApp(new HomeApp());
+    }
+  });
 
   /// Register Headless Task.
   bg.BackgroundGeolocation.registerHeadlessTask(headlessTask);

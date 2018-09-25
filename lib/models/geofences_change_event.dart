@@ -38,7 +38,13 @@ class GeofencesChangeEvent {
     });
   }
 
-  String toString() {
-    return '[GeofencesChangeEvent off: $off, on: $on]';
+  String toString({compact: bool}) {
+    if (compact == true) {
+      List<String> identifiersOn = [];
+      on.forEach((Geofence geofence) => identifiersOn.add(geofence.identifier));
+      return 'on: $identifiersOn, off: $off';
+    } else {
+      return '[GeofencesChangeEvent off: $off, on: $on]';
+    }
   }
 }

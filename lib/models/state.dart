@@ -149,7 +149,7 @@ class State extends Config {
     enabled = data['enabled'];
     trackingMode = data['trackingMode'];
     schedulerEnabled = data['schedulerEnabled'];
-    odometer = (data['odometer'].runtimeType == int) ? data['odometetr'] * 1.0 : data['odometer'];
+    odometer = (data['odometer'].runtimeType == int) ? (data['odometer'] * 1.0) : data['odometer'];
     map = data;
   }
 

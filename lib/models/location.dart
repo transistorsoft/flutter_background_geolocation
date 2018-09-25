@@ -22,6 +22,9 @@ class _Coords {
     }
     this.floor = coords['floor'];
   }
+  String toString() {
+    return 'coords: $latitude,$longitude, acy: $accuracy, spd: $speed';
+  }
 }
 
 class _Battery {
@@ -130,11 +133,40 @@ class Location {
     }
   }
 
-  String toString() {
-    return '[Location ' + this.map.toString() + ']';
+  String toString({compact: bool}) {
+    if (compact == true) {
+      return '[Location ${DateTime.parse(timestamp).toLocal()}, isMoving: $isMoving, sample: $sample, $coords]';
+    } else {
+      return '[Location ${map.toString()}]';
+    }
   }
 
   Map toMap() {
     return map;
+  }
+}
+
+/// Location Error
+///
+/// ## Error Codes
+///
+/// | Code  | Error                       |
+/// |-------|-----------------------------|
+/// | 0     | Location unknown            |
+/// | 1     | Location permission denied  |
+/// | 2     | Network error               |
+/// | 408   | Location timeout            |
+///
+class LocationError {
+  int code;
+  String message;
+
+  LocationError(PlatformException e) {
+    code = int.parse(e.code);
+    message = e.message;
+  }
+
+  String toString() {
+    return '[LocationError code: $code, message: $message]';
   }
 }

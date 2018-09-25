@@ -133,6 +133,7 @@ class BackgroundGeolocation {
   static List<_Subscription> _subscriptions = new List();
   // Stream Listeners
   static Stream<Location> _eventsLocation;
+  static Stream<int> _eventsLocationError;
   static Stream<Location> _eventsMotionChange;
   static Stream<ActivityChangeEvent> _eventsActivityChange;
   static Stream<ProviderChangeEvent> _eventsProviderChange;
@@ -940,7 +941,6 @@ class BackgroundGeolocation {
 
   /// Subscribe to location events
   ///
-  ///
   ///  **NOTE:** When performing a [onMotionChange] or [getCurrentPosition], the plugin requests **multiple** location *samples* in order to record the most accurate location possible.  These *samples* are **not** persisted to the database but they will be provided to your `callback`, for your convenience, since it can take some seconds for the best possible location to arrive.
   ///
   /// For example, you might use these samples to progressively update the user's position on a map.  You can detect these *samples* in your `callback` via `location.sample == true`.  If you're manually `POST`ing location to your server, you should ignore these locations.
@@ -948,9 +948,9 @@ class BackgroundGeolocation {
   /// ## Example
   ///
   /// ```dart
-  /// BackgroundGeolocation.onLocation', ((Location location) {
+  /// BackgroundGeolocation.onLocation((Location location) {
   ///   print('[onLocation] success: $location');
-  /// }).catchError((error) {
+  /// }, (LocationError error) {
   ///   print('[onLocation] ERROR: $error');
   /// });
   /// ```
@@ -964,13 +964,21 @@ class BackgroundGeolocation {
   /// | 2     | Network error               |
   /// | 408   | Location timeout            |
   ///
-  static void onLocation(Function(Location) callback) {
+  static void onLocation(Function(Location) success, [Function(LocationError) failure]) {
     if (_eventsLocation == null) {
       _eventsLocation = _eventChannelLocation
           .receiveBroadcastStream()
-          .map((dynamic event) => new Location(event));
+          .handleError((dynamic error) {
+            if (failure != null) {
+              failure(new LocationError(error));
+            } else {
+              print('[BackgroundGeolocation onLocation] ‼️ Uncaught location error: $error.  You should provide a failure callback as 2nd argument.');
+            }
+          })
+          .map((dynamic event) => new Location(event)
+      );
     }
-    _registerSubscription(_eventsLocation.listen(callback), callback);
+    _registerSubscription(_eventsLocation.listen(success), success);
   }
 
   /// Subscribe to changes in motion activity.
@@ -1134,13 +1142,11 @@ class BackgroundGeolocation {
   /// });
   /// ```
   ///
-  static void onSchedule(Function(dynamic) callback) {
+  static void onSchedule(Function(State) callback) {
     if (_eventsSchedule == null) {
       _eventsSchedule =
-          _eventChannelSchedule.receiveBroadcastStream().map((dynamic event) {
-        // TODO cast to BGState
-        return event;
-      });
+          _eventChannelSchedule.receiveBroadcastStream()
+          .map((dynamic event) => new State(event));
     }
     _registerSubscription(_eventsSchedule.listen(callback), callback);
   }
@@ -1400,13 +1406,17 @@ class BackgroundGeolocation {
     _methodChannel.invokeMethod('registerHeadlessTask', args).then((dynamic success) {
       completer.complete(true);
     }).catchError((error) {
-      print('[BackgroundGeolocation registerHeadlessTask] ‼️ ${error.code}');
+      String message = error.toString();
+      if (error.code != null) {
+        message = error.code;
+      }
+      print('[BackgroundGeolocation registerHeadlessTask] ‼️ ${message}');
       completer.complete(false);
     });
     return completer.future;
   }
 
-  static void _registerSubscription(
+  static StreamSubscription<dynamic> _registerSubscription(
       StreamSubscription<dynamic> sub, Function callback) {
     _subscriptions.add(new _Subscription(sub, callback));
   }

@@ -9,12 +9,13 @@ import com.transistorsoft.locationmanager.logger.TSLog;
 
 @TargetApi(21)
 public class HeadlessJobService extends JobService {
+    private HeadlessTask mHeadlessTask;
 
     @Override
     public boolean onStartJob(final JobParameters params) {
         Bundle event = new Bundle(params.getExtras());
 
-        new HeadlessTask(getApplicationContext(), event, new HeadlessTask.Callback() {
+        mHeadlessTask = new HeadlessTask(getApplicationContext(), event, new HeadlessTask.Callback() {
             @Override
             public void onComplete() {
                 jobFinished(params, false);
@@ -24,7 +25,7 @@ public class HeadlessJobService extends JobService {
     }
     @Override
     public boolean onStopJob(JobParameters params) {
-        TSLog.logger.debug(TSLog.ICON_WARN + " onStopJob");
+        TSLog.logger.debug(TSLog.ICON_WARN + " onStopJob: " + mHeadlessTask.hashCode());
         jobFinished(params, false);
         return true;
     }

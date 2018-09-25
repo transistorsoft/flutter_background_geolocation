@@ -8,6 +8,7 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
 
 import '../app.dart';
 import 'map_view.dart';
+import 'event_list.dart';
 import 'dialog.dart' as util;
 
 // For pretty-printing location JSON
@@ -18,8 +19,10 @@ class HomeView extends StatefulWidget {
   State createState() => HomeViewState();
 }
 
-class HomeViewState extends State<HomeView> {
+class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeView> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  TabController _tabController;
   bool _isMoving;
   bool _enabled;
   String _motionActivity;
@@ -35,22 +38,35 @@ class HomeViewState extends State<HomeView> {
     _motionActivity = 'UNKNOWN';
     _odometer = '0';
 
+    _tabController = TabController(
+        length: 2,
+        initialIndex: 1,
+        vsync: this
+    );
+    _tabController.addListener(_handleTabChange);
+
     initPlatformState();
   }
 
   Future<Null> initPlatformState() async {
     final SharedPreferences prefs = await _prefs;
-    String username = prefs.getString("username");
 
+    // Set persisted tabIndex: MapView | EventList
+    int tabIndex = prefs.getInt("tabIndex");
+    if (tabIndex != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        //_tabController.animateTo(tabIndex);
+      });
+    }
+
+    // Fetch username and devivceParams for posting to tracker.transistorsoft.com
+    String username = prefs.getString("username");
     Map deviceParams = await bg.Config.deviceParams;
 
     // 1.  Listen to events (See docs for all 12 available events).
     bg.BackgroundGeolocation.onLocation(_onLocation);
     bg.BackgroundGeolocation.onMotionChange(_onMotionChange);
     bg.BackgroundGeolocation.onActivityChange(_onActivityChange);
-    bg.BackgroundGeolocation.onProviderChange(_onProviderChange);
-    bg.BackgroundGeolocation.onConnectivityChange(_onConnectivityChange);
-    bg.BackgroundGeolocation.onHeartbeat(_onHeartbeat);
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
@@ -70,7 +86,22 @@ class HomeViewState extends State<HomeView> {
         _enabled = state.enabled;
         _isMoving = state.isMoving;
       });
+    }).catchError((error) {
+      print('[ready] ERROR: $error');
     });
+  }
+
+  void _handleTabChange() async {
+    if (!_tabController.indexIsChanging) { return; }
+    final SharedPreferences prefs = await _prefs;
+    prefs.setInt("tabIndex", _tabController.index);
+  }
+
+  @override
+  void dispose() {
+    _tabController.removeListener(_handleTabChange);
+    _tabController.dispose();
+    super.dispose();
   }
 
   void _onClickEnable(enabled) {
@@ -139,92 +170,82 @@ class HomeViewState extends State<HomeView> {
   //
 
   void _onLocation(bg.Location location) {
-    print('[location] - $location');
-
-    String odometerKM = (location.odometer / 1000.0).toStringAsFixed(1);
-
+    print('[${bg.Event.LOCATION}] - $location');
     setState(() {
       _content = encoder.convert(location.toMap());
-      _odometer = odometerKM;
+      _odometer = (location.odometer / 1000.0).toStringAsFixed(1);
     });
   }
 
   void _onMotionChange(bg.Location location) {
-    print('[motionchange] - $location');
+    print('[${bg.Event.MOTIONCHANGE}] - $location');
     setState(() {
       _isMoving = location.isMoving;
     });
   }
 
   void _onActivityChange(bg.ActivityChangeEvent event) {
-    print('[activitychange] - $event');
+    print('[${bg.Event.ACTIVITYCHANGE}] - $event');
     setState(() {
       _motionActivity = event.activity;
     });
   }
 
-  void _onProviderChange(bg.ProviderChangeEvent event) {
-    print('$event');
-    setState(() {
-      _content = encoder.convert(event.toMap());
-    });
-  }
-
-  void _onConnectivityChange(bg.ConnectivityChangeEvent event) {
-    print('$event');
-  }
-
-  void _onHeartbeat(bg.HeartbeatEvent event) {
-    print('$event');
-  }
-
   @override
   Widget build(BuildContext context) {
 
-    Widget body;
-    // iOS doesn't yet support maps.
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      body = SingleChildScrollView(child: Text('$_content'));
-    } else {
-      body = new MapView();
-    }
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BG Geo'),
-        leading: IconButton(onPressed: _onClickHome, icon: Icon(Icons.home, color: Colors.black)),
-        backgroundColor: Theme.of(context).bottomAppBarColor,
-        brightness: Brightness.light,
-        actions: <Widget>[
-          Switch(value: _enabled, onChanged: _onClickEnable
-          ),
-        ]
-      ),
-      body: body,
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          padding: const EdgeInsets.only(left: 5.0, right: 5.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              IconButton(
-                icon: Icon(Icons.gps_fixed),
-                onPressed: _onClickGetCurrentPosition,
-              ),
-              Text('$_motionActivity · $_odometer km'),
-              MaterialButton(
-                minWidth: 50.0,
-                child: Icon((_isMoving) ? Icons.pause : Icons.play_arrow, color: Colors.white),
-                color: (_isMoving) ? Colors.red : Colors.green,
-                onPressed: _onClickChangePace
-              )
-            ]
+          title: const Text('BG Geo'),
+          centerTitle: true,
+          leading: IconButton(onPressed: _onClickHome, icon: Icon(Icons.home, color: Colors.black)),
+          backgroundColor: Theme.of(context).bottomAppBarColor,
+          brightness: Brightness.light,
+          actions: <Widget>[
+            Switch(value: _enabled, onChanged: _onClickEnable
+            ),
+          ],
+          bottom: TabBar(
+              controller: _tabController,
+              indicatorColor: Colors.red,
+              tabs: [
+                Tab(icon: Icon(Icons.map)),
+                Tab(icon: Icon(Icons.list))
+              ]
           )
-        )
+      ),
+      //body: body,
+      body: TabBarView(
+          controller: _tabController,
+          children: [
+            // iOS doesn't yet support maps.  Just show a JSON rending of location for now.  Android get MapView.
+            (defaultTargetPlatform == TargetPlatform.android) ? MapView() : SingleChildScrollView(child: Text('$_content')),
+            EventList()
+          ],
+          physics: new NeverScrollableScrollPhysics()
+      ),
+      bottomNavigationBar: BottomAppBar(
+          child: Container(
+              padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+              child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.gps_fixed),
+                      onPressed: _onClickGetCurrentPosition,
+                    ),
+                    Text('$_motionActivity · $_odometer km'),
+                    MaterialButton(
+                        minWidth: 50.0,
+                        child: Icon((_isMoving) ? Icons.pause : Icons.play_arrow, color: Colors.white),
+                        color: (_isMoving) ? Colors.red : Colors.green,
+                        onPressed: _onClickChangePace
+                    )
+                  ]
+              )
+          )
       ),
     );
   }
-
-
 }
