@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## [0.1.5] - 2018-09-25
+- [Fixed] warnings reported by Flutter publisher.
+
 ## [0.1.4] - 2018-09-25
 - [Added] Android Headless mode.  See docs for `enableHeadless`.
 - [Added] an "event list" screen to "AdvancedApp" example.

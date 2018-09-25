@@ -1437,7 +1437,7 @@ class BackgroundGeolocation {
     return completer.future;
   }
 
-  static StreamSubscription<dynamic> _registerSubscription(
+  static void _registerSubscription(
       StreamSubscription<dynamic> sub, Function callback) {
     _subscriptions.add(new _Subscription(sub, callback));
   }
