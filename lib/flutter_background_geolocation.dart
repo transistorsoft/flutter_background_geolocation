@@ -8,7 +8,6 @@ library flt_background_geolocation;
 
 import 'dart:async';
 import 'dart:ui';
-import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
