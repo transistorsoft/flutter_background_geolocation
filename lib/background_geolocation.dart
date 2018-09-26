@@ -138,7 +138,6 @@ class BackgroundGeolocation {
   static List<_Subscription> _subscriptions = new List();
   // Stream Listeners
   static Stream<Location> _eventsLocation;
-  static Stream<int> _eventsLocationError;
   static Stream<Location> _eventsMotionChange;
   static Stream<ActivityChangeEvent> _eventsActivityChange;
   static Stream<ProviderChangeEvent> _eventsProviderChange;
