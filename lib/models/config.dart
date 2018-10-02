@@ -1870,11 +1870,13 @@ class Config {
   static Future<Map<String, dynamic>> get deviceParams async {
     Map<String, dynamic> response;
     try {
+      RegExp re = new RegExp(r"[\s\.,]");
       if (defaultTargetPlatform == TargetPlatform.android) {
         AndroidDeviceInfo info = await deviceInfo.androidInfo;
+        String uuid = '${info.model}-${info.version.release}'.replaceAll(re, '-');
         response = {
           'device': {
-            'uuid': info.id,
+            'uuid': uuid,
             'model': info.model,
             'platform': 'Android',
             'manufacturer': info.manufacturer,
@@ -1884,9 +1886,10 @@ class Config {
         };
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         IosDeviceInfo info = await deviceInfo.iosInfo;
+        String uuid = '${info.utsname.machine}-${info.systemVersion}'.replaceAll(re, '-');
         response = {
           'device': {
-            'uuid': info.identifierForVendor,
+            'uuid': uuid,
             'model': info.utsname.machine,
             'platform': 'iOS',
             'manufacturer': 'Apple',

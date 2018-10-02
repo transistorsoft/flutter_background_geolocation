@@ -2,6 +2,7 @@ part of flt_background_geolocation;
 
 /// Event object provided to [BackgroundGeolocation.onActivityChange].
 ///
+
 class ActivityChangeEvent {
   final String activity;
   final int confidence;

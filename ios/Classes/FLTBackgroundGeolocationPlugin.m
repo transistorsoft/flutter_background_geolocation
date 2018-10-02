@@ -247,7 +247,7 @@ static NSString *const ACTION_INITIALIZED = @"initialized";
     TSCurrentPositionRequest *request = [[TSCurrentPositionRequest alloc] initWithSuccess:^(TSLocation *location) {
         result([location toDictionary]);
     } failure:^(NSError *error) {
-        result([FlutterError errorWithCode: [NSString stringWithFormat:@"%lu", error.code] message:nil details:nil]);
+        result([FlutterError errorWithCode: [NSString stringWithFormat:@"%lu", (long) error.code] message:nil details:nil]);
     }];
     
     if (options[@"timeout"]) {
@@ -298,7 +298,7 @@ static NSString *const ACTION_INITIALIZED = @"initialized";
     TSCurrentPositionRequest *request = [[TSCurrentPositionRequest alloc] initWithSuccess:^(TSLocation *location) {
         result([location toDictionary]);
     } failure:^(NSError *error) {
-        result([FlutterError errorWithCode: [NSString stringWithFormat:@"%lu", error.code] message:nil details:nil]);
+        result([FlutterError errorWithCode: [NSString stringWithFormat:@"%lu", (long) error.code] message:nil details:nil]);
     }];
     [_locationManager setOdometer:value request:request];
 }
@@ -351,7 +351,7 @@ static NSString *const ACTION_INITIALIZED = @"initialized";
     [_locationManager sync:^(NSArray* records) {
         result(records);
     } failure:^(NSError* error) {
-        result([FlutterError errorWithCode:[NSString stringWithFormat:@"%lu", error.code] message:@"Sync failure" details:nil]);
+        result([FlutterError errorWithCode:[NSString stringWithFormat:@"%lu", (long) error.code] message:@"Sync failure" details:nil]);
     }];
 }
 

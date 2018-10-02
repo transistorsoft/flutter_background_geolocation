@@ -9,6 +9,7 @@ part of flt_background_geolocation;
 /// void myHeadlessTask(HeadlessEvent headlesseEvent) async {
 ///   String name = headlessEvent.name;
 ///
+///
 ///   switch(name) {
 ///     case Event.TERMINATE:
 ///       break;
@@ -18,7 +19,6 @@ part of flt_background_geolocation;
 ///     .
 ///     .
 ///   }
-///   headlessEvent.finish(); // <-- REQUIRED
 /// }
 ///
 /// void main() {
@@ -55,21 +55,9 @@ class HeadlessEvent {
   ///
   dynamic event;
 
-  /// Addresses the native Android `HeadlessTask` instance running this task.
-  ///
-  String _taskId;
-
-  /// Method channel for communicating with the Android `HeadlessTask` referenced by [taskId].
-  ///
-  /// Used by [finish] for signalling completion of the `HeadlessTask`.
-  ///
-  MethodChannel _channel;
-
-  HeadlessEvent(String name, Map params, String taskId) {
+  HeadlessEvent(String name, Map params) {
     this.name = name;
-    this._taskId = taskId;
-    this._channel =
-        MethodChannel(_PLUGIN_PATH + "/headless/" + taskId, JSONMethodCodec());
+
     try {
       switch (name) {
         case Event.TERMINATE:
@@ -119,16 +107,7 @@ class HeadlessEvent {
     }
   }
 
-  /// Use the `finsh` method to signal completion of your `HeadlessTask`
-  ///
-  /// The plugin uses Android's `JobDispatcher` to execute Headless-tasks.  If you don't signal completion of your tasks,
-  /// the OS can punish further executions for taking too long in the background.
-  ///
-  void finish() {
-    _channel.invokeMethod('finish');
-  }
-
   String toString() {
-    return '[HeadlessEvent $_taskId name: $name, event: $event]';
+    return '[HeadlessEvent name: $name, event: $event]';
   }
 }
