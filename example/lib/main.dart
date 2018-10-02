@@ -59,8 +59,6 @@ void headlessTask(bg.HeadlessEvent headlessEvent) async {
       bool enabled = headlessEvent.event;
       break;
   }
-  // Important:  must signal completion of our headless task to native code.
-  headlessEvent.finish();
 }
 
 void main() {

@@ -77,7 +77,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     public static final String ACTION_STOP_SCHEDULE     = "stopSchedule";
     public static final String ACTION_LOG               = "log";
 
-    private static final String JOB_SERVICE_CLASS         = "HeadlessJobService";
+    private static final String JOB_SERVICE_CLASS         = "HeadlessTask";
 
     private boolean mIsInitialized;
     private Intent mLaunchIntent;

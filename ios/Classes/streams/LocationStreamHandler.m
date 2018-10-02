@@ -17,7 +17,7 @@ static NSString *const LOCATION_ERROR = @"LOCATION_ERROR";
     };
     
     [[TSLocationManager sharedInstance] onLocation:self.callback failure:^(NSError *error) {    
-        events([FlutterError errorWithCode: [NSString stringWithFormat:@"%lu", error.code] message:LOCATION_ERROR details:nil]);
+        events([FlutterError errorWithCode: [NSString stringWithFormat:@"%lu", (long) error.code] message:LOCATION_ERROR details:nil]);
     }];
     
     return nil;

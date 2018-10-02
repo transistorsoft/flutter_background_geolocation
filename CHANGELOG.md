@@ -1,6 +1,7 @@
 # Change Log
 
-## Unreleased
+## [0.1.6] - 2018-10-01
+- [Changed] Refactor Android Headless mechanism.  Got rid of Android `JobScheduler` mechanism with more direct `EventBus`.  `JobScheduler` events were subject to Android time-slicing, causing headless events to arrive late.
 
 ## [0.1.5] - 2018-09-25
 - [Fixed] warnings reported by Flutter publisher.

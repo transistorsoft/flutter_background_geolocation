@@ -1311,7 +1311,6 @@ class BackgroundGeolocation {
   ///
   /// After running your app with `runApp`, register your headless-task with [registerHeadlessTask].  Within your `callback`, you're free to interact with the complete `BackgroundGeolocation` API.
   ///
-  /// After completion of your headless-task, you must signal to the native-code with [HeadlessEvent.finish].  __WARNING__:  Failure to do so can cause the OS to punish your app for spending too much time in the background by throttling future events.
   ///
   /// ## Example
   ///
@@ -1363,8 +1362,6 @@ class BackgroundGeolocation {
   ///       ProviderChangeEvent event = headlessEvent.event;
   ///       break;
   ///   }
-  ///   // IMPORTANT:  Signal completion of you HeadlessEvent:
-  ///   headlessEvent.finish();  // <-- REQUIRED
   /// }
   ///
   /// void main() {
@@ -1390,7 +1387,6 @@ class BackgroundGeolocation {
   ///
   /// __WARNING__:
   ///
-  /// - Be sure to signal completion of your headless-task with [HeadlessEvent.finish].
   /// - You **cannot** register more than **one** headless-task.
   /// - You **cannot** reference your UI within your headless-task.  There is no UI.
   ///
@@ -1461,8 +1457,7 @@ void _headlessCallbackDispatcher() {
             '[BackgroundGeolocation _headlessCallbackDispatcher] ERROR: Failed to get callback from handle: $args');
         return;
       }
-      callback(
-          new HeadlessEvent(args['event'], args['params'], args['taskId']));
+      callback(new HeadlessEvent(args['event'], args['params']));
     } catch (e, stacktrace) {
       print(
           '[BackgroundGeolocation _headlessCallbackDispather] ‼️ Callback error: ' +
