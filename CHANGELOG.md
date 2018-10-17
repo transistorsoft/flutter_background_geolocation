@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.1.7] - 2018-10-17
+- [Fixed] Issue #8.  Could not modify button-text of `locationAuthorizationAlert` after `#ready`.
+
 ## [0.1.6] - 2018-10-01
 - [Changed] Refactor Android Headless mechanism.  Got rid of Android `JobScheduler` mechanism with more direct `EventBus`.  `JobScheduler` events were subject to Android time-slicing, causing headless events to arrive late.
 

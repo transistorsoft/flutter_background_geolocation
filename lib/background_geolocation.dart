@@ -205,7 +205,7 @@ class BackgroundGeolocation {
   ///
   /// ## Example
   ///
-  // ```dart
+  /// ```dart
   /// BackgroundGeolocation.ready(Config(
   ///   reset: true,  // <-- set true to ALWAYS apply supplied config; not just at first launch.
   ///   distanceFilter: 50
@@ -591,7 +591,6 @@ class BackgroundGeolocation {
     return await _methodChannel.invokeMethod('sync');
   }
 
-  ///
   /// Adds a [Geofence] to be monitored by the native Geofencing API.
   ///
   /// If a [Geofence] *already exists* with the configured [Geofence.identifier], the previous one will be **deleted** before the new one is inserted.
