@@ -1497,7 +1497,7 @@ class Config {
   /// | [Config.NOTIFICATION_PRIORITY_LOW]     | Notification weighted to bottom of list; notification-bar icon weighted right                                   |
   /// | [Config.NOTIFICATION_PRIORITY_MAX]     | Same as `NOTIFICATION_PRIORITY_HIGH`  |
   /// | [Config.NOTIFICATION_PRIORITY_MIN]     | Notification **strongly** weighted to bottom of list; notification-bar icon **hidden**                          |
-
+  ///
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
   ///   foregroundService: true,
@@ -1873,7 +1873,8 @@ class Config {
       RegExp re = new RegExp(r"[\s\.,]");
       if (defaultTargetPlatform == TargetPlatform.android) {
         AndroidDeviceInfo info = await deviceInfo.androidInfo;
-        String uuid = '${info.model}-${info.version.release}'.replaceAll(re, '-');
+        String uuid =
+            '${info.model}-${info.version.release}'.replaceAll(re, '-');
         response = {
           'device': {
             'uuid': uuid,
@@ -1886,7 +1887,8 @@ class Config {
         };
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         IosDeviceInfo info = await deviceInfo.iosInfo;
-        String uuid = '${info.utsname.machine}-${info.systemVersion}'.replaceAll(re, '-');
+        String uuid =
+            '${info.utsname.machine}-${info.systemVersion}'.replaceAll(re, '-');
         response = {
           'device': {
             'uuid': uuid,
