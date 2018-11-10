@@ -23,6 +23,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.view.FlutterNativeView;
 
+import com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ActivityChangeStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ConnectivityChangeStreamHandler;
@@ -130,6 +131,10 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
                     .setHeadlessJobService(getClass().getPackage().getName() + "." + JOB_SERVICE_CLASS)
                     .commit();
         }
+    }
+
+    public static void setPluginRegistrant(PluginRegistry.PluginRegistrantCallback callback) {
+        HeadlessTask.setPluginRegistrant(callback);
     }
 
     private void initializeLocationManager(Activity activity) {
