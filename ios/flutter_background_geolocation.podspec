@@ -3,10 +3,10 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_background_geolocation'
-  s.version          = '0.0.1'
+  s.version          = '0.2.0'
   s.summary          = 'The most sophisticated background location-tracking &amp; geofencing module with battery-conscious motion-detection intelligence for iOS and Android. '
   s.description      = <<-DESC
-The most sophisticated background location-tracking &amp; geofencing module with battery-conscious motion-detection intelligence for iOS and Android. 
+The most sophisticated background location-tracking &amp; geofencing module with battery-conscious motion-detection intelligence for iOS and Android.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
@@ -18,10 +18,10 @@ The most sophisticated background location-tracking &amp; geofencing module with
   s.dependency 'CocoaLumberjack', '~> 3.0'
 
   s.libraries           = 'sqlite3', 'z'
-  s.vendored_frameworks = ['TSLocationManager.framework', 'TSBackgroundFetch.framework']
+  s.vendored_frameworks = ['TSLocationManager.framework']
 
   s.static_framework = true
-  
+
   s.ios.deployment_target = '8.0'
 end
 

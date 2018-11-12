@@ -42,26 +42,17 @@ static NSString *const ACTION_INITIALIZED = @"initialized";
 
 #import <TSBackgroundFetch/TSBackgroundFetch.h>
 
-@implementation FLTBackgroundGeolocationPlugin 
-
--(BOOL)application:(UIApplication *)application performFetchWithCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    NSLog(@"FLTBackgroundgeolocation AppDelegate received fetch event");
-    TSBackgroundFetch *fetchManager = [TSBackgroundFetch sharedInstance];
-    [fetchManager performFetchWithCompletionHandler:completionHandler applicationState:application.applicationState];
-    return YES;
-}
+@implementation FLTBackgroundGeolocationPlugin
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
 
     // Method Channel
     NSString *path = [NSString stringWithFormat:@"%@/%@", PLUGIN_PATH, METHOD_CHANNEL_NAME];
     FlutterMethodChannel* channel = [FlutterMethodChannel methodChannelWithName:path binaryMessenger:[registrar messenger]];
-    
+
     FLTBackgroundGeolocationPlugin* instance = [[FLTBackgroundGeolocationPlugin alloc] init];
-    [registrar addApplicationDelegate:instance];
     [registrar addMethodCallDelegate:instance channel:channel];
-    
+
     // Event Channels
     [LocationStreamHandler register:registrar];
     [MotionChangeStreamHandler register:registrar];
@@ -79,10 +70,10 @@ static NSString *const ACTION_INITIALIZED = @"initialized";
 
 - (instancetype) init {
     self = [super init];
-    
+
     if (self) {
         _locationManager = [TSLocationManager sharedInstance];
-        
+
         // Provide reference to rootViewController for #emailLog method.
         UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         _locationManager.viewController = root;
@@ -243,13 +234,13 @@ static NSString *const ACTION_INITIALIZED = @"initialized";
 }
 
 - (void) getCurrentPosition:(NSDictionary*)options result:(FlutterResult)result {
-    
+
     TSCurrentPositionRequest *request = [[TSCurrentPositionRequest alloc] initWithSuccess:^(TSLocation *location) {
         result([location toDictionary]);
     } failure:^(NSError *error) {
         result([FlutterError errorWithCode: [NSString stringWithFormat:@"%lu", (long) error.code] message:nil details:nil]);
     }];
-    
+
     if (options[@"timeout"]) {
         request.timeout = [options[@"timeout"] doubleValue];
     }
@@ -276,15 +267,15 @@ static NSString *const ACTION_INITIALIZED = @"initialized";
     TSWatchPositionRequest *request = [[TSWatchPositionRequest alloc] initWithSuccess:^(TSLocation *location) {
         [self sendEvent:EVENT_WATCHPOSITION body:[location toDictionary]];
     } failure:^(NSError *error) {
-        
+
     }];
-    
+
     if (options[@"interval"])           { request.interval = [options[@"interval"] doubleValue]; }
     if (options[@"desiredAccuracy"])    { request.desiredAccuracy = [options[@"desiredAccuracy"] doubleValue]; }
     if (options[@"persist"])            { request.persist = [options[@"persist"] boolValue]; }
     if (options[@"extras"])             { request.extras = options[@"extras"]; }
     if (options[@"timeout"])            { request.timeout = [options[@"timeout"] doubleValue]; }
-    
+
     [locationManager watchPosition:request];
     success(@[]);
      */

@@ -11,7 +11,7 @@ Flutter seems to have a problem with 3rd-party Android libraries which merge the
 +    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.helloworld">
 
-    <application 
+    <application
 +        tools:replace="android:label"
          android:name="io.flutter.app.FlutterApplication"
          android:label="flutter_background_geolocation_example"
@@ -28,6 +28,10 @@ Execution failed for task ':app:processDebugManifest'.
     is also present at [tslocationmanager-2.13.3.aar] AndroidManifest.xml:24:18-50 value=(@string/app_name).
     Suggestion: add 'tools:replace="android:label"' to <application> element at AndroidManifest.xml:15:5-38:19 to override.
 ```
+
+## `background_fetch`
+
+`flutter_background_geolocation` installs a dependency `background_fetch` (also created by [Transistor Software](https://www.transistorsoft.com)).  You must perform the [Android Setup](https://github.com/transistorsoft/flutter_background_fetch/blob/master/help/INSTALL-ANDROID.md) for it as well.
 
 ## `android/build.gradle`
 
@@ -78,9 +82,60 @@ android {
         .
         .
 +       targetSdkVersion rootProject.ext.targetSdkVersion
-    }    
+    }
 }
 ```
+
+## Headless Mechanism with `enableHeadless: true`
+
+If you intend to use the SDK's Android *Headless* mechanism, you must perform the following additional setup:
+
+Create either `Application.kt` or `Application.java` in the same directory as `MainActivity`.
+
+- For `Application.kt`, use the following:
+
+```java
+import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
+
+class Application : FlutterApplication(), PluginRegistrantCallback {
+  override fun onCreate() {
+    super.onCreate();
+    FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
+  }
+
+  override fun registerWith(registry: PluginRegistry) {
+    GeneratedPluginRegistrant.registerWith(registry);
+  }
+}
+```
+
+- For `Application.java`, use the following:
+
+```java
+import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
+
+public class Application extends FlutterApplication implements PluginRegistrantCallback {
+  @Override
+  public void onCreate() {
+    super.onCreate();
+    FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
+  }
+
+  @Override
+  public void registerWith(PluginRegistry registry) {
+    GeneratedPluginRegistrant.registerWith(registry);
+  }
+}
+```
+
+Now edit `AndroidManifest.xml` and provide a reference to your custom `Application` class:
+```xml
+    <application
+        android:name=".Application"
+        ...
+```
+
+
 
 ## Configure your license
 

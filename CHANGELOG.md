@@ -1,4 +1,7 @@
 # Change Log
+## [0.2.0] - 2018-11-12
+- [Changed] Include `background_fetch` as an external dependency rather than including iOS TSBackgroundFetch.framework directly (this was always the plan).
+- [Changed] In example, import flutter_map (Leaflet) instead of google_map (too buggy and not ready).
 
 ## [0.1.7] - 2018-10-17
 - [Fixed] Issue #8.  Could not modify button-text of `locationAuthorizationAlert` after `#ready`.

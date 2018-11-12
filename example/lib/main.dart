@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+import 'package:background_fetch/background_fetch.dart';
+
 import 'package:flutter_background_geolocation_example/app.dart';
 import 'advanced/app.dart';
 import 'hello_world/app.dart';
 
-/// Receives events from BackgroundGeolocation in Headless state.
-///
-void headlessTask(bg.HeadlessEvent headlessEvent) async {
+/// Receive events from BackgroundGeolocation in Headless state.
+void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
   print('📬 --> $headlessEvent');
 
   switch(headlessEvent.name) {
@@ -61,6 +62,14 @@ void headlessTask(bg.HeadlessEvent headlessEvent) async {
   }
 }
 
+/// Receive events from BackgroundFetch in Headless state.
+void backgroundFetchHeadlessTask() async {
+  // Get current-position from BackgroundGeolocation in headless mode.
+  bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
+  print('[BackgroundFetch] HeadlessTask, location: $location');
+  BackgroundFetch.finish();
+}
+
 void main() {
   /// Application selection:  Select the app to boot:
   /// - AdvancedApp
@@ -82,6 +91,9 @@ void main() {
     }
   });
 
-  /// Register Headless Task.
-  bg.BackgroundGeolocation.registerHeadlessTask(headlessTask);
+  /// Register BackgroundGeolocation headless-task.
+  bg.BackgroundGeolocation.registerHeadlessTask(backgroundGeolocationHeadlessTask);
+  /// Register BackgroundFetch headless-task.
+  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+
 }

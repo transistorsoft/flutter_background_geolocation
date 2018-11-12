@@ -38,7 +38,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
     private final List<HeadlessEvent> mEvents = new ArrayList<>();
 
     // Called by Application#onCreate
-    public static void setPluginRegistrant(PluginRegistry.PluginRegistrantCallback callback) {
+    static void setPluginRegistrant(PluginRegistry.PluginRegistrantCallback callback) {
         sPluginRegistrantCallback = callback;
     }
 
@@ -145,6 +145,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
     }
 
     private void initFlutterView(Context context) {
+        FlutterMain.ensureInitializationComplete(context, null);
         FlutterCallbackInformation callbackInfo = FlutterCallbackInformation.lookupCallbackInformation(sRegistrationCallbackId);
         if (callbackInfo == null) {
             TSLog.logger.error(TSLog.error("Fatal: failed to find callback"));

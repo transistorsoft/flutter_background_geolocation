@@ -4,13 +4,14 @@ description: Demonstrates how to use the flutter_background_geolocation plugin.
 dependencies:
   flutter:
     sdk: flutter
-  google_maps_flutter:
-     git:
-       url: git://github.com/flutter/plugins
-       path: packages/google_maps_flutter
+  flutter_map:
+    git:
+      url: git://github.com/apptreesoftware/flutter_map
+      ref: master
   unicorndial: ^1.1.4
-  shared_preferences: ^0.4.2
 
+  shared_preferences: ^0.4.2
+  background_fetch: ^0.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

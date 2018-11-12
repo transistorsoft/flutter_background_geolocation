@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+import 'package:background_fetch/background_fetch.dart';
 
 import '../app.dart';
 import 'map_view.dart';
@@ -30,7 +30,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   bool _enabled;
   String _motionActivity;
   String _odometer;
-  String _content;
 
   List<Event> events = [];
 
@@ -39,7 +38,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     super.initState();
     _isMoving = false;
     _enabled = false;
-    _content = '';
     _motionActivity = 'UNKNOWN';
     _odometer = '0';
 
@@ -54,6 +52,10 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   }
 
   Future<Null> initPlatformState() async {
+    BackgroundFetch.configure(BackgroundFetchConfig(minimumFetchInterval: 15, stopOnTerminate: false, enableHeadless: true), () {
+      print('[BackgroundFetch] received event');
+      BackgroundFetch.finish();
+    });
 
     // 1.  Listen to events (See docs for all 12 available events).
     bg.BackgroundGeolocation.onLocation(_onLocation, _onLocationError);
@@ -297,8 +299,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
           child: TabBarView(
               controller: _tabController,
               children: [
-                // iOS doesn't yet support maps.  Just show a JSON rending of location for now.  Android get MapView.
-                (defaultTargetPlatform == TargetPlatform.android) ? MapView() : SingleChildScrollView(child: Text('$_content')),
+                MapView(),
                 EventList()
               ],
               physics: new NeverScrollableScrollPhysics()

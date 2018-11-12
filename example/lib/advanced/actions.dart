@@ -11,7 +11,7 @@ class Actions {
   static const String SYNC = "sync";
   static const String EMAIL_LOG = "emailLog";
   static const String DESTROY_LOG = "destroyLog";
-
+  static const String REMOVE_GEOFENCES = "removeGeofences";
 
   static void sync(BuildContext context) async {
     int count = await bg.BackgroundGeolocation.count;

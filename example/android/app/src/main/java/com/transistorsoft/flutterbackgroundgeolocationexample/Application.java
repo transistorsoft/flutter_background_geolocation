@@ -1,8 +1,7 @@
 package com.transistorsoft.flutterbackgroundgeolocationexample;
 
-import android.util.Log;
-
-import com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask;
+import com.transistorsoft.flutter.backgroundfetch.BackgroundFetchPlugin;
+import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
 
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
@@ -12,7 +11,8 @@ public class Application  extends FlutterApplication implements PluginRegistry.P
     @Override
     public void onCreate() {
         super.onCreate();
-        HeadlessTask.setPluginRegistrant(this);
+        FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
+        BackgroundFetchPlugin.setPluginRegistrant(this);
     }
 
     @Override

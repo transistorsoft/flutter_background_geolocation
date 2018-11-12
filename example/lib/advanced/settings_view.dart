@@ -16,7 +16,6 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
 
   bg.State _state;
 
@@ -111,6 +110,11 @@ class _SettingsViewState extends State<SettingsView> {
       case Actions.DESTROY_LOG:
         Actions.destroyLog(context);
         break;
+      case Actions.REMOVE_GEOFENCES:
+        bg.BackgroundGeolocation.removeGeofences().then((bool success) {
+          bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("MESSAGE_SENT"));
+        });
+        break;
       case 'about':
         _onClickAbout();
         break;
@@ -141,6 +145,8 @@ class _SettingsViewState extends State<SettingsView> {
                 const PopupMenuDivider(),
                 const PopupMenuItem<String>(value: Actions.EMAIL_LOG, child: ListTile(title: Text('Email log'), leading: Icon(Icons.email))),
                 const PopupMenuItem<String>(value: Actions.DESTROY_LOG, child: ListTile(title: Text('Destroy log'), leading: Icon(Icons.delete))),
+                const PopupMenuDivider(),
+                const PopupMenuItem<String>(value: Actions.REMOVE_GEOFENCES, child: ListTile(title: Text('Remove geofences'), leading: Icon(Icons.delete))),
                 const PopupMenuDivider(),
                 const PopupMenuItem<String>(value: "about", child: ListTile(title: Text('About'), leading: Icon(Icons.help)))
               ],

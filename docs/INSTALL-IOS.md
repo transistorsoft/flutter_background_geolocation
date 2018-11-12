@@ -15,7 +15,7 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
 
 - Add the following permissions to `Info.plist`:
 
-| Key                                                                        | 
+| Key                                                                        |
 |----------------------------------------------------------------------------|
 | Privacy - Location Always and When In Use Description                      |
 | Privacy - Location When In Use Permission                                  |
@@ -44,4 +44,9 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
 </dict>
 </plist>
 ```
+
+## `background_fetch`
+
+`flutter_background_geolocation` installs a dependency `background_fetch` (also created by [Transistor Software](https://www.transistorsoft.com)).  You must perform the [iOS Setup](https://github.com/transistorsoft/flutter_background_fetch/blob/master/help/INSTALL-IOS.md) for it as well.
+
 
