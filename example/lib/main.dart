@@ -67,6 +67,15 @@ void backgroundFetchHeadlessTask() async {
   // Get current-position from BackgroundGeolocation in headless mode.
   bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
   print('[BackgroundFetch] HeadlessTask, location: $location');
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  int count = 0;
+  if (prefs.get("fetch-count") != null) {
+    count = prefs.getInt("fetch-count");
+  }
+  prefs.setInt("fetch-count", ++count);
+  print('[BackgroundFetch] count: $count');
+
   BackgroundFetch.finish();
 }
 

@@ -15,7 +15,7 @@
          FlutterApplication and put your custom class here. -->
     <application tools:replace="android:label"
         android:name=".Application"
-        android:label="flutter_background_geolocation_example"
+        android:label="Flutter Background Geolocation"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -36,8 +36,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyA4z9xcXa7Go9ZETbR8vdloJeIpL6asbfI"/>
+
+        <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="821a6d9e944ecdd84496edea043d3c9541b16bd4f2b3447258bcbe80d6119b20" />
     </application>
 </manifest>
 

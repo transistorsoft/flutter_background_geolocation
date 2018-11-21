@@ -11,3 +11,4 @@ build/
 ios/.generated
 .gradle
 doc
+example/android/key.properties
