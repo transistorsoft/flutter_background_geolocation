@@ -1425,7 +1425,7 @@ class BackgroundGeolocation {
       if (error.code != null) {
         message = error.code;
       }
-      print('[BackgroundGeolocation registerHeadlessTask] ‼️ ${message}');
+      print('[BackgroundGeolocation registerHeadlessTask] ‼️ $error');
       completer.complete(false);
     });
     return completer.future;
