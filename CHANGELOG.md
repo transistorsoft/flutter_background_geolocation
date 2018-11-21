@@ -1,4 +1,13 @@
 # Change Log
+
+## [0.2.1] - 2018-11-21
+- [Fixed] Android headless configuration was setting incorrect headlessJobService class name.
+- [Fixed] Android onActivityTerminate listener was incorrectly sending a signal to the native library when location permission activity was closed, incorrectly sending a signal that the app was terminated.  This would remove all event-listeners.
+- [Added] Android SDK 28 requires new permission to use foreground-service.
+- [Fixed] Do not calculate odometer with geofence events.  Android geofence event's location timestamp does not correspond with the actual time the geofence fires since Android is performing some heuristics in the background to ensure the potential geofence event is not a false positive.  The actual geofence event can fire some minutes in the future (ie: the location timestamp will be some minutues in the past).  Using geofence location in odometer calculations will corrupt the odometer value.
+- [Fixed] Android could not dynamically update the `locationTemplate` / `geofenceTemplate` without `#stop` and application restart.
+- [Fixed] Android `startGeofences` after revoking & re-granting permission would fail to launch the plugin's Service.
+
 ## [0.2.0] - 2018-11-12
 - [Changed] Include `background_fetch` as an external dependency rather than including iOS TSBackgroundFetch.framework directly (this was always the plan).
 - [Changed] In example, import flutter_map (Leaflet) instead of google_map (too buggy and not ready).

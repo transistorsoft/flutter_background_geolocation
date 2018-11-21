@@ -78,7 +78,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     public static final String ACTION_STOP_SCHEDULE     = "stopSchedule";
     public static final String ACTION_LOG               = "log";
 
-    private static final String JOB_SERVICE_CLASS         = "HeadlessTask";
+    private static final String JOB_SERVICE_CLASS         = "com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask";
 
     private boolean mIsInitialized;
     private Intent mLaunchIntent;
@@ -128,7 +128,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             config.useCLLocationAccuracy(true);
 
             config.updateWithBuilder()
-                    .setHeadlessJobService(getClass().getPackage().getName() + "." + JOB_SERVICE_CLASS)
+                    .setHeadlessJobService(JOB_SERVICE_CLASS)
                     .commit();
         }
     }
@@ -709,7 +709,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     }
 
     private Map<String, Object> setHeadlessJobService(Map<String, Object> config) {
-        config.put("headlessJobService", getClass().getPackage() + "." + JOB_SERVICE_CLASS);
+        config.put("headlessJobService", JOB_SERVICE_CLASS);
         return config;
     }
 
@@ -765,7 +765,9 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
 
     @Override
     public void onActivityDestroyed(Activity activity) {
-        activity.getApplication().unregisterActivityLifecycleCallbacks(this);
-        BackgroundGeolocation.getInstance(mContext).onActivityDestroy();
+        if (mRegistrar.activity() == null) {
+            activity.getApplication().unregisterActivityLifecycleCallbacks(this);
+            BackgroundGeolocation.getInstance(mContext).onActivityDestroy();
+        }
     }
 }

@@ -52,8 +52,17 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   }
 
   Future<Null> initPlatformState() async {
-    BackgroundFetch.configure(BackgroundFetchConfig(minimumFetchInterval: 15, stopOnTerminate: false, enableHeadless: true), () {
+    BackgroundFetch.configure(BackgroundFetchConfig(minimumFetchInterval: 15, stopOnTerminate: false, enableHeadless: true), () async {
       print('[BackgroundFetch] received event');
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int count = 0;
+      if (prefs.get("fetch-count") != null) {
+        count = prefs.getInt("fetch-count");
+      }
+      prefs.setInt("fetch-count", ++count);
+      print('[BackgroundFetch] count: $count');
+
       BackgroundFetch.finish();
     });
 
@@ -84,6 +93,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         stopOnTerminate: false,
         startOnBoot: true,
         foregroundService: true,
+        enableHeadless: true,
         stopTimeout: 1,
         debug: true,
         autoSync: true,
@@ -216,6 +226,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
   void _onHttp(bg.HttpEvent event) {
     print('[${bg.Event.HTTP}] - $event');
+
     setState(() {
       events.insert(0, Event(bg.Event.HTTP, event, event.toString()));
     });
