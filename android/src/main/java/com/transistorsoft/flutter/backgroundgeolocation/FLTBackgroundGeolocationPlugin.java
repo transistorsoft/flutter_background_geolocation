@@ -239,14 +239,14 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_PLAY_SOUND)) {
             playSound((int) call.arguments, result);
         } else if (call.method.equalsIgnoreCase("registerHeadlessTask")) {
-            registerHeadlessTask((List<Long>) call.arguments, result);
+            registerHeadlessTask((List<Object>) call.arguments, result);
         } else {
             result.notImplemented();
         }
     }
 
     // experimental Flutter Headless (NOT READY)
-    private void registerHeadlessTask(List<Long> callbacks, Result result) {
+    private void registerHeadlessTask(List<Object> callbacks, Result result) {
         if (HeadlessTask.register(callbacks)) {
             result.success(true);
         } else {

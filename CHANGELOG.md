@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.2.2] - 2018-11-21
+- [Fixed] Android headless callback ids can be of Class Long vs Integer when assemble for release vs debug.  Very odd, but added class-detection code.
+
 ## [0.2.1] - 2018-11-21
 - [Fixed] Android headless configuration was setting incorrect headlessJobService class name.
 - [Fixed] Android onActivityTerminate listener was incorrectly sending a signal to the native library when location permission activity was closed, incorrectly sending a signal that the app was terminated.  This would remove all event-listeners.

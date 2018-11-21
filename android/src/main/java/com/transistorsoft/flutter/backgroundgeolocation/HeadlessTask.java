@@ -1,6 +1,7 @@
 package com.transistorsoft.flutter.backgroundgeolocation;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.event.HeadlessEvent;
@@ -43,12 +44,26 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
     }
 
     // Called by FLTBackgroundGeolocationPlugin
-    static boolean register(List<Long> callbacks) {
+    static boolean register(List<Object> callbacks) {
         if (sRegistrationCallbackId != null) {
             return false;
         }
-        sRegistrationCallbackId = callbacks.get(0);
-        sClientCallbackId = callbacks.get(1);
+        // There is weirdness with the class of these callbacks (Integer vs Long) between assembleDebug vs assembleRelease.
+        Object cb1 = callbacks.get(0);
+        Object cb2 = callbacks.get(1);
+
+        if (cb1.getClass() == Long.class) {
+            sRegistrationCallbackId = (Long) cb1;
+        } else if (cb1.getClass() == Integer.class) {
+            sRegistrationCallbackId = ((Integer) cb1).longValue();
+        }
+
+        if (cb2.getClass() == Long.class) {
+            sClientCallbackId = (Long) cb2;
+        } else if (cb2.getClass() == Integer.class) {
+            sClientCallbackId = ((Integer) cb2).longValue();
+        }
+
         return true;
     }
 
