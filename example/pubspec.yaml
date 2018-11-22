@@ -18,8 +18,7 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  test: ^1.5.1
   flutter_driver:
     sdk: flutter
   colorize: ^2.0.0
