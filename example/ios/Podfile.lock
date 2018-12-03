@@ -1,5 +1,5 @@
 PODS:
-  - background_fetch (0.0.1):
+  - background_fetch (0.1.1):
     - Flutter
   - CocoaLumberjack (3.4.2):
     - CocoaLumberjack/Default (= 3.4.2)
@@ -40,7 +40,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/shared_preferences/ios"
 
 SPEC CHECKSUMS:
-  background_fetch: 7940fcd9b1630784843187fe3ea93cd02d9b92fb
+  background_fetch: 48bc814e7f731763322f4cfc2088407f4e03082d
   CocoaLumberjack: db7cc9e464771f12054c22ff6947c5a58d43a0fd
   device_info: 76ce0b32e13034d1883be4a382433648f9dcee63
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296

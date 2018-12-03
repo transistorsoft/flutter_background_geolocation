@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+- [Fixed] Prevent Android foreground-service from auto-starting when location permission is revoked via Settings screen.
+- [Fixed] NPE in Android HTTP Service when manual sync is called.  Probably a threading issue with multiple sync operations executed simultaneously.
+
 ## [0.2.2] - 2018-11-21
 - [Fixed] Android headless callback ids can be of Class Long vs Integer when assemble for release vs debug.  Very odd, but added class-detection code.
 
