@@ -1,6 +1,7 @@
 # Change Log
 
-## Unreleased
+## [0.2.3]
+- [Changed] Upgrade Android logger dependency to latest version (`logback`).
 - [Fixed] Prevent Android foreground-service from auto-starting when location permission is revoked via Settings screen.
 - [Fixed] NPE in Android HTTP Service when manual sync is called.  Probably a threading issue with multiple sync operations executed simultaneously.
 

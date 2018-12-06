@@ -1421,10 +1421,6 @@ class BackgroundGeolocation {
         .then((dynamic success) {
       completer.complete(true);
     }).catchError((error) {
-      String message = error.toString();
-      if (error.code != null) {
-        message = error.code;
-      }
       print('[BackgroundGeolocation registerHeadlessTask] ‼️ $error');
       completer.complete(false);
     });
