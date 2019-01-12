@@ -852,7 +852,7 @@ class BackgroundGeolocation {
   /// print(sensors);
   ///
   static Future<Sensors> get sensors async {
-    Completer completer = new Completer();
+    Completer completer = new Completer<Sensors>();
 
     _methodChannel.invokeMethod('getSensors').then((dynamic data) {
       completer.complete(new Sensors(
@@ -866,6 +866,36 @@ class BackgroundGeolocation {
       completer.completeError(e);
     });
     return completer.future;
+  }
+
+  /// Get current state of location-services.
+  ///
+  /// See also:
+  /// - [Config.logMaxDays] (default `3` days)
+  static Future<ProviderChangeEvent> get providerState async {
+    Completer completer = new Completer<ProviderChangeEvent>();
+
+    _methodChannel.invokeMethod('getProviderState').then((dynamic data) {
+      completer.complete(new ProviderChangeEvent(
+          data['enabled'], data['status'], data['network'], data['gps']));
+    }).catchError((e) {
+      completer.completeError(e);
+    });
+
+    return completer.future;
+  }
+
+  /// Request location permission dialog with user.
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.requestPermission().then((int status) {
+  ///   print('[requestPermission] permission granted');
+  /// }).catchError((error) {
+  ///   print('[requestPermission] DENIED');
+  /// });
+  ///
+  static Future<int> requestPermission() async {
+    return await _methodChannel.invokeMethod('requestPermission');
   }
 
   static Future<bool> playSound(int soundId) async {

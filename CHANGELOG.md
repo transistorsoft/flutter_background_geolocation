@@ -1,5 +1,13 @@
 # Change Log
 
+## [0.2.4] - 2019-01-12
+- [Changed] Update `device_info` dependency -> `0.3.0`.
+- [Changed] Android Service: Return `START_STICKY` instead of `START_REDELIVER_INTENT`.
+- [Changed] Android: `setShowBadge(false)` on Android `NotificationChannel`.  Some users reporting that Android shows a badge-count on app icon when service is started / stopped.
+- [Fixed] Android NPE in `watchPosition`
+- [Added] Added method `getProviderState` for querying current state of location-services.
+- [Added] Added method `requestPermission` for manually requesting location-permission (`#start`, `#getCurrentPosition`, `#watchPosition` etc, will already automatically request permission.
+
 ## [0.2.3]
 - [Changed] Upgrade Android logger dependency to latest version (`logback`).
 - [Fixed] Prevent Android foreground-service from auto-starting when location permission is revoked via Settings screen.
