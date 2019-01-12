@@ -39,6 +39,8 @@ static NSString *const ACTION_IS_POWER_SAVE_MODE = @"isPowerSaveMode";
 static NSString *const ACTION_PLAY_SOUND = @"playSound";
 static NSString *const ACTION_REGISTER_HEADLESS_TASK = @"registerHeadlessTask";
 static NSString *const ACTION_INITIALIZED = @"initialized";
+static NSString *const ACTION_REQUEST_PERMISSION = @"requestPermission";
+static NSString *const ACTION_GET_PROVIDER_STATE = @"getProviderState";
 
 #import <TSBackgroundFetch/TSBackgroundFetch.h>
 
@@ -153,12 +155,29 @@ static NSString *const ACTION_INITIALIZED = @"initialized";
         result([@"iOS " stringByAppendingString:[[UIDevice currentDevice] systemVersion]]);
     } else if ([self method:ACTION_REGISTER_HEADLESS_TASK is:action]) {
         [self registerHeadlessTask:call.arguments result:result];
+    } else if ([self method:ACTION_GET_PROVIDER_STATE is:action]) {
+        [self getProviderState:result];
+    } else if ([self method:ACTION_REQUEST_PERMISSION is:action]) {
+        [self requestPermission:result];
     } else if ([self method:ACTION_INITIALIZED is:action]) {
         // Headless task initialization ignored on iOS.
         result(@YES);
     } else {
         result(FlutterMethodNotImplemented);
     }
+}
+
+- (void) getProviderState:(FlutterResult)result {
+    TSProviderChangeEvent *event = [_locationManager getProviderState];
+    result([event toDictionary]);
+}
+
+- (void) requestPermission:(FlutterResult)result {
+    [_locationManager requestPermission:^(NSNumber *status) {
+        result(status);
+    } failure:^(NSNumber *status) {
+        result([FlutterError errorWithCode:@"DENIED" message:nil details:status]);
+    }];
 }
 
 #pragma mark API methods

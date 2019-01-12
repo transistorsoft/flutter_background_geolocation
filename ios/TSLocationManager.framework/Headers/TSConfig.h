@@ -166,6 +166,8 @@ TSConfig
 @property (nonatomic) CLLocationDistance odometer;
 @property (nonatomic) TSTrackingMode trackingMode;
 @property (nonatomic) CLAuthorizationStatus lastLocationAuthorizationStatus;
+@property (nonatomic) BOOL iOSHasWarnedLocationServicesOff;
+
 /// @name Geolocation Properties
 /**
  * GPS is only used when kCLDesiredAccuracyBest or kCLDesiredAccuracyBestForNavigation.

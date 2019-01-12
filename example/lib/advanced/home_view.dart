@@ -132,12 +132,10 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         });
       });
     } else {
-      bg.BackgroundGeolocation.setOdometer(0.0);
       bg.BackgroundGeolocation.stop().then((bg.State state) {
         print('[stop] success: $state');
         // Reset odometer.
         setState(() {
-          _odometer = '0.0';
           _enabled = state.enabled;
           _isMoving = state.isMoving;
         });

@@ -240,6 +240,10 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             playSound((int) call.arguments, result);
         } else if (call.method.equalsIgnoreCase("registerHeadlessTask")) {
             registerHeadlessTask((List<Object>) call.arguments, result);
+        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_PROVIDER_STATE)) {
+            getProviderState(result);
+        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_REQUEST_PERMISSION)) {
+            requestPermission(result);
         } else {
             result.notImplemented();
         }
@@ -637,6 +641,17 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
 
     private void isPowerSaveMode(Result result) {
         result.success(BackgroundGeolocation.getInstance(mContext).isPowerSaveMode());
+    }
+
+    private void getProviderState(Result result) {
+        result.success(BackgroundGeolocation.getInstance(mContext).getProviderState().toMap());
+    }
+
+    private void requestPermission(final Result result) {
+        BackgroundGeolocation.getInstance(mContext).requestPermission(new TSRequestPermissionCallback() {
+            @Override public void onSuccess(int status) { result.success(status); }
+            @Override public void onFailure(int status) { result.error("DENIED", null, status); }
+        });
     }
 
     private void playSound(int soundId, Result result) {
