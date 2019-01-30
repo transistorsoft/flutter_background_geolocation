@@ -1,5 +1,8 @@
 # Change Log
 
+## [0.3.1] - 2019-01-30
+- [Fixed] Constrain `device_info` dependency version.
+
 ## [0.3.0] - 2019-01-30
 - [Added] New `schedule` feature for specifying "location+geofence" tracking or "geofence-only" in any schedule period.  See docs for Config.schedule.
 - [Added] New `DeviceSettings` API for querying if Android app is ignoring battery optimization, in addition to methods for redirecting to "Ignore Battery Optimziations" settings screen.  Also introduces a method `DeviceSettings.showPowerManager` method for showing vendor-specific "Power Management" screen (eg: Huawei Settings->Battery->Launch).
