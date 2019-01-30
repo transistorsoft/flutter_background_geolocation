@@ -1,8 +1,5 @@
 part of flt_background_geolocation;
 
-const _PLUGIN_PATH = "com.transistorsoft/flutter_background_geolocation";
-const _METHOD_CHANNEL_NAME = "$_PLUGIN_PATH/methods";
-
 const _EVENT_CHANNEL_LOCATION = "$_PLUGIN_PATH/events/" + Event.LOCATION;
 const _EVENT_CHANNEL_MOTIONCHANGE =
     "$_PLUGIN_PATH/events/" + Event.MOTIONCHANGE;
@@ -104,10 +101,6 @@ class _Subscription {
 /// ```
 ///
 class BackgroundGeolocation {
-  // MethodChannel
-  static const MethodChannel _methodChannel =
-      const MethodChannel(_METHOD_CHANNEL_NAME);
-
   // EventChannels
   static const EventChannel _eventChannelMotionChange =
       const EventChannel(_EVENT_CHANNEL_MOTIONCHANGE);
@@ -471,6 +464,7 @@ class BackgroundGeolocation {
       int desiredAccuracy,
       Map<String, dynamic> extras}) async {
     Map<String, dynamic> options = {};
+    if (samples != null) options['samples'] = samples;
     if (timeout != null) options['timeout'] = timeout;
     if (maximumAge != null) options['maximumAge'] = maximumAge;
     if (persist != null) options['persist'] = persist;
@@ -810,34 +804,6 @@ class BackgroundGeolocation {
   ///
   static Future<bool> destroyLog() async {
     return await _methodChannel.invokeMethod('destroyLog');
-  }
-
-  /// Fetches the state of the operating-system's "Power Saving" mode.
-  ///
-  /// Power Saving mode can throttle certain services in the background, such as HTTP requests or GPS.
-  ///
-  ///  **NOTE:** You can listen to changes in the state of "Power Saving" mode from the event [onPowerSaveChange].
-  ///
-  /// ## iOS
-  ///
-  /// iOS Power Saving mode can be engaged manually by the user in **Settings -> Battery** or from an automatic OS dialog.
-  ///
-  /// ![](https://dl.dropboxusercontent.com/s/lz3zl2jg4nzstg3/Screenshot%202017-09-19%2010.34.21.png?dl=1)
-  ///
-  /// ## Android
-  ///
-  /// Android Power Saving mode can be engaged manually by the user in **Settings -> Battery -> Battery Saver** or automatically with a user-specified "threshold" (eg: 15%).
-  ///
-  /// ![](https://dl.dropboxusercontent.com/s/raz8lagrqayowia/Screenshot%202017-09-19%2010.33.49.png?dl=1)
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// bool isPowerSaveMode = await BackgroundGeolocation.isPowerSaveMode;
-  /// ```
-  ///
-  static Future<bool> get isPowerSaveMode async {
-    return await _methodChannel.invokeMethod('isPowerSaveMode');
   }
 
   /// Returns the presense of device sensors *accelerometer*, *gyroscope*, *magnetometer*
@@ -1301,7 +1267,7 @@ class BackgroundGeolocation {
   ///
   /// Fired when the state of the operating-system's "Power Saving" mode changes.  Your `callback` will be provided with a `bool` showing whether "Power Saving" is **enabled** or **disabled**.  Power Saving mode can throttle certain services in the background, such as HTTP requests or GPS.
   ///
-  ///  **NOTE:** You can manually request the current-state of "Power Saving" mode with the method [isPowerSaveMode].
+  ///  **NOTE:** You can manually request the current-state of "Power Saving" mode with the method [DeviceSettings.isPowerSaveMode].
   ///
   /// ## iOS
   ///

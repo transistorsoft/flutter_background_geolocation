@@ -6,11 +6,11 @@ dependencies:
     sdk: flutter
   flutter_map:
     git:
-      url: git://github.com/apptreesoftware/flutter_map
-      ref: master
+      url: git://github.com/4kssoft/flutter_map
+      ref: 9eb20f2cb9e4800cc122cbacd7e6752de40fb044
   unicorndial: ^1.1.4
 
-  shared_preferences: ^0.4.2
+  shared_preferences: ^0.5.0
   background_fetch: ^0.1.1
 
   # The following adds the Cupertino Icons font to your application.

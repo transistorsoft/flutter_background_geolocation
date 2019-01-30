@@ -115,6 +115,15 @@ class _SettingsViewState extends State<SettingsView> {
           bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("MESSAGE_SENT"));
         });
         break;
+      case 'power_manager':
+        bool didShow = await bg.DeviceSettings.showPowerManager(true);
+        print('- did show Power Manager Settings: $didShow');
+        break;
+      case 'ignore_battery_optimizations':
+        bool isIgnoring = await bg.DeviceSettings.isIgnoringBatteryOptimizations;
+        print('- isIgnoringBatteryOptimizations: $isIgnoring');
+        bg.DeviceSettings.showIgnoreBatteryOptimizations();
+        break;
       case 'about':
         _onClickAbout();
         break;
@@ -147,6 +156,9 @@ class _SettingsViewState extends State<SettingsView> {
                 const PopupMenuItem<String>(value: Actions.DESTROY_LOG, child: ListTile(title: Text('Destroy log'), leading: Icon(Icons.delete))),
                 const PopupMenuDivider(),
                 const PopupMenuItem<String>(value: Actions.REMOVE_GEOFENCES, child: ListTile(title: Text('Remove geofences'), leading: Icon(Icons.delete))),
+                const PopupMenuDivider(),
+                const PopupMenuItem<String>(value: "power_manager", child: ListTile(title: Text('Settings->Power Manager'), leading: Icon(Icons.settings_power))),
+                const PopupMenuItem<String>(value: "ignore_battery_optimizations", child: ListTile(title: Text('Settings->Ignore Battery Optimizations'), leading: Icon(Icons.battery_alert))),
                 const PopupMenuDivider(),
                 const PopupMenuItem<String>(value: "about", child: ListTile(title: Text('About'), leading: Icon(Icons.help)))
               ],
