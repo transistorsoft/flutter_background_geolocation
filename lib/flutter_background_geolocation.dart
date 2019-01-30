@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:device_info/device_info.dart';
 
 part 'background_geolocation.dart';
+part 'device_settings.dart';
 part 'models/event.dart';
 part 'models/location.dart';
 part 'models/geofence.dart';
@@ -30,3 +31,9 @@ part 'models/config.dart';
 part 'models/state.dart';
 part 'models/sensors.dart';
 part 'models/headless_event.dart';
+
+const _PLUGIN_PATH = "com.transistorsoft/flutter_background_geolocation";
+
+// MethodChannel
+const MethodChannel _methodChannel =
+    const MethodChannel("$_PLUGIN_PATH/methods");

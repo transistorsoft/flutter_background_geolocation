@@ -894,6 +894,29 @@ class Config {
   ///   ]
   /// ```
   ///
+  /// ## Scheduling Geofences-only or Location + Geofences Tracking
+  ///
+  /// You can choose to schedule either geofences-only (ie: [BackgroundGeolocation.startGeofences] or location + geofences (ie: [BackgroundGeolocation.start]) tracking with each configured schedule by appending the text `geofence` or `location` (default):
+  ///
+  /// In the following schedule, the SDK will engage *location + geofences* tracking between 9am to 5pm.  From 6pm to midnight, only *geofences* will be monitored.
+  ///
+  /// ```dart
+  /// schedule: [
+  ///   "1-7 09:00-17:00 location",
+  ///   "1-7 18:00-12:00 geofence"
+  /// ]
+  /// ```
+  ///
+  /// Since `location` is the default tracking-mode, it can be omitted:
+  ///
+  /// ```dart
+  /// schedule: [
+  ///   "1-7 09:00-10:00",  // <-- location is default
+  ///   "1-7 10:00-11:00 geofence"
+  ///   "1-7 12:00-13:00",
+  ///   "1-7 13:00-14:00 geofence"
+  /// ```
+  ///
   /// ## iOS
   ///
   /// iOS **cannot** evaluate the Schedule at the *exact* time you configure -- it can only evaluate the **`schedule`** *periodically*, whenever your app comes alive.

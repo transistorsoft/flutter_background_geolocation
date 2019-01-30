@@ -126,7 +126,8 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     return new CircleMarker(
         point: LatLng(location.coords.latitude, location.coords.longitude),
         color: Color.fromRGBO(255, 0, 0, 0.5),
-        radius: 50
+        useRadiusInMeter: true,
+        radius: 200
     );
   }
 
@@ -146,7 +147,8 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     return new CircleMarker(
         point: LatLng(location.coords.latitude, location.coords.longitude),
         color: Color.fromRGBO(255, 0, 0, 0.5),
-        radius: 10
+        useRadiusInMeter: true,
+        radius: 200
     );
   }
 
@@ -205,7 +207,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
 
 class GeofenceMarker extends CircleMarker {
   bg.Geofence geofence;
-  GeofenceMarker(bg.Geofence geofence, [bool triggered=false]):super(radius: 75.0, color: (triggered) ? Color.fromRGBO(100, 100, 100, 0.5) : Color.fromRGBO(0, 200, 0, 0.2), point: LatLng(geofence.latitude, geofence.longitude)) {
+  GeofenceMarker(bg.Geofence geofence, [bool triggered=false]):super(useRadiusInMeter:true, radius: geofence.radius, color: (triggered) ? Color.fromRGBO(100, 100, 100, 0.5) : Color.fromRGBO(0, 200, 0, 0.2), point: LatLng(geofence.latitude, geofence.longitude)) {
     this.geofence = geofence;
   }
 }

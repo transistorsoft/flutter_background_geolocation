@@ -1,5 +1,22 @@
 # Change Log
 
+## [0.3.0] - 2019-01-30
+- [Added] New `schedule` feature for specifying "location+geofence" tracking or "geofence-only" in any schedule period.  See docs for Config.schedule.
+- [Added] New `DeviceSettings` API for querying if Android app is ignoring battery optimization, in addition to methods for redirecting to "Ignore Battery Optimziations" settings screen.  Also introduces a method `DeviceSettings.showPowerManager` method for showing vendor-specific "Power Management" screen (eg: Huawei Settings->Battery->Launch).
+```dart
+bool isIgnoring = await DeviceSettings.isIgnoringBatteryOptimizations;
+if (!isIgnoring) {
+  // Show Android "Ignore Battery Optimizations" settings screen.
+  DeviceSettings.showIgnoreBatteryOptimizations();
+}
+
+// Show Android vendor-specific "Power Manager" device settings screen (eg: Huawei)
+DeviceSettings.showPowerManager();
+
+```
+
+- [Changed] Loosen `device_info` dependency version to allow `>=2.0.0`.
+
 ## [0.2.4] - 2019-01-12
 - [Changed] Update `device_info` dependency -> `0.3.0`.
 - [Changed] Android Service: Return `START_STICKY` instead of `START_REDELIVER_INTENT`.

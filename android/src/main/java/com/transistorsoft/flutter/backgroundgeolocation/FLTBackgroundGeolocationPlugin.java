@@ -236,6 +236,10 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             getSensors(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_IS_POWER_SAVE_MODE)) {
             isPowerSaveMode(result);
+        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_IS_IGNORING_BATTERY_OPTIMIZATIONS)) {
+            isIgnoringBatteryOptimizations(result);
+        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_SHOW_SETTINGS)) {
+            showSettings((List) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_PLAY_SOUND)) {
             playSound((int) call.arguments, result);
         } else if (call.method.equalsIgnoreCase("registerHeadlessTask")) {
@@ -264,6 +268,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
 
     private void ready(Map<String, Object> params, final Result result) {
         TSConfig config = TSConfig.getInstance(mContext);
+
         if (config.isFirstBoot()) {
             if (!applyConfig(params, result)) {
                 return;
@@ -643,6 +648,20 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         result.success(BackgroundGeolocation.getInstance(mContext).isPowerSaveMode());
     }
 
+    private void isIgnoringBatteryOptimizations(Result result) {
+        result.success(BackgroundGeolocation.getInstance(mContext).isIgnoringBatteryOptimizations());
+    }
+
+    private void showSettings(List<Object> args, Result result) {
+        String action = (String) args.get(0);
+        Boolean force = false;
+        if (args.size() == 2) {
+            force = (Boolean) args.get(1);
+        }
+        Boolean didShow = BackgroundGeolocation.getInstance(mContext).showSettings(action, force);
+        result.success(didShow);
+    }
+
     private void getProviderState(Result result) {
         result.success(BackgroundGeolocation.getInstance(mContext).getProviderState().toMap());
     }
@@ -668,13 +687,22 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         for (String key : map.keySet()) {
           Object value = map.get(key);
           if (value instanceof Map<?, ?>) {
-            value = mapToJson((Map<String, Object>) value);
+              value = mapToJson((Map<String, Object>) value);
+          } else if (value instanceof List<?>) {
+              value = listToJson((List<Object>) value);
           }
           jsonData.put(key, value);
         }
         return jsonData;
     }
 
+    private JSONArray listToJson(List<Object> list) throws JSONException {
+        JSONArray jsonData = new JSONArray();
+        for (Object value : list) {
+            jsonData.put(value);
+        }
+        return jsonData;
+    }
     private static Map<String, Object> jsonToMap(JSONObject json) throws JSONException {
         Map<String, Object> retMap = new HashMap<>();
 
@@ -730,6 +758,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
 
     private boolean applyConfig(Map<String, Object> params, Result result) {
         TSConfig config = TSConfig.getInstance(mContext);
+
         try {
             config.updateWithJSONObject(mapToJson(setHeadlessJobService(params)));
         } catch (JSONException e) {

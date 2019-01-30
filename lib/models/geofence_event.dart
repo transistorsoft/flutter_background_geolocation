@@ -16,7 +16,7 @@ part of flt_background_geolocation;
 ///
 /// When a proximity-query detects a change in the list of monitored geofences, it will fire the [BackgroundGeolocation.onGeofencesChange] event, providing information about which geofences were activiated as well as those which were de-activiated.
 ///
-/// The [GeofencesChangeEvent] provided to your `callback` contains properties [GeofencesChangeEvent.on] and [GeofenceChangeEvent.off] for determining those geofences which have started and stopped being actively monitored.
+/// The [GeofencesChangeEvent] provided to your `callback` contains properties [GeofencesChangeEvent.on] and [GeofencesChangeEvent.off] for determining those geofences which have started and stopped being actively monitored.
 ///
 /// ```dart
 /// BackgroundGeolocation.onGeofencesChange((GeofencesChangeEvent event) {
@@ -34,7 +34,7 @@ part of flt_background_geolocation;
 ///
 /// This [GeofencesChangeEvent] object provides only the *changed* geofences, those which were just activated or de-activated.
 ///
-/// When **all** geofences have been removed, the event object will provide an empty List `[]` for both [GeofenceChangeEvent.on] and [GeofencesChangeEvent.off] properties.
+/// When **all** geofences have been removed, the event object will provide an empty List `[]` for both [GeofencesChangeEvent.on] and [GeofencesChangeEvent.off] properties.
 ///
 ///
 /// ## [Config.geofenceProximityRadius]

@@ -101,6 +101,10 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         params: deviceParams,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE
     )).then((bg.State state) {
+      print('[ready] ${state.toMap()}');
+      if (state.schedule.isNotEmpty) {
+        bg.BackgroundGeolocation.startSchedule();
+      }
       setState(() {
         _enabled = state.enabled;
         _isMoving = state.isMoving;
@@ -159,11 +163,13 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
   // Manually fetch the current position.
   void _onClickGetCurrentPosition() {
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
+
     bg.BackgroundGeolocation.getCurrentPosition(
         persist: false,     // <-- do not persist this location
         desiredAccuracy: 0, // <-- desire best possible accuracy
         timeout: 30000,     // <-- wait 30s before giving up.
-        samples: 3          // <-- sample 3 location before selecting best.
+        samples: 1          // <-- sample just 1 location
     ).then((bg.Location location) {
       print('[getCurrentPosition] - $location');
     }).catchError((error) {
