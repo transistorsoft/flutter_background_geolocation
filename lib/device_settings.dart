@@ -1,12 +1,67 @@
 part of flt_background_geolocation;
 
+/// An object for redirecting a User to an Android device's settings screen from a [DeviceSettings] request.
+///
+/// This object contains meta-data about the device ([manufacturer], [model], [version]) in addition to a flag [seen] to let you know if you've
+/// already shown some particular screen to the user.  [lastSeenAt] lets you know the `DateTime` you last showed a particular screen to the user.
+///
+class DeviceSettingsRequest {
+  /// Device manufacturer.
+  String manufacturer;
+
+  /// Device model
+  String model;
+
+  /// OS version
+  String version;
+
+  /// Flag showing whether you've already shown this screen to the user.
+  bool seen;
+
+  /// The [DateTime] you last showed this screen to the user.
+  DateTime lastSeenAt;
+
+  /// The settings screen to be shown (eg: [DeviceSettings.IGNORE_BATTERY_OPTIMIZATIONS], [DeviceSettings.POWER_MANAGER]).
+  ///
+  /// This property is set automatically.
+  String action;
+
+  DeviceSettingsRequest(
+      {@required String action,
+      String manufacturer,
+      String model,
+      String version,
+      bool seen,
+      int lastSeenAt}) {
+    this.action = action;
+    this.manufacturer = manufacturer;
+    this.model = model;
+    this.version = version;
+    this.seen = seen;
+    this.lastSeenAt = (lastSeenAt > 0)
+        ? DateTime.fromMillisecondsSinceEpoch(lastSeenAt)
+        : null;
+  }
+
+  Map toMap() {
+    return {
+      "manufacturer": manufacturer,
+      "model": model,
+      "version": version,
+      "seen": seen,
+      "lastSeenAt": lastSeenAt,
+      "action": action
+    };
+  }
+}
+
 /// Device Settings API.
 ///
 /// Provides an API to show Android & vendor-specific Battery / Power Management settings screens that can affect performance of the Background Geolocation SDK on various devices.
 ///
 /// The site [Don't Kill My App](https://dontkillmyapp.com/) provides a comprehensive list of poor Android vendors which throttle background-services that this plugin relies upon.
 ///
-/// This `DeviceSettings` API is an attempt to provide resources to direct the user to the appropriate vendor-specific settings screen to solve issues with background operation.
+/// This `DeviceSettings` API is an attempt to provide resources to direct the user to the appropriate vendor-specific settings screen to resolve issues with background operation.
 ///
 /// ![](https://dl.dropboxusercontent.com/s/u7ljngfecxvibyh/huawei-settings-battery-launch.jpg?dl=1)
 /// ![](https://dl.dropboxusercontent.com/s/hd6yxw58hgc7ef4/android-settings-battery-optimization.jpg?dl=1)
@@ -15,10 +70,34 @@ part of flt_background_geolocation;
 /// ## Example
 ///
 /// ```dart
-/// // Is Android device ignoring power optimizations?
+/// // Is Android device ignoring battery optimizations?
 /// bool isIgnoring = await DeviceSettings.isIgnoringBatteryOptimizations;
-/// if (isIgnoring) {
-///   DeviceSettings.showIgnoreBatteryOptimizations();
+/// if (!isIgnoring) {
+///   DeviceSettings.showIgnoreBatteryOptimizations().then((DeviceSettingsRequest request) {
+///     print("- Screen seen? ${request.seen} ${request.lastSeenAt}");
+///     print("- Device: ${request.manufacturer} ${request.model} ${request.version}");
+///
+///     // If we've already shown this screen to the user, we don't want to annoy them.
+///     if (request.seen) {
+///       return;
+///     }
+///
+///     // It's your responsibility to instruct the user what exactly
+///     // to do here, perhaps with a Confirm Dialog:
+///     showMyConfimDialog(
+///       title: "Settings request",
+///       text: "Please disable battery optimizations for your device"
+///     ).then((bool confirmed) {
+///       if (confirmed) {
+///         // User clicked [Confirm] button.  Execute the redirect to settings screen:
+///         DeviceSettings.show(request);
+///       }
+///     });
+///   }).catchError((dynamic error) {
+///     // Depending on Manufacturer/Model/OS Version, a Device may not implement
+///     // a particular Settings screen.
+///     print(error);
+///   });
 /// }
 ///
 /// // Is iOS/Android device in power-saving mode?
@@ -78,25 +157,69 @@ class DeviceSettings {
 
   /// Shows the Android *Ignore Battery Optimizations* settings screen.
   ///
-  /// **Note:**  In most cases, the plugin **will perform normally** with battery optimizations.  You should only instruct the user to *Ignore Battery Optimizations* for your app as a last resort to solve issues with background operation.
+  /// **Note:**  In most cases, the plugin **will perform normally** with battery optimizations.  You should only instruct the user to *Ignore Battery Optimizations* for your app as a last resort to resolve issues with background operation.
   ///
   /// ![](https://dl.dropboxusercontent.com/s/hd6yxw58hgc7ef4/android-settings-battery-optimization.jpg?dl=1)
   ///
   /// **WARNING:**  Ignoring battery optimizations *will* cause your app to consume **much** more power.
   ///
+  /// `showIgnoreBatteryOptimizations` does **not** immediately redirect to the desired Device settings screen.  Instead, it first returns a [DeviceSettingsRequest], containing
+  /// meta-data about the device (`manufacturer`, `model`, `version`), in addition to a flags `seen` and `lastSeenAt`, letting you know if and when you've already shown this screen to the user.
+  ///
+  ///
+  /// In your success-callback, it's completely **up to you** to instruct the user what exactly to do on that screen.
+  ///
+  /// Based upon the manufacturer/model/os, a Device may not have this particular Settings screen implemented.  In this case, `catchError` will fire.
+  ///
+  /// ## Example
+  ///
   /// ```dart
+  /// // Is Android device ignoring battery optimizations?
   /// bool isIgnoring = await DeviceSettings.isIgnoringBatteryOptimizations;
-  /// if (isIgnoring) {
-  ///   DeviceSettings.showIgnoreBatteryOptimizations();
+  /// if (!isIgnoring) {
+  ///   DeviceSettings.showIgnoreBatteryOptimizations().then((DeviceSettingsRequest request) {
+  ///     print("- Screen seen? ${request.seen} ${request.lastSeenAt}");
+  ///     print("- Device: ${request.manufacturer} ${request.model} ${request.version}");
+  ///
+  ///     // If we've already shown this screen to the user, we don't want to annoy them.
+  ///     if (request.seen) {
+  ///       return;
+  ///     }
+  ///
+  ///     // It's your responsibility to instruct the user what exactly
+  ///     // to do here, perhaps with a Confirm Dialog:
+  ///     showMyConfimDialog(
+  ///       title: "Settings request",
+  ///       text: "Please disable battery optimizations for your device"
+  ///     ).then((bool confirmed) {
+  ///       if (confirmed) {
+  ///         // User clicked [Confirm] button.  Execute the redirect to settings screen:
+  ///         DeviceSettings.show(request);
+  ///       }
+  ///     });
+  ///   }).catchError((dynamic error) {
+  ///     // Depending on Manufacturer/Model/OS Version, a Device may not implement
+  ///     // a particular Settings screen.
+  ///     print(error);
+  ///   });
   /// }
   /// ```
   ///
-  static Future<bool> showIgnoreBatteryOptimizations() async {
+  static Future<DeviceSettingsRequest> showIgnoreBatteryOptimizations() async {
     List<dynamic> args = [IGNORE_BATTERY_OPTIMIZATIONS];
-    return await _methodChannel.invokeMethod('showSettings', args);
+    Map request = await _methodChannel.invokeMethod('requestSettings', args);
+    return new DeviceSettingsRequest(
+        action: request['action'],
+        manufacturer: request['manufacturer'],
+        model: request['model'],
+        version: request['version'],
+        seen: request['seen'],
+        lastSeenAt: request['lastSeenAt']);
   }
 
-  /// Shows a vendor specific "Power Management" screen.
+  /// Shows a vendor-specific "Power Management" screen.
+  ///
+  /// For example, a *Huawei* device will show the *Battery->Launch* screen:
   ///
   /// ![](https://dl.dropboxusercontent.com/s/u7ljngfecxvibyh/huawei-settings-battery-launch.jpg?dl=1)
   /// ![](https://dl.dropboxusercontent.com/s/cce6jxuvxmecv2z/huawei-settings-battery-launch-apply.jpg?dl=1)
@@ -106,17 +229,45 @@ class DeviceSettings {
   /// Unfortunately, there's no possible way to determine if the user *actually* performs the desired action to "white list" your app on the shown settings-screen.
   /// For this reason, the SDK will show the screen only once, setting a flag to determine if shown already.
   ///
+  /// `showPowerManager` does **not** immediately redirect to the desired Device settings screen.  Instead, it first returns a [DeviceSettingsRequest], containing
+  /// meta-data about the device (`manufacturer`, `model`, `version`), in addition to a flags `seen` and `lastSeenAt`, letting you know if and when you've already shown this screen to the user.
+  ///
+  /// In your success-callback, it's completely **up to you** to instruct the user what exactly to do on that screen.
+  ///
+  /// **Note:**  Based upon the manufacturer/model/OS, a Device may not have a particular Settings screen implemented (eg: Google Pixel).  In this case, `catchError` will fire.
+  ///
+  /// ## Example
+  ///
   /// ```dart
-  /// DeviceSettings.showPowerManager();
+  /// DeviceSettings.showPowerManager().then((DeviceSettingsRequest request) {
+  ///   print("- Screen seen? ${request.seen} ${request.lastSeenAt}");
+  ///   print("- Device: ${request.manufacturer} ${request.model} ${request.version}");
+  ///
+  ///   // If we've already shown this screen to the user, we don't want to annoy them.
+  ///   if (request.seen) {
+  ///     return;
+  ///   }
+  ///   // It's your responsibility to instruct the user what exactly
+  ///   // to do here, perhaps with a Confirm Dialog:
+  ///   showMyConfimDialog(
+  ///     title: "Device Power Management",
+  ///     text: "Please whitelist the app in your Device's Power Management settings by clicking this then selecting that."
+  ///   ).then((bool confirmed) {
+  ///     if (confirmed) {
+  ///       // User clicked [Confirm] button.  Execute the redirect to settings screen:
+  ///       DeviceSettings.show(request);
+  ///     }
+  ///   });
+  /// }).catchError((dynamic error) {
+  ///   // Depending on Manufacturer/Model/OS Version, a Device may not implement
+  ///   // a particular Settings screen.
+  ///   print(error);
+  /// });
   /// ```
   ///
-  /// If you wish to ensure the screen is shown, provide the optional `bool force` param.
+  /// ## Vendor Settings Screens
   ///
-  /// ```dart
-  /// DeviceSettings.showPowerManager(true);
-  /// ```
-  ///
-  /// **NOTE:** Most devices have no vendor-specific "Power Management" screen (eg: Google Pixel).  Power Manager screens are available only for the following vendors:
+  /// The following Android Settings screen will be shown depending on Vendor / OS version:
   ///
   /// | Vendor                               | Settings Activity Name                                                 |
   /// |--------------------------------------|------------------------------------------------------------------------|
@@ -130,8 +281,21 @@ class DeviceSettings {
   /// | Asus                                 | `AutobootManageActivity`                                               |
   /// | LeEco                                | `mobilemanager.MainActivity`                                           |
   ///
-  static Future<bool> showPowerManager([bool force = false]) async {
-    List<dynamic> args = [POWER_MANAGER, force];
+  static Future<DeviceSettingsRequest> showPowerManager() async {
+    List<dynamic> args = [POWER_MANAGER];
+    Map request = await _methodChannel.invokeMethod('requestSettings', args);
+    return new DeviceSettingsRequest(
+        action: request['action'],
+        manufacturer: request['manufacturer'],
+        model: request['model'],
+        version: request['version'],
+        seen: request['seen'],
+        lastSeenAt: request['lastSeenAt']);
+  }
+
+  /// This method is designed to be executed from a [showPowerManager] or [showIgnoreBatteryOptimizations] callback.
+  static Future<bool> show(DeviceSettingsRequest request) async {
+    List<dynamic> args = [request.action];
     return await _methodChannel.invokeMethod('showSettings', args);
   }
 }
