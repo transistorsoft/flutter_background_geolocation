@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import io.flutter.plugin.common.JSONMethodCodec;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -23,7 +22,6 @@ import io.flutter.plugin.common.PluginRegistry.Registrar;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.view.FlutterNativeView;
 
-import com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ActivityChangeStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ConnectivityChangeStreamHandler;
@@ -41,6 +39,7 @@ import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.TSConfig;
 import com.transistorsoft.locationmanager.adapter.callback.*;
 import com.transistorsoft.locationmanager.data.LocationModel;
+import com.transistorsoft.locationmanager.device.DeviceSettingsRequest;
 import com.transistorsoft.locationmanager.geofence.TSGeofence;
 import com.transistorsoft.locationmanager.location.TSCurrentPositionRequest;
 import com.transistorsoft.locationmanager.location.TSLocation;
@@ -59,24 +58,21 @@ import org.json.JSONObject;
  */
 public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Application.ActivityLifecycleCallbacks, PluginRegistry.ViewDestroyListener {
     public static final String PLUGIN_ID                  = "com.transistorsoft/flutter_background_geolocation";
-    public static final String METHOD_CHANNEL_NAME         = PLUGIN_ID + "/methods";
-    public static final String EVENT_CHANNEL_MOTIONCHANGE  = "com.transistorsoft/flutter_background_geolocation/events/motionchange";
-    public static final String EVENT_CHANNEL_LOCATION      = "com.transistorsoft/flutter_background_geolocation/events/location";
+    private static final String METHOD_CHANNEL_NAME         = PLUGIN_ID + "/methods";
 
-    public static final String ACTION_RESET             = "reset";
-    public static final String ACTION_FINISH            = "finish";
-    public static final String ACTION_START_BACKGROUND_TASK = "startBackgroundTask";
-    public static final String ACTION_ERROR             = "error";
-    public static final String ACTION_CONFIGURE         = "configure";
-    public static final String ACTION_READY             = "ready";
+    private static final String ACTION_RESET             = "reset";
+    private static final String ACTION_FINISH            = "finish";
+    private static final String ACTION_START_BACKGROUND_TASK = "startBackgroundTask";
+    private static final String ACTION_READY             = "ready";
 
-    public static final String ACTION_PLAY_SOUND        = "playSound";
-    public static final String ACTION_GET_STATE         = "getState";
-    public static final String ACTION_GET_LOG           = "getLog";
-    public static final String ACTION_EMAIL_LOG         = "emailLog";
-    public static final String ACTION_START_SCHEDULE    = "startSchedule";
-    public static final String ACTION_STOP_SCHEDULE     = "stopSchedule";
-    public static final String ACTION_LOG               = "log";
+    private static final String ACTION_GET_STATE         = "getState";
+    private static final String ACTION_GET_LOG           = "getLog";
+    private static final String ACTION_EMAIL_LOG         = "emailLog";
+    private static final String ACTION_START_SCHEDULE    = "startSchedule";
+    private static final String ACTION_STOP_SCHEDULE     = "stopSchedule";
+    private static final String ACTION_LOG               = "log";
+    private static final String ACTION_REQUEST_SETTINGS  = "requestSettings";
+    private static final String ACTION_SHOW_SETTINGS     = "showSettings";
 
     private static final String JOB_SERVICE_CLASS         = "com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask";
 
@@ -238,7 +234,9 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             isPowerSaveMode(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_IS_IGNORING_BATTERY_OPTIMIZATIONS)) {
             isIgnoringBatteryOptimizations(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_SHOW_SETTINGS)) {
+        } else if (call.method.equalsIgnoreCase(ACTION_REQUEST_SETTINGS)) {
+            requestSettings((List) call.arguments, result);
+        } else if (call.method.equalsIgnoreCase(ACTION_SHOW_SETTINGS)) {
             showSettings((List) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_PLAY_SOUND)) {
             playSound((int) call.arguments, result);
@@ -652,14 +650,25 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         result.success(BackgroundGeolocation.getInstance(mContext).isIgnoringBatteryOptimizations());
     }
 
+    private void requestSettings(List<Object> args, Result result) {
+        String action = (String) args.get(0);
+
+        DeviceSettingsRequest request = BackgroundGeolocation.getInstance(mContext).requestSettings(action);
+        if (request != null) {
+            result.success(request.toMap());
+        } else {
+            result.error("0", "Failed to find " + action + " screen for device " + Build.MANUFACTURER + " " + Build.MODEL + "@" + Build.VERSION.RELEASE, null);
+        }
+    }
+
     private void showSettings(List<Object> args, Result result) {
         String action = (String) args.get(0);
-        Boolean force = false;
-        if (args.size() == 2) {
-            force = (Boolean) args.get(1);
+        boolean didShow = BackgroundGeolocation.getInstance(mContext).showSettings(action);
+        if (didShow) {
+            result.success(didShow);
+        } else {
+            result.error("0", "Failed to find " + action + " screen for device " + Build.MANUFACTURER + " " + Build.MODEL + "@" + Build.VERSION.RELEASE, null);
         }
-        Boolean didShow = BackgroundGeolocation.getInstance(mContext).showSettings(action, force);
-        result.success(didShow);
     }
 
     private void getProviderState(Result result) {

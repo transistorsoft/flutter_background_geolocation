@@ -42,6 +42,7 @@ static NSString *const ACTION_INITIALIZED = @"initialized";
 static NSString *const ACTION_REQUEST_PERMISSION = @"requestPermission";
 static NSString *const ACTION_GET_PROVIDER_STATE = @"getProviderState";
 static NSString *const ACTION_IS_IGNORING_BATTERY_OPTIMIZATIONS = @"isIgnoringBatteryOptimizations";
+static NSString *const ACTION_REQUEST_SETTINGS = @"requestSettings";
 static NSString *const ACTION_SHOW_SETTINGS = @"showSettings";
 
 #import <TSBackgroundFetch/TSBackgroundFetch.h>
@@ -153,8 +154,10 @@ static NSString *const ACTION_SHOW_SETTINGS = @"showSettings";
         [self isPowerSaveMode:result];
     } else if ([self method:ACTION_IS_IGNORING_BATTERY_OPTIMIZATIONS is:action]) {
         result(@NO);
+    } else if ([self method:ACTION_REQUEST_SETTINGS is:action]) {
+        result([FlutterError errorWithCode:@"0" message:@"No iOS implementation" details:nil]);
     } else if ([self method:ACTION_SHOW_SETTINGS is:action]) {
-        result(@NO);
+        result([FlutterError errorWithCode:@"0" message:@"No iOS implementation" details:nil]);
     } else if ([self method:ACTION_PLAY_SOUND is:action]) {
         [self playSound:[call.arguments intValue] result:result];
     } else if ([@"getPlatformVersion" isEqualToString:call.method]) {

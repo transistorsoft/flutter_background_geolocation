@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
@@ -116,13 +117,30 @@ class _SettingsViewState extends State<SettingsView> {
         });
         break;
       case 'power_manager':
-        bool didShow = await bg.DeviceSettings.showPowerManager(true);
-        print('- did show Power Manager Settings: $didShow');
+        //bool didShow = await bg.DeviceSettings.showPowerManager(true);
+        bg.DeviceSettings.showPowerManager().then((bg.DeviceSettingsRequest request) {
+          util.Dialog.confirm(context, "Power Manager", "Manufacturer: ${request.manufacturer}\nModel:${request.model}\nVersion:${request.version}\nSeen: ${request.seen}\n${request.lastSeenAt}", (bool confirm) {
+            if (!confirm) { return; }
+            bg.DeviceSettings.show(request);
+          });
+        }).catchError((dynamic error) {
+          print(error);
+          util.Dialog.alert(context, "Notice", error.message);
+        });
+        //print('- did show Power Manager Settings: $didShow');
         break;
       case 'ignore_battery_optimizations':
         bool isIgnoring = await bg.DeviceSettings.isIgnoringBatteryOptimizations;
         print('- isIgnoringBatteryOptimizations: $isIgnoring');
-        bg.DeviceSettings.showIgnoreBatteryOptimizations();
+        bg.DeviceSettings.showIgnoreBatteryOptimizations().then((bg.DeviceSettingsRequest request) {
+          util.Dialog.confirm(context, "Ignore Battery Optimizations", "isIgnoring? $isIgnoring\nManufacturer: ${request.manufacturer}\nModel:${request.model}\nVersion:${request.version}\nSeen: ${request.seen}\n${request.lastSeenAt}", (bool confirm) {
+            if (!confirm) { return; }
+            bg.DeviceSettings.show(request);
+          });
+        }).catchError((dynamic error) {
+          print(error);
+          util.Dialog.alert(context, "Notice", error.message);
+        });
         break;
       case 'about':
         _onClickAbout();
