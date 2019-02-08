@@ -14,7 +14,7 @@ class Sensors {
   /// `true` if this device has a gyroscope.
   bool gyroscope;
 
-  /// `true` if this device has a magentometer (compass).
+  /// `true` if this device has a magnetometer (compass).
   bool magentometer;
 
   /// __`[iOS only]`__ `true` if this iOS device has an **M7** co-processor (iPhone 5S+).

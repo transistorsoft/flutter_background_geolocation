@@ -1,7 +1,13 @@
 # Change Log
 
-## [0.3.2] - 2019=01-31
-- [Changed] Changed new Android DeviceSettings API to first send a request to native API, offering the developer a chance to show a Dialog to the user with instructions.  
+## [0.3.3] - 2019-02-08
+- [Fixed] Fixed bug in Android Headless event `BOOT` not receiving `State` data.
+- [Changed] Changed the mechanism of storing Android Headless callback IDs to put them into `SharedPreferences` rather than relying upon existence as static class vars.
+- [Fixed] Incorrect event-data provided to Headless `motionchange` event.
+- [Fixed] Spell-check docs.
+
+## [0.3.2] - 2019-01-31
+- [Changed] Changed new Android DeviceSettings API to first send a request to native API, offering the developer a chance to show a Dialog to the user with instructions.
 
 ## [0.3.1] - 2019-01-30
 - [Fixed] Constrain `device_info` dependency version.

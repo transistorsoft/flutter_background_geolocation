@@ -1,7 +1,7 @@
 package com.transistorsoft.flutter.backgroundgeolocation;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.SharedPreferences;
 
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.event.HeadlessEvent;
@@ -28,6 +28,9 @@ import io.flutter.view.FlutterNativeView;
 import io.flutter.view.FlutterRunArguments;
 
 public class HeadlessTask implements MethodChannel.MethodCallHandler {
+    private static final String KEY_REGISTRATION_CALLBACK_ID    = "registrationCallbackId";
+    private static final String KEY_CLIENT_CALLBACK_ID          = "clientCallbackId";
+
     private static PluginRegistry.PluginRegistrantCallback sPluginRegistrantCallback;
     static private Long sRegistrationCallbackId;
     static private Long sClientCallbackId;
@@ -44,27 +47,31 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
     }
 
     // Called by FLTBackgroundGeolocationPlugin
-    static boolean register(List<Object> callbacks) {
-        if (sRegistrationCallbackId != null) {
-            return false;
-        }
+    static boolean register(Context context, List<Object> callbacks) {
+        SharedPreferences prefs = context.getSharedPreferences(HeadlessTask.class.getName(), Context.MODE_PRIVATE);
+
         // There is weirdness with the class of these callbacks (Integer vs Long) between assembleDebug vs assembleRelease.
         Object cb1 = callbacks.get(0);
         Object cb2 = callbacks.get(1);
 
+        SharedPreferences.Editor editor = prefs.edit();
         if (cb1.getClass() == Long.class) {
-            sRegistrationCallbackId = (Long) cb1;
+            editor.putLong(KEY_REGISTRATION_CALLBACK_ID, (Long) cb1);
         } else if (cb1.getClass() == Integer.class) {
-            sRegistrationCallbackId = ((Integer) cb1).longValue();
+            editor.putLong(KEY_REGISTRATION_CALLBACK_ID, ((Integer) cb1).longValue());
         }
 
         if (cb2.getClass() == Long.class) {
-            sClientCallbackId = (Long) cb2;
+            editor.putLong(KEY_CLIENT_CALLBACK_ID, (Long) cb2);
         } else if (cb2.getClass() == Integer.class) {
-            sClientCallbackId = ((Integer) cb2).longValue();
+            editor.putLong(KEY_CLIENT_CALLBACK_ID, ((Integer) cb2).longValue());
         }
+        editor.apply();
 
-        return true;
+        sRegistrationCallbackId = prefs.getLong(KEY_REGISTRATION_CALLBACK_ID, -1);
+        sClientCallbackId = prefs.getLong(KEY_CLIENT_CALLBACK_ID, -1);
+
+        return ((sRegistrationCallbackId != -1) && (sClientCallbackId != -1));
     }
 
     @Override
@@ -82,9 +89,18 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
 
     @Subscribe(threadMode=ThreadMode.MAIN)
     public void onHeadlessEvent(HeadlessEvent event) {
+
+        SharedPreferences prefs = event.getContext().getSharedPreferences(getClass().getName(), Context.MODE_PRIVATE);
+        sRegistrationCallbackId = prefs.getLong(KEY_REGISTRATION_CALLBACK_ID, -1);
+        sClientCallbackId = prefs.getLong(KEY_CLIENT_CALLBACK_ID, -1);
+
         String eventName = event.getName();
         TSLog.logger.debug("\uD83D\uDC80 [HeadlessTask " + eventName + "]");
 
+        if ((sRegistrationCallbackId == -1) || (sClientCallbackId == -1)) {
+            TSLog.logger.error(TSLog.error("Invalid Headless Callback ids.  Cannot handle headless event"));
+            return;
+        }
         synchronized (mEvents) {
             mEvents.add(event);
             if (mBackgroundFlutterView == null) {
@@ -130,7 +146,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
         } else if (name.equals(BackgroundGeolocation.EVENT_LOCATION)) {
             result = event.getLocationEvent().toJson();
         } else if (name.equals(BackgroundGeolocation.EVENT_MOTIONCHANGE)) {
-            result = event.getMotionChangeEvent().getLocation().toJson();
+            result = event.getMotionChangeEvent().toJson();
         } else if (name.equals(BackgroundGeolocation.EVENT_HTTP)) {
             result = event.getHttpEvent().toJson();
         } else if (name.equals(BackgroundGeolocation.EVENT_PROVIDERCHANGE)) {

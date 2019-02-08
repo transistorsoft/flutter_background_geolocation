@@ -3,6 +3,7 @@ part of flt_background_geolocation;
 /// Event constants
 ///
 class Event {
+  static const BOOT = "boot";
   static const TERMINATE = "terminate";
   static const LOCATION = "location";
   static const HTTP = "http";

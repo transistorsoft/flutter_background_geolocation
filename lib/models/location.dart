@@ -75,7 +75,7 @@ class Location {
   ///
   bool sample;
 
-  /// The current distance travelled.
+  /// The current distance traveled.
   ///
   /// __See also:__
   /// - [BackgroundGeolocation.setOdometer]

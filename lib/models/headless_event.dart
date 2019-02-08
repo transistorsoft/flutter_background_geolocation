@@ -40,6 +40,8 @@ class HeadlessEvent {
   ///
   /// | Event `name`                 | `event` Class                         |
   /// |------------------------------|---------------------------------------|
+  /// | [Event.BOOT]                 | [State]                               |
+  /// | [Event.TERMINATE]            | [State]                               |
   /// | [Event.LOCATION]             | [Location]                            |
   /// | [Event.MOTIONCHANGE]         | [Location]                            |
   /// | [Event.HTTP]                 | [HttpEvent]                           |
@@ -62,13 +64,14 @@ class HeadlessEvent {
       switch (name) {
         case Event.TERMINATE:
         case Event.SCHEDULE:
+        case Event.BOOT:
           event = new State(params);
           break;
         case Event.LOCATION:
           event = new Location(params);
           break;
         case Event.MOTIONCHANGE:
-          event = new Location(params["location"]);
+          event = new Location(params['location']);
           break;
         case Event.ACTIVITYCHANGE:
           event =
@@ -101,7 +104,7 @@ class HeadlessEvent {
           break;
       }
     } catch (e, stacktrace) {
-      print('[HeadlessEvent] ‼️ ERROR DECODING EVENT: $e');
+      print('[HeadlessEvent] ‼️ ERROR DECODING EVENT $name: $e');
       print(params.toString());
       print(stacktrace);
     }

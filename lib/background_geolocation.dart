@@ -45,7 +45,7 @@ class _Subscription {
 /// | [onGeofencesChange]    | Fired when the list of actively-monitored geofences changed.  See [Config.geofenceProximityRadius]. |
 /// | [onSchedule]           | Fired for [Config.schedule] events.                                  |
 /// | [onConnectivityChange] | Fired when network-connectivity changes (connected / disconnected).  |
-/// | [onPowerSaveChange]    | Fired when state of operating-system's "power-saving" feature is enabled / disabld. |
+/// | [onPowerSaveChange]    | Fired when state of operating-system's "power-saving" feature is enabled / disabled. |
 /// | [onEnabledChange]      | Fired when the plugin is enabled / disabled via its [start] / [stop] methods.        |
 ///
 /// ## Example
@@ -157,7 +157,7 @@ class BackgroundGeolocation {
   /// Signal to the plugin that your app is launched and ready, proving the default [Config].
   ///
   /// The supplied [Config] will be applied **only at first install** of your app — for every launch thereafter,
-  /// the plugin will automatically load its last-known configuration from persisent storage.
+  /// the plugin will automatically load its last-known configuration from persistent storage.
   /// The plugin always remembers the configuration you apply to it.
   ///
   ///
@@ -194,7 +194,7 @@ class BackgroundGeolocation {
   ///
   /// ## [Config.reset]: true
   ///
-  /// Optionally, you can set [Config.reset] to `true`  This is helpful during development.  This will esentially *force* the supplied [Config] to be applied with *each launch* of your application.
+  /// Optionally, you can set [Config.reset] to `true`  This is helpful during development.  This will essentially *force* the supplied [Config] to be applied with *each launch* of your application.
   ///
   /// ## Example
   ///
@@ -214,7 +214,7 @@ class BackgroundGeolocation {
   ///
   /// Re-configure the plugin's [Config] parameters.
   ///
-  /// The supplied [Config] will be appended to the current configuration and applied in realtime.
+  /// The supplied [Config] will be appended to the current configuration and applied in real-time.
   ///
   /// ## Example
   ///
@@ -386,7 +386,7 @@ class BackgroundGeolocation {
 
   /// Signal completion of [startBackgroundTask]
   ///
-  /// Sends a signal to the native OS that your long-running task, addressed by `taskId` privided by [startBackgroundTask] is complete and the OS may proceed to suspend your application if applicable.
+  /// Sends a signal to the native OS that your long-running task, addressed by `taskId` provided by [startBackgroundTask] is complete and the OS may proceed to suspend your application if applicable.
   ///
   static Future<int> finish(int taskId) async {
     return await _methodChannel.invokeMethod('finish', taskId);
@@ -483,9 +483,9 @@ class BackgroundGeolocation {
     return completer.future;
   }
 
-  /// Retrieve the current distance-travelled ("odometer").
+  /// Retrieve the current distance-traveled ("odometer").
   ///
-  /// The plugin constantly tracks distance travelled, computing the distance between the current location and last and maintaining the sum.  To fetch the current **odometer** reading:
+  /// The plugin constantly tracks distance traveled, computing the distance between the current location and last and maintaining the sum.  To fetch the current **odometer** reading:
   ///
   /// ## Example
   ///
@@ -495,7 +495,7 @@ class BackgroundGeolocation {
   ///
   ///  **NOTE:** Also see [Config.desiredOdometerAccuracy] to set control the accuracy of locations being used in odometer calculations.
   ///
-  ///  **WARNING:** Odometer calculations are dependant upon the accuracy of received locations.  If location accuracy is poor, this will necessarily introduce error into odometer calculations.
+  ///  **WARNING:** Odometer calculations are dependent upon the accuracy of received locations.  If location accuracy is poor, this will necessarily introduce error into odometer calculations.
   ///
   static Future<double> get odometer async {
     return await _methodChannel.invokeMethod('getOdometer');
@@ -519,7 +519,7 @@ class BackgroundGeolocation {
     return new Location(data);
   }
 
-  /// Retrive a List of [Location] currently stored in the plugin's SQLite datbase.
+  /// Retrive a List of [Location] currently stored in the plugin's SQLite database.
   ///
   /// ## Example
   ///
@@ -531,7 +531,7 @@ class BackgroundGeolocation {
     return await _methodChannel.invokeMethod('getLocations');
   }
 
-  /// Retrive the count of all locations current stored in the plugin's SQLite datbase.
+  /// Retrive the count of all locations current stored in the plugin's SQLite database.
   ///
   /// ## Example
   ///
@@ -567,7 +567,7 @@ class BackgroundGeolocation {
   ///
   /// If you configured [Config.batchSync] `true`, all the locations will be sent to your server in a single HTTP POST request, otherwise the plugin will execute an HTTP post for **each** [Location] in the database (REST-style).
   /// Your callback will be executed and provided with a `List` of all the locations from the SQLite database.  If you configured the plugin for HTTP (by configuring a [Config.url], your callback will be executed after all the HTTP request(s) have completed.
-  /// If the plugin failed to sync to your server (possibly because of no network connection), the failure callback will be called with an error message.  If you are **not** using the HTTP features, [sync] will delete all records from its SQLite datbase.
+  /// If the plugin failed to sync to your server (possibly because of no network connection), the failure callback will be called with an error message.  If you are **not** using the HTTP features, [sync] will delete all records from its SQLite database.
   ///
   /// ## Example
   ///
@@ -794,7 +794,7 @@ class BackgroundGeolocation {
     return await _methodChannel.invokeMethod('emailLog', email);
   }
 
-  /// Destory the entire contents of plugin's log database.
+  /// Destroy the entire contents of plugin's log database.
   ///
   /// ## Example
   ///
@@ -806,7 +806,7 @@ class BackgroundGeolocation {
     return await _methodChannel.invokeMethod('destroyLog');
   }
 
-  /// Returns the presense of device sensors *accelerometer*, *gyroscope*, *magnetometer*
+  /// Returns the presence of device sensors *accelerometer*, *gyroscope*, *magnetometer*
   ///
   /// These core [Sensors] are used by the motion activity-recognition system -- when any of these sensors are missing from a device (particularly on cheap Android devices),
   /// the performance of the motion activity-recognition system will be **severely** degraded and highly inaccurate.
@@ -932,7 +932,7 @@ class BackgroundGeolocation {
   /// ## Example
   ///
   /// ```dart
-  /// BackgroundGeolocation.onMotioncChange((Location location) {
+  /// BackgroundGeolocation.onMotionChange((Location location) {
   ///   if (location.isMoving) {
   ///      print('[onMotionChange] Device has just started MOVING $location');
   ///   } else {
@@ -1050,7 +1050,7 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.onGeofencesChange((GeofencesChangeEvent event) {
-  ///   List<String> on = event.on;     //<-- new geofences activiated.
+  ///   List<String> on = event.on;     //<-- new geofences activated.
   ///   List<Geofence> off = event.off; //<-- geofences that were just de-activated.
   ///
   ///   // Create map circles
@@ -1244,7 +1244,7 @@ class BackgroundGeolocation {
 
   /// Subscribe to changes in plugin [State.enabled].
   ///
-  /// Fired when the plugin's [State.enabled] changes.  For example, executing [start] and [stop] will cause the `onEnabledChnage` event to fire.  This event is primarily desigend for use with the configuration option [Config.stopAfterElapsedMinutes], which automatically executes the plugin's [stop] method.
+  /// Fired when the plugin's [State.enabled] changes.  For example, executing [start] and [stop] will cause the `onEnabledChnage` event to fire.  This event is primarily designed for use with the configuration option [Config.stopAfterElapsedMinutes], which automatically executes the plugin's [stop] method.
   ///
   /// ## Example
   ///
@@ -1263,7 +1263,7 @@ class BackgroundGeolocation {
     _registerSubscription(_eventsEnabledChange.listen(callback), callback);
   }
 
-  /// Subsribe to state changes in OS power-saving system.
+  /// Subscribe to state changes in OS power-saving system.
   ///
   /// Fired when the state of the operating-system's "Power Saving" mode changes.  Your `callback` will be provided with a `bool` showing whether "Power Saving" is **enabled** or **disabled**.  Power Saving mode can throttle certain services in the background, such as HTTP requests or GPS.
   ///
