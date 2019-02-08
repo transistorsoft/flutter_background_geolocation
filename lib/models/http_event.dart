@@ -30,7 +30,7 @@ part of flt_background_geolocation;
 /// ```dart
 /// POST /my_url
 /// {
-///   "location": {  // <-- hardcoded "httpRootProperty"
+///   "location": {  // <-- hard-coded "httpRootProperty"
 ///     "coords": {
 ///         "latitude": 23.23232323,
 ///         "longitude": 37.37373737
@@ -145,7 +145,7 @@ part of flt_background_geolocation;
 /// | `latitude` | `Float` ||
 /// | `longitude` | `Float` ||
 /// | `speed` | `Float` | Meters|
-/// | `heading` | `Float` | Degress|
+/// | `heading` | `Float` | Degrees|
 /// | `accuracy` | `Float` | Meters|
 /// | `altitude` | `Float` | Meters|
 /// | `altitude_accuracy` | `Float` | Meters|
@@ -233,7 +233,7 @@ part of flt_background_geolocation;
 /// }
 /// ```
 ///
-/// :exclamation: `#extras` are automatically appened to the last element of the array as an `{Object}`.
+/// :exclamation: `#extras` are automatically appended to the last element of the array as an `{Object}`.
 ///
 /// #### Array Template with `httpRootProperty: "."`
 ///

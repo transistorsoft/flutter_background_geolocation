@@ -94,7 +94,7 @@ class Config {
   ///
   ///  **NOTE:**
   ///
-  /// - To disable this behaviour, configure [disableElasticity]:true.
+  /// - To disable this behavior, configure [disableElasticity]:true.
   /// - To control the scale of the automatic `distanceFilter` calculation, see [elasticityMultiplier]
   ///
   /// `distanceFilter` is auto-scaled by rounding speed to the nearest `5 m/s` and adding `distanceFilter` meters for each `5 m/s` increment.
@@ -121,7 +121,7 @@ class Config {
   ///   => 6 * 50 = 300 meters
   /// ```
   ///
-  /// Note the following real example of background-geolocation on highway 101 towards San Francisco as the driver slows down as he runs into slower traffic (geolocations become compressed as distanceFilter decreases)
+  /// Note the following real example of background-geolocation on highway 101 towards San Francisco as the driver slows down as he runs into slower traffic (locations become compressed as distanceFilter decreases)
   ///
   /// ![distanceFilter at highway speed](https://dl.dropboxusercontent.com/s/uu0hs0sediw26ar/distance-filter-highway.png?dl=1)
   ///
@@ -174,11 +174,11 @@ class Config {
 
   /// The radius around current location to query for geofences to activate monitoring upon.
   ///
-  /// The default and *minimum* is `1000` meters.  **@see** releated event [BackgroundGeolocation.onGeofencesChange].  When using Geofences, the plugin activates only thoses in proximity (the maximim geofences allowed to be simultaneously monitored is limited by the platform, where **iOS** allows only 20 and **Android**.  However, the plugin allows you to create as many geofences as you wish (thousands even).  It stores these in its database and uses spatial queries to determine which **20** or **100** geofences to activate.
+  /// The default and *minimum* is `1000` meters.  **@see** related event [BackgroundGeolocation.onGeofencesChange].  When using Geofences, the plugin activates only those in proximity (the maximum geofences allowed to be simultaneously monitored is limited by the platform, where **iOS** allows only 20 and **Android**.  However, the plugin allows you to create as many geofences as you wish (thousands even).  It stores these in its database and uses spatial queries to determine which **20** or **100** geofences to activate.
   ///
   ///  **NOTE:**
   /// - See [GeofenceEvent]
-  /// - [View animation of this behaviour](https://www.transistorsoft.com/shop/products/assets/images/background-geolocation-infinite-geofencing.gif)
+  /// - [View animation of this behavior](https://www.transistorsoft.com/shop/products/assets/images/background-geolocation-infinite-geofencing.gif)
   ///
   /// ![](https://dl.dropboxusercontent.com/s/7sggka4vcbrokwt/geofenceProximityRadius_iphone6_spacegrey_portrait.png?dl=1)
   ///
@@ -252,7 +252,7 @@ class Config {
   /// ## iOS
   /// ----------------------------------------------------
   ///
-  /// Disables the accelerometer-based **Stop-detection System**.  When disabled, the plugin will use the default iOS behaviour of automatically turning off location-services when the device has stopped for **exactly 15 minutes**.  When disabled, you will no longer have control over [stopTimeout].
+  /// Disables the accelerometer-based **Stop-detection System**.  When disabled, the plugin will use the default iOS behavior of automatically turning off location-services when the device has stopped for **exactly 15 minutes**.  When disabled, you will no longer have control over [stopTimeout].
   ///
   /// To *completely* disable automatically turning off iOS location-services, you must also provide [pausesLocationUpdatesAutomatically]:false.
   ///
@@ -480,7 +480,7 @@ class Config {
 
   /// Immediately upload each recorded location to your configured [url].
   ///
-  /// Default is `true`.  If you've enabeld HTTP feature by configuring an [url], the plugin will attempt to HTTP POST each location to your server **as it is recorded**.  If you set [autoSync], it's up to you to **manually** execute the [BackgroundGeolocation.sync] method to initate the HTTP POST.
+  /// Default is `true`.  If you've enabled HTTP feature by configuring an [url], the plugin will attempt to HTTP POST each location to your server **as it is recorded**.  If you set [autoSync], it's up to you to **manually** execute the [BackgroundGeolocation.sync] method to initiate the HTTP POST.
   ///
   /// __Note:__ The plugin will continue to persist **every** recorded location in the SQLite database until you execute [BackgroundGeolocation.sync].
   ///
@@ -495,13 +495,13 @@ class Config {
   ///
   /// Defaults to `0` (no threshold).  If you configure a value greater-than **`0`**, the plugin will wait until that many locations are recorded before executing HTTP requests to your server through your configured [url].
   ///
-  /// Configuring an `autoSyncThreshold` in conjunction with [batchSync]:true **can conserve battery** by reducing the number of HTTP requets, since HTTP requets consume *far* more energy / second than GPS.
+  /// Configuring an `autoSyncThreshold` in conjunction with [batchSync]:true **can conserve battery** by reducing the number of HTTP requests, since HTTP requests consume *far* more energy / second than GPS.
   ///
   int autoSyncThreshold;
 
   /// POST multiple locations to your [url] in a single HTTP request.
   ///
-  /// Default is **`false`**.  If you've enabled HTTP feature by configuring an [url], [batchSync]: true will POST *all* the locations currently stored in native SQLite datbase to your server in a single HTTP POST request.  With [batchSync]: false, an HTTP POST request will be initiated for **each** location in database.
+  /// Default is **`false`**.  If you've enabled HTTP feature by configuring an [url], [batchSync]: true will POST *all* the locations currently stored in native SQLite database to your server in a single HTTP POST request.  With [batchSync]: false, an HTTP POST request will be initiated for **each** location in database.
   ///
   bool batchSync;
 
@@ -515,7 +515,7 @@ class Config {
 
   /// Optional custom template for rendering `location` JSON request data in HTTP requests.
   ///
-  /// The `locationTemplate` will be evaulated for variables using Ruby `erb`-style tags:
+  /// The `locationTemplate` will be evaluated for variables using Ruby `erb`-style tags:
   ///
   /// ```erb
   /// <%= variable_name %>
@@ -599,7 +599,7 @@ class Config {
   /// | `latitude`            | `Float`  |             |
   /// | `longitude`           | `Float`  |             |
   /// | `speed`               | `Float`  | Meters      |
-  /// | `heading`             | `Float`  | Degress     |
+  /// | `heading`             | `Float`  | Degrees     |
   /// | `accuracy`            | `Float`  | Meters      |
   /// | `altitude`            | `Float`  | Meters      |
   /// | `altitude_accuracy`   | `Float`  | Meters      |
@@ -618,7 +618,7 @@ class Config {
   ///
   /// The `geofenceTemplate` is similar to [locationTemplate] with the addition of two extra `geofence.*` tags.
   ///
-  /// The `geofenceTemplate` will be evaulated for variables using Ruby `erb`-style tags:
+  /// The `geofenceTemplate` will be evaluated for variables using Ruby `erb`-style tags:
   ///
   /// ```erb
   /// <%= variable_name %>
@@ -681,7 +681,7 @@ class Config {
   /// | `latitude`            | `Float`  |             |
   /// | `longitude`           | `Float`  |             |
   /// | `speed`               | `Float`  | Meters      |
-  /// | `heading`             | `Float`  | Degress     |
+  /// | `heading`             | `Float`  | Degrees     |
   /// | `accuracy`            | `Float`  | Meters      |
   /// | `altitude`            | `Float`  | Meters      |
   /// | `altitude_accuracy`   | `Float`  | Meters      |
@@ -738,7 +738,7 @@ class Config {
   ///
   /// Defaults to **`true`**.  When the user terminates the app, the plugin will [BackgroundGeolocation.stop] tracking.  Set this to **`false`** to continue tracking after application terminate.
   ///
-  /// If you *do* configure **`stopOnTerminate: false`**, your Flutter application **will** terminate at that time.  However, both Android and iOS differ in their behaviour *after* this point:
+  /// If you *do* configure **`stopOnTerminate: false`**, your Flutter application **will** terminate at that time.  However, both Android and iOS differ in their behavior *after* this point:
   ///
   /// ## iOS
   ///
@@ -1043,7 +1043,7 @@ class Config {
 
   /// Forces [BackgroundGeolocation.ready] to apply supplied [Config] with each application launch.
   ///
-  /// Optionally, you can specify **`reset: true`** to [BackgroundGeolocation.ready].  This will esentially *force* the supplied [Config] to be applied with each launch of your application.
+  /// Optionally, you can specify **`reset: true`** to [BackgroundGeolocation.ready].  This will essentially *force* the supplied [Config] to be applied with each launch of your application.
   ///
   /// ## Example
   ///
@@ -1052,7 +1052,7 @@ class Config {
   ///   reset: true,  // <-- set true to ALWAYS apply supplied config; not just at first launch.
   ///   distanceFilter: 50
   /// }, (state) => {
-  ///   conosle.log('Ready with reset: true: ', state.distanceFilter);
+  ///   console.log('Ready with reset: true: ', state.distanceFilter);
   /// });
   /// ```
   ///
@@ -1068,7 +1068,7 @@ class Config {
   ///
   /// Defaults to `false`.  Set `true` in order to disable constant background-tracking and use only the iOS [Significant Changes API](https://developer.apple.com/reference/corelocation/cllocationmanager/1423531-startmonitoringsignificantlocati?language=objc).
   ///
-  ///  **WARNING:** If Apple has rejected your application, refusing to grant your app the privelege of using the **`UIBackgroundMode: "location"`**, this can be a solution.
+  ///  **WARNING:** If Apple has rejected your application, refusing to grant your app the privilege of using the **`UIBackgroundMode: "location"`**, this can be a solution.
   ///
   ///  **NOTE** The Significant Changes API will report a location only every `500` to `1000` meters (can be higher in non urban environments; depends upon the spacing of Cellular towers).  Many of the plugin's configuration parameters **will be ignored**, such as [distanceFilter], [stationaryRadius], [activityType], etc.
   ///
@@ -1076,9 +1076,9 @@ class Config {
 
   /// __`[iOS only]`__ Configure iOS location API to *never* automatically turn off.
   ///
-  ///  **WARNING:** This option should generally be left `undefined`.  You should only specifiy this option if you know *exactly* what you're doing.
+  ///  **WARNING:** This option should generally be left `undefined`.  You should only specify this option if you know *exactly* what you're doing.
   ///
-  /// The default behaviour of the plugin is to turn **off** location-services *automatically* when the device is detected to be stationary for [stopTimeout] minutes.  When set to `false`, location-services will **never** be turned off (and [disableStopDetection] will automatically be set to `true`) -- it's your responsibility to turn them off when you no longer need to track the device.  This feature should **not** generally be used.  [preventSuspend] will no longer work either.
+  /// The default behavior of the plugin is to turn **off** location-services *automatically* when the device is detected to be stationary for [stopTimeout] minutes.  When set to `false`, location-services will **never** be turned off (and [disableStopDetection] will automatically be set to `true`) -- it's your responsibility to turn them off when you no longer need to track the device.  This feature should **not** generally be used.  [preventSuspend] will no longer work either.
   ///
   bool pausesLocationUpdatesAutomatically;
 
@@ -1132,7 +1132,7 @@ class Config {
   ///
   /// You will be responsible for handling disabled location authorization by listening to the [BackgroundGeolocation.onProviderChange] event.
   ///
-  /// By default, the plugin automatically shows a native alert (configured via [locationAuthorizationAlert] and [locationAuthorizationRequest] to the user when location-services are disabled, directing them to the settings screen.  If you **do not** desire this automated behaviour, set `disableLocationAuthorizationAlert: true`.
+  /// By default, the plugin automatically shows a native alert (configured via [locationAuthorizationAlert] and [locationAuthorizationRequest] to the user when location-services are disabled, directing them to the settings screen.  If you **do not** desire this automated behavior, set `disableLocationAuthorizationAlert: true`.
   ///
   /// ## Example
   ///
@@ -1179,7 +1179,7 @@ class Config {
 
   /// __`[iOS only]`__ Allows the iOS stop-detection system to be delayed from activating.
   ///
-  /// Defaults to **`0`** (no delay).  Allows the stop-detection system to be delayed from activating.  When the stop-detection system *is* engaged, location-services will be temporarily turned **off** and only the accelerometer is monitored.  Stop-detection will only engage if this timer expires.  The timer is cancelled if any movement is detected before expiration.  If a value of **`0`** is specified, the stop-detection system will engage as soon as the device is detected to be stationary.
+  /// Defaults to **`0`** (no delay).  Allows the stop-detection system to be delayed from activating.  When the stop-detection system *is* engaged, location-services will be temporarily turned **off** and only the accelerometer is monitored.  Stop-detection will only engage if this timer expires.  The timer is canceled if any movement is detected before expiration.  If a value of **`0`** is specified, the stop-detection system will engage as soon as the device is detected to be stationary.
   ///
   /// You can experience the iOS stop-detection system at work by configuring [debug]:true.  After the device stops moving (stopped at a traffic light, for example), the plugin will emit sound-effects and local-notifications about "Location-services: OFF / ON".
   ///
@@ -1193,7 +1193,7 @@ class Config {
   ///
   ///  **WARNING:** The plugin is **HIGHLY** optimized for motion-activity-updates.  If you **do** disable this, the plugin *will* drain more battery power.  You are **STRONGLY** advised against disabling this.  You should explain to your users with an appropriate `NSMotionUsageDescription` in your `Info.plist` file, for example:
   ///
-  /// > "Motion activity detection increases battery efficiency by intelligently toggling location-tracking" off when your device is detected to be stationry.
+  /// > "Motion activity detection increases battery efficiency by intelligently toggling location-tracking" off when your device is detected to be stationary.
   ///
   bool disableMotionActivityUpdates;
 
@@ -1205,7 +1205,7 @@ class Config {
   ///
   ///  **Note:** When a device is unplugged form power with the screen off, iOS will *still* throttle [BackgroundGeolocation.onHeartbeat] events about 2 minutes after entering the background state.  However, if the screen is lit up or even the *slightest* device-motion is detected, [BackgroundGeolocation.onHeartbeat] events will immediately resume.
   ///
-  ///  **WARNING:** **`preventSuspend: true`** should **only** be used in **very** specific use-cases and should typically **not** be used as it *will* have a **very noticable impact on battery performance.**  You should carefully manage **`preventSuspend`**, engaging it for controlled periods-of-time.  You should **not** expect to run your app in this mode 24 hours / day, 7 days-a-week.
+  ///  **WARNING:** **`preventSuspend: true`** should **only** be used in **very** specific use-cases and should typically **not** be used as it *will* have a **very noticeable impact on battery performance.**  You should carefully manage **`preventSuspend`**, engaging it for controlled periods-of-time.  You should **not** expect to run your app in this mode 24 hours / day, 7 days-a-week.
   ///
   /// ## Exampler
   ///
@@ -1279,7 +1279,7 @@ class Config {
 
   /// __`[Android only]`__ Allow recording locations which are duplicates of the previous.
   ///
-  /// By default, the Android plugin will ignore a received location when it is *identical* to the previous location.  Set `true` to override this behaviour and record *every* location, regardless if it is identical to the last location.
+  /// By default, the Android plugin will ignore a received location when it is *identical* to the previous location.  Set `true` to override this behavior and record *every* location, regardless if it is identical to the last location.
   ///
   /// In the logs, you will see a location being ignored:
   /// ```
@@ -1447,7 +1447,7 @@ class Config {
   ///
   /// Defaults to **`false`**.  When the Android OS is under memory pressure from other applications (eg: a phone call), the OS can and will free up memory by terminating other processes and scheduling them for re-launch when memory becomes available.  If you find your tracking being **terminated unexpectedly**, *this* is why.
   ///
-  /// If you set this option to **`true`**, the plugin will run its Android service in the foreground, **supplying the ongoing notification to be shown to the user while in this state**.  Running as a foreground-service makes the tracking-service **much** more inmmune to OS killing it due to memory/battery pressure.  By default services are background, meaning that if the system needs to kill them to reclaim more memory (such as to display a large page in a web browser).
+  /// If you set this option to **`true`**, the plugin will run its Android service in the foreground, **supplying the ongoing notification to be shown to the user while in this state**.  Running as a foreground-service makes the tracking-service **much** more immune to OS killing it due to memory/battery pressure.  By default services are background, meaning that if the system needs to kill them to reclaim more memory (such as to display a large page in a web browser).
   ///
   ///  **Note:** See related config options:
   /// - [notificationTitle]

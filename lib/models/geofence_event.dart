@@ -14,7 +14,7 @@ part of flt_background_geolocation;
 ///
 /// ## Event: [BackgroundGeolocation.onGeofencesChange]
 ///
-/// When a proximity-query detects a change in the list of monitored geofences, it will fire the [BackgroundGeolocation.onGeofencesChange] event, providing information about which geofences were activiated as well as those which were de-activiated.
+/// When a proximity-query detects a change in the list of monitored geofences, it will fire the [BackgroundGeolocation.onGeofencesChange] event, providing information about which geofences were activated as well as those which were de-activated.
 ///
 /// The [GeofencesChangeEvent] provided to your `callback` contains properties [GeofencesChangeEvent.on] and [GeofencesChangeEvent.off] for determining those geofences which have started and stopped being actively monitored.
 ///
@@ -68,7 +68,7 @@ class GeofenceEvent {
   Map extras;
 
   GeofenceEvent(Map params) {
-    // Remove geofence from location to prevent recursive creation fo GeofenceEvent.
+    // Remove geofence from location to prevent recursive creation of GeofenceEvent.
     Map locationData = params['location'];
     locationData.remove("geofence");
 

@@ -53,8 +53,6 @@ import org.json.JSONObject;
 
 /**
  * FlutterBackgroundGeolocationPlugin
- * TODO android headless:  https://github.com/flutter/plugins/pull/642/commits/0808e48317936b4e659ce453c972e5ff4104c5a2
- * FlutterIsolteStartedEvent
  */
 public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Application.ActivityLifecycleCallbacks, PluginRegistry.ViewDestroyListener {
     public static final String PLUGIN_ID                  = "com.transistorsoft/flutter_background_geolocation";
@@ -65,6 +63,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     private static final String ACTION_START_BACKGROUND_TASK = "startBackgroundTask";
     private static final String ACTION_READY             = "ready";
 
+    private static final String ACTION_REGISTER_HEADLESS_TASK = "registerHeadlessTask";
     private static final String ACTION_GET_STATE         = "getState";
     private static final String ACTION_GET_LOG           = "getLog";
     private static final String ACTION_EMAIL_LOG         = "emailLog";
@@ -240,7 +239,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             showSettings((List) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_PLAY_SOUND)) {
             playSound((int) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase("registerHeadlessTask")) {
+        } else if (call.method.equalsIgnoreCase(ACTION_REGISTER_HEADLESS_TASK)) {
             registerHeadlessTask((List<Object>) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_PROVIDER_STATE)) {
             getProviderState(result);
@@ -253,10 +252,10 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
 
     // experimental Flutter Headless (NOT READY)
     private void registerHeadlessTask(List<Object> callbacks, Result result) {
-        if (HeadlessTask.register(callbacks)) {
+        if (HeadlessTask.register(mContext, callbacks)) {
             result.success(true);
         } else {
-            result.error("HEADLESS_TASK_ALREADY_REGISTERED", "Only one HeadlessTask may be registered", null);
+            result.error("Failed to registerHeadlessTask.  Callback IDs: " + callbacks.toString(), null, null);
         }
     }
 

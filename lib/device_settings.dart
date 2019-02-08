@@ -188,7 +188,7 @@ class DeviceSettings {
   ///
   ///     // It's your responsibility to instruct the user what exactly
   ///     // to do here, perhaps with a Confirm Dialog:
-  ///     showMyConfimDialog(
+  ///     showMyConfirmDialog(
   ///       title: "Settings request",
   ///       text: "Please disable battery optimizations for your device"
   ///     ).then((bool confirmed) {
@@ -226,15 +226,15 @@ class DeviceSettings {
   ///
   /// The site [Don't Kill My App](https://dontkillmyapp.com/) provides a comprehensive list of poor Android vendors which throttle background-services that this plugin relies upon.
   ///
-  /// Unfortunately, there's no possible way to determine if the user *actually* performs the desired action to "white list" your app on the shown settings-screen.
-  /// For this reason, the SDK will show the screen only once, setting a flag to determine if shown already.
-  ///
   /// `showPowerManager` does **not** immediately redirect to the desired Device settings screen.  Instead, it first returns a [DeviceSettingsRequest], containing
   /// meta-data about the device (`manufacturer`, `model`, `version`), in addition to a flags `seen` and `lastSeenAt`, letting you know if and when you've already shown this screen to the user.
   ///
-  /// In your success-callback, it's completely **up to you** to instruct the user what exactly to do on that screen.
+  /// Unfortunately, there's no possible way to determine if the user *actually* performs the desired action to "white list" your app on the shown settings-screen.
+  /// For this reason, you'll have to evaluate the provided properties [DeviceSettingsRequest.seen]] &amp; [DeviceSettingsRequest.lastSeenAt] and determine for yourself whether to [DeviceSettings.show] this screen.
   ///
-  /// **Note:**  Based upon the manufacturer/model/OS, a Device may not have a particular Settings screen implemented (eg: Google Pixel).  In this case, `catchError` will fire.
+  /// In your success-callback, it's completely **up to you** to instruct the user what exactly to do on that screen, based upon the provided [DeviceSettingsRequest] properties `manufacturer`, `model` and `version`.
+  ///
+  /// **Note:**  Based upon the `manufacturer` / `model` / OS `version`, a Device **may not have** a particular Settings screen implemented (eg: Google Pixel).  In this case, the `Promise` will fire an exception.
   ///
   /// ## Example
   ///
@@ -249,9 +249,9 @@ class DeviceSettings {
   ///   }
   ///   // It's your responsibility to instruct the user what exactly
   ///   // to do here, perhaps with a Confirm Dialog:
-  ///   showMyConfimDialog(
+  ///   showMyConfirmDialog(
   ///     title: "Device Power Management",
-  ///     text: "Please whitelist the app in your Device's Power Management settings by clicking this then selecting that."
+  ///     text: "Please white-list the app in your Device's Power Management settings by clicking this then selecting that."
   ///   ).then((bool confirmed) {
   ///     if (confirmed) {
   ///       // User clicked [Confirm] button.  Execute the redirect to settings screen:

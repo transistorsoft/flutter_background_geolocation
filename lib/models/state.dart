@@ -13,7 +13,7 @@ class State extends Config {
   ///
   bool schedulerEnabled;
 
-  /// Current distance travelled.
+  /// Current distance traveled.
   ///
   /// __See also:__
   /// - [BackgroundGeolocation.setOdometer].
