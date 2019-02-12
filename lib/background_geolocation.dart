@@ -1311,50 +1311,61 @@ class BackgroundGeolocation {
   ///
   /// __`main.dart`__
   /// ```dart
+  /// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
   ///
   /// /// Receives all events from BackgroundGeolocation while app is terminated:
-  /// void headlessTask(HeadlessEvent headlessEvent) async {
+  /// void headlessTask(bg.HeadlessEvent headlessEvent) async {
   ///   print('[HeadlessTask]: $headlessEvent');
   ///
+  ///   // Implement a `case` for only those events you're interested in.
   ///   switch(headlessEvent.name) {
-  ///     case Event.TERMINATE:
-  ///       State state = headlessEvent.event;
+  ///     case bg.Event.TERMINATE:
+  ///       bg.State state = headlessEvent.event;
+  ///       print('- State: $state');
   ///       break;
-  ///     case Event.HEARTBEAT:
-  ///       HeartbeatEvent event = headlessEvent.event;
-  ///       Location location = await BackgroundGeolocation.getCurrentPosition(
-  ///         samples:1
-  ///       );
+  ///     case bg.Event.HEARTBEAT:
+  ///       bg.HeartbeatEvent event = headlessEvent.event;
+  ///       print('- HeartbeatEvent: $event');
   ///       break;
-  ///     case Event.LOCATION:
-  ///       Location location = headlessEvent.event;
+  ///     case bg.Event.LOCATION:
+  ///       bg.Location location = headlessEvent.event;
+  ///       print('- Location: $location');
   ///       break;
-  ///     case Event.MOTIONCHANGE:
-  ///       Location location = headlessEvent.event;
+  ///     case bg.Event.MOTIONCHANGE:
+  ///       bg.Location location = headlessEvent.event;
+  ///       print('- Location: $location');
   ///       break;
-  ///     case Event.HEARTBEAT:
-  ///       HttpEvent response = headlessEvent.event;
+  ///     case bg.Event.GEOFENCE:
+  ///       bg.GeofenceEvent geofenceEvent = headlessEvent.event;
+  ///       print('- GeofenceEvent: $geofenceEvent');
   ///       break;
-  ///     case Event.SCHEDULE:
-  ///       State state = headlessEvent.event;
+  ///     case bg.Event.GEOFENCESCHANGE:
+  ///       bg.GeofencesChangeEvent event = headlessEvent.event;
+  ///       print('- GeofencesChangeEvent: $event');
   ///       break;
-  ///     case Event.GEOFENCE:
-  ///       GeofenceEvent event = headlessEvent.event;
+  ///     case bg.Event.SCHEDULE:
+  ///       bg.State state = headlessEvent.event;
+  ///       print('- State: $state');
   ///       break;
-  ///     case Event.GEOFENCESCHANGE:
-  ///       GeofencesChangeEvent event = headlessEvent.event;
+  ///     case bg.Event.ACTIVITYCHANGE:
+  ///       bg.ActivityChangeEvent event = headlessEvent.event;
+  ///       print('ActivityChangeEvent: $event');
   ///       break;
-  ///     case Event.ACTIVITYCHANGE:
-  ///       ActivityChangeEvent event = headlessEvent.event;
+  ///     case bg.Event.HTTP:
+  ///       bg.HttpEvent response = headlessEvent.event;
+  ///       print('HttpEvent: $response');
   ///       break;
-  ///     case Event.CONNECTIVITYCHANGE:
-  ///       ConnectivityChangeEvent event = headlessEvent.event;
-  ///       break;
-  ///     case Event.ENABLEDCHANGE:
+  ///     case bg.Event.POWERSAVECHANGE:
   ///       bool enabled = headlessEvent.event;
+  ///       print('ProviderChangeEvent: $enabled');
   ///       break;
-  ///     case Event.PROVIDERCHANGE:
-  ///       ProviderChangeEvent event = headlessEvent.event;
+  ///     case bg.Event.CONNECTIVITYCHANGE:
+  ///       bg.ConnectivityChangeEvent event = headlessEvent.event;
+  ///       print('ConnectivityChangeEvent: $event');
+  ///       break;
+  ///     case bg.Event.ENABLEDCHANGE:
+  ///       bool enabled = headlessEvent.event;
+  ///       print('EnabledChangeEvent: $enabled');
   ///       break;
   ///   }
   /// }

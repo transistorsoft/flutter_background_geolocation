@@ -1388,12 +1388,16 @@ class Config {
   /// For `Application.kt`, use the following:
   ///
   /// ```java
-  /// import com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask;
+  /// import io.flutter.app.FlutterApplication;
+  /// import io.flutter.plugin.common.PluginRegistry;
+  /// import io.flutter.plugins.GeneratedPluginRegistrant;
   ///
-  /// class Application : FlutterApplication(), PluginRegistrantCallback {
+  /// import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
+  ///
+  /// class Application : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
   ///   override fun onCreate() {
   ///     super.onCreate();
-  ///     HeadlessTask.setPluginRegistrant(this);
+  ///     FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
   ///   }
   ///
   ///   override fun registerWith(registry: PluginRegistry) {
@@ -1405,13 +1409,17 @@ class Config {
   /// For `Application.java`, use the following:
   ///
   /// ```java
-  /// import com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask;
+  /// import io.flutter.app.FlutterApplication;
+  /// import io.flutter.plugin.common.PluginRegistry;
+  /// import io.flutter.plugins.GeneratedPluginRegistrant;
   ///
-  /// public class Application extends FlutterApplication implements PluginRegistrantCallback {
+  /// import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
+  ///
+  /// public class Application extends FlutterApplication implements PluginRegistry.PluginRegistrantCallback {
   ///   @Override
   ///   public void onCreate() {
   ///     super.onCreate();
-  ///     HeadlessTask.setPluginRegistrant(this);
+  ///     FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
   ///   }
   ///
   ///   @Override
@@ -1432,18 +1440,63 @@ class Config {
   /// Finally, in your `main.dart`, [BackgroundGeolocation.registerHeadlessTask]:
   ///
   /// ```dart
+  /// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+  ///
   /// /// Receives all events from BackgroundGeolocation while app is terminated:
-  /// void headlessTask(HeadlessEvent headlessEvent) async {
+  /// void headlessTask(bg.HeadlessEvent headlessEvent) async {
   ///   print('[HeadlessTask]: $headlessEvent');
   ///
-  ///   switch(event.name) {
-  ///     case Event.HEARTBEAT:
+  ///   // Implement a `case` for only those events you're interested in.
+  ///   switch(headlessEvent.name) {
+  ///     case bg.Event.TERMINATE:
+  ///       bg.State state = headlessEvent.event;
+  ///       print('- State: $state');
   ///       break;
-  ///     .
-  ///     .
-  ///     .
+  ///     case bg.Event.HEARTBEAT:
+  ///       bg.HeartbeatEvent event = headlessEvent.event;
+  ///       print('- HeartbeatEvent: $event');
+  ///       break;
+  ///     case bg.Event.LOCATION:
+  ///       bg.Location location = headlessEvent.event;
+  ///       print('- Location: $location');
+  ///       break;
+  ///     case bg.Event.MOTIONCHANGE:
+  ///       bg.Location location = headlessEvent.event;
+  ///       print('- Location: $location');
+  ///       break;
+  ///     case bg.Event.GEOFENCE:
+  ///       bg.GeofenceEvent geofenceEvent = headlessEvent.event;
+  ///       print('- GeofenceEvent: $geofenceEvent');
+  ///       break;
+  ///     case bg.Event.GEOFENCESCHANGE:
+  ///       bg.GeofencesChangeEvent event = headlessEvent.event;
+  ///       print('- GeofencesChangeEvent: $event');
+  ///       break;
+  ///     case bg.Event.SCHEDULE:
+  ///       bg.State state = headlessEvent.event;
+  ///       print('- State: $state');
+  ///       break;
+  ///     case bg.Event.ACTIVITYCHANGE:
+  ///       bg.ActivityChangeEvent event = headlessEvent.event;
+  ///       print('ActivityChangeEvent: $event');
+  ///       break;
+  ///     case bg.Event.HTTP:
+  ///       bg.HttpEvent response = headlessEvent.event;
+  ///       print('HttpEvent: $response');
+  ///       break;
+  ///     case bg.Event.POWERSAVECHANGE:
+  ///       bool enabled = headlessEvent.event;
+  ///       print('ProviderChangeEvent: $enabled');
+  ///       break;
+  ///     case bg.Event.CONNECTIVITYCHANGE:
+  ///       bg.ConnectivityChangeEvent event = headlessEvent.event;
+  ///       print('ConnectivityChangeEvent: $event');
+  ///       break;
+  ///     case bg.Event.ENABLEDCHANGE:
+  ///       bool enabled = headlessEvent.event;
+  ///       print('EnabledChangeEvent: $enabled');
+  ///       break;
   ///   }
-  ///   headlessEvent.finish();  // <-- REQUIRED
   /// }
   ///
   /// void main() {
