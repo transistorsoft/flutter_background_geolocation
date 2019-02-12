@@ -42,9 +42,11 @@ The **[Android module](http://www.transistorsoft.com/shop/products/flutter-backg
 
 :open_file_folder: **`pubspec.yaml`**:
 
+**Note:** See [Versions](https://pub.dartlang.org/packages/flutter_background_geolocation/#-versions-tab-) for latest available version.
+
 ```yaml
 dependencies:
-  flutter_background_geolocation: '^0.3.3'
+  flutter_background_geolocation: '^0.3.4'
 ```
 
 ### Or latest from Git:
