@@ -35,19 +35,26 @@ Execution failed for task ':app:processDebugManifest'.
 
 ## `android/build.gradle`
 
-As an app grows in complexity and imports a variety of 3rd-party modules, it helps to provide some key *"Global Gradle Configuration Properties"** which all modules can align their requested dependency versions to.  `flutter_background_geolocation` **is aware** of these variables and will align itself to them when detected.  One of the most common build errors comes from multiple 3rd-party modules importing different version of `play-services` or `com.android.support` libraries.
+As an app grows in complexity and imports a variety of 3rd-party modules, it helps to provide some key **"Global Gradle Configuration Properties"** which all modules can align their requested dependency versions to.  `flutter_background_geolocation` **is aware** of these variables and will align itself to them when detected.  One of the most common build errors comes from multiple 3rd-party modules importing different version of `play-services` or `com.android.support` libraries.
 
 :open_file_folder: `android/build.gradle`:
 
 ```diff
 buildscript {
++   ext {
++       compileSdkVersion   = 27
++       targetSdkVersion    = 27
++       supportLibVersion   = "27.1.1"
++       playServicesLocationVersion = "16.0.0"
++   }
+
     repositories {
         google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 
@@ -58,13 +65,6 @@ allprojects {
     }
 }
 
-+ext {
-+    compileSdkVersion   = 27
-+    targetSdkVersion    = 27
-+    buildToolsVersion   = "27.0.3"
-+    supportLibVersion   = "27.1.1"
-+    playServicesVersion = "15.0.1"
-+}
 ```
 
 In addition, you should take advantage of the *Global Configuration Properties* **yourself**, replacing hard-coded values in your `android/app/build.gradle` with references to these variables:
