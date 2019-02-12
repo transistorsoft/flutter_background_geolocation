@@ -44,7 +44,7 @@ The **[Android module](http://www.transistorsoft.com/shop/products/flutter-backg
 
 ```yaml
 dependencies:
-  flutter_background_geolocation: '^0.1.0'
+  flutter_background_geolocation: '^0.3.3'
 ```
 
 ### Or latest from Git:

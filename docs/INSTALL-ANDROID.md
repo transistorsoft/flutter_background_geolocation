@@ -95,9 +95,13 @@ Create either `Application.kt` or `Application.java` in the same directory as `M
 - For `Application.kt`, use the following:
 
 ```java
+import io.flutter.app.FlutterApplication;
+import io.flutter.plugin.common.PluginRegistry;
+import io.flutter.plugins.GeneratedPluginRegistrant;
+
 import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
 
-class Application : FlutterApplication(), PluginRegistrantCallback {
+class Application : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
   override fun onCreate() {
     super.onCreate();
     FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
@@ -112,9 +116,13 @@ class Application : FlutterApplication(), PluginRegistrantCallback {
 - For `Application.java`, use the following:
 
 ```java
+import io.flutter.app.FlutterApplication;
+import io.flutter.plugin.common.PluginRegistry;
+import io.flutter.plugins.GeneratedPluginRegistrant;
+
 import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
 
-public class Application extends FlutterApplication implements PluginRegistrantCallback {
+public class Application extends FlutterApplication implements PluginRegistry.PluginRegistrantCallback {
   @Override
   public void onCreate() {
     super.onCreate();

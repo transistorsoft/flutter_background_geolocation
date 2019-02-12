@@ -41,8 +41,8 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
 
     private final List<HeadlessEvent> mEvents = new ArrayList<>();
 
-    // Called by Application#onCreate
-    static void setPluginRegistrant(PluginRegistry.PluginRegistrantCallback callback) {
+    // Called by Application#onCreate.  Must be public.
+    public static void setPluginRegistrant(PluginRegistry.PluginRegistrantCallback callback) {
         sPluginRegistrantCallback = callback;
     }
 
