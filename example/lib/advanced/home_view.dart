@@ -166,7 +166,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
 
     bg.BackgroundGeolocation.getCurrentPosition(
-        persist: false,     // <-- do not persist this location
+        persist: true,     // <-- do not persist this location
         desiredAccuracy: 0, // <-- desire best possible accuracy
         timeout: 30000,     // <-- wait 30s before giving up.
         samples: 1          // <-- sample just 1 location

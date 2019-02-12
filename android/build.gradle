@@ -1,35 +1,20 @@
 group 'com.transistorsoft.flutter.backgroundgeolocation'
 version '1.0-SNAPSHOT'
 
-def DEFAULT_COMPILE_SDK_VERSION     = 27
-def DEFAULT_PLAY_SERVICES_VERSION   = "15.0.1"
-def DEFAULT_SUPPORT_LIB_VERSION     = "27.1.1"
-
-buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.2'
-    }
-}
-
-rootProject.allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url "./libs"
-        }
-    }
-}
-
 apply plugin: 'com.android.library'
 
+def DEFAULT_COMPILE_SDK_VERSION                 = 27
+def DEFAULT_PLAY_SERVICES_LOCATION_VERSION      = "16.0.0"
+def DEFAULT_SUPPORT_LIB_VERSION                 = "27.1.1"
+def DEFAULT_OK_HTTP_VERSION                     = "3.12.1"
+def DEFAULT_ANDROID_PERMISSIONS_VERSION         = "0.1.7"
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
 android {
-    compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
+    compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
 
     defaultConfig {
         minSdkVersion 16
@@ -40,18 +25,26 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url './libs'
+    }
+}
+
 dependencies {
-    def googlePlayServicesVersion = (rootProject.hasProperty('googlePlayServicesVersion')) ? rootProject.ext.googlePlayServicesVersion : DEFAULT_PLAY_SERVICES_VERSION
-    def supportLibVersion = (rootProject.hasProperty('supportLibVersion')) ? rootProject.ext.supportLibVersion : DEFAULT_SUPPORT_LIB_VERSION
+    def playServicesLocationVersion =safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
+    def supportLibVersion = safeExtGet('supportLibVersion', DEFAULT_SUPPORT_LIB_VERSION)
+    def okHttpVersion = safeExtGet('okHttpVersion', DEFAULT_OK_HTTP_VERSION)
+    def androidPermissionsVersion = safeExtGet('androidPermissionsVersion', DEFAULT_ANDROID_PERMISSIONS_VERSION)
 
     implementation fileTree(include: '*.aar', dir: 'libs')
-    implementation "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
+    implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
     implementation 'org.greenrobot:eventbus:3.0.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation 'org.slf4j:slf4j-api:1.7.25'
     implementation 'com.github.tony19:logback-android:1.3.0-2'
     // android-permissions
-    implementation 'com.intentfilter:android-permissions:0.1.6'
+    implementation "com.intentfilter:android-permissions:$androidPermissionsVersion"
     implementation "com.android.support:appcompat-v7:$supportLibVersion"
 
 

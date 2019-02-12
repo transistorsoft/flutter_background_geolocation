@@ -61,6 +61,12 @@ class Config {
   static const int ACTIVITY_TYPE_FITNESS = 3;
   static const int ACTIVITY_TYPE_OTHER_NAVIGATION = 4;
 
+  // #persistMode
+  static const int PERSIST_MODE_ALL = 2;
+  static const int PERSIST_MODE_LOCATION = 1;
+  static const int PERSIST_MODE_GEOFENCE = -1;
+  static const int PERSIST_MODE_NONE = 0;
+
   Map _map;
 
   /// Specify the desired-accuracy of the geolocation system.
@@ -313,6 +319,21 @@ class Config {
   ///
   /// __WARNING:__ It is highly recommended to let the plugin manage uploading locations to your server, **particularly for Android** when configured with **`stopOnTerminate: false`**, since your Cordova app (where your Javascript lives) *will* terminate &mdash; only the plugin's native Android background service will continue to operate, recording locations and uploading to your server.  The plugin's native HTTP service *is* better at this task than Javascript Ajax requests, since the plugin will automatically retry on server failure.
   String url;
+
+  /// Allows you to specify which events to persist to the SDK's internal database:  locations | geofences | all (default).
+  ///
+  /// Note that all recorded location and geofence events will *always* be provided to your [BackgroundGeolocation.onLocation] and [BackgroundGeolocation.onGeofence] events, just that the
+  /// persistence of those events in the SDK's internal SQLite database can be limited.  Any event which has not been persisted to the SDK's internal database
+  /// will also **not** therefore be uploaded to your [url] (if configured).
+  ///
+  /// | Name                                 | Description                                             |
+  /// |--------------------------------------|---------------------------------------------------------|
+  /// | [PERSIST_MODE_ALL]                   | (__DEFAULT__) Persist both geofence and location events |
+  /// | [PERSIST_MODE_LOCATION]              | Persist only location events (ignore geofence events)   |
+  /// | [PERSIST_MODE_GEOFENCE]              | Persist only geofence events (ignore location events)   |
+  /// | [PERSIST_MODE_NONE]                  | Persist nothing (neither geofence nor location events)  |
+  ///
+  int persistMode;
 
   /// The HTTP method to use when creating an HTTP request to your configured [url].
   ///
@@ -1647,6 +1668,7 @@ class Config {
       this.stopOnStationary,
       // HTTP & Persistence
       this.url,
+      this.persistMode,
       this.method,
       this.httpRootProperty,
       this.params,
@@ -1762,6 +1784,7 @@ class Config {
     if (stopOnStationary != null) config['stopOnStationary'] = stopOnStationary;
     // HTTP & Persistence
     if (url != null) config['url'] = url;
+    if (persistMode != null) config['persistMode'] = persistMode;
     if (method != null) config['method'] = method;
     if (httpRootProperty != null) config['httpRootProperty'] = httpRootProperty;
     if (params != null) config['params'] = params;
