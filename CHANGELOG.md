@@ -1,5 +1,10 @@
 # Change Log
 
+## [0.3.4] - 2019-02-12
+- [Changed] Update Gradle install docs.
+- [Changed] Refactor Headless setup docs.
+- [Added] New `Config` `persistMode`.  Allows one to determine exactly which events get persisted (geofences, locations, all or none).
+
 ## [0.3.3] - 2019-02-08
 - [Fixed] Fixed bug in Android Headless event `BOOT` not receiving `State` data.
 - [Changed] Changed the mechanism of storing Android Headless callback IDs to put them into `SharedPreferences` rather than relying upon existence as static class vars.
