@@ -98,7 +98,7 @@ class HeadlessEvent {
   ///
   dynamic event;
 
-  HeadlessEvent(String name, Map params) {
+  HeadlessEvent(String name, dynamic params) {
     this.name = name;
 
     try {

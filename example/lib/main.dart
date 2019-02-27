@@ -22,12 +22,14 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
       }
       break;
     case bg.Event.HEARTBEAT:
+      /* DISABLED getCurrentPosition on heartbeat
       try {
         bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
         print('[getCurrentPosition] Headless: $location');
       } catch (error) {
         print('[getCurrentPosition] Headless ERROR: $error');
       }
+      */
       break;
     case bg.Event.LOCATION:
       bg.Location location = headlessEvent.event;

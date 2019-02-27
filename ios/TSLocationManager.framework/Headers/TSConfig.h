@@ -37,6 +37,13 @@ typedef enum TSLogLevel : NSInteger {
     tsLogLevelVerbose
 } TSLogLevel;
 
+typedef enum TSPersistMode : NSInteger {
+    tsPersistModeNone = 0,
+    tsPersistModeAll = 2,
+    tsPersistModeLocation = 1,
+    tsPersistModeGeofence = -1
+} TSPersistMode;
+
 /**
  * TSConfigBuilder
  */
@@ -94,6 +101,7 @@ typedef enum TSLogLevel : NSInteger {
 @property (nonatomic) NSInteger maxRecordsToPersist;
 @property (nonatomic) NSString* locationsOrderDirection;
 @property (nonatomic) NSInteger httpTimeout;
+@property (nonatomic) TSPersistMode persistMode;
 
 // Application
 @property (nonatomic) BOOL stopOnTerminate;
@@ -218,6 +226,7 @@ TSConfig
 @property (nonatomic, readonly) NSInteger maxRecordsToPersist;
 @property (nonatomic, readonly) NSString* locationsOrderDirection;
 @property (nonatomic, readonly) NSInteger httpTimeout;
+@property (nonatomic) TSPersistMode persistMode;
 
 /// @name Application Properties
 @property (nonatomic, readonly) BOOL stopOnTerminate;

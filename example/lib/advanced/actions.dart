@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
-import 'dialog.dart' as util;
+import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
 
 class Actions {
   static const String RESET_ODOMETER = "resetOdometer";
@@ -26,6 +26,8 @@ class Actions {
       bg.BackgroundGeolocation.sync().then((List records) {
         // TODO hide spinner.
         bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("MESSAGE_SENT"));
+      }).catchError((dynamic error) {
+        print('[sync] ERROR: $error');
       });
     });
   }

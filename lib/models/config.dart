@@ -1333,6 +1333,14 @@ class Config {
   ///
   bool enableTimestampMeta;
 
+  /// Experimental filter to ignore anomalous locations that suddenly jump an unusual distance from last.
+  /// The SDK will calculate an apparent speed and distance relative to last known location.  If the location suddenly
+  /// teleports from last location, it will be ignored.
+  ///
+  /// __`Android-only`__ The measurement is in meters/second.  The default is to throw away any location which apparently moved at 300 meters/second from last known location.
+  ///
+  int speedJumpFilter;
+
   // Activity Recognition Options
 
   /// __`[Android-only]`__ Configures a comma-separated list of motion-activities which are allow to trigger location-tracking.
@@ -1775,6 +1783,7 @@ class Config {
       this.deferTime,
       this.allowIdenticalLocations,
       this.enableTimestampMeta,
+      this.speedJumpFilter,
       // Activity Recognition Options
       this.triggerActivities,
       // Application Options
@@ -1908,6 +1917,7 @@ class Config {
       config['allowIdenticalLocations'] = allowIdenticalLocations;
     if (enableTimestampMeta != null)
       config['enableTimestampMeta'] = enableTimestampMeta;
+    if (speedJumpFilter != null) config['speedJumpFilter'] = speedJumpFilter;
     // Activity Recognition Options
     if (triggerActivities != null)
       config['triggerActivities'] = triggerActivities;

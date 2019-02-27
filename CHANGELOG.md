@@ -1,5 +1,9 @@
 # Change Log
 
+## [1.0.0-beta.1] - 2019-02-27
+- [Changed] Major refactor of Android Service architecture.  The SDK no longer requires a foreground-service active at all times.  The foreground-service (and cooresponding persistent notification) will only be active while the SDK is in the *moving* state.  No breaking dart api changes.
+- [Changed] Improved Android debug notifications.
+
 ## [0.3.4] - 2019-02-12
 - [Changed] Update Gradle install docs.
 - [Changed] Refactor Headless setup docs.
