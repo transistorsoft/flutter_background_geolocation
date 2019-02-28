@@ -8,13 +8,13 @@ import 'package:unicorndial/unicorndial.dart';
 
 import 'actions.dart';
 import 'settings_view.dart';
-import 'dialog.dart' as util;
+import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
 
 class MainMenuButton extends StatelessWidget {
   BuildContext _context;
 
   void _onClickMenu() async {
-    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("OPEN"));
+
   }
 
   void _onClickSettings() {

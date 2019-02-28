@@ -851,20 +851,9 @@ class BackgroundGeolocation {
     return completer.future;
   }
 
-  /// Request location permission dialog with user.
   ///
-  /// ```dart
-  /// BackgroundGeolocation.requestPermission().then((int status) {
-  ///   print('[requestPermission] permission granted');
-  /// }).catchError((error) {
-  ///   print('[requestPermission] DENIED');
-  /// });
-  ///
-  static Future<int> requestPermission() async {
-    return await _methodChannel.invokeMethod('requestPermission');
-  }
-
-  static Future<bool> playSound(int soundId) async {
+  /// Do not use.
+  static Future<bool> playSound(dynamic soundId) async {
     return await _methodChannel.invokeMethod('playSound', soundId);
   }
 

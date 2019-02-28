@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
-import 'dialog.dart' as util;
+import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
 
 class GeofenceView extends StatefulWidget {
   LatLng center;
@@ -18,10 +18,12 @@ class _GeofenceViewState extends State<GeofenceView> {
   bool _notifyOnEntry = true;
   bool _notifyOnExit = true;
   bool _notifyOnDwell = false;
+
   int _loiteringDelay = 10000;
 
   _GeofenceViewState(this.center);
   void _onClickClose() {
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("CLOSE"));
 
     //bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("CLOSE"));
     Navigator.of(context).pop();

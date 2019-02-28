@@ -12,7 +12,7 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
 
 import 'hello_world/app.dart';
 import 'advanced/app.dart';
-import 'advanced/dialog.dart' as util;
+import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
 
 const TRACKER_HOST = 'http://tracker.transistorsoft.com/locations/';
 

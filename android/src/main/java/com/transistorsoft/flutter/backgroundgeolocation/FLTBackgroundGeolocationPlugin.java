@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,11 +42,13 @@ import com.transistorsoft.locationmanager.adapter.TSConfig;
 import com.transistorsoft.locationmanager.adapter.callback.*;
 import com.transistorsoft.locationmanager.data.LocationModel;
 import com.transistorsoft.locationmanager.device.DeviceSettingsRequest;
+import com.transistorsoft.locationmanager.event.TerminateEvent;
 import com.transistorsoft.locationmanager.geofence.TSGeofence;
 import com.transistorsoft.locationmanager.location.TSCurrentPositionRequest;
 import com.transistorsoft.locationmanager.location.TSLocation;
 import com.transistorsoft.locationmanager.location.TSWatchPositionRequest;
 import com.transistorsoft.locationmanager.logger.TSLog;
+import com.transistorsoft.locationmanager.scheduler.TSScheduleManager;
 import com.transistorsoft.locationmanager.util.Sensors;
 
 import org.json.JSONArray;
@@ -238,7 +242,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         } else if (call.method.equalsIgnoreCase(ACTION_SHOW_SETTINGS)) {
             showSettings((List) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_PLAY_SOUND)) {
-            playSound((int) call.arguments, result);
+            playSound((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_REGISTER_HEADLESS_TASK)) {
             registerHeadlessTask((List<Object>) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_PROVIDER_STATE)) {
@@ -681,8 +685,8 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         });
     }
 
-    private void playSound(int soundId, Result result) {
-        BackgroundGeolocation.getInstance(mContext).startTone(soundId);
+    private void playSound(String name, Result result) {
+        BackgroundGeolocation.getInstance(mContext).startTone(name);
         result.success(true);
     }
 
@@ -801,7 +805,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
 
     @Override
     public void onActivityResumed(Activity activity) {
-
+        TSScheduleManager.getInstance(activity).cancelOneShot(TerminateEvent.ACTION);
     }
     @Override
     public void onActivityStarted(Activity activity) {
@@ -810,16 +814,22 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         }
     }
     @Override
-    public void onActivityStopped(Activity activity) {}
+    public void onActivityStopped(Activity activity) {
+        TSConfig config = TSConfig.getInstance(activity);
+        if (config.getEnabled() && config.getEnableHeadless() && !config.getStopOnTerminate()) {
+            TSScheduleManager.getInstance(activity).oneShot(TerminateEvent.ACTION, 10000);
+        }
+    }
 
     @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {}
+    public void onActivitySaveInstanceState(Activity activity, Bundle bundle) { }
 
     @Override
     public void onActivityDestroyed(Activity activity) {
         if (mRegistrar.activity() == null) {
-            activity.getApplication().unregisterActivityLifecycleCallbacks(this);
             BackgroundGeolocation.getInstance(mContext).onActivityDestroy();
+            activity.getApplication().unregisterActivityLifecycleCallbacks(this);
         }
     }
+
 }

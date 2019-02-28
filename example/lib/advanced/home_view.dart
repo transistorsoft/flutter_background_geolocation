@@ -9,7 +9,7 @@ import 'package:background_fetch/background_fetch.dart';
 import '../app.dart';
 import 'map_view.dart';
 import 'event_list.dart';
-import 'dialog.dart' as util;
+import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
 import 'shared_events.dart';
 
 // For pretty-printing location JSON
@@ -88,6 +88,8 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
+        reset: false,
+        heartbeatInterval: 60,
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_NAVIGATION,
         distanceFilter: 10.0,
         stopOnTerminate: false,
@@ -168,8 +170,8 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     bg.BackgroundGeolocation.getCurrentPosition(
         persist: true,     // <-- do not persist this location
         desiredAccuracy: 0, // <-- desire best possible accuracy
-        timeout: 30000,     // <-- wait 30s before giving up.
-        samples: 1          // <-- sample just 1 location
+        timeout: 10,     // <-- wait 30s before giving up.
+        samples: 3          // <-- sample just 1 location
     ).then((bg.Location location) {
       print('[getCurrentPosition] - $location');
     }).catchError((error) {
@@ -246,7 +248,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   void _onHeartbeat(bg.HeartbeatEvent event) {
     print('[${bg.Event.HEARTBEAT}] - $event');
     setState(() {
-      events.insert(0, Event(bg.Event.HEARTBEAT, event, event.location.toString(compact: false)));
+      events.insert(0, Event(bg.Event.HEARTBEAT, event, event.toString()));
     });
   }
 
