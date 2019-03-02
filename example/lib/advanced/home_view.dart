@@ -126,26 +126,32 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     });
   }
 
-  void _onClickEnable(enabled) {
+  void _onClickEnable(enabled) async {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
-
     if (enabled) {
-      bg.BackgroundGeolocation.start().then((bg.State state) {
-        print('[start] success $state');
+      dynamic callback = (bg.State state) {
+        print('[start] success: $state');
         setState(() {
           _enabled = state.enabled;
           _isMoving = state.isMoving;
         });
-      });
+      };
+      bg.State state = await bg.BackgroundGeolocation.state;
+      if (state.trackingMode == 1) {
+        bg.BackgroundGeolocation.start().then(callback);
+      } else {
+        bg.BackgroundGeolocation.startGeofences().then(callback);
+      }
     } else {
-      bg.BackgroundGeolocation.stop().then((bg.State state) {
+      dynamic callback = (bg.State state) {
         print('[stop] success: $state');
-        // Reset odometer.
         setState(() {
           _enabled = state.enabled;
           _isMoving = state.isMoving;
         });
-      });
+      };
+      bg.BackgroundGeolocation.stop().then(callback);
+
     }
   }
 

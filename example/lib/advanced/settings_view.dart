@@ -186,6 +186,7 @@ class _SettingsViewState extends State<SettingsView> {
       body: new CustomScrollView(
         slivers: <Widget>[
           _buildListHeader("Geolocation"),
+
           _buildList(_geolocationSettings),
 
           _buildListHeader("Activity Recognition"),
@@ -203,6 +204,32 @@ class _SettingsViewState extends State<SettingsView> {
           _buildListHeader("Geofencing"),
         ],
       )
+    );
+  }
+
+  Widget _buildSelectTrackingMode() {
+    String trackingMode = (_state.trackingMode == 1) ? "location" : "geofence";
+
+    List<DropdownMenuItem<String>> menuItems = new List();
+    menuItems.add(new DropdownMenuItem(child: Text("Location + Geofences"), value: "location"));
+    menuItems.add(new DropdownMenuItem(child: Text("Geofences only"), value: "geofence"));
+
+    return InputDecorator(
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
+          labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
+          labelText: "Tracking mode",
+        ),
+        child: DropdownButtonHideUnderline(
+            child: DropdownButton(
+                isDense: true,
+                value: trackingMode,
+                items: menuItems,
+                onChanged: (value) {
+                  print("*********** change: $value");
+                }
+            )
+        )
     );
   }
 
@@ -350,23 +377,44 @@ class _SettingsViewState extends State<SettingsView> {
   Function(String) _createSelectChangeHandler(Map<String,Object> setting) {
     String type = setting['dataType'];
     String name = setting['name'];
-    return (String value) {
-      bg.Config config = new bg.Config();
-      print("select value: $name: $value");
-      switch(type) {
-        case 'integer':
-          config.set(name, int.parse(value));
-          break;
-        default:
-          config.set(name, value);
-          break;
-      }
-      bg.BackgroundGeolocation.setConfig(config).then((bg.State state) {
-        setState(() {
-          _state = state;
-        });
-      });
-    };
+    switch(name) {
+      case 'trackingMode':
+        dynamic onSuccess = (bg.State state) {
+          setState(() {
+            _state = state;
+          });
+        };
+        dynamic onFailure = (error) {
+          print('[Error] failed to start the plugin: $error');
+        };
+        return (String value) {
+          int trackingMode = int.parse(value);
+          if (trackingMode == 1) {
+            bg.BackgroundGeolocation.start().then(onSuccess).catchError(onFailure);
+          } else {
+            bg.BackgroundGeolocation.startGeofences().then(onSuccess).catchError(onFailure);
+          }
+        };
+        break;
+      default:
+        return (String value) {
+          bg.Config config = new bg.Config();
+          print("select value: $name: $value");
+          switch(type) {
+            case 'integer':
+              config.set(name, int.parse(value));
+              break;
+            default:
+              config.set(name, value);
+              break;
+          }
+          bg.BackgroundGeolocation.setConfig(config).then((bg.State state) {
+            setState(() {
+              _state = state;
+            });
+          });
+        };
+    }
   }
 
   Function(bool) _createSwitchChangeHandler(String field) {
@@ -381,9 +429,13 @@ class _SettingsViewState extends State<SettingsView> {
   }
 }
 
+///
+/// SIMPLE Hash of most of the plugin's available settings.
+///
 const PLUGIN_SETTINGS = {
   'common': [
     // Geolocation
+    {'name': 'trackingMode', 'group': 'geolocation', 'dataType':'string', 'inputType':'select', 'labels':['Location + Geofences', 'Geofences only'], 'values': [1, 0], 'defaultValue':1},
     {'name': 'desiredAccuracy', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'labels': ['NAVIGATION', 'HIGH', 'LOW', 'VERY_LOW', 'LOWEST'], 'values': [-2, -1, 10, 100, 1000], 'defaultValue': 0 },
     {'name': 'distanceFilter', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 10, 20, 50, 100, 500], 'defaultValue': 20 },
     {'name': 'disableElasticity', 'group': 'geolocation', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},

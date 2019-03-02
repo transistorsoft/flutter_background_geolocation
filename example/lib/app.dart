@@ -108,7 +108,7 @@ class _HomeViewState extends State<_HomeView> {
               ),
           ),
           actions: <Widget>[
-            new RaisedButton(
+            new FlatButton(
                 child: const Text('Save'),
                 onPressed: _onSelectUsername
             )
@@ -199,10 +199,10 @@ class _HomeViewState extends State<_HomeView> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  RaisedButton(onPressed: () {
+                  FlatButton(onPressed: () {
                     _showDialog();
                   }, child: Text('Edit Username'), color: Colors.redAccent, textColor: Colors.white),
-                  RaisedButton(onPressed: () {}, child: Text('View Tracking'), color: Colors.blue, textColor: Colors.white),
+                  FlatButton(onPressed: () {}, child: Text('View Tracking'), color: Colors.blue, textColor: Colors.white),
                 ]
             )
         )
