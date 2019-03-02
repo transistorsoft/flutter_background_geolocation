@@ -46,14 +46,14 @@ class Dialog {
           content: Text(message),
           actions: <Widget>[
             FlatButton(
-              child: new Text("Cancel"),
+              child: Text('Cancel'),
               onPressed: () {
                 callback(false);
                 Navigator.of(context).pop();
               },
             ),
             FlatButton(
-              child: new Text("Confirm"),
+              child: Text('Confirm'),
               onPressed: () {
                 callback(true);
                 Navigator.of(context).pop();
@@ -75,7 +75,7 @@ class Dialog {
           content: Text(message),
           actions: <Widget>[
             FlatButton(
-              child: new Text("Ok"),
+              child: Text("Ok"),
               onPressed: () {
                 if (callback != null) {
                   callback(true);
@@ -126,14 +126,14 @@ class Dialog {
             ),
           ),
           actions: <Widget>[
-            new RaisedButton(
-                child: const Text('Cancel'),
+            new FlatButton(
+                child: Text('Cancel'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 }
             ),
-            new RaisedButton(
-                child: const Text('Submit'),
+            new FlatButton(
+                child: Text('Submit'),
                 onPressed: () {
                   Navigator.of(context).pop();
                   completer.complete(submittedValue);

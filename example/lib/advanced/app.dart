@@ -37,7 +37,6 @@ class _AdvancedAppState extends State<AdvancedApp> {
           color: Colors.white
         ),
         bottomAppBarColor: Colors.amberAccent,
-
         hintColor: Colors.black12,
         primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
           bodyColor: Colors.black,

@@ -15,8 +15,8 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
   switch(headlessEvent.name) {
     case bg.Event.TERMINATE:
       try {
-        bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
-        print('[getCurrentPosition] Headless: $location');
+        //bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
+        print('[getCurrentPosition] Headless: $headlessEvent');
       } catch (error) {
         print('[getCurrentPosition] Headless ERROR: $error');
       }
@@ -67,8 +67,8 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
 /// Receive events from BackgroundFetch in Headless state.
 void backgroundFetchHeadlessTask() async {
   // Get current-position from BackgroundGeolocation in headless mode.
-  bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
-  print('[BackgroundFetch] HeadlessTask, location: $location');
+  //bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
+  print('[BackgroundFetch] HeadlessTask');
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int count = 0;
