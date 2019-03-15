@@ -42,9 +42,9 @@ As an app grows in complexity and imports a variety of 3rd-party modules, it hel
 ```diff
 buildscript {
 +   ext {
-+       compileSdkVersion   = 27
-+       targetSdkVersion    = 27
-+       supportLibVersion   = "27.1.1"
++       compileSdkVersion   = 28
++       targetSdkVersion    = 28
++       supportLibVersion   = "1.0.2"
 +       playServicesLocationVersion = "16.0.0"
 +   }
 
@@ -54,7 +54,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath 'com.android.tools.build:gradle:3.3.1'
     }
 }
 
