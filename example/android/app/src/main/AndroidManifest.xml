@@ -16,6 +16,7 @@
     <application tools:replace="android:label"
         android:name=".Application"
         android:label="Flutter Background Geolocation"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
