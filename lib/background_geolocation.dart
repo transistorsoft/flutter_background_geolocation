@@ -805,6 +805,22 @@ class BackgroundGeolocation {
   static Future<bool> destroyLog() async {
     return await _methodChannel.invokeMethod('destroyLog');
   }
+    
+  /// Request location permission dialog with user.
+  ///
+  /// ## Example
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.requestPermission().then((int status) {
+  ///   print('[requestPermission] permission granted');
+  /// }).catchError((error) {
+  ///   print('[requestPermission] DENIED');
+  /// });
+  /// ```
+  ///
+  static Future<int> requestPermission() async {
+    return await _methodChannel.invokeMethod('requestPermission');
+  }
 
   /// Returns the presence of device sensors *accelerometer*, *gyroscope*, *magnetometer*
   ///
