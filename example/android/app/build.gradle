@@ -30,6 +30,20 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+/**
+ * Purge flutter_background_geolocation debug sounds from release build.
+ */
+def purgeBackgroundGeolocationDebugResources(applicationVariants) {
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == 'release') {
+            variant.mergeResources.doLast {
+                delete(fileTree(dir: variant.mergeResources.outputDir, includes: ['raw_tslocationmanager*']))
+
+            }
+        }
+    }
+}
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -63,6 +77,9 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
+    //Remove debug sounds from background_geolocation plugin
+    //purgeBackgroundGeolocationDebugResources(applicationVariants)
 
 }
 

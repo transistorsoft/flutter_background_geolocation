@@ -20,6 +20,8 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   bool get wantKeepAlive { return true; }
 
   bg.Location _stationaryLocation;
+
+  List<CircleMarker> _currentPosition = [];
   List<LatLng> _polyline = [];
   List<CircleMarker> _locations = [];
   List<CircleMarker> _stopLocations = [];
@@ -67,8 +69,12 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
       _geofenceEventEdges.clear();
     }
   }
+
   void _onMotionChange(bg.Location location) async {
     LatLng ll = new LatLng(location.coords.latitude, location.coords.longitude);
+
+    _updateCurrentPositionMarker(ll);
+
     _mapController.move(ll, _mapController.zoom);
 
     // clear the big red stationaryRadius circle.
@@ -117,6 +123,9 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     bg.Location location = event.location;
     LatLng center = new LatLng(geofence.latitude, geofence.longitude);
     LatLng hit = new LatLng(location.coords.latitude, location.coords.longitude);
+
+    // Update current position marker.
+    _updateCurrentPositionMarker(hit);
     // Determine bearing from center -> event location
     double bearing = Geospatial.getBearing(center, hit);
     // Compute a coordinate at the intersection of the line joining center point -> event location and the circle.
@@ -175,6 +184,9 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   void _onLocation(bg.Location location) {
     LatLng ll = new LatLng(location.coords.latitude, location.coords.longitude);
     _mapController.move(ll, _mapController.zoom);
+
+    _updateCurrentPositionMarker(ll);
+
     if (location.sample) { return; }
 
     // Add a point to the tracking polyline.
@@ -182,17 +194,34 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     // Add a marker for the recorded location.
     //_locations.add(_buildLocationMarker(location));
     _locations.add(CircleMarker(
-      point: LatLng(location.coords.latitude, location.coords.longitude),
+      point: ll,
       color: Colors.black,
       radius: 5.0
     ));
 
     _locations.add(CircleMarker(
-        point: LatLng(location.coords.latitude, location.coords.longitude),
+        point: ll,
         color: Colors.blue,
         radius: 4.0
     ));
+  }
 
+  /// Update Big Blue current position dot.
+  void _updateCurrentPositionMarker(LatLng ll) {
+    _currentPosition.clear();
+
+    // White background
+    _currentPosition.add(CircleMarker(
+        point: ll,
+        color: Colors.white,
+        radius: 10
+    ));
+    // Blue foreground
+    _currentPosition.add(CircleMarker(
+        point: ll,
+        color: Colors.blue,
+        radius: 7
+    ));
   }
 
   CircleMarker _buildStationaryCircleMarker(bg.Location location, bg.State state) {
@@ -281,7 +310,8 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
         new CircleLayerOptions(circles: _geofenceEvents),
         new PolylineLayerOptions(polylines: _geofenceEventPolylines),
         new CircleLayerOptions(circles: _geofenceEventLocations),
-        new CircleLayerOptions(circles: _geofenceEventEdges)
+        new CircleLayerOptions(circles: _geofenceEventEdges),
+        new CircleLayerOptions(circles: _currentPosition),
       ],
     );
   }

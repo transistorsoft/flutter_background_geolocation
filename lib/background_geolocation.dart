@@ -388,8 +388,14 @@ class BackgroundGeolocation {
   ///
   /// Sends a signal to the native OS that your long-running task, addressed by `taskId` provided by [startBackgroundTask] is complete and the OS may proceed to suspend your application if applicable.
   ///
-  static Future<int> finish(int taskId) async {
+  static Future<int> stopBackgroundTask(int taskId) async {
     return await _methodChannel.invokeMethod('finish', taskId);
+  }
+
+  /// @deprecated.  Renamed to [stopBackgroundTask]
+  ///
+  static Future<int> finish(int taskId) async {
+    return stopBackgroundTask(taskId);
   }
 
   /// Manually toggles the plugin's **motion state** between **stationary** and **moving**.
@@ -650,7 +656,7 @@ class BackgroundGeolocation {
   ///
   static Future<bool> addGeofences(List<Geofence> geofences) async {
     List<Map<String, dynamic>> rs =
-        geofences.map((Geofence geofence) => geofence.toMap());
+        geofences.map((Geofence geofence) => geofence.toMap()).toList();
     return await _methodChannel.invokeMethod('addGeofences', rs);
   }
 
@@ -816,6 +822,7 @@ class BackgroundGeolocation {
   /// ```dart
   /// Sensors sensors = await BackgroundGeolocation.sensors;
   /// print(sensors);
+  /// ```
   ///
   static Future<Sensors> get sensors async {
     Completer completer = new Completer<Sensors>();
@@ -834,10 +841,45 @@ class BackgroundGeolocation {
     return completer.future;
   }
 
-  /// Get current state of location-services.
+  /// Request location permission.
+  /// __NOTE:__ The methods [start], [startGeofences], [getCurrentPosition] will automatically request location permission.
   ///
-  /// See also:
-  /// - [Config.logMaxDays] (default `3` days)
+  /// The Promise will be fullfilled with a [ProviderChangeEvent.status].
+  ///
+  /// ## Example
+  /// ```dart
+  /// bg.BackgroundGeolocation.requestPermission().then((int status) {
+  ///   print("[requestPermission] STATUS: $status");
+  ///   switch(status) {
+  ///     case bg.ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS:
+  ///       print("[requestPermission] AUTHORIZATION_STATUS_ALWAYS");
+  ///       break;
+  ///     case bg.ProviderChangeEvent.AUTHORIZATION_STATUS_WHEN_IN_USE:
+  ///       print("[requestPermission] AUTHORIZATION_STATUS_WHEN_IN_USE");
+  ///       break;
+  ///     case bg.ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED:
+  ///       print("[requestPermission] AUTHORIZATION_STATUS_DENIED");
+  ///       break;
+  ///     case bg.ProviderChangeEvent.AUTHORIZATION_STATUS_NOT_DETERMINED:
+  ///       print("[requestPermission] AUTHORIZATION_STATUS_NOT_DETERMINED");
+  ///       break;
+  ///     case bg.ProviderChangeEvent.AUTHORIZATION_STATUS_RESTRICTED:
+  ///       print("[requestPermission] AUTHORIZATION_STATUS_RESTRICTED");
+  ///       break;
+  ///   }
+  /// }).catchError((dynamic error) {
+  ///   print("[requestPermission] ERROR: $error");
+  /// });
+  /// ```
+  ///
+  static Future<int> requestPermission() async {
+    return await _methodChannel.invokeMethod('requestPermission');
+  }
+
+  /// Get current state of location-services, including authorization status.
+  ///
+  /// See [ProviderChangeEvent]
+  ///
   static Future<ProviderChangeEvent> get providerState async {
     Completer completer = new Completer<ProviderChangeEvent>();
 

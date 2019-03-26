@@ -436,13 +436,14 @@ const PLUGIN_SETTINGS = {
   'common': [
     // Geolocation
     {'name': 'trackingMode', 'group': 'geolocation', 'dataType':'string', 'inputType':'select', 'labels':['Location + Geofences', 'Geofences only'], 'values': [1, 0], 'defaultValue':1},
-    {'name': 'desiredAccuracy', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'labels': ['NAVIGATION', 'HIGH', 'LOW', 'VERY_LOW', 'LOWEST'], 'values': [-2, -1, 10, 100, 1000], 'defaultValue': 0 },
+    {'name': 'desiredAccuracy', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'labels': ['NAVIGATION', 'HIGH', 'MEDIUM', 'LOW', 'MINIMUM'], 'values': [-2, -1, 10, 100, 1000], 'defaultValue': 0 },
     {'name': 'distanceFilter', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 10, 20, 50, 100, 500], 'defaultValue': 20 },
     {'name': 'disableElasticity', 'group': 'geolocation', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     {'name': 'elasticityMultiplier', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 1, 2, 3, 5, 10], 'defaultValue': 1},
     {'name': 'geofenceProximityRadius', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [1000, 1500, 2000, 5000, 10000, 100000], 'defaultValue': 1000 },
     {'name': 'stopAfterElapsedMinutes', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [-1, 0, 1, 2, 5, 10, 15], 'defaultValue': 0},
     {'name': 'desiredOdometerAccuracy', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [10, 20, 50, 100, 500], 'defaultValue': 100},
+    {'name': 'useSignificantChangesOnly', 'group': 'geolocation', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     // Activity Recognition
     {'name': 'activityRecognitionInterval', 'group': 'activity recognition', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 1000, 5000, 10000, 30000], 'defaultValue': 10000},
     {'name': 'stopTimeout', 'group': 'activity recognition', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 1, 5, 10, 15], 'defaultValue': 1},
@@ -468,7 +469,6 @@ const PLUGIN_SETTINGS = {
     // Geolocation
     {'name': 'stationaryRadius', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 25, 50, 100, 500, 1000, 5000], 'defaultValue': 25 },
     {'name': 'activityType', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [1, 2, 3, 4], 'labels': ['OTHER', 'AUTOMOTIVE_NAVIGATION', 'FITNESS', 'OTHER_NAVIGATION'], 'defaultValue': 'OTHER'},
-    {'name': 'useSignificantChangesOnly', 'group': 'geolocation', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     // Application
     {'name': 'preventSuspend', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     // Activity Recognition
@@ -478,8 +478,9 @@ const PLUGIN_SETTINGS = {
   'android': [
     // Geolocation
     {'name': 'locationUpdateInterval', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 1000, 5000, 10000, 30000, 60000], 'defaultValue': 5000},
-    {'name': 'fastestLocationUpdateInterval', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 1000, 5000, 10000, 30000, 60000], 'defaultValue': 1000},
+    {'name': 'fastestLocationUpdateInterval', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [-1, 0, 1000, 5000, 10000, 30000, 60000], 'defaultValue': 1000},
     {'name': 'deferTime', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [0, (10*1000), (30*1000), (60*1000), (5*60*1000)], 'defaultValue': 0},
+    {'name': 'geofenceModeHighAccuracy', 'group': 'geolocation', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     // Activity Recognition
     // Application
     {'name': 'enableHeadless', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': true},

@@ -164,6 +164,21 @@ class Config {
   ///
   double elasticityMultiplier;
 
+  /// Set `true` in order to disable constant background-tracking.  Locations will be recorded only periodically.
+  ///
+  /// ### iOS
+  /// Engages [iOS "significant location changes" API]([Significant Changes API](https://developer.apple.com/reference/corelocation/cllocationmanager/1423531-startmonitoringsignificantlocati?language=objc).) for only periodic location updates every 500-1000 meters.
+  ///
+  ///  **WARNING:** If Apple has rejected your application, refusing to grant your app the privilege of using the **`UIBackgroundMode: "location"`**, this can be a solution.
+  ///
+  ///  **NOTE** The Significant Changes API will report a location only every `500` to `1000` meters (can be higher in non urban environments; depends upon the spacing of Cellular towers).  Many of the plugin's configuration parameters **will be ignored**, such as [distanceFilter], [stationaryRadius], [activityType], etc.
+  ///
+  /// ### Android
+  ///
+  /// A location will be recorded several times per hour while the device is in the *moving* state.  No foreground-service will be run (nor a corresponding persistent notification).
+  ///
+  bool useSignificantChangesOnly;
+
   /// Automatically [BackgroundGeolocation.stop] tracking after x minutes.
   ///
   /// The plugin can optionally automatically [BackgroundGeolocation.stop] after some number of minutes elapses after the [BackgroundGeolocation.start] method was called.
@@ -195,6 +210,37 @@ class Config {
   /// Defaults to `true`.  Set `false` to disable triggering a geofence immediately if device is already inside it.
   ///
   bool geofenceInitialTriggerEntry;
+
+  /// __`[Android only]`__ Enable high-accuracy for geofence-only mode ([BackgroundGeolocation.startGeofences].
+  ///
+  /// Defaults to `false`.  Runs as a *foreground service* (along with its corresponding persitent notification).  This will make geofence
+  /// triggering **far more consistent**.  In this mode, the usual config options to control location-services will be applied:
+  ///
+  /// - [desiredAccuracy] ([DESIRED_ACCURACY_MEDIUM] works well).
+  /// - [locationUpdateInterval]
+  /// - [distanceFilter]
+  /// - [deferTime]
+  ///
+  /// The more aggressive you configure the location-update params above (at the cost of power consumption), the more responsive will be your geofence-triggering.
+  ///
+  /// # Example
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.ready(Config(
+  ///   geofenceModeHighAccuracy: true,
+  ///   desiredAccuracy: Config.DESIRED_ACCURACY_MEDIUM,
+  ///   locationUpdateInterval: 5000,
+  ///   distanceFilter: 50
+  /// )).then((State state) {
+  ///   BackgroundGeolocation.startGeofences();
+  /// });
+  /// ```
+  ///
+  ///
+  ///
+  /// __WARNING:__ Will consume more power.
+  ///
+  bool geofenceModeHighAccuracy;
 
   /// The maximum location accuracy allowed for a location to be used for [Location.odometer] calculations.
   ///
@@ -1085,16 +1131,6 @@ class Config {
 
   // Geolocation Options
 
-  /// __`[iOS only]`__ Engages iOS "significant location changes" API for only periodic location updates every 500-1000 meters.
-  ///
-  /// Defaults to `false`.  Set `true` in order to disable constant background-tracking and use only the iOS [Significant Changes API](https://developer.apple.com/reference/corelocation/cllocationmanager/1423531-startmonitoringsignificantlocati?language=objc).
-  ///
-  ///  **WARNING:** If Apple has rejected your application, refusing to grant your app the privilege of using the **`UIBackgroundMode: "location"`**, this can be a solution.
-  ///
-  ///  **NOTE** The Significant Changes API will report a location only every `500` to `1000` meters (can be higher in non urban environments; depends upon the spacing of Cellular towers).  Many of the plugin's configuration parameters **will be ignored**, such as [distanceFilter], [stationaryRadius], [activityType], etc.
-  ///
-  bool useSignificantChangesOnly;
-
   /// __`[iOS only]`__ Configure iOS location API to *never* automatically turn off.
   ///
   ///  **WARNING:** This option should generally be left `undefined`.  You should only specify this option if you know *exactly* what you're doing.
@@ -1720,6 +1756,7 @@ class Config {
       this.geofenceProximityRadius,
       this.geofenceInitialTriggerEntry,
       this.desiredOdometerAccuracy,
+      this.useSignificantChangesOnly,
       // ActivityRecognition
       this.isMoving,
       this.stopTimeout,
@@ -1761,7 +1798,6 @@ class Config {
       //
 
       // Geolocation Options
-      this.useSignificantChangesOnly,
       this.pausesLocationUpdatesAutomatically,
       this.locationAuthorizationRequest,
       this.locationAuthorizationAlert,
@@ -1784,6 +1820,7 @@ class Config {
       this.allowIdenticalLocations,
       this.enableTimestampMeta,
       this.speedJumpFilter,
+      this.geofenceModeHighAccuracy,
       // Activity Recognition Options
       this.triggerActivities,
       // Application Options
@@ -1833,6 +1870,8 @@ class Config {
       config['geofenceInitialTriggerEntry'] = geofenceInitialTriggerEntry;
     if (desiredOdometerAccuracy != null)
       config['desiredOdometerAccuracy'] = desiredOdometerAccuracy;
+    if (useSignificantChangesOnly != null)
+      config['useSignificantChangesOnly'] = useSignificantChangesOnly;
     // ActivityRecognition
     if (isMoving != null) config['isMoving'] = isMoving;
     if (stopTimeout != null) config['stopTimeout'] = stopTimeout;
@@ -1882,8 +1921,6 @@ class Config {
     //
 
     // Geolocation Options
-    if (useSignificantChangesOnly != null)
-      config['useSignificantChangesOnly'] = useSignificantChangesOnly;
     if (pausesLocationUpdatesAutomatically != null)
       config['pausesLocationUpdatesAutomatically'] =
           pausesLocationUpdatesAutomatically;
@@ -1921,6 +1958,8 @@ class Config {
     // Activity Recognition Options
     if (triggerActivities != null)
       config['triggerActivities'] = triggerActivities;
+    if (geofenceModeHighAccuracy != null)
+      config['geofenceModeHighAccuracy'] = geofenceModeHighAccuracy;
     // Application Options
     if (enableHeadless != null) config['enableHeadless'] = enableHeadless;
     if (foregroundService != null)
