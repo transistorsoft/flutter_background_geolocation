@@ -13,7 +13,12 @@
 
 ### New Features
 
-- [Added] Android implementation for `useSignificantChangesOnly` Config option.  Will request Android locations **without the persistent foreground service**.  You will receive location updates only a few times per hour.
+- [Added] Android implementation for `useSignificantChangesOnly` Config option.  Will request Android locations **without the persistent foreground service**.  You will receive location updates only a few times per hour:
+`useSignificantChangesOnly: true`:
+![](https://dl.dropboxusercontent.com/s/wdl9e156myv5b34/useSignificantChangesOnly.png?dl=1)
+
+`useSignificantChangesOnly: false`:
+![](https://dl.dropboxusercontent.com/s/hcxby3sujqanv9q/useSignificantChangesOnly-false.png?dl=1)
 - [Added] Android now implements a "stationary geofence", just like iOS.  It currently acts as a secondary triggering mechanism along with the current motion-activity API.  You will hear the "zap" sound effect when it triggers.  This also
 - [Added] The SDK detects mock locations and skips trigging the `stopTimeout` system, improving location simulation workflow.
 has the fortunate consequence of allowing mock-location apps (eg: Lockito) of being able to trigger tracking automatically.
