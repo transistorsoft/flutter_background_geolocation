@@ -51,9 +51,11 @@ class State extends Config {
                 ? data['geofenceProximityRadius'].round()
                 : data['geofenceProximityRadius'],
             geofenceInitialTriggerEntry: data['geofenceInitialTriggerEntry'],
+            geofenceModeHighAccuracy: data['geofenceModeHighAccuracy'],
             desiredOdometerAccuracy: (data['desiredOdometerAccuracy'].runtimeType == int)
                 ? data['desiredOdometerAccuracy'] * 1.0
                 : data['desiredOdometerAccuracy'],
+            useSignificantChangesOnly: data['useSignificantChangesOnly'],
             // ActivityRecognition
             isMoving: data['isMoving'],
             stopTimeout: (data['stopTimeout'].runtimeType == double)
@@ -68,6 +70,7 @@ class State extends Config {
             stopOnStationary: data['stopOnStationary'],
             // HTTP & Persistence
             url: data['url'],
+            persistMode: data['persistMode'],
             method: data['method'],
             httpRootProperty: data['httpRootProperty'],
             params: data['params'].cast<String, dynamic>(),
@@ -100,7 +103,6 @@ class State extends Config {
             //
 
             // Geolocation Options
-            useSignificantChangesOnly: data['useSignificantChangesOnly'],
             pausesLocationUpdatesAutomatically:
                 data['pausesLocationUpdatesAutomatically'],
             locationAuthorizationRequest: data['locationAuthorizationRequest'],
@@ -128,6 +130,7 @@ class State extends Config {
             deferTime: data['deferTime'],
             allowIdenticalLocations: data['allowIdenticalLocations'],
             enableTimestampMeta: data['enableTimestampMeta'],
+            speedJumpFilter: data['speedJumpFilter'],
             // Activity Recognition Options
             triggerActivities: data['triggerActivities'],
             // Application Options

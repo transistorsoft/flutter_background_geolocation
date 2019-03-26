@@ -142,6 +142,8 @@ static NSString *const ACTION_SHOW_SETTINGS = @"showSettings";
         [self getGeofences:result];
     } else if ([self method:ACTION_GET_LOG is:action]) {
         [self getLog:result];
+    } else if ([self method:ACTION_DESTROY_LOG is:action]) {
+        [self destroyLog:result];
     } else if ([self method:ACTION_EMAIL_LOG is:action]) {
         [self emailLog:call.arguments result:result];
     } else if ([self method:ACTION_LOG is:action]) {
@@ -459,6 +461,15 @@ static NSString *const ACTION_SHOW_SETTINGS = @"showSettings";
     } failure:^(NSString* error) {
         result([FlutterError errorWithCode:error message:nil details:nil]);
     }];
+}
+
+- (void) destroyLog:(FlutterResult)result {
+    BOOL success = [_locationManager destroyLog];
+    if (success) {
+        result(@(YES));
+    } else {
+        result([FlutterError errorWithCode:@"UNKNOWN_ERROR" message:nil details:nil]);
+    }
 }
 
 - (void) emailLog:(NSString*)email result:(FlutterResult)result {

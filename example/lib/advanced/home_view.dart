@@ -5,11 +5,14 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 import 'package:background_fetch/background_fetch.dart';
+import 'package:http/http.dart' as http;
 
 import '../app.dart';
 import 'map_view.dart';
 import 'event_list.dart';
-import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
+import './util/dialog.dart' as util;
+import './util/test.dart';
+
 import 'shared_events.dart';
 
 // For pretty-printing location JSON
@@ -26,10 +29,15 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   TabController _tabController;
 
+  String _username;
   bool _isMoving;
   bool _enabled;
   String _motionActivity;
   String _odometer;
+
+  /// My private test mode.  IGNORE.
+  int _testModeClicks;
+  Timer _testModeTimer;
 
   List<Event> events = [];
 
@@ -40,6 +48,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     _enabled = false;
     _motionActivity = 'UNKNOWN';
     _odometer = '0';
+    _testModeClicks = 0;
 
     _tabController = TabController(
         length: 2,
@@ -83,7 +92,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     // Fetch username and devivceParams for posting to tracker.transistorsoft.com
     final SharedPreferences prefs = await _prefs;
 
-    String username = prefs.getString("username");
+    _username = prefs.getString("username");
     Map deviceParams = await bg.Config.deviceParams;
 
     // 2.  Configure the plugin
@@ -99,7 +108,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         stopTimeout: 1,
         debug: true,
         autoSync: true,
-        url: 'http://tracker.transistorsoft.com/locations/$username',
+        url: 'http://tracker.transistorsoft.com/locations/$_username',
         params: deviceParams,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE
     )).then((bg.State state) {
@@ -260,6 +269,21 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
   void _onGeofence(bg.GeofenceEvent event) {
     print('[${bg.Event.GEOFENCE}] - $event');
+
+    bg.BackgroundGeolocation.startBackgroundTask().then((int taskId) {
+      // Execute an HTTP request to test an async operation completes.
+      String url = "http://tracker.transistorsoft.com/devices?company_token=$_username";
+      http.read(url).then((String result) {
+        print("[http test] success: $result");
+        bg.BackgroundGeolocation.playSound("POP");
+        bg.BackgroundGeolocation.stopBackgroundTask(taskId);
+      }).catchError((dynamic error) {
+        print("[http test] failed: $error");
+        bg.BackgroundGeolocation.stopBackgroundTask(taskId);
+      });
+    });
+
+
     setState(() {
       events.insert(0, Event(bg.Event.GEOFENCE, event, event.toString(compact: false)));
     });
@@ -339,7 +363,10 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
                       icon: Icon(Icons.gps_fixed),
                       onPressed: _onClickGetCurrentPosition,
                     ),
-                    Text('$_motionActivity · $_odometer km'),
+                    FlatButton(
+                        child: Text('$_motionActivity · $_odometer km'),
+                        onPressed: _onClickTestMode,
+                    ),
                     MaterialButton(
                         minWidth: 50.0,
                         child: Icon((_isMoving) ? Icons.pause : Icons.play_arrow, color: Colors.white),
@@ -351,6 +378,24 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
           )
       ),
     );
+  }
+
+  /// My private field-test setup.
+  /// @private IGNORE.
+  void _onClickTestMode() {
+    _testModeClicks++;
+
+    bg.BackgroundGeolocation.playSound('POP');
+    if (_testModeClicks == 10) {
+      bg.BackgroundGeolocation.playSound('BEEP_ON');
+      Test.applyTestConfig();
+    }
+    if (_testModeTimer != null) {
+      _testModeTimer.cancel();
+    }
+    _testModeTimer = new Timer(Duration(seconds: 2), () {
+      _testModeClicks = 0;
+    });
   }
 
   @override

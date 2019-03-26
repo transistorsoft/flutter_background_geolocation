@@ -7,7 +7,8 @@ def DEFAULT_COMPILE_SDK_VERSION                 = 28
 def DEFAULT_PLAY_SERVICES_LOCATION_VERSION      = "16.0.0"
 def DEFAULT_SUPPORT_LIB_VERSION                 = "1.0.2"
 def DEFAULT_OK_HTTP_VERSION                     = "3.12.1"
-def DEFAULT_ANDROID_PERMISSIONS_VERSION         = "0.1.7"
+def DEFAULT_ANDROID_PERMISSIONS_VERSION         = "0.1.8"
+def DEFAULT_REMOVE_DEBUG_SOUNDS_IN_RELEASE      = true
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -23,6 +24,12 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+
+
+    def removeDebugSounds = safeExtGet('removeBackgroundGeolocationDebugSoundsInRelase', DEFAULT_REMOVE_DEBUG_SOUNDS_IN_RELEASE)
+
+    removeDebugSounds = true
+
 }
 
 repositories {

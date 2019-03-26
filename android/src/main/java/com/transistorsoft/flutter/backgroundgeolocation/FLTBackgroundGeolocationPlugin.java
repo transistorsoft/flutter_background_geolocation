@@ -63,8 +63,6 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     private static final String METHOD_CHANNEL_NAME         = PLUGIN_ID + "/methods";
 
     private static final String ACTION_RESET             = "reset";
-    private static final String ACTION_FINISH            = "finish";
-    private static final String ACTION_START_BACKGROUND_TASK = "startBackgroundTask";
     private static final String ACTION_READY             = "ready";
 
     private static final String ACTION_REGISTER_HEADLESS_TASK = "registerHeadlessTask";
@@ -184,10 +182,10 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             startSchedule(result);
         } else if (call.method.equalsIgnoreCase(ACTION_STOP_SCHEDULE)) {
             stopSchedule(result);
-        } else if (call.method.equalsIgnoreCase(ACTION_START_BACKGROUND_TASK)) {
-            result.success(0);
-        } else if (call.method.equalsIgnoreCase(ACTION_FINISH)) {
-            result.success(0);
+        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_START_BACKGROUND_TASK)) {
+            startBackgroundTask(result);
+        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_FINISH)) {
+            stopBackgroundTask((int) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_RESET)) {
             reset(call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_SET_CONFIG)) {
@@ -279,6 +277,8 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             if (!applyConfig(params, result)) {
                 return;
             }
+        } else {
+
         }
 
         BackgroundGeolocation.getInstance(mContext).ready(new TSCallback() {
@@ -606,6 +606,17 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             throw new TSGeofence.Exception(e.getMessage());
         }
         return builder.build();
+    }
+
+    private void startBackgroundTask(final Result result) {
+        BackgroundGeolocation.getInstance(mContext).startBackgroundTask(new TSBackgroundTaskCallback() {
+            @Override public void onStart(int taskId) { result.success(taskId); }
+        });
+    }
+
+    private void stopBackgroundTask(int taskId, Result result) {
+        BackgroundGeolocation.getInstance(mContext).stopBackgroundTask(taskId);
+        result.success(taskId);
     }
 
     private void getLog(final Result result) {

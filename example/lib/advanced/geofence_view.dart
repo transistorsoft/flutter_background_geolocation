@@ -88,14 +88,11 @@ class _GeofenceViewState extends State<GeofenceView> {
                       isDense: true,
                       onChanged: (String value) {_radius = double.parse(value);},
                       items: [
-                        DropdownMenuItem(
-                          value: '150',
-                          child: new Text('150'),
-                        ),
-                        DropdownMenuItem(
-                          value: '200',
-                          child: new Text('200'),
-                        )
+                        DropdownMenuItem(value: '150', child: new Text('150')),
+                        DropdownMenuItem(value: '200', child: new Text('200')),
+                        DropdownMenuItem(value: '500', child: new Text('500')),
+                        DropdownMenuItem(value: '1000', child: new Text('1000')),
+                        DropdownMenuItem(value: '5000', child: new Text('5000'))
                       ]
                     ),
                   ),
