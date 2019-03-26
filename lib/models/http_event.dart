@@ -164,8 +164,8 @@ part of flt_background_geolocation;
 ///
 /// | Tag | Type | Description |
 /// |-----|------|-------------|
-/// | `geofence_identifier` | `String` | Which geofence?|
-/// | `geofence_action` | `String` | `ENTER,EXIT,DWELL`|
+/// | `geofence.identifier` | `String` | Which geofence?|
+/// | `geofence.action` | `String` | `ENTER,EXIT,DWELL`|
 ///
 /// #### Quoting String Values
 ///
