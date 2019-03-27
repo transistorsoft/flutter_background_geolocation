@@ -1,4 +1,10 @@
-## [1.0.0-rc.1] - 2019-03-20
+# CHANGELOG
+
+## [1.0.0-rc.2] - 2019-03-27
+
+- [Fixed] An Android foreground-service is launched on first install and fails to stop.
+
+## [1.0.0-rc.1] - 2019-03-25
 
 ### Breaking Changes
 - [Changed] The license format has changed.  New `1.0.0` licenses are now available for customers in the [product dashboard](https://www.transistorsoft.com/shop/customers).
