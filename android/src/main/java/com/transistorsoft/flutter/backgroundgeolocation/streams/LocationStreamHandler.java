@@ -3,6 +3,7 @@ package com.transistorsoft.flutter.backgroundgeolocation.streams;
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.callback.TSLocationCallback;
 import com.transistorsoft.locationmanager.location.TSLocation;
+import com.transistorsoft.locationmanager.logger.TSLog;
 
 import io.flutter.plugin.common.EventChannel;
 

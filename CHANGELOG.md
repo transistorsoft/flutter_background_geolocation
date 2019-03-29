@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [1.0.0-rc.3] - 2019-03-29
+
+- [Fixed] Android `NullPointerException` with `Bundle#getExtras` (#674).
+- [Fixed] Android not persisting `providerchange` location when location-services re-enabled.
+
 ## [1.0.0-rc.2] - 2019-03-27
 
 - [Fixed] An Android foreground-service is launched on first install and fails to stop.
@@ -7,9 +12,11 @@
 ## [1.0.0-rc.1] - 2019-03-25
 
 ### Breaking Changes
+
 - [Changed] The license format has changed.  New `1.0.0` licenses are now available for customers in the [product dashboard](https://www.transistorsoft.com/shop/customers).
 
 ### Fixes
+
 - [Fixed] iOS missing native `destroyLog` implementation (thanks to @joserocha3)
 - [Fixed] Missing Dart implementation for `requestPermission` method (thanks to @joserocha3)
 - [Fixed] Logic bugs in MotionActivity triggering between *stationary* / *moving* states.
