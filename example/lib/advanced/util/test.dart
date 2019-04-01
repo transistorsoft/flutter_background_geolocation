@@ -119,6 +119,7 @@ class Test {
         fastestLocationUpdateInterval: -1,
         stopTimeout: 0,
         url: "http://tracker.transistorsoft.com/locations/$username",
+        //url: 'http://192.168.11.14:9000/locations',
         params: deviceParams,
         geofenceModeHighAccuracy: true,
         stopOnTerminate: false,
