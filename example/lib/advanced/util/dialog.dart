@@ -25,7 +25,7 @@ const SOUND_MAP = {
     "ERROR": "ERROR",
     "OPEN": "OPEN",
     "CLOSE": "CLOSE",
-    "FLOURISH": "MOTIONCHANGE_TRUE"
+    "FLOURISH": "POP"
   }
 };
 
