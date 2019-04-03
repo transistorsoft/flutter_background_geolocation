@@ -166,7 +166,7 @@ class Config {
 
   /// Set `true` in order to disable constant background-tracking.  Locations will be recorded only periodically.
   ///
-  /// Defaults to `false`.  A location will be recorded only every `500` to `1000` meters (can be higher in non urban environments; depends upon the spacing of Cellular towers).  Many of the plugin's configuration parameters **will have no effect**, such as [[distanceFilter]], [[stationaryRadius]], [[activityType]], etc.
+  /// Defaults to `false`.  A location will be recorded only every `500` to `1000` meters (can be higher in non urban environments; depends upon the spacing of Cellular towers).  Many of the plugin's configuration parameters **will have no effect**, such as [distanceFilter], [stationaryRadius], [activityType], etc.
   ///
   /// Using `significantChangesOnly: true` will provide **significant** power-saving at the expense of fewer recorded locations.
   ///
@@ -222,7 +222,7 @@ class Config {
   ///
   bool geofenceInitialTriggerEntry;
 
-  /// __`[Android only]`__ Enable high-accuracy for **geofence-only** mode (See [[BackgroundGeolocation.startGeofences]]).
+  /// __`[Android only]`__ Enable high-accuracy for **geofence-only** mode (See [BackgroundGeolocation.startGeofences]).
   ///
   /// Defaults to `false`.  Runs Android's [BackgroundGeolocation.startGeofences] with a///foreground service* (along with its corresponding persitent notification;  See [foregroundService] for a list of available notification config options, including [notificationText], [notificationTitle]).
   ///
