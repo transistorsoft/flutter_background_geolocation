@@ -166,16 +166,27 @@ class Config {
 
   /// Set `true` in order to disable constant background-tracking.  Locations will be recorded only periodically.
   ///
+  /// Defaults to `false`.  A location will be recorded only every `500` to `1000` meters (can be higher in non urban environments; depends upon the spacing of Cellular towers).  Many of the plugin's configuration parameters **will have no effect**, such as [distanceFilter], [stationaryRadius], [activityType], etc.
+  ///
+  /// Using `significantChangesOnly: true` will provide **significant** power-saving at the expense of fewer recorded locations.
+  ///
   /// ### iOS
-  /// Engages [iOS "significant location changes" API]([Significant Changes API](https://developer.apple.com/reference/corelocation/cllocationmanager/1423531-startmonitoringsignificantlocati?language=objc).) for only periodic location updates every 500-1000 meters.
   ///
-  ///  **WARNING:** If Apple has rejected your application, refusing to grant your app the privilege of using the **`UIBackgroundMode: "location"`**, this can be a solution.
+  /// Engages the iOS [Significant Location Changes API](https://developer.apple.com/reference/corelocation/cllocationmanager/1423531-startmonitoringsignificantlocati?language=objc) API for only periodic location updates every 500-1000 meters.
+  /// @break
   ///
-  ///  **NOTE** The Significant Changes API will report a location only every `500` to `1000` meters (can be higher in non urban environments; depends upon the spacing of Cellular towers).  Many of the plugin's configuration parameters **will be ignored**, such as [distanceFilter], [stationaryRadius], [activityType], etc.
+  /// ⚠️ If Apple has rejected your application, refusing to grant your app the privilege of using the **`UIBackgroundMode: "location"`**, this can be a solution.
+  ///
   ///
   /// ### Android
   ///
-  /// A location will be recorded several times per hour while the device is in the *moving* state.  No foreground-service will be run (nor a corresponding persistent notification).
+  /// A location will be recorded several times per hour while the device is in the *moving* state.  No foreground-service will be run (nor its corresponding persistent notification).
+  ///
+  /// ## Example **`useSignificantChanges: true`**
+  /// ![](https://dl.dropboxusercontent.com/s/wdl9e156myv5b34/useSignificantChangesOnly.png?dl=1)
+  ///
+  /// ## Example **`useSignificantChanges: false` (Default)**
+  /// ![](https://dl.dropboxusercontent.com/s/hcxby3sujqanv9q/useSignificantChangesOnly-false.png?dl=1)
   ///
   bool useSignificantChangesOnly;
 
@@ -211,19 +222,25 @@ class Config {
   ///
   bool geofenceInitialTriggerEntry;
 
-  /// __`[Android only]`__ Enable high-accuracy for geofence-only mode ([BackgroundGeolocation.startGeofences].
+  /// __`[Android only]`__ Enable high-accuracy for **geofence-only** mode (See [BackgroundGeolocation.startGeofences]).
   ///
-  /// Defaults to `false`.  Runs as a *foreground service* (along with its corresponding persitent notification).  This will make geofence
-  /// triggering **far more consistent**.  In this mode, the usual config options to control location-services will be applied:
+  /// Defaults to `false`.  Runs Android's [BackgroundGeolocation.startGeofences] with a///foreground service* (along with its corresponding persitent notification;  See [foregroundService] for a list of available notification config options, including [notificationText], [notificationTitle]).
+  ///
+  /// Configuring `geofenceModeHighAccuracy: true` will make Android geofence triggering///*far more responsive**.  In this mode, the usual config options to control location-services will be applied:
+  ///
+  /// ⚠️ Warning: Will consume more power.
   ///
   /// - [desiredAccuracy] ([DESIRED_ACCURACY_MEDIUM] works well).
   /// - [locationUpdateInterval]
   /// - [distanceFilter]
   /// - [deferTime]
   ///
+  /// With the default `geofenceModeHighAccuracy: false`, a device will have to move farther *into* a geofence before the *ENTER* event fires and farther *out of* a geofence before
+  /// the *EXIT* event fires.
+  ///
   /// The more aggressive you configure the location-update params above (at the cost of power consumption), the more responsive will be your geofence-triggering.
   ///
-  /// # Example
+  /// ## Example:
   ///
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
@@ -231,14 +248,16 @@ class Config {
   ///   desiredAccuracy: Config.DESIRED_ACCURACY_MEDIUM,
   ///   locationUpdateInterval: 5000,
   ///   distanceFilter: 50
-  /// )).then((State state) {
+  /// )).then((state) {
   ///   BackgroundGeolocation.startGeofences();
   /// });
   /// ```
   ///
+  /// ## Example `geofenceModeHighAccuracy: false` (Default) &mdash; Transition events **are delayed**.
+  /// ![](https://dl.dropboxusercontent.com/s/6nxbuersjcdqa8b/geofenceModeHighAccuracy-false.png?dl=1)
   ///
-  ///
-  /// __WARNING:__ Will consume more power.
+  /// ## Example `geofenceModeHighAccuracy: true` &mdash; Transition events are **nearly instantaneous**.
+  /// ![](https://dl.dropbox.com/s/w53hqn7f7n1ug1o/geofenceModeHighAccuracy-true.png?dl=1)
   ///
   bool geofenceModeHighAccuracy;
 
