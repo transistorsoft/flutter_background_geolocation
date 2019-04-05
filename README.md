@@ -55,7 +55,7 @@ dependencies:
 dependencies:
   flutter_background_geolocation:
     git:
-      url: https://github.com/transistorsoft/flutter_background_geolocation
+      url: https://github.com/transistorsoft/flutter_background_geolocation.git
 ```
 
 ## :large_blue_diamond: Setup Guides
