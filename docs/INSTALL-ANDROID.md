@@ -121,6 +121,8 @@ Create either `Application.kt` or `Application.java` in the same directory as `M
 - For `Application.kt`, use the following:
 
 ```java
+package your.app.name;
+
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugins.GeneratedPluginRegistrant;
@@ -142,6 +144,8 @@ class Application : FlutterApplication(), PluginRegistry.PluginRegistrantCallbac
 - For `Application.java`, use the following:
 
 ```java
+package your.app.name;
+
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugins.GeneratedPluginRegistrant;
