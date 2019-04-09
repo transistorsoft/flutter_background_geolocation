@@ -131,7 +131,12 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     // Compute a coordinate at the intersection of the line joining center point -> event location and the circle.
     LatLng edge = Geospatial.computeOffsetCoordinate(center, geofence.radius, bearing);
     // Green for ENTER, Red for EXIT.
-    Color color = (event.action == "ENTER") ? Colors.green : Colors.red;
+    Color color = Colors.green;
+    if (event.action == "EXIT") {
+      color = Colors.red;
+    } else if (event.action == "DWELL") {
+      color = Colors.yellow;
+    }
 
     // Edge CircleMarker (background: black, stroke doesn't work so stack 2 circles)
     _geofenceEventEdges.add(CircleMarker(
@@ -292,7 +297,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
             new Polyline(
                 points: _polyline,
                 strokeWidth: 10.0,
-                color: Color.fromRGBO(0, 179, 253, 0.7),
+                color: Color.fromRGBO(0, 179, 253, 0.8),
             ),
           ],
         ),
