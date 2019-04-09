@@ -104,6 +104,7 @@ dependencies {
      testImplementation 'junit:junit:4.12'
 -    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 -    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
++   def supportLibVersion = rootProject.ext.supportLibVersion
 +   androidTestImplementation 'androidx.test:runner:1.1.1'                   // or higher
 +   androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'   // or higher
 +   implementation "androidx.appcompat:appcompat:$supportLibVersion"
@@ -120,6 +121,8 @@ Create either `Application.kt` or `Application.java` in the same directory as `M
 - For `Application.kt`, use the following:
 
 ```java
+package your.app.name;
+
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugins.GeneratedPluginRegistrant;
@@ -141,6 +144,8 @@ class Application : FlutterApplication(), PluginRegistry.PluginRegistrantCallbac
 - For `Application.java`, use the following:
 
 ```java
+package your.app.name;
+
 import io.flutter.app.FlutterApplication;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugins.GeneratedPluginRegistrant;
