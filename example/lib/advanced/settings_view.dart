@@ -6,6 +6,8 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
 
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
 import 'actions.dart';
+import 'util/test.dart';
+
 
 const INPUT_TYPE_SELECT = "select";
 const INPUT_TYPE_TOGGLE = "toggle";
@@ -26,6 +28,13 @@ class _SettingsViewState extends State<SettingsView> {
   List<Map> _httpSettings = [];
   List<Map> _applicationSettings = [];
   List<Map> _debugSettings = [];
+
+  // Geofence test params.
+  double _radius = 200.0;
+  bool _notifyOnEntry = true;
+  bool _notifyOnExit = true;
+  bool _notifyOnDwell = false;
+  int _loiteringDelay = 10000;
 
   void initState() {
     super.initState();
@@ -148,6 +157,16 @@ class _SettingsViewState extends State<SettingsView> {
     }
   }
 
+  _onClickAddGeofences() async {
+    await bg.BackgroundGeolocation.addGeofences(Test.getFreewayDriveGeofences(_radius, _notifyOnEntry, _notifyOnExit, _notifyOnDwell, _loiteringDelay));
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("ADD_GEOFENCE"));
+  }
+
+  _onClickRemoveGeofences() async {
+    await bg.BackgroundGeolocation.removeGeofences();
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("MESSAGE_SENT"));
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_state == null) {
@@ -186,7 +205,6 @@ class _SettingsViewState extends State<SettingsView> {
       body: new CustomScrollView(
         slivers: <Widget>[
           _buildListHeader("Geolocation"),
-
           _buildList(_geolocationSettings),
 
           _buildListHeader("Activity Recognition"),
@@ -201,35 +219,10 @@ class _SettingsViewState extends State<SettingsView> {
           _buildListHeader("Debug"),
           _buildList(_debugSettings),
 
-          _buildListHeader("Geofencing"),
+          _buildListHeader("Geofence Test (Freeway Drive)"),
+          _buildGeofenceTestPanel()
         ],
       )
-    );
-  }
-
-  Widget _buildSelectTrackingMode() {
-    String trackingMode = (_state.trackingMode == 1) ? "location" : "geofence";
-
-    List<DropdownMenuItem<String>> menuItems = new List();
-    menuItems.add(new DropdownMenuItem(child: Text("Location + Geofences"), value: "location"));
-    menuItems.add(new DropdownMenuItem(child: Text("Geofences only"), value: "geofence"));
-
-    return InputDecorator(
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
-          labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
-          labelText: "Tracking mode",
-        ),
-        child: DropdownButtonHideUnderline(
-            child: DropdownButton(
-                isDense: true,
-                value: trackingMode,
-                items: menuItems,
-                onChanged: (value) {
-                  print("*********** change: $value");
-                }
-            )
-        )
     );
   }
 
@@ -372,6 +365,173 @@ class _SettingsViewState extends State<SettingsView> {
 
   Text _buildLabel(String label) {
     return Text(label, style: TextStyle(color: Colors.blue, fontSize: 15.0));
+  }
+
+  /**
+   * Build geofence test panel for loading a series of geofences along iOS "Freeway Drive" route.
+   */
+  Widget _buildGeofenceTestPanel() {
+
+    List<DropdownMenuItem<String>> radiusItems = new List();
+    radiusItems.add(new DropdownMenuItem(child: Text('100 meters'), value: '100'));
+    radiusItems.add(new DropdownMenuItem(child: Text('150 meters'), value: '150'));
+    radiusItems.add(new DropdownMenuItem(child: Text('200 meters'), value: '200'));
+    radiusItems.add(new DropdownMenuItem(child: Text('500 meters'), value: '500'));
+    radiusItems.add(new DropdownMenuItem(child: Text('1000 meters'), value: '1000'));
+    radiusItems.add(new DropdownMenuItem(child: Text('5000 meters'), value: '5000'));
+    radiusItems.add(new DropdownMenuItem(child: Text('10000 meters'), value: '10000'));
+
+    List<DropdownMenuItem<String>> loiteringDelayItems = new List();
+    loiteringDelayItems.add(new DropdownMenuItem(child: Text('1000 ms'), value: '1000'));
+    loiteringDelayItems.add(new DropdownMenuItem(child: Text('5000 ms'), value: '5000'));
+    loiteringDelayItems.add(new DropdownMenuItem(child: Text('10000 ms'), value: '10000'));
+    loiteringDelayItems.add(new DropdownMenuItem(child: Text('30000 ms'), value: '30000'));
+    loiteringDelayItems.add(new DropdownMenuItem(child: Text('60000 ms'), value: '60000'));
+
+    return SliverFixedExtentList(
+        delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+          return Container(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    MaterialButton(
+                        minWidth: 150.0,
+                        child: Text('Remove Geofences', style: TextStyle(color: Colors.white)),
+                        color: Colors.red,
+                        onPressed: _onClickRemoveGeofences
+                    ),
+                    MaterialButton(
+                        minWidth: 150.0,
+                        child: Text('Add Geofences', style: TextStyle(color: Colors.white)),
+                        color: Colors.blue,
+                        onPressed: _onClickAddGeofences
+                    )
+                  ]
+                ),
+                InputDecorator(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
+                      labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
+                      labelText: "Radius",
+                    ),
+                    child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                            isDense: true,
+                            value: _radius.toInt().toString(),
+                            items: radiusItems,
+                            onChanged: (String value) {
+                              setState(() {
+                                _radius = double.parse(value);
+                              });
+                            }
+                        )
+                    )
+                ),
+                InputDecorator(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(top:0.0, left:10.0, bottom:0.0),
+                      labelStyle: TextStyle(color: Colors.blue),
+                      //labelText: name
+                    ),
+                    child: Row(
+                        children: <Widget>[
+                          Expanded(flex: 3, child: _buildLabel("notifyOnEntry")),
+                          Expanded(
+                              flex: 1,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    Switch(value: _notifyOnEntry, onChanged: (bool value) {
+                                      setState(() {
+                                        _notifyOnEntry = value;
+                                      });
+                                    })
+                                  ]
+                              )
+                          )
+                        ]
+                    )
+                ),
+                InputDecorator(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(top:0.0, left:10.0, bottom:0.0),
+                      labelStyle: TextStyle(color: Colors.blue),
+                      //labelText: name
+                    ),
+                    child: Row(
+                        children: <Widget>[
+                          Expanded(flex: 3, child: _buildLabel("notifyOnExit")),
+                          Expanded(
+                              flex: 1,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    Switch(value: _notifyOnExit, onChanged: (bool value) {
+                                      setState(() {
+                                        _notifyOnExit = value;
+                                      });
+                                    })
+                                  ]
+                              )
+                          )
+                        ]
+                    )
+                ),
+                InputDecorator(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(top:0.0, left:10.0, bottom:0.0),
+                      labelStyle: TextStyle(color: Colors.blue),
+                      //labelText: name
+                    ),
+                    child: Row(
+                        children: <Widget>[
+                          Expanded(flex: 3, child: _buildLabel("notifyOnDwell")),
+                          Expanded(
+                              flex: 1,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
+                                    Switch(value: _notifyOnDwell, onChanged: (bool value) {
+                                      setState(() {
+                                        _notifyOnDwell = value;
+                                      });
+                                    })
+                                  ]
+                              )
+                          )
+                        ]
+                    )
+                ),
+                InputDecorator(
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
+                      labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
+                      labelText: "loiteringDelay (ms)",
+                    ),
+                    child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                            isDense: true,
+                            value: _loiteringDelay.toString(),
+                            items: loiteringDelayItems,
+                            onChanged: (String value) {
+                              setState(() {
+                                _loiteringDelay = int.parse(value);
+                              });
+                            }
+                        )
+                    )
+                ),
+              ]
+            )
+          );
+        }, childCount: 1),
+        itemExtent: 330.0
+    );
   }
 
   Function(String) _createSelectChangeHandler(Map<String,Object> setting) {

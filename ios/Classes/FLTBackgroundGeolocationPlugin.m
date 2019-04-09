@@ -330,7 +330,7 @@ static NSString *const ACTION_SHOW_SETTINGS = @"showSettings";
 
 - (void) finish:(int)taskId result:(FlutterResult)result {
     [_locationManager stopBackgroundTask:taskId];
-    result(@(YES));
+    result(@(taskId));
 }
 
 #pragma mark HTTP & Persistence Methods

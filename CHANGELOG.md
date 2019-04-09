@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.0.1] - 2019-04-09
+- [Fixed] iOS: Incorrect return type BOOL from native method stopBackgroundTask.  Should have been int.
+- [Changed] Add Geofence test panel in example Settings screen.  Allows to add a series of test-geofences along the iOS simulator Freeway Drive route.
+
 ## [1.0.0] - 2019-04-05
 - [RELEASE] Release 1.0.0
 
