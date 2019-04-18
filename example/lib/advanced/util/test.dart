@@ -110,16 +110,17 @@ class Test {
     String username = prefs.getString("username");
     Map deviceParams = await bg.Config.deviceParams;
 
-    bg.BackgroundGeolocation.setConfig(bg.Config(
+    await bg.BackgroundGeolocation.setConfig(bg.Config(
         debug: true,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_NAVIGATION,
         distanceFilter: 50,
         locationUpdateInterval: 5000,
         fastestLocationUpdateInterval: -1,
+        enableTimestampMeta: true,
         stopTimeout: 1,
+        schedule: [],
         url: "http://tracker.transistorsoft.com/locations/$username",
-        //url: 'http://192.168.11.14:9000/locations',
         params: deviceParams,
         geofenceModeHighAccuracy: true,
         stopOnTerminate: false,
