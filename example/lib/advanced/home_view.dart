@@ -160,7 +160,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         });
       };
       bg.BackgroundGeolocation.stop().then(callback);
-
     }
   }
 
@@ -306,6 +305,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   void _onEnabledChange(bool enabled) {
     print('[${bg.Event.ENABLEDCHANGE}] - $enabled');
     setState(() {
+      _enabled = enabled;
       events.clear();
       events.insert(0, Event(bg.Event.ENABLEDCHANGE, enabled, '[EnabledChangeEvent enabled: $enabled]'));
     });
