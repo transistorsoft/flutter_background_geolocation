@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [Unreleased]
+- [Fixed] Android bug where Service repeatedly stops / starts after rebooting device with plugin in *moving* state.
 - [Fixed] Android scheduler bug.  When app is terminated & restarted during a scheduled ON period, tracking-service does not restart.
 
 ## [1.0.1] - 2019-04-09
