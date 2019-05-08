@@ -71,6 +71,7 @@ static NSString *const ACTION_SHOW_SETTINGS = @"showSettings";
     [PowerSaveChangeStreamHandler register:registrar];
     [ConnectivityChangeStreamHandler register:registrar];
     [EnabledChangeStreamHandler register:registrar];
+    [NotificationActionStreamHandler register:registrar];
 }
 
 - (instancetype) init {
@@ -197,9 +198,12 @@ static NSString *const ACTION_SHOW_SETTINGS = @"showSettings";
         TSConfig *config = [TSConfig sharedInstance];
         if (config.isFirstBoot) {
             [config updateWithDictionary:params];
-        } else if (params[@"reset"] && [[params objectForKey:@"reset"] boolValue]) {
-            [config reset];
-            [config updateWithDictionary:params];
+        } else {
+            BOOL reset = (params[@"reset"]) ? [params[@"reset"] boolValue] : YES;
+            if (reset) {
+                [config reset];
+                [config updateWithDictionary:params];
+            }
         }
         [self.locationManager ready];
         result([config toDictionary]);

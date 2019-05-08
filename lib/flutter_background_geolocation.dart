@@ -4,6 +4,14 @@
 ///
 /// The primary APIs for the plugin are exposed through the two classes [BackgroundGeolocation] and [Config].
 ///
+/// ## 📚 Help
+/// - 📘 [Philosophy of Operation](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Philosophy-of-Operation)
+/// - 📘 HTTP Guide: [HttpEvent].
+/// - 📘 Geofencing Guide:  [GeofenceEvent].
+/// - 📘 [Android Headless Mode](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode).
+/// - 📘 [Android Custom Notification Layout](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Custom-Notification-Layout).
+/// - 📘 [Debugging Guide](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Debugging).
+///
 library flt_background_geolocation;
 
 import 'dart:async';
@@ -31,6 +39,7 @@ part 'models/config.dart';
 part 'models/state.dart';
 part 'models/sensors.dart';
 part 'models/headless_event.dart';
+part 'models/notification.dart';
 
 const _PLUGIN_PATH = "com.transistorsoft/flutter_background_geolocation";
 

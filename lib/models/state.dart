@@ -22,6 +22,8 @@ class State extends Config {
   double odometer;
 
   /// Whether the plugin is in the location-tracking mode ([BackgroundGeolocation.start] or geofences-only mode ([BackgroundGeolocation.startGeofences]).
+  /// - `1` = Location + Geofence tracking (ie: [BackgroundGeolocation.start]).
+  /// - `0` = Geofences-only tracking (ie: [BackgroundGeolocation.startGeofences]).
   ///
   int trackingMode;
 
@@ -142,13 +144,7 @@ class State extends Config {
             forceReloadOnBoot: data['forceReloadOnBoot'],
             forceReloadOnHeartbeat: data['forceReloadOnHeartbeat'],
             forceReloadOnSchedule: data['forceReloadOnSchedule'],
-            notificationPriority: data['notificationPriority'],
-            notificationTitle: data['notificationTitle'],
-            notificationText: data['notificationText'],
-            notificationColor: data['notificationColor'],
-            notificationSmallIcon: data['notificationSmallIcon'],
-            notificationLargeIcon: data['notificationLargeIcon'],
-            notificationChannelName: data['notificationChannelName']) {
+            notification: (data['notification'] != null) ? Notification.fromMap(data['notification']) : null) {
     enabled = data['enabled'];
     trackingMode = data['trackingMode'];
     schedulerEnabled = data['schedulerEnabled'];

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
+import 'dart:async';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 import 'package:unicorndial/unicorndial.dart';
 
 import 'actions.dart';
-import 'dart:async';
 import 'settings_view.dart';
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
 
@@ -15,6 +15,7 @@ class MainMenuButton extends StatelessWidget {
   BuildContext _context;
 
   void _onClickMenu() async {
+    // Text a backgroundTask on menu-click.
     bg.BackgroundGeolocation.startBackgroundTask().then((int taskId) {
       print("********* startBackgroundTask: $taskId");
 

@@ -17,4 +17,5 @@ class Event {
   static const CONNECTIVITYCHANGE = "connectivitychange";
   static const ENABLEDCHANGE = "enabledchange";
   static const POWERSAVECHANGE = "powersavechange";
+  static const NOTIFICATIONACTION = "notificationaction";
 }
