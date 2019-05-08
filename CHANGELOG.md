@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.3] - 2019-05-08
+- [Fixed] Dart analysis warnings, re: initializing null values in new Notification class.
+
 ## [1.0.2] - 2019-05-08
 - [Fixed] iOS: changing `pauseslocationUpdatesAutomatically` was not being applied.
 - [Changed] `reset` parameter provided to `#ready` has now been default to `true`.  This causes too many support issues for people using the plugin the first time.
