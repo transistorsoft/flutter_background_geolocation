@@ -104,25 +104,20 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
-        reset: false,
-        heartbeatInterval: 60,
+        debug: true,
+        logLevel: bg.Config.LOG_LEVEL_VERBOSE,
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_NAVIGATION,
         distanceFilter: 10.0,
         stopOnTerminate: false,
         startOnBoot: true,
-        notification: bg.Notification(
-          layout: "notification_layout",  // <-- see android/app/src/main/res/layout/notification_layout.xml
-          title: "Device is in-motion.",
-          text: "Background location-tracking engaged.",
-        ),
-        foregroundService: true,
         enableHeadless: true,
         stopTimeout: 1,
-        debug: true,
         autoSync: true,
         url: 'http://tracker.transistorsoft.com/locations/$_username',
         params: deviceParams,
-        logLevel: bg.Config.LOG_LEVEL_VERBOSE
+        heartbeatInterval: 60,
+        foregroundService: true,
+        reset: false
     )).then((bg.State state) {
       print('[ready] ${state.toMap()}');
       if (state.schedule.isNotEmpty) {
