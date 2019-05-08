@@ -236,17 +236,17 @@ class Notification {
   ///   )
   /// ));
   /// ```
-  String layout = null;
+  String layout;
 
   /// Configure the *title* of the persistent notification in the Notification Bar when running with [Config.foregroundService] __`true`__
   ///
   /// Defaults to the application name from `AndroidManifest`.  When running the service with [Config.foregroundService]: true, Android requires a persistent notification.  This will configure the **title** of that notification.
-  String title = null;
+  String title;
 
   /// Configure the *text* of the persistent notification in the Notification Bar when running with [Config.foregroundService] __`true`__
   ///
   /// Defaults to *"Location service activated"*.  When running the service with [Config.foregroundService]: true, Android requires a persistent notification.  This will configure the **text** of that notification.
-  String text = null;
+  String text;
 
   /// Configure the *color* of the persistent notification icon in the Notification Bar when running with [Config.foregroundService] __`true`__
   ///
@@ -255,7 +255,7 @@ class Notification {
   /// Supported formats are:
   /// - `#RRGGBB`
   /// - `#AARRGGBB`
-  String color = null;
+  String color;
 
   /// Configure the *small icon* of the persistent notification in the Notification Bar when running with [Config.foregroundService] __`true`__
   ///
@@ -285,7 +285,7 @@ class Notification {
   ///
   /// ### ℹ️ See also:
   /// - [largeIcon]
-  String smallIcon = null;
+  String smallIcon;
 
   /// Configure the *large icon* of the persistent notification in the Notification Bar when running with [Config.foregroundService] __`true`__
   ///
@@ -316,7 +316,7 @@ class Notification {
   /// ### ℹ️ See also:
   /// - [smallIcon]
   ///
-  String largeIcon = null;
+  String largeIcon;
 
   /// When running the service with [Config.foregroundService]: true, Android requires a persistent notification in the Notification Bar.  This will control the **priority** of that notification as well as the position of the notificaiton-bar icon.
   ///
@@ -339,7 +339,7 @@ class Notification {
   ///   )
   /// ));
   /// ```
-  int priority = null;
+  int priority;
 
   /// Configure the name of the plugin's notification-channel used to display the [Config.foregroundService] notification.
   ///
@@ -368,7 +368,7 @@ class Notification {
   /// ));
   /// ```
   ///
-  String channelName = null;
+  String channelName;
 
   ///
   /// Custom strings to render into `<TextView />` elements of a custom notification [layout].
@@ -399,7 +399,7 @@ class Notification {
   /// ));
   /// ```
   ///
-  Map<String, String> strings = null;
+  Map<String, String> strings;
 
   ///
   /// Declare click listeners for `<Button />` elements of a custom notification [layout].
@@ -442,7 +442,7 @@ class Notification {
   /// });
   /// ```
   ///
-  List<String> actions = null;
+  List<String> actions;
 
   static fromMap(Map map) {
     return Notification(
