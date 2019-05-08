@@ -8,7 +8,11 @@ class Geofence {
 
   /// Circular geofence radius.
   double radius;
+
+  /// Latitude of the Geofence center.
   double latitude;
+
+  /// Longitude of the Geofence center.
   double longitude;
 
   /// Set `true` to fire on entering the geofence.

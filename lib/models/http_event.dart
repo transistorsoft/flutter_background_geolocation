@@ -2,268 +2,138 @@ part of flt_background_geolocation;
 
 /// Event object provided to [BackgroundGeolocation.onHttp].
 ///
-/// # HTTP Features
+/// ## Example
 ///
-/// ## JSON Request Templates
+/// ```dart
+/// BackgroundGeolocation.onHttp((HttpEvent response) {
+///   print('[http] success? ${response.success}, status? ${response.status}');
+/// });
+/// ```
 ///
-/// The plugin supports customizable JSON request schemas with the following config options:
+/// # HTTP Guide
+/// ---------------------------------------------------------------------------------------
 ///
-/// | Option             | Type       | Default     | Description |
-/// |--------------------|------------|-------------|-------------|
-/// |[Config.httpRootProperty]  | `String`   | `location`  | The root key in the JSON to render records |
-/// |[Config.locationTemplate]  | `String`   | `undefined` | Optional template to render [Location] data |
-/// |[Config.geofenceTemplate]  | `String`   | `undefined` | Optional template to render [GeofenceEvent] data |
-///
-/// ### [Config.httpRootProperty]
-///
-/// Traditionally, the plugin had a hard-coded "Location Data Schema", where it automatically appended location-data to the `location` key in the JSON data, eg:
+/// The [BackgroundGeolocation] SDK hosts its own flexible and robust native HTTP & SQLite persistence services.  To enable the HTTP service, simply configure the SDK with an [Config.url]:
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   url: 'http://my_url',
-///   params: {
-///     myParams: {'foo': 'bar'}
-///   }
-/// ));
-/// ```
-///
-/// ```dart
-/// POST /my_url
-/// {
-///   "location": {  // <-- hard-coded "httpRootProperty"
-///     "coords": {
-///         "latitude": 23.23232323,
-///         "longitude": 37.37373737
-///     }
+///   url: "https://my-server.com/locations",
+///   autoSync: true,
+///   autoSyncThreshold: 5,
+///   batchSync: true,
+///   maxBatchSize: 50,
+///   headers: {
+///     "AUTHENTICATION_TOKEN": "23kasdlfkjlksjflkasdZIds"
 ///   },
-///   "myParams": {
-///     "foo": "bar"
-///   }
-/// }
-/// ```
-///
-/// With [Config.httpRootProperty], you can now customize this key:
-///
-/// ```dart
-/// BackgroundGeolocation.ready(Config(
-///   url: 'http://my_url',
-///   httpRootProperty: 'data',
 ///   params: {
-///     myParams: {'foo': 'bar'}
-///   }
-/// ));
-/// ```
-///
-/// ```dart
-/// POST /my_url
-/// {
-///   "data": {  // <-- customizable "httpRootProperty"!
-///     "coords": {
-///         "latitude": 23.23232323,
-///         "longitude": 37.37373737
-///     }
+///     "user_id": 1234
 ///   },
-///   "myParams": {
-///     "foo": "bar"
-///   }
-/// }
-/// ```
-///
-/// #### [Config.httpRootProperty]: "."
-///
-/// If you'd rather POST your data *as* the root of the JSON, use **[Config.httpRootProperty]: "."**:
-///
-/// ```dart
-/// BackgroundGeolocation.ready(Config(
-///   url: 'http://my_url',
-///   httpRootProperty: '.',
-///   params: {
-///     myParams: {'foo': 'bar'}
-///   }
-/// ))
-/// ```
-///
-/// ```dart
-/// POST /my_url
-/// {
-///   "coords": {  // <-- location data place *as* the root of the JSON
-///       "latitude": 23.23232323,
-///       "longitude": 37.37373737
-///   },
-///   "myParams": {
-///     "foo": "bar"
-///   }
-/// }
-/// ```
-///
-/// ### [Config.locationTemplate] & [Config.geofenceTemplate]
-///
-/// If you wish to provide your own custom HTTP JSON schema, you can configure distinct templates for both [Location] and [GeofenceEvent] data.  Evaluate variables in your template using Ruby `erb`-style tags:
-///
-/// ```erb
-/// <%= variable_name %>
-/// ```
-///
-/// ## Example:
-///
-/// ```dart
-/// BackgroundGeolocation.ready(Config(
-///   url: 'http://my_url',
-///   httpRootProperty: 'data',
-///   params: {
-///     myParams: {'foo': 'bar'}
-///   },
-///   locationTemplate: '{ "lat":<%= latitude %>, "lng":<%= longitude %> }',
 ///   extras: {
-///     "location_extra_foo": "extra location data"
-///   }
-/// ))
-/// ```
-///
-/// ```dart
-/// POST /my_url
-/// {
-///   "data": {
-///     "lat": 45.5192657,
-///     "lng": -73.6169116,
-///     "location_extra_foo": "extra location data"
+///     "route_id": 8675309
 ///   },
-///   "myParams": {
-///     "foo": "bar"
+///   locationsOrderDirection: "DESC",
+///   maxDaysToPersist: 14
+/// )).then((State state) {
+///   print('[ready] success: ${state}');
+/// });
+/// ```
+///
+/// ## The SQLite Database
+///
+/// The SDK immediately inserts each recorded location into its SQLite database.  This database is designed to act as a temporary buffer for the HTTP service and the SDK __strongly__ desires an *empty* database.  The only way that locations are destroyed from the database are:
+/// - Successful HTTP response from your server (`200`, `201`, `204`).
+/// - Executing [BackgroundGeolocation.destroyLocations].
+/// - [Config.maxDaysToPersist] elapses and the location is destroyed.
+/// - [Config.maxRecordsToPersist] destroys oldest record in favor of latest.
+///
+/// ## The HTTP Service
+///
+/// The SDK's HTTP service operates by selecting records from the database, locking them to prevent duplicate requests then uploading to your server.
+/// - By default, the HTTP Service will select a single record (oldest first; see [Config.locationsOrderDirection]) and execute an HTTP request to your [Config.url].
+/// - Each HTTP request is *synchronous* &mdash; the HTTP service will await the response from your server before selecting and uploading another record.
+/// - If your server returns an error or doesn't respond, the HTTP Service will immediately **halt**.
+/// - Configuring [Config.batchSync] __`true`__ instructs the HTTP Service to select *all* records in the database and upload them to your server in a single HTTP request.
+/// - Use [Config.maxBatchSize] to limit the number of records selected for each [Config.batchSync] request.  The HTTP service will execute *synchronous* HTTP *batch* requests until the database is empty.
+///
+/// ## HTTP Failures
+///
+/// If your server does *not* return a `20x` response (eg: `200`, `201`, `204`), the SDK will __`UNLOCK`__ that record.  Another attempt to upload will be made in the future (until [Config.maxDaysToPersist]) when:
+/// - When another location is recorded.
+/// - Application `pause` / `resume` events.
+/// - Application boot.
+/// - [BackgroundGeolocation.onHeartbeat] events.
+/// - [BackgroundGeolocation.onConnectivityChange] events.
+/// - __[iOS]__ Background `fetch` events.
+///
+/// ```dart
+/// BackgroundGeolocation.onHttp((HttpEvent response) {
+///   if (!response.success) {
+///     print('[onHttp] failure: ${response.status}, ${response.responseText}');
 ///   }
-/// }
+/// });
 /// ```
 ///
-/// ### Template Tags
+/// ## Receiving the HTTP Response.
 ///
-/// #### Common Tags
+/// You can capture the HTTP response from your server by listening to the [BackgroundGeolocation.onHttp] event.
 ///
-/// The following template tags are common to both **[Config.locationTemplate]** and **[Config.geofenceTemplate]**:
+/// ## [Config.autoSync]
 ///
-/// | Tag | Type | Description |
-/// |-----|------|-------------|
-/// | `latitude` | `Float` ||
-/// | `longitude` | `Float` ||
-/// | `speed` | `Float` | Meters|
-/// | `heading` | `Float` | Degrees|
-/// | `accuracy` | `Float` | Meters|
-/// | `altitude` | `Float` | Meters|
-/// | `altitude_accuracy` | `Float` | Meters|
-/// | `timestamp` | `String` |ISO-8601|
-/// | `uuid` | `String` |Unique ID|
-/// | `event` | `String` |`motionchange,geofence,heartbeat,providerchange`
-/// | `odometer` | `Float` | Meters|
-/// | `activity.type` | `String` | `still,on_foot,running,on_bicycle,in_vehicle,unknown`|
-/// | `activity.confidence` | `Integer` | 0-100%|
-/// | `battery.level` | `Float` | 0-100%|
-/// | `battery.is_charging` | `Boolean` | Is device plugged in?|
+/// By default, the SDK will attempt to immediately upload each recorded location to your configured [Config.url].
+/// - Use [Config.autoSyncThreshold] to throttle HTTP requests.  This will instruct the SDK to accumulate that number of records in the database before calling upon the HTTP Service.  This is a good way to **conserve battery**, since HTTP requests consume more energy/second than the GPS.
 ///
-/// #### Geofence Tags
+/// ----------------------------------------------------------------------
 ///
-/// The following template tags are specific to **[Config.geofenceTemplate]** only:
+/// ⚠️ Warning:  [Config.autoSyncThreshold]
 ///
-/// | Tag | Type | Description |
-/// |-----|------|-------------|
-/// | `geofence.identifier` | `String` | Which geofence?|
-/// | `geofence.action` | `String` | `ENTER,EXIT,DWELL`|
+/// If you've configured [Config.autoSyncThreshold], it **will be ignored** during a [BackgroundGeolocation.onMotionChange] event &mdash; all queued locations will be uploaded, since:
+/// - If an `onMotionChange` event fires **into the *moving* state**, the device may have been sitting dormant for a long period of time.  The plugin is *eager* to upload this state-change to the server as soon as possible.
+/// - If an `onMotionChange` event fires **into the *stationary* state**, the device may be *about to* lie dormant for a long period of time.  The plugin is *eager* to upload all queued locations to the server before going dormant.
+/// ----------------------------------------------------------------------
 ///
-/// #### Quoting String Values
+/// ## Manual [BackgroundGeolocation.sync]
 ///
-/// You're completely responsible for `"quoting"` your own `String` values.  The following will generate a JSON parsing error:
+/// The SDK's HTTP Service can be summoned into action at __any time__ via the method [BackgroundGeolocation.sync].
 ///
-/// ```dart
-/// BackgroundGeolocation.ready(Config(
-///   locationTemplate: '{ "event":<%= event %> }',
-/// ));
+/// ## [Config.params], [Config.headers] and [Config.extras]
+///
+/// - The SDK's HTTP Service appends configured [Config.params] to root of the `JSON` data of each HTTP request.
+/// - [Config.headers] are appended to each HTTP Request.
+/// - [Config.extras] are appended to each recorded location and persisted to the database record.
+///
+/// ## Custom `JSON` Schema:  [Config.locationTemplate] and [Config.geofenceTemplate]
+///
+/// The default HTTP `JSON` schema for both [Location] and [Geofence] can be overridden by the configuration options [Config.locationTemplate] and [Config.geofenceTemplate], allowing you to create any schema you wish.
+///
+/// ## HTTP Logging
+///
+/// You can observe the plugin performing HTTP requests in the logs for both iOS and Android (_See Wiki [Debugging](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Debugging):
+///
+/// ### Example
+/// ```
+/// ╔═════════════════════════════════════════════
+/// ║ LocationService: location
+/// ╠═════════════════════════════════════════════
+/// ╟─ 📍 Location[45.519199,-73.617054]
+/// ✅ INSERT: 70727f8b-df7d-48d0-acbd-15f10cacdf33
+/// ╔═════════════════════════════════════════════
+/// ║ HTTP Service
+/// ╠═════════════════════════════════════════════
+/// ✅ Locked 1 records
+/// 🔵 HTTP POST: 70727f8b-df7d-48d0-acbd-15f10cacdf33
+/// 🔵 Response: 200
+/// ✅ DESTROY: 70727f8b-df7d-48d0-acbd-15f10cacdf33
 /// ```
 ///
-/// In the logs, you'll find:
-/// ```
-/// ‼️-[TSLocation templateError:template:] locationTemplate error: Invalid value around character 10.
-/// { "event":<%= event %> }
-/// ```
+/// |#| Log entry               | Description                                                           |
+/// |-|-------------------------|-----------------------------------------------------------------------|
+/// |1| `📍Location`            | Location received from native Location API.                           |
+/// |2| `✅INSERT`              | Location record inserted into SDK's SQLite database.                  |
+/// |3| `✅Locked`              | SDK's HTTP service locks a record (to prevent duplicate HTTP uploads).|
+/// |4| `🔵HTTP POST`           | SDK's HTTP service attempts an HTTP request to your configured `url`. |
+/// |5| `🔵Response`            | Response from your server.                                            |
+/// |6| `✅DESTROY|UNLOCK`      | After your server returns a __`20x`__ response, the SDK deletes that record from the database.  Otherwise, the SDK will __`UNLOCK`__ that record and try again in the future. |
 ///
-/// To fix this, the `String` tag `<%= event %>` must be wrapped in `""`:
-///
-/// ```dart
-/// BackgroundGeolocation.ready(Config(
-///   locationTemplate: '{ "event":"<%= event %>" }',
-/// ));
-/// ```
-///
-/// #### `bool`, `double` and `int` Values
-///
-/// `bool`, `double` and `int` values do **not** require quoting:
-///
-/// ```
-/// BackgroundGeolocation.ready(Config(
-///   locationTemplate: '{ "is_moving":<%= is_moving %>, "odometer":<%= odometer %> }',
-/// ));
-/// ```
-///
-/// #### Array Templates
-///
-/// You're not forced to define your templates as an **`{Object}`** &mdash; You can define them as an **`[Array]`** too.
-///
-/// ```dart
-/// BackgroundGeolocation.ready(Config(
-///   url: 'http://my_url',
-///   httpRootProperty: 'data',
-///   params: {
-///     myParams: {'foo': 'bar'}
-///   },
-///   locationTemplate: '[ <%= latitude %>, <%= longitude %> ]',
-///   extras: {
-///     "location_extra_foo": "extra location data"
-///   }
-/// ))
-/// ```
-///
-/// ```dart
-/// POST /my_url
-/// {
-///   "data": [
-///     45.5192657,
-///     -73.6169116,
-///     {"location_extra_foo": "extra location data"}  // <-- appended #extras
-///   ],
-///   "myParams": {
-///     "foo": "bar"
-///   }
-/// }
-/// ```
-///
-/// :exclamation: `#extras` are automatically appended to the last element of the array as an `{Object}`.
-///
-/// #### Array Template with `httpRootProperty: "."`
-///
-/// :warning: This case is tricky and should probably be avoided, particularly if you have configured [Config.params], since there no place in the request JSON to append them.
-///
-/// ```dart
-/// BackgroundGeolocation.ready(Config(
-///   url: 'http://my_url',
-///   httpRootProperty: '.',
-///   params: {
-///     myParams: {'foo': 'bar'}
-///   },
-///   locationTemplate: '[<%=latitude%>, <%=longitude%>]',
-///   extras: {
-///     "location_extra_foo": "extra location data"
-///   }
-/// ))
-/// ```
-///
-/// ```dart
-/// - POST /my_url
-///  [  // <-- #params are lost.  There's no place in the data-structure to append them.
-///   45.5192657,
-///   -73.6169116,
-///   {
-///     "location_extra_foo": "extra location data"
-///   }
-/// ]
-/// ```
-
 class HttpEvent {
   /// `true` if the HTTP response was successful (`200`, `201`, `204`).
   bool success;

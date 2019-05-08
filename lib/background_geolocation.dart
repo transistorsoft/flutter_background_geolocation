@@ -19,6 +19,8 @@ const _EVENT_CHANNEL_CONNECTIVITYCHANGE =
     "$_PLUGIN_PATH/events/" + Event.CONNECTIVITYCHANGE;
 const _EVENT_CHANNEL_ENABLEDCHANGE =
     "$_PLUGIN_PATH/events/" + Event.ENABLEDCHANGE;
+const _EVENT_CHANNEL_NOTIFICATIONACTION =
+    "$_PLUGIN_PATH/events/" + Event.NOTIFICATIONACTION;
 
 class _Subscription {
   final StreamSubscription<dynamic> subscription;
@@ -31,7 +33,7 @@ class _Subscription {
 ///
 /// ## Events
 ///
-/// [BackgroundGeolocation] is event-based.
+/// [BackgroundGeolocation] is event-based and highly configurable through the [Config] API.
 ///
 /// | Method                 | Description                             |
 /// |------------------------|-----------------------------------------|
@@ -47,6 +49,7 @@ class _Subscription {
 /// | [onConnectivityChange] | Fired when network-connectivity changes (connected / disconnected).  |
 /// | [onPowerSaveChange]    | Fired when state of operating-system's "power-saving" feature is enabled / disabled. |
 /// | [onEnabledChange]      | Fired when the plugin is enabled / disabled via its [start] / [stop] methods.        |
+/// | [onNotificationAction] | __(Android only)__ Fired when a [Notification.actions] button is clicked upon a custom [Notification.layout] |
 ///
 /// ## Example
 ///
@@ -64,17 +67,17 @@ class _Subscription {
 ///     //
 ///     // Fired whenever a location is recorded
 ///     bg.BackgroundGeolocation.onLocation((bg.Location location) {
-///       print('[location] - $location');
+///       print('[location] - ${location}');
 ///     });
 ///
 ///     // Fired whenever the plugin changes motion-state (stationary->moving and vice-versa)
 ///     bg.BackgroundGeolocation.onMotionChange((bg.Location location) {
-///       print('[motionchange] - $location');
+///       print('[motionchange] - ${location}');
 ///     });
 ///
 ///     // Fired whenever the state of location-services changes.  Always fired at boot
 ///     bg.BackgroundGeolocation.onProviderChange((bg.ProviderChangeEvent event) {
-///       print('[providerchange] - $event');
+///       print('[providerchange] - ${event}');
 ///     });
 ///
 ///     ////
@@ -86,8 +89,7 @@ class _Subscription {
 ///         stopOnTerminate: false,
 ///         startOnBoot: true,
 ///         debug: true,
-///         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
-///         reset: true
+///         logLevel: bg.Config.LOG_LEVEL_VERBOSE
 ///     )).then((bg.State state) {
 ///       if (!state.enabled) {
 ///         ////
@@ -126,6 +128,8 @@ class BackgroundGeolocation {
       const EventChannel(_EVENT_CHANNEL_CONNECTIVITYCHANGE);
   static const EventChannel _eventChannelEnabledChange =
       const EventChannel(_EVENT_CHANNEL_ENABLEDCHANGE);
+  static const EventChannel _eventChannelNotificationAction =
+      const EventChannel(_EVENT_CHANNEL_NOTIFICATIONACTION);
 
   // Event Subscriptions
   static List<_Subscription> _subscriptions = new List();
@@ -142,6 +146,7 @@ class BackgroundGeolocation {
   static Stream<bool> _eventsPowerSaveChange;
   static Stream<ConnectivityChangeEvent> _eventsConnectivityChange;
   static Stream<bool> _eventsEnabledChange;
+  static Stream<String> _eventsNotificationAction;
 
   /// Return the current [State] of the plugin, including all [Config] parameters.
   ///
@@ -172,7 +177,7 @@ class BackgroundGeolocation {
   ///     'my-auth-token': 'secret-token'
   ///   }
   /// )).then((State state) {
-  ///   print('[ready] success: $state');
+  ///   print('[ready] success: ${state}');
   /// });
   /// ```
   ///
@@ -200,10 +205,9 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
-  ///   reset: true,  // <-- set true to ALWAYS apply supplied config; not just at first launch.
   ///   distanceFilter: 50
   /// }).then((State state) {
-  ///   print('[ready] - $state')
+  ///   print('[ready] - ${state}')
   /// });
   ///
   static Future<State> ready(Config config) async {
@@ -225,7 +229,7 @@ class BackgroundGeolocation {
   ///   stopOnTerminate: false,
   ///   startOnBoot: true
   /// )).then((State state) {
-  ///   print('[setConfig] success: $state');
+  ///   print('[setConfig] success: ${state}');
   /// })
   /// ```
   ///
@@ -254,7 +258,7 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.start.then((State state) {
-  ///   print('[start] success - $state');
+  ///   print('[start] success - ${state}');
   /// });
   /// ```
   /// For more information, see [Philosophy of Operation](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Philosophy-of-Operation)
@@ -292,7 +296,7 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.startSchedule.then((State state) {
-  ///   print('[startSchedule] success: $state');
+  ///   print('[startSchedule] success: ${state}');
   /// })
   /// ```
   ///
@@ -305,7 +309,7 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.stopSchedule.then((State state) {
-  ///   print('[stopSchedule] success: $state');
+  ///   print('[stopSchedule] success: ${state}');
   /// })
   /// ```
   ///
@@ -346,7 +350,7 @@ class BackgroundGeolocation {
   ///
   /// // Listen to geofence events.
   /// BackgroundGeolocation.onGeofence((GeofenceEvent event) {
-  ///   print('[onGeofence] - $event')
+  ///   print('[onGeofence] - ${event}')
   /// });
   ///
   /// BackgroundGeolocation.ready(Config(
@@ -516,7 +520,7 @@ class BackgroundGeolocation {
   /// ```dart
   /// BackgroundGeolocation.setOdometer(1234.56).then((Location location) {
   ///   // This is the location where odometer was set at.
-  ///   print('[setOdometer] success: $location');
+  ///   print('[setOdometer] success: ${location}');
   /// });
   /// ```
   ///
@@ -579,9 +583,9 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.sync((List records) {
-  ///   print('[sync] success: $records');
+  ///   print('[sync] success: ${records}');
   /// }).catchError((error) {
-  ///   print('[sync] FAILURE: $error');
+  ///   print('[sync] FAILURE: ${error}');
   /// });
   ///
   /// ```
@@ -615,7 +619,7 @@ class BackgroundGeolocation {
   /// )).then((bool success) {
   ///   print('[addGeofence] success');
   /// }.catchError((error) {
-  ///   print('[addGeofence] FAILURE: $error');
+  ///   print('[addGeofence] FAILURE: ${error}');
   //// });
   /// ```
   ///
@@ -668,7 +672,7 @@ class BackgroundGeolocation {
   /// BackgroundGeolocation.removeGeofence("Home").then((bool success) {
   ///   print('[removeGeofence] success');
   /// }).catchError((error) {
-  ///   print('[removeGeofence] FAILURE: $error');
+  ///   print('[removeGeofence] FAILURE: ${error}');
   /// });
   ///
   static Future<bool> removeGeofence(String identifier) async {
@@ -688,8 +692,8 @@ class BackgroundGeolocation {
   /// ## Example
   ///
   /// ```dart
-  /// List<Geofence> geofences = await BackgroundGeolocation.getGeofences();
-  /// print('[getGeofences: $geofences');
+  /// List<Geofence> geofences = await BackgroundGeolocation.geofences;
+  /// print('[getGeofences: ${geofences}');
   /// ```
   ///
   static Future<List<Geofence>> get geofences async {
@@ -776,7 +780,7 @@ class BackgroundGeolocation {
   /// ```dart
   /// BackgroundGeolocation.log.then((String log) {
   ///   // Warning:  this string could be several megabytes.
-  ///   print('[log] success: $log');
+  ///   print('[log] success: ${log}');
   /// });
   /// ```
   ///
@@ -792,7 +796,7 @@ class BackgroundGeolocation {
   /// BackgroundGeolocation.emailLog('foo@bar.com').then((bool success) {
   ///   print('[emailLog] success');
   /// }).catchError((error) {
-  ///   print('[emailLog] FAILURE: $error');
+  ///   print('[emailLog] FAILURE: ${error}');
   /// });
   /// ```
   ///
@@ -849,7 +853,7 @@ class BackgroundGeolocation {
   /// ## Example
   /// ```dart
   /// bg.BackgroundGeolocation.requestPermission().then((int status) {
-  ///   print("[requestPermission] STATUS: $status");
+  ///   print("[requestPermission] STATUS: ${status}");
   ///   switch(status) {
   ///     case bg.ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS:
   ///       print("[requestPermission] AUTHORIZATION_STATUS_ALWAYS");
@@ -868,7 +872,7 @@ class BackgroundGeolocation {
   ///       break;
   ///   }
   /// }).catchError((dynamic error) {
-  ///   print("[requestPermission] ERROR: $error");
+  ///   print("[requestPermission] ERROR: ${error}");
   /// });
   /// ```
   ///
@@ -912,6 +916,7 @@ class BackgroundGeolocation {
   /// - [onEnabledChange]
   /// - [onConnectivityChange]
   /// - [onPowerSaveChange]
+  /// - [onNotificationAction]
   ///
   /// ## Example
   ///
@@ -932,7 +937,7 @@ class BackgroundGeolocation {
   ///
   /// // Create a Location callback:
   /// Function(Location) callback = (Location location) {
-  ///   print('[My location callback] $location');
+  ///   print('[My location callback] ${location}');
   /// };
   /// // Listen to the event:
   /// BackgroundGeolocation.onLocation(callback);
@@ -965,9 +970,9 @@ class BackgroundGeolocation {
   /// ```dart
   /// BackgroundGeolocation.onMotionChange((Location location) {
   ///   if (location.isMoving) {
-  ///      print('[onMotionChange] Device has just started MOVING $location');
+  ///      print('[onMotionChange] Device has just started MOVING ${location}');
   ///   } else {
-  ///      print('[onMotionChange] Device has just STOPPED:  $location);
+  ///      print('[onMotionChange] Device has just STOPPED:  ${location});
   ///   }
   /// });
   /// ```
@@ -991,9 +996,9 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.onLocation((Location location) {
-  ///   print('[onLocation] success: $location');
+  ///   print('[onLocation] success: ${location}');
   /// }, (LocationError error) {
-  ///   print('[onLocation] ERROR: $error');
+  ///   print('[onLocation] ERROR: ${error}');
   /// });
   /// ```
   ///
@@ -1031,7 +1036,7 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.onActivityChange((ActivityChangeEvent event) {
-  ///   print('[onActivityChange] $event');
+  ///   print('[onActivityChange] ${event}');
   /// });
   /// ```
   ///
@@ -1053,7 +1058,7 @@ class BackgroundGeolocation {
   /// ## Example
   ///
   /// BackgroundGeolocation.onGeofence((GeofenceEvent event) {
-  ///   print('[onGeofence] $event');
+  ///   print('[onGeofence] ${event}');
   /// });
   /// ```
   static void onGeofence(Function(GeofenceEvent) callback) {
@@ -1125,14 +1130,14 @@ class BackgroundGeolocation {
   /// ));
   ///
   /// BackgroundGeolocation.onHeartbeat((HeartbeatEvent event) {
-  ///   print('[onHeartbeat] $event');
+  ///   print('[onHeartbeat] ${event}');
   ///
   ///   // You could request a new location if you wish.
   ///   BackgroundGeolocation.getCurrentPosition(
   ///     samples: 1,
   ///     persist: true
   ///   ).then((Location location) {
-  ///     print('[getCurrentPosition] $location');
+  ///     print('[getCurrentPosition] ${location}');
   ///   });
   /// })
   /// ```
@@ -1155,7 +1160,7 @@ class BackgroundGeolocation {
   ///   int status = response.status;
   ///   bool success = response.success;
   ///   String responseText = response.responseText;
-  ///   print('[onHttp] status: $status, success? $success, responseText: $responseText');
+  ///   print('[onHttp] status: ${status}, success? ${success}, responseText: ${responseText}');
   /// });
   /// ```
   ///
@@ -1220,7 +1225,7 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.onProviderChange((ProviderChangeEvent event) {
-  ///   print('[onProviderChange: $event');
+  ///   print('[onProviderChange: ${event}');
   ///
   ///   switch(provider.status) {
   ///     case ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED:
@@ -1258,7 +1263,7 @@ class BackgroundGeolocation {
   /// ## Example
   /// ```dart
   /// BackgroundGeolocation.oConnectivityChange((ConnectivityChangeEvent event) {
-  ///   print('[onConnectivityChange] $event');
+  ///   print('[onConnectivityChange] ${event}');
   /// });
   /// ```
   ///
@@ -1281,7 +1286,7 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.onEnabledChange'((bool isEnabled) {
-  ///   print('[onEnabledChanged] isEnabled? $isEnabled');
+  ///   print('[onEnabledChanged] isEnabled? ${isEnabled}');
   /// });
   /// ```
   ///
@@ -1316,7 +1321,7 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.oPowerSaveChange((bool isPowerSaveMode) {
-  ///   print('[onPowerSaveChange: $isPowerSaveMode');
+  ///   print('[onPowerSaveChange: ${isPowerSaveMode}');
   /// });
   /// ```
   ///
@@ -1329,14 +1334,55 @@ class BackgroundGeolocation {
     _registerSubscription(_eventsPowerSaveChange.listen(callback), callback);
   }
 
+  /// __(Android only)__ Registers a button-click listener on a [Custom Notification Layout](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Custom-Notification-Layout)
+  ///
+  /// ![](https://dl.dropbox.com/s/whcb6q1gxxdk9t1/android-foreground-notification-transistor.png?dl=1)
+  ///
+  /// ℹ️ See also:
+  /// - [Android Custom Notification Layout](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Custom-Notification-Layout)
+  /// - [Notification.actions]
+  /// - [Notification.layout]
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.ready(Config(
+  ///   notification: Notification(
+  ///     actions: [  // <-- register button listeners
+  ///       "notificationButtonFoo",
+  ///       "notificationButtonBar"
+  ///     ]
+  ///   )
+  /// ));
+  ///
+  /// // Listen to custom button clicks:
+  /// BackgroundGeolocation.onNotificationAction((String buttonId) {
+  ///   print("[onNotificationAction] - ${buttonId}");
+  ///   switch(buttonId) {
+  ///     case 'notificationButtonFoo':
+  ///       break;
+  ///     case 'notificationButtonBar':
+  ///       break;
+  ///   }
+  /// });
+  /// ```
+  ///
+  static void onNotificationAction(Function(String) callback) {
+    if (_eventsNotificationAction == null) {
+      _eventsNotificationAction = _eventChannelNotificationAction
+          .receiveBroadcastStream()
+          .map((dynamic action) => action as String);
+    }
+    _registerSubscription(_eventsNotificationAction.listen(callback), callback);
+  }
+
   /// Registers a function to receive events from __`BackgroundGeolocation`__ while in the *terminated* ("Headless") state.
   ///
-  /// __Note:__ Requires [Config.enableHeadless]:true.
+  /// __Note:__ Requires [Config.enableHeadless]:true.  See the [Android Headless Mode Guide](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode).
   ///
   /// In **`main.dart`**, create a global function beside `void main() {}` (**Must** be defined as a distinct function, not an anonymous callback).  This `function` will receive *all* events from `BackgroundGeolocation` in the headless state, and provided with a [HeadlessEvent] containing a [HeadlessEvent.name] and [HeadlessEvent.event].
   ///
   /// After running your app with `runApp`, register your headless-task with [registerHeadlessTask].  Within your `callback`, you're free to interact with the complete `BackgroundGeolocation` API.
   ///
+  /// __WARNING:__ You **must** `registerHeadlessTask` in your `main.dart`.  Do **not** place it in your application components.
   ///
   /// ## Example
   ///
@@ -1346,57 +1392,57 @@ class BackgroundGeolocation {
   ///
   /// /// Receives all events from BackgroundGeolocation while app is terminated:
   /// void headlessTask(bg.HeadlessEvent headlessEvent) async {
-  ///   print('[HeadlessTask]: $headlessEvent');
+  ///   print('[HeadlessTask]: ${headlessEvent}');
   ///
-  ///   // Implement a `case` for only those events you're interested in.
+  ///   // Implement a 'case' for only those events you're interested in.
   ///   switch(headlessEvent.name) {
   ///     case bg.Event.TERMINATE:
   ///       bg.State state = headlessEvent.event;
-  ///       print('- State: $state');
+  ///       print('- State: ${state}');
   ///       break;
   ///     case bg.Event.HEARTBEAT:
   ///       bg.HeartbeatEvent event = headlessEvent.event;
-  ///       print('- HeartbeatEvent: $event');
+  ///       print('- HeartbeatEvent: ${event}');
   ///       break;
   ///     case bg.Event.LOCATION:
   ///       bg.Location location = headlessEvent.event;
-  ///       print('- Location: $location');
+  ///       print('- Location: ${location}');
   ///       break;
   ///     case bg.Event.MOTIONCHANGE:
   ///       bg.Location location = headlessEvent.event;
-  ///       print('- Location: $location');
+  ///       print('- Location: ${location}');
   ///       break;
   ///     case bg.Event.GEOFENCE:
   ///       bg.GeofenceEvent geofenceEvent = headlessEvent.event;
-  ///       print('- GeofenceEvent: $geofenceEvent');
+  ///       print('- GeofenceEvent: ${geofenceEvent}');
   ///       break;
   ///     case bg.Event.GEOFENCESCHANGE:
   ///       bg.GeofencesChangeEvent event = headlessEvent.event;
-  ///       print('- GeofencesChangeEvent: $event');
+  ///       print('- GeofencesChangeEvent: ${event}');
   ///       break;
   ///     case bg.Event.SCHEDULE:
   ///       bg.State state = headlessEvent.event;
-  ///       print('- State: $state');
+  ///       print('- State: ${state}');
   ///       break;
   ///     case bg.Event.ACTIVITYCHANGE:
   ///       bg.ActivityChangeEvent event = headlessEvent.event;
-  ///       print('ActivityChangeEvent: $event');
+  ///       print('ActivityChangeEvent: ${event}');
   ///       break;
   ///     case bg.Event.HTTP:
   ///       bg.HttpEvent response = headlessEvent.event;
-  ///       print('HttpEvent: $response');
+  ///       print('HttpEvent: ${response}');
   ///       break;
   ///     case bg.Event.POWERSAVECHANGE:
   ///       bool enabled = headlessEvent.event;
-  ///       print('ProviderChangeEvent: $enabled');
+  ///       print('ProviderChangeEvent: ${enabled}');
   ///       break;
   ///     case bg.Event.CONNECTIVITYCHANGE:
   ///       bg.ConnectivityChangeEvent event = headlessEvent.event;
-  ///       print('ConnectivityChangeEvent: $event');
+  ///       print('ConnectivityChangeEvent: ${event}');
   ///       break;
   ///     case bg.Event.ENABLEDCHANGE:
   ///       bool enabled = headlessEvent.event;
-  ///       print('EnabledChangeEvent: $enabled');
+  ///       print('EnabledChangeEvent: ${enabled}');
   ///       break;
   ///   }
   /// }
@@ -1421,6 +1467,7 @@ class BackgroundGeolocation {
   /// - [onGeofencesChange]
   /// - [onEnabledChange]
   /// - [onConnectivityChange]
+  /// - [onNotificationAction]
   ///
   /// __WARNING__:
   ///
@@ -1432,12 +1479,12 @@ class BackgroundGeolocation {
   /// ```dart
   /// // NO!  This will not work.
   /// BackgroundGeolocation.registerHeadlessTask((HeadlessEvent event) {
-  ///   print('$event');
+  ///   print('${event}');
   /// });
   ///
   /// // YES!
   /// void myHeadlessTask(HeadlessEvent headlessEvent) async {
-  ///   print('$event');
+  ///   print('${event}');
   /// }
   ///
   /// BackgroundGeolocation.registerHeadlessTask(myHeadlessTask);
@@ -1469,6 +1516,39 @@ class BackgroundGeolocation {
       StreamSubscription<dynamic> sub, Function callback) {
     _subscriptions.add(new _Subscription(sub, callback));
   }
+
+// Initiate a constant stream of location-updates
+// DISABLED:  can't execute callback more than once with Flutter.  Will have to use an EventChannel.
+//  static Future<Location> watchPosition(
+//      {int timeout,
+//        int interval,
+//        bool persist,
+//        int desiredAccuracy,
+//        Map<String, dynamic> extras}) async {
+//    Map<String, dynamic> options = {};
+//    if (timeout != null) options['timeout'] = timeout;
+//    if (interval != null) options['interval'] = interval;
+//    if (persist != null) options['persist'] = persist;
+//    if (desiredAccuracy != null) options['desiredAccuracy'] = desiredAccuracy;
+//    if (extras != null) options['extras'] = extras;
+//
+//    Completer completer = new Completer<Location>();
+//
+//    _methodChannel
+//        .invokeMethod('watchPosition', options)
+//        .then((dynamic data) {
+//      completer.complete(new Location(data));
+//    }).catchError((error) {
+//      completer.completeError(new LocationError(error));
+//    });
+//    return completer.future;
+//  }
+// Halt watchPosition
+//
+//  static Future<bool> stopWatchPosition() async {
+//    return await _methodChannel.invokeMethod('stopWatchPosition');
+//  }
+
 }
 
 /// Headless Callback Dispatcher

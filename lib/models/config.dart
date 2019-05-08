@@ -2,7 +2,7 @@ part of flt_background_geolocation;
 
 /// Configuration API.
 ///
-/// Instances of `Config` are consumed by [BackgroundGeolocation.ready].
+/// Instances of `Config` are consumed by [BackgroundGeolocation.ready] and [BackgroundGeolocation.setConfig].
 ///
 /// # Example
 ///
@@ -25,7 +25,16 @@ part of flt_background_geolocation;
 ///   print('[ready] BackgroundGeolocation is configured and ready to use');
 ///
 ///   BackgroundGeolocation.start();
-/// })
+/// });
+///
+/// // To modify config after #ready has been executed, use #setConfig
+/// BackgroundGeolocation.setConfig(Config(
+///   headers: {
+///     "my-auth-token": "my-new-secret-key"
+///   }
+/// )).then((State state) {
+///   BackgroundGeolocation.sync();
+/// });
 /// ```
 ///
 class Config {
@@ -224,7 +233,7 @@ class Config {
 
   /// __`[Android only]`__ Enable high-accuracy for **geofence-only** mode (See [BackgroundGeolocation.startGeofences]).
   ///
-  /// Defaults to `false`.  Runs Android's [BackgroundGeolocation.startGeofences] with a///foreground service* (along with its corresponding persitent notification;  See [foregroundService] for a list of available notification config options, including [notificationText], [notificationTitle]).
+  /// Defaults to `false`.  Runs Android's [BackgroundGeolocation.startGeofences] with a///foreground service* (along with its corresponding persitent notification;  See [Notification] for a list of available notification config options, including [notification.text], [notification.title]).
   ///
   /// Configuring `geofenceModeHighAccuracy: true` will make Android geofence triggering///*far more responsive**.  In this mode, the usual config options to control location-services will be applied:
   ///
@@ -398,6 +407,8 @@ class Config {
   /// | [PERSIST_MODE_GEOFENCE]              | Persist only geofence events (ignore location events)   |
   /// | [PERSIST_MODE_NONE]                  | Persist nothing (neither geofence nor location events)  |
   ///
+  /// __See also:__ __HTTP Guide__ at [HttpEvent].
+  ///
   int persistMode;
 
   /// The HTTP method to use when creating an HTTP request to your configured [url].
@@ -487,6 +498,7 @@ class Config {
   ///   "device_id": 'abc123'
   /// }
   /// ```
+  /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
   Map<String, dynamic> params;
 
@@ -520,6 +532,7 @@ class Config {
   /// ```
   ///
   ///  **Note:**  The plugin automatically applies a number of required headers, including `"content-type": "application/json"`
+  /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
   Map<String, dynamic> headers;
 
@@ -562,6 +575,8 @@ class Config {
   /// }
   /// ```
   ///
+  /// __See also:__ __HTTP Guide__ at [HttpEvent].
+  ///
   Map<String, dynamic> extras;
 
   /// Immediately upload each recorded location to your configured [url].
@@ -574,6 +589,7 @@ class Config {
   /// - [autoSyncThreshold]
   /// - [batchSync]
   /// - [maxBatchSize]
+  /// - __HTTP Guide__ at [HttpEvent].
   ///
   bool autoSync;
 
@@ -583,11 +599,24 @@ class Config {
   ///
   /// Configuring an `autoSyncThreshold` in conjunction with [batchSync]:true **can conserve battery** by reducing the number of HTTP requests, since HTTP requests consume *far* more energy / second than GPS.
   ///
+  /// ----------------------------------------------------------------------
+  ///
+  /// ⚠️ Warning:
+  ///
+  /// If you've configured `autoSyncThreshold`, it **will be ignored** during a [BackgroundGeolocation.onMotionChange] event &mdash; all queued locations will be uploaded, since:
+  /// - If an `onMotionChange` event fires **into the *moving* state**, the device may have been sitting dormant for a long period of time.  The plugin is *eager* to upload this state-change to the server as soon as possible.
+  /// - If an `onMotionChange` event fires **into the *stationary* state**, the device may be *about to* lie dormant for a long period of time.  The plugin is *eager* to upload all queued locations to the server before going dormant.
+  /// ----------------------------------------------------------------------
+  ///
+  /// __See also:__ __HTTP Guide__ at [HttpEvent].
+  ///
   int autoSyncThreshold;
 
   /// POST multiple locations to your [url] in a single HTTP request.
   ///
   /// Default is **`false`**.  If you've enabled HTTP feature by configuring an [url], [batchSync]: true will POST *all* the locations currently stored in native SQLite database to your server in a single HTTP POST request.  With [batchSync]: false, an HTTP POST request will be initiated for **each** location in database.
+  ///
+  /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
   bool batchSync;
 
@@ -596,6 +625,8 @@ class Config {
   /// Defaults to `-1` (no maximum).  If you've enabled HTTP feature by configuring an [url] with [batchSync]: true, this parameter will limit the number of records attached to **each** batch request.  If the current number of records exceeds the **`maxBatchSize`**, multiple HTTP requests will be generated until the location queue is empty.
   ///
   /// The plugin can potentially accumulate mega-bytes worth of location-data if operating in a disconnected environment for long periods.  You will not want to [batchSync]:true a large amount of data in a single HTTP request.
+  ///
+  /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
   int maxBatchSize;
 
@@ -623,7 +654,7 @@ class Config {
   /// ))
   /// ```
   ///
-  ///  ## Warning:  quoting `String` data.
+  /// ## Warning:  quoting `String` data.
   ///
   /// The plugin does not automatically apply double-quotes around `String` data.  The plugin will attempt to JSON encode your template exactly as you're configured.
   ///
@@ -808,7 +839,7 @@ class Config {
   /// BackgroundGeolocation.onHttp((HttpEvent response) {
   ///   bool success = response.success;
   ///   if (!success) {
-  ///     print('[onHttp] FAILURE: $response');
+  ///     print('[onHttp] FAILURE: ${response}');
   ///   }
   /// });
   ///
@@ -843,6 +874,7 @@ class Config {
   ///  **See also:**
   /// - [Android Headless Mode](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode)
   /// - [enableHeadless]
+  /// - __HTTP Guide__ at [HttpEvent].
   ///
   bool stopOnTerminate;
 
@@ -883,14 +915,14 @@ class Config {
   /// ));
   ///
   /// BackgroundGeolocation.onHeartbeat((HeartbeatEvent event) {
-  ///   print('[onHeartbeat] $event');
+  ///   print('[onHeartbeat] ${event}');
   ///
   ///   // You could request a new location if you wish.
   ///   BackgroundGeolocation.getCurrentPosition(
   ///     samples: 1,
   ///     persist: true
   ///   ).then((Location location) {
-  ///     print('[getCurrentPosition] $location');
+  ///     print('[getCurrentPosition] ${location}');
   ///   });
   /// })
   ///
@@ -927,7 +959,7 @@ class Config {
   /// // Listen to #onSchedule events:
   /// BackgroundGeolocation.onSchedule((State state) {
   ///   bool enabled = state.enabled;
-  ///   print('[onSchedule] - enabled? $enabled');
+  ///   print('[onSchedule] - enabled? ${enabled}');
   /// });
   /// .
   /// .
@@ -1025,15 +1057,127 @@ class Config {
   ///
   /// Defaults to **`false`**.  When set to **`true`**, the plugin will emit debugging sounds and notifications for life-cycle events of [BackgroundGeolocation].
   ///
-  /// ## iOS
+  /// # iOS
   ///
   /// In you wish to hear debug sounds in the background, you must manually enable the background-mode:
   ///
   /// **`[x] Audio and Airplay`** background mode in *Background Capabilities* of XCode.
   ///
-  /// ![](https://dl.dropboxusercontent.com/s/fl7exx3g8whot9f/enable-background-audio.png?dl=1)\
+  /// ![](https://dl.dropboxusercontent.com/s/fl7exx3g8whot9f/enable-background-audio.png?dl=1)
   ///
-  ///  **See also:** [Debugging Sounds](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Debug-Sounds)
+  /// # Debug Sound FX
+  ///
+  /// {@inject-html}
+  /// <table>
+  ///   <thead>
+  ///     <tr>
+  ///       <th>Event</th>
+  ///       <th>iOS</th>
+  ///       <th>Android</th>
+  ///     </tr>
+  ///   </thead>
+  ///   <tbody><tr>
+  ///       <td><code>LOCATION_RECORDED</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/yestzqdb6gzx7an/location-recorded.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropboxusercontent.com/s/d3e821scn5fppq6/tslocationmanager_ooooiii3_full_vol.wav?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>LOCATION_SAMPLE</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/7inowa0folzlal3/location-sample.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/8bgiyifowyf9c7n/tslocationmanager_click_tap_done_checkbox5_full_vol.wav?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>LOCATION_ERROR</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/lwmx6j2ddzke1c7/location-error.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/wadrz2x6elhc65l/tslocationmanager_digi_warn.mp3?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>LOCATION_SERVICES_ON</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/4cith8fg58bf5rh/location-services-on.mp3?dl=0"></audio></td>
+  ///       <td>n/a</td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>LOCATION_SERVICES_OFF</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/vdntndpzl1ebeq2/location-services-off.mp3?dl=0"></audio></td>
+  ///       <td>n/a</td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>STATIONARY_GEOFENCE_EXIT</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/6voj31fmmoqhveb/motionchange-true.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/gjgv51pot3h2n3t/tslocationmanager_zap_fast.mp3?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>MOTIONCHANGE_FALSE</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/qjduicy3c9d4yfv/motionchange-false.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/fm4j2t8nqzd5856/tslocationmanager_marimba_drop.mp3?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>MOTIONCHANGE_TRUE</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/6voj31fmmoqhveb/motionchange-true.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/n5mn6tr7x994ivg/tslocationmanager_chime_short_chord_up.mp3?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>STOP_DETECTION_DELAY_INITIATED</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/34jf8sifr5nkyie/stopDetectionDelay.mp3?dl=0"></audio></td>
+  ///       <td>n/a</td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>STOP_TIMER_ON</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/s6dou5vv55glq5w/stop-timeout-start.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/q4a9pf0vlztfafh/tslocationmanager_chime_bell_confirm.mp3?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>STOP_TIMER_OFF</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/c39phjw0vogg8lm/stop-timeout-cancel.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/9o9v826was19lyi/tslocationmanager_bell_ding_pop.mp3?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>HEARTBEAT</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/5rdc38isc8yf323/heartbeat.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/bsdtw21hscqqy67/tslocationmanager_peep_note1.wav?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>GEOFENCE_ENTER</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/i4hzh4rgmd1lo20/geofence-enter.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/76up5ik215xwxh1/tslocationmanager_beep_trip_up_dry.mp3?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>GEOFENCE_EXIT</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/nwonzl1ni15qv1k/geofence-exit.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/xuyyagffheyk8r7/tslocationmanager_beep_trip_dry.mp3?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>GEOFENCE_DWELL_START</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/djlpw2ejaioq0g2/geofence-dwell-start.mp3?dl=0"></audio></td>
+  ///       <td>n/a</td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>GEOFENCE_DWELL_CANCEL</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/37xvre56gz3ro58/geofence-dwell-cancel.mp3?dl=0"></audio></td>
+  ///       <td>n/a</td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>GEOFENCE_DWELL</code></td>
+  ///       <td><code>GEOFENCE_ENTER</code> after <code>GEOFENCE_DWELL_START</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/uw5vjuatm3wnuid/tslocationmanager_beep_trip_up_echo.mp3?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>ERROR</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/13c50fnepyiknnb/error.mp3?dl=0"></audio></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/32e93c1t4kh69p1/tslocationmanager_music_timpani_error_01.mp3?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>WARNING</code></td>
+  ///       <td>n/a</td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/wadrz2x6elhc65l/tslocationmanager_digi_warn.mp3?dl=0"></audio></td>
+  ///     </tr>
+  ///     <tr>
+  ///       <td><code>BACKGROUND_FETCH</code></td>
+  ///       <td><video controls name="media" height="50" width="200"><source src="https://dl.dropbox.com/s/am91js76s0ehjo1/background-fetch.mp3?dl=0"></audio></td>
+  ///       <td>n/a</td>
+  ///     </tr>
+  /// </tbody></table>
+  /// @{@end-inject-html}
   ///
   bool debug;
 
@@ -1214,7 +1358,7 @@ class Config {
   ///
   /// ```dart
   /// BackgroundGeolocation.onProviderChange((ProviderChangeEvent event) {
-  ///   print('[onProviderChange] $event');
+  ///   print('[onProviderChange] ${event}');
   ///
   ///   if (!provider.enabled) {
   ///     alert('Please enable location services');
@@ -1287,7 +1431,7 @@ class Config {
   ///
   /// ```dart
   /// BackgroundGeolocation.onHeartbeat((HeartbeatEvent event) {
-  ///   print('[onHeartbeat] $event');
+  ///   print('[onHeartbeat] ${event}');
   /// });
   ///
   /// BackgroundGeolocation.ready(Config(
@@ -1507,57 +1651,57 @@ class Config {
   ///
   /// /// Receives all events from BackgroundGeolocation while app is terminated:
   /// void headlessTask(bg.HeadlessEvent headlessEvent) async {
-  ///   print('[HeadlessTask]: $headlessEvent');
+  ///   print('[HeadlessTask]: ${headlessEvent}');
   ///
   ///   // Implement a `case` for only those events you're interested in.
   ///   switch(headlessEvent.name) {
   ///     case bg.Event.TERMINATE:
   ///       bg.State state = headlessEvent.event;
-  ///       print('- State: $state');
+  ///       print('- State: ${state}');
   ///       break;
   ///     case bg.Event.HEARTBEAT:
   ///       bg.HeartbeatEvent event = headlessEvent.event;
-  ///       print('- HeartbeatEvent: $event');
+  ///       print('- HeartbeatEvent: ${event}');
   ///       break;
   ///     case bg.Event.LOCATION:
   ///       bg.Location location = headlessEvent.event;
-  ///       print('- Location: $location');
+  ///       print('- Location: ${location}');
   ///       break;
   ///     case bg.Event.MOTIONCHANGE:
   ///       bg.Location location = headlessEvent.event;
-  ///       print('- Location: $location');
+  ///       print('- Location: ${location}');
   ///       break;
   ///     case bg.Event.GEOFENCE:
   ///       bg.GeofenceEvent geofenceEvent = headlessEvent.event;
-  ///       print('- GeofenceEvent: $geofenceEvent');
+  ///       print('- GeofenceEvent: ${geofenceEvent}');
   ///       break;
   ///     case bg.Event.GEOFENCESCHANGE:
   ///       bg.GeofencesChangeEvent event = headlessEvent.event;
-  ///       print('- GeofencesChangeEvent: $event');
+  ///       print('- GeofencesChangeEvent: ${event}');
   ///       break;
   ///     case bg.Event.SCHEDULE:
   ///       bg.State state = headlessEvent.event;
-  ///       print('- State: $state');
+  ///       print('- State: ${state}');
   ///       break;
   ///     case bg.Event.ACTIVITYCHANGE:
   ///       bg.ActivityChangeEvent event = headlessEvent.event;
-  ///       print('ActivityChangeEvent: $event');
+  ///       print('ActivityChangeEvent: ${event}');
   ///       break;
   ///     case bg.Event.HTTP:
   ///       bg.HttpEvent response = headlessEvent.event;
-  ///       print('HttpEvent: $response');
+  ///       print('HttpEvent: ${response}');
   ///       break;
   ///     case bg.Event.POWERSAVECHANGE:
   ///       bool enabled = headlessEvent.event;
-  ///       print('ProviderChangeEvent: $enabled');
+  ///       print('ProviderChangeEvent: ${enabled}');
   ///       break;
   ///     case bg.Event.CONNECTIVITYCHANGE:
   ///       bg.ConnectivityChangeEvent event = headlessEvent.event;
-  ///       print('ConnectivityChangeEvent: $event');
+  ///       print('ConnectivityChangeEvent: ${event}');
   ///       break;
   ///     case bg.Event.ENABLEDCHANGE:
   ///       bool enabled = headlessEvent.event;
-  ///       print('EnabledChangeEvent: $enabled');
+  ///       print('EnabledChangeEvent: ${enabled}');
   ///       break;
   ///   }
   /// }
@@ -1586,13 +1730,7 @@ class Config {
   ///
   /// If you set this option to **`true`**, the plugin will run its Android service in the foreground, **supplying the ongoing notification to be shown to the user while in this state**.  Running as a foreground-service makes the tracking-service **much** more immune to OS killing it due to memory/battery pressure.  By default services are background, meaning that if the system needs to kill them to reclaim more memory (such as to display a large page in a web browser).
   ///
-  ///  **Note:** See related config options:
-  /// - [notificationTitle]
-  /// - [notificationText]
-  /// - [notificationColor]
-  /// - [notificationPriority]
-  /// - [notificationSmallIcon]
-  /// - [notificationLargeIcon]
+  ///  **Note:** See related config option [Notification]:
   ///
   /// :blue_book: For more information, see the [Android Service](https://developer.android.com/reference/android/app/Service.html#startForeground(int,%20android.app.Notification)) docs.
   ///
@@ -1646,120 +1784,54 @@ class Config {
   ///
   bool forceReloadOnSchedule;
 
-  /// When running the service with [foregroundService]: true, Android requires a persistent notification in the Notification Bar.  This will control the **priority** of that notification as well as the position of the notificaiton-bar icon.
+  /// __(Android only)__ Configure the persistent foreground notification.
   ///
-  /// The following `notificationPriority` values defined as static constants upon the [Config] object:
+  /// The Android operating system requires a persistent notification when running a foreground service.
   ///
-  /// | Value                                  | Description                           |
-  /// |----------------------------------------|---------------------------------------|
-  /// | [Config.NOTIFICATION_PRIORITY_DEFAULT] | Notification weighted to top of list; notification-bar icon weighted left                                       |
-  /// | [Config.NOTIFICATION_PRIORITY_HIGH]    | Notification **strongly** weighted to top of list; notification-bar icon **strongly** weighted to left          |
-  /// | [Config.NOTIFICATION_PRIORITY_LOW]     | Notification weighted to bottom of list; notification-bar icon weighted right                                   |
-  /// | [Config.NOTIFICATION_PRIORITY_MAX]     | Same as `NOTIFICATION_PRIORITY_HIGH`  |
-  /// | [Config.NOTIFICATION_PRIORITY_MIN]     | Notification **strongly** weighted to bottom of list; notification-bar icon **hidden**                          |
+  /// ![](https://dl.dropbox.com/s/acuhy5cu4p7uofr/android-foreground-service-default.png?dl=1)
+  ///
+  /// # Example
   ///
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
-  ///   foregroundService: true,
-  ///   notificationPriority: Config.NOTIFICATION_PRIORITY_MIN
-  /// ));
+  ///   notification: Notification(
+  ///     title: "The Title",
+  ///     text: "The Text"
+  ///   )
+  /// ))
+  /// .
+  /// .
+  /// .
+  /// // To update the notification in real-time, use #setConfig
+  /// // You need only provide *changed* parameters --  initially configured
+  /// // parameters will remain unchanged.
+  /// BackgroundGeolocation.setConfig(Config(
+  ///   notification: Notification(
+  ///     title: "The New Title"
+  ///   )
+  /// ))
   /// ```
-  ///
+  Notification notification;
+
+  /// __Deprecated.__  Use [Notification.priority].
   int notificationPriority;
 
-  /// Configure the *title* of the persistent notification in the Notification Bar when running with [foregroundService]:true
-  ///
-  /// Defaults to the application name from `AndroidManifest`.  When running the service with [foregroundService]: true, Android requires a persistent notification.  This will configure the **title** of that notification.
-  ///
+  /// __Deprecated.__  Use [Notification.title].
   String notificationTitle;
 
-  /// Configure the *text* of the persistent notification in the Notification Bar when running with [foregroundService]:true
-  ///
-  /// Defaults to *"Location service activated"*.  When running the service with [foregroundService]: true, Android requires a persistent notification.  This will configure the **text** of that notification.
-  ///
+  /// __Deprecated.__  Use [Notification.text].
   String notificationText;
 
-  /// Configure the *color* of the persistent notification icon in the Notification Bar when running with [foregroundService]:true
-  ///
-  /// Defaults to `null`.  When running the service with [foregroundService]: true, Android requires a persistent notification.  This will configure the **color** of the notification **icon** (API >= 21).
-  ///
-  /// Supported formats are:
-  /// - `#RRGGBB`
-  /// - `#AARRGGBB`
-  ///
+  /// __Deprecated.__  Use [Notification.color].
   String notificationColor;
 
-  /// Configure the *small icon* of the persistent notification in the Notification Bar when running with [foregroundService]:true
-  ///
-  /// When running the service with [foregroundService]: true, Android requires a persistent notification in the Notification Bar.  This allows you customize that icon.  Defaults to your application icon.
-  ///
-  /// **NOTE** You must specify the **`type`** (`drawable|mipmap`) of resource you wish to use in the following format:
-  ///
-  /// `{type}/icon_name`,
-  ///
-  /// **WARNING:** Do not append the file-extension (eg: `.png`)
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// // 1. drawable
-  /// BackgroundGeolocation.ready(Config(
-  ///   notificationSmallIcon: "drawable/my_custom_notification_small_icon"
-  /// ));
-  ///
-  /// // 2. mipmap
-  /// BackgroundGeolocation.ready(Config(
-  ///   notificationSmallIcon: "mipmap/my_custom_notification_small_icon"
-  /// ));
-  /// ```
-  ///
+  /// __Deprecated.__  Use [Notification.smallIcon].
   String notificationSmallIcon;
 
-  /// Configure the *large icon* of the persistent notification in the Notification Bar when running with [foregroundService]:true
-  ///
-  /// When running the service with [foregroundService]: true, Android requires a persistent notification in the Notification Bar.  This allows you customize that icon.  Defaults to your application icon.
-  ///
-  /// **NOTE** You must specify the **`type`** (`drawable|mipmap`) of resource you wish to use in the following format:
-  ///
-  /// `{type}/icon_name`,
-  ///
-  /// **WARNING:** Do not append the file-extension (eg: `.png`)
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// // 1. drawable
-  /// BackgroundGeolocation.ready(Config(
-  ///   notificationSmallIcon: "drawable/my_custom_notification_small_icon"
-  /// ));
-  ///
-  /// // 2. mipmap
-  /// BackgroundGeolocation.ready(Config(
-  ///   notificationSmallIcon: "mipmap/my_custom_notification_small_icon"
-  /// ));
-  /// ```
-  ///
+  /// __Deprecated.__  Use [Notification.largeIcon].
   String notificationLargeIcon;
 
-  /// Configure the name of the plugin's notification-channel used to display the [foregroundService] notification.
-  ///
-  /// On Android O+, the plugin's foreground-service needs to create a "Notification Channel".  The name of this channel can be seen in Settings->App & Notifications->Your App.  Defaults to your application's name from `AndroidManifest`.
-  ///
-  /// ![](https://dl.dropboxusercontent.com/s/zgcxau7lyjfuaw9/android-notificationChannelName.png?dl=1)\
-  ///
-  /// ## Example
-  ///
-  /// ```dart
-  /// BackgroundGeolocation.ready(Config(
-  ///   notificationChannelName: "Location Tracker"
-  /// ));
-  ///
-  /// // or with #setConfig
-  /// BackgroundGeolocation.setConfig(Config(
-  ///   notificationChannelName: "My new channel name"
-  /// ));
-  /// ```
-  ///
+  /// __Deprecated.__  Use [Notification.channelName]
   String notificationChannelName;
 
   Config(
@@ -1851,6 +1923,7 @@ class Config {
       this.forceReloadOnBoot,
       this.forceReloadOnHeartbeat,
       this.forceReloadOnSchedule,
+      this.notification,
       this.notificationPriority,
       this.notificationTitle,
       this.notificationText,
@@ -1871,6 +1944,7 @@ class Config {
     if (_map != null) {
       return _map;
     }
+
     Map config = {};
     // Geolocation Options
     if (desiredAccuracy != null) config['desiredAccuracy'] = desiredAccuracy;
@@ -2008,7 +2082,28 @@ class Config {
       config['notificationLargeIcon'] = notificationLargeIcon;
     if (notificationChannelName != null)
       config['notificationChannelName'] = notificationChannelName;
+    if (notification != null) config['notification'] = notification.toMap();
 
+    // Detect obsolete notification* fields and re-map to Notification instance.
+    if ((notificationPriority != null) ||
+        (notificationText != null) ||
+        (notificationTitle != null) ||
+        (notificationChannelName != null) ||
+        (notificationColor != null) ||
+        (notificationSmallIcon != null) ||
+        (notificationLargeIcon != null)) {
+      print(
+          '[background_geolocation] WARNING: Config.notification* fields (eg: notificationTexdt) are all deprecated in favor of new Notification(title: "My Title", text: "My Text") instance.  See docs for Notification class');
+      notification = Notification(
+          text: notificationText,
+          title: notificationTitle,
+          color: notificationColor,
+          channelName: notificationChannelName,
+          smallIcon: notificationSmallIcon,
+          largeIcon: notificationLargeIcon,
+          priority: notificationPriority);
+      config['notification'] = notification.toMap();
+    }
     return config;
   }
 

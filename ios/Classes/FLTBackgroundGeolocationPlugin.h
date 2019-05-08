@@ -13,6 +13,7 @@
 #import "PowerSaveChangeStreamHandler.h"
 #import "ConnectivityChangeStreamHandler.h"
 #import "EnabledChangeStreamHandler.h"
+#import "NotificationActionStreamHandler.h"
 
 @interface FLTBackgroundGeolocationPlugin : NSObject<FlutterPlugin>
 

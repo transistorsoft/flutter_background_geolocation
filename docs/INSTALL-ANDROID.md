@@ -199,5 +199,45 @@ If you've not yet purchased a license to unlock Android, you can purchase one [h
 </manifest>
 ```
 
+## Proguard Config
 
+If you've configured `minifyEnabled true` in your `app/build.gradle`, be sure to add the following items to your `proguard-rules.pro`, since the BackgroundGeolocation library is *already* minified.
 
+```diff
+buildTypes {
+    release {
++       minifyEnabled true // <-- here
+        proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+        signingConfig signingConfigs.release
+    }
+}
+```
+
+### :open_file_folder: `proguard-rules.pro` (`android/app/proguard-rules.pro`)
+
+```proguard
+-keepnames class com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin
+-keepnames class io.flutter.app.FlutterActivity
+
+# BackgroundGeolocation lib tslocationmanager.aar is *already* proguarded
+-keep class com.transistorsoft.** { *; }
+-dontwarn com.transistorsoft.**
+
+# BackgroundGeolocation (EventBus)
+-keepattributes *Annotation*
+-keepclassmembers class ** {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+-keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
+    <init>(java.lang.Throwable);
+}
+
+# logback
+-keep class ch.qos.** { *; }
+-keep class org.slf4j.** { *; }
+-dontwarn ch.qos.logback.core.net.*
+
+# OkHttp3
+-dontwarn okio.**
+```

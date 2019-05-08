@@ -34,6 +34,7 @@ import com.transistorsoft.flutter.backgroundgeolocation.streams.HeartbeatStreamH
 import com.transistorsoft.flutter.backgroundgeolocation.streams.HttpStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.LocationStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.MotionChangeStreamHandler;
+import com.transistorsoft.flutter.backgroundgeolocation.streams.NotificationActionStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.PowerSaveChangeStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ProviderChangeStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ScheduleStreamHandler;
@@ -119,7 +120,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             new EnabledChangeStreamHandler().register(registrar);
             new ProviderChangeStreamHandler().register(registrar);
             new PowerSaveChangeStreamHandler().register(registrar);
-
+            new NotificationActionStreamHandler().register(registrar);
             // Allow desiredAccuracy configuration as CLLocationAccuracy
             TSConfig config = TSConfig.getInstance(registrar.context().getApplicationContext());
             config.useCLLocationAccuracy(true);
@@ -196,6 +197,8 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             getCurrentPosition((Map) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_WATCH_POSITION)) {
             watchPosition((Map) call.arguments, result);
+        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_STOP_WATCH_POSITION)) {
+            stopWatchPosition(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_LOCATIONS)) {
             getLocations(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_INSERT_LOCATION)) {
@@ -272,13 +275,14 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             if (!applyConfig(params, result)) {
                 return;
             }
-        } else if (params.containsKey("reset") && (boolean) params.get("reset")) {
-            config.reset();
-            if (!applyConfig(params, result)) {
-                return;
-            }
         } else {
-
+            boolean reset = (!params.containsKey("reset")) || (boolean) params.get("reset");
+            if (reset) {
+                config.reset();
+                if (!applyConfig(params, result)) {
+                    return;
+                }
+            }
         }
 
         BackgroundGeolocation.getInstance(mContext).ready(new TSCallback() {
@@ -318,6 +322,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         }
         resultWithState(result);
     }
+
     private void startGeofences(final Result result) {
         BackgroundGeolocation.getInstance(mContext).startGeofences(new TSCallback() {
             @Override public void onSuccess() { resultWithState(result); }
@@ -402,8 +407,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
 
         builder.setCallback(new TSLocationCallback() {
             @Override public void onLocation(TSLocation tsLocation) {
-                //sendEvent(EVENT_WATCHPOSITION, jsonToMap(tsLocation.toJson()));
-                //Map<String, Object> data = tsLocation.toMap();
+                result.success(tsLocation.toMap());
             }
             @Override public void onError(Integer error) {
                 result.error(error.toString(), null, null);
@@ -427,8 +431,20 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             }
         }
         BackgroundGeolocation.getInstance(mContext).watchPosition(builder.build());
-        result.success(true);
-        //success.invoke();
+    }
+
+    private void stopWatchPosition(final Result result) {
+        BackgroundGeolocation.getInstance(mContext).stopWatchPosition(new TSCallback() {
+            @Override
+            public void onSuccess() {
+                result.success(true);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                result.error(error, null, null);
+            }
+        });
     }
 
     private void getLocations(final Result result) {
