@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.4] - 2019-05-09
+- [Changed] Update docs.
+
 ## [1.0.3] - 2019-05-08
 - [Fixed] Dart analysis warnings, re: initializing null values in new Notification class.
 
