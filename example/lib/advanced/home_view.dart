@@ -90,7 +90,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     bg.BackgroundGeolocation.onConnectivityChange(_onConnectivityChange);
     bg.BackgroundGeolocation.onHeartbeat(_onHeartbeat);
     bg.BackgroundGeolocation.onGeofence(_onGeofence);
-    bg.BackgroundGeolocation.onGeofencesChange(_onGeofencesChange);
     bg.BackgroundGeolocation.onSchedule(_onSchedule);
     bg.BackgroundGeolocation.onPowerSaveChange(_onPowerSaveChange);
     bg.BackgroundGeolocation.onEnabledChange(_onEnabledChange);
@@ -295,13 +294,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     setState(() {
       events.insert(0, Event(bg.Event.GEOFENCE, event, event.toString(compact: false)));
-    });
-  }
-
-  void _onGeofencesChange(bg.GeofencesChangeEvent event) {
-    print('[${bg.Event.GEOFENCESCHANGE}] - $event');
-    setState(() {
-      events.insert(0, Event(bg.Event.GEOFENCESCHANGE, event, event.toString(compact: false)));
     });
   }
 

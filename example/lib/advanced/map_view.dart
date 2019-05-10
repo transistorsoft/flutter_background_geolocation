@@ -172,6 +172,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   }
 
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {
+    print('[${bg.Event.GEOFENCESCHANGE}] - $event');
     event.off.forEach((String identifier) {
       _geofences.removeWhere((GeofenceMarker marker) {
         return marker.geofence.identifier == identifier;
