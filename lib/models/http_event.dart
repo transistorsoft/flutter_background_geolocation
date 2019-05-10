@@ -11,7 +11,6 @@ part of flt_background_geolocation;
 /// ```
 ///
 /// # HTTP Guide
-/// ---------------------------------------------------------------------------------------
 ///
 /// The [BackgroundGeolocation] SDK hosts its own flexible and robust native HTTP & SQLite persistence services.  To enable the HTTP service, simply configure the SDK with an [Config.url]:
 ///

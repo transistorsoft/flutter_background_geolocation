@@ -46,7 +46,6 @@ part of flt_background_geolocation;
 /// ```
 ///
 /// Adding multiple geofences with [BackgroundGeolocation.addGeofences].
-/// ---------------------------------------------------------------------------------------------------------
 ///
 /// ### Example
 /// ```dart
@@ -71,9 +70,7 @@ part of flt_background_geolocation;
 ///
 /// __ℹ️ Note:__ Adding a geofence having an [Geofence.identifier] which already exists within the SDK's geofence database will cause the previous record to be destroyed and the new one inserted.
 ///
-///
 /// ## Listening for Geofence Events
-/// ---------------------------------------------------------------------------------------------------------
 ///
 /// Listen to geofence events with [BackgroundGeolocation.onGeofence].
 ///
@@ -87,7 +84,6 @@ part of flt_background_geolocation;
 /// ```
 ///
 /// ## Infinite Geofencing
-/// ---------------------------------------------------------------------------------------------------------
 ///
 /// The Background Geolocation SDK contains unique and powerful Geofencing features that allow you to monitor any number of circular geofences you wish (thousands even), in spite of limits imposed by the native platform APIs (**20 for iOS; 100 for Android**).
 ///
@@ -101,10 +97,7 @@ part of flt_background_geolocation;
 ///
 /// ![](https://dl.dropboxusercontent.com/s/7sggka4vcbrokwt/geofenceProximityRadius_iphone6_spacegrey_portrait.png?dl=1)
 ///
-/// ---------------------------------------------------------------------------------------------------
-///
 /// ## Listening for changes in the actively-monitored set-of-geofences.
-/// ---------------------------------------------------------------------------------------------------------
 ///
 /// As the SDK periodically queries for geofences within the [Config.geofenceProximityRadius], you can listen for changes in the actively-monitored geofences using the event [BackgroundGeolocation.onGeofencesChange].  This event will let you know those geofences which have *begun* to be *actively monitored* ([GeofencesChangeEvent.on]) in addition to those which just *ceased* to be actively monitored ([GeofencesChangeEvent.off]).
 ///
@@ -128,7 +121,6 @@ part of flt_background_geolocation;
 /// - When **all** geofences have been removed, the [GeofencesChangeEvent] will provide empty lists for both [GeofencesChangeEvent.on] & [GeofencesChangeEvent.off].
 ///
 /// ## Removing Geofences
-/// ---------------------------------------------------------------------------------------------------------
 ///
 /// Once a geofence has been inserted into the SDK's database using [BackgroundGeolocation.addGeofence] or [BackgroundGeolocation.addGeofences], they will be monitored *forever*.  If you've configured [Config.stopOnTerminate] __`false`__ and [Config.startOnBoot] __`true`__, geofences will continue to be monitored even if the application is terminated or device rebooted.
 /// To cease monitoring a geofence or *geofences*, you must *remove* them from the SDK's database.
@@ -150,7 +142,6 @@ part of flt_background_geolocation;
 /// ```
 ///
 /// ## Querying Geofences
-/// ---------------------------------------------------------------------------------------------------------
 ///
 /// Use the method [BackgroundGeolocation.geofences] property to retrieve the entire Array of [Geofence] stored in the SDK's database:
 ///
@@ -161,7 +152,6 @@ part of flt_background_geolocation;
 /// ```
 ///
 /// ## Monitoring *only* geofences
-/// ---------------------------------------------------------------------------------------------------------
 ///
 /// The BackgroundGeolocation SDK allows you to optionally monitor *only* geofences without constant location-tracking.  To engage *geofences-only* mode, use the method [BackgroundGeolocation.startGeofences] instead of [BackgroundGeolocation.start].
 ///
@@ -183,7 +173,6 @@ part of flt_background_geolocation;
 /// ```
 ///
 /// ## Toggling between tracking-modes [BackgroundGeolocation.start] and [BackgroundGeolocation.startGeofences]:
-/// ---------------------------------------------------------------------------------------------------------
 ///
 /// The SDK can easily be toggled between [State.trackingMode] simply by executing the corresponding [BackgroundGeolocation.start] or [BackgroundGeolocation.startGeofences] methods.
 ///
