@@ -1,9 +1,9 @@
 <!--
 *****************************************************************
-*
-* WARNING:  DO NOT IGNORE THIS TEMPLATE
-* 
+* WARNING:  If you ignore this template, so too will your issue
 *****************************************************************
+
+ Provide a general summary of the issue in the Title above. Please use syntax highlighting when posting code. Wrap your code in three(3) back ticks (```) . Thank you.
 -->
 
 <!--
