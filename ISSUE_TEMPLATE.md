@@ -2,12 +2,12 @@
 *****************************************************************
 *
 * WARNING:  DO NOT IGNORE THIS TEMPLATE
-* 
+*
 *****************************************************************
 -->
 
 <!--
-  Provide a general summary of the issue in the Title above 
+  Provide a general summary of the issue in the Title above
 -->
 ## Your Environment
 * Plugin version:
@@ -15,7 +15,10 @@
 * OS version:
 * Device manufacturer / model:
 * Flutter info (`flutter doctor`):
-* Plugin config
+* Plugin config:
+```javascript <-- Syntax highlighting: DO NOT REMOVE -->
+PASTE_YOUR_CODE_HERE
+```
 
 ## Expected Behavior
 <!--- Tell us what should happen -->
@@ -35,7 +38,16 @@
 
 ## Debug logs
 <!-- include iOS / Android logs
-- ios XCode logs, 
+- ios XCode logs,
 - use #getLog #emailLog methods (@see docs)
-- Android: $ adb logcat
+- Android: $ adb logcat -s TSLocationManager
 -->
+<details>
+	<summary>Logs</summary>
+
+``` <!-- syntax-highligting:  DO NOT REMOVE -->
+PASTE_YOUR_LOGS_HERE
+```
+
+</details>
+
