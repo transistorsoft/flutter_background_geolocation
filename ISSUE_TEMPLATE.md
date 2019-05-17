@@ -16,7 +16,7 @@
 * Device manufacturer / model:
 * Flutter info (`flutter doctor`):
 * Plugin config:
-```javascript <-- Syntax highlighting: DO NOT REMOVE -->
+```dart <-- Syntax highlighting: DO NOT REMOVE -->
 PASTE_YOUR_CODE_HERE
 ```
 
