@@ -85,7 +85,7 @@ class _HomeViewState extends State<_HomeView> {
               height: 200.0,
               child: Column(
                   children: <Widget>[
-                    new Text('Please enter a unique identifier so that BackgroundGeolocation can post locations to the demo server:'),
+                    new Text('Please enter a unique identifier to post locations to the demo server:'),
                     new Text('tracker.transistorsoft.com'),
                     new Row(
                       children: <Widget>[

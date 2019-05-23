@@ -75,6 +75,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     private static final String ACTION_LOG               = "log";
     private static final String ACTION_REQUEST_SETTINGS  = "requestSettings";
     private static final String ACTION_SHOW_SETTINGS     = "showSettings";
+    private static final String ACTION_REGISTER_PLUGIN   = "registerPlugin";
 
     private static final String JOB_SERVICE_CLASS         = "com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask";
 
@@ -250,6 +251,9 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             getProviderState(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_REQUEST_PERMISSION)) {
             requestPermission(result);
+        } else if (call.method.equalsIgnoreCase(ACTION_REGISTER_PLUGIN)) {
+            // No implementation; iOS only.
+            result.success(true);
         } else {
             result.notImplemented();
         }

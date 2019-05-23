@@ -119,7 +119,6 @@ class Test {
         fastestLocationUpdateInterval: -1,
         enableTimestampMeta: true,
         stopTimeout: 1,
-        schedule: [],
         url: "http://tracker.transistorsoft.com/locations/$username",
         params: deviceParams,
         geofenceModeHighAccuracy: true,

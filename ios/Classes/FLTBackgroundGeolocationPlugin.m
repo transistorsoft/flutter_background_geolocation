@@ -44,6 +44,7 @@ static NSString *const ACTION_GET_PROVIDER_STATE = @"getProviderState";
 static NSString *const ACTION_IS_IGNORING_BATTERY_OPTIMIZATIONS = @"isIgnoringBatteryOptimizations";
 static NSString *const ACTION_REQUEST_SETTINGS = @"requestSettings";
 static NSString *const ACTION_SHOW_SETTINGS = @"showSettings";
+static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
 
 #import <TSBackgroundFetch/TSBackgroundFetch.h>
 
@@ -174,6 +175,8 @@ static NSString *const ACTION_SHOW_SETTINGS = @"showSettings";
     } else if ([self method:ACTION_INITIALIZED is:action]) {
         // Headless task initialization ignored on iOS.
         result(@YES);
+    } else if ([self method:ACTION_REGISTER_PLUGIN is:action]) {
+        [self registerPlugin:call.arguments result:result];
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -510,6 +513,11 @@ static NSString *const ACTION_SHOW_SETTINGS = @"showSettings";
 
 - (void) registerHeadlessTask:(NSArray*)callbacks result:(FlutterResult)result {
     // iOS:  No implementation should be necessary.
+}
+
+- (void) registerPlugin:(NSString*)plugin result:(FlutterResult)result {
+    TSConfig *config = [TSConfig sharedInstance];
+    [config registerPlugin:plugin];
 }
 
 #pragma mark Util Methods

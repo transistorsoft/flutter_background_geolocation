@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [1.0.6] - 2019-05-12
+- [Added] New Android config `Config.scheduleUseAlarmManager` to force Android scheduler to use more precise `AlarmManager` instead of `JobScheduler`.
+- [Added] Support for [background_geolocation_firebase](https://github.com/transistorsoft/flutter_background_geolocation_firebase) adapter.
+
 ## [1.0.5] - 2019-05-10
 - [Changed] Rollback `android-permissions` version back to `0.1.8`.  It relies on `support-annotations@28`.  This isn't a problem if one simply upgrades their `targetSdkVersion` but the support calls aren't worth the hassle, since the latest version doesn't offer anything the plugin needs.
 
