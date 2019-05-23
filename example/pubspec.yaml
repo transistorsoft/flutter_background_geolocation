@@ -4,7 +4,7 @@ version: 1.0.5+4
 dependencies:
   flutter:
     sdk: flutter
-  flutter_map: ^0.5.0
+  flutter_map: ^0.5.3
     #git:
     #  url: git://github.com/4kssoft/flutter_map
     #  ref: 9eb20f2cb9e4800cc122cbacd7e6752de40fb044
