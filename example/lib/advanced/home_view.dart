@@ -103,6 +103,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
+        reset: false,
         debug: true,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_NAVIGATION,
@@ -115,8 +116,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         url: 'http://tracker.transistorsoft.com/locations/$_username',
         params: deviceParams,
         heartbeatInterval: 60,
-        foregroundService: true,
-        reset: false
+        foregroundService: true
     )).then((bg.State state) {
       print('[ready] ${state.toMap()}');
       if (state.schedule.isNotEmpty) {

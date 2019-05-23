@@ -13,10 +13,16 @@ PODS:
   - flutter_background_geolocation (0.2.0):
     - CocoaLumberjack (~> 3.0)
     - Flutter
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
   - path_provider (0.0.1):
     - Flutter
   - shared_preferences (0.0.1):
     - Flutter
+  - sqflite (0.0.1):
+    - Flutter
+    - FMDB (~> 2.7.2)
 
 DEPENDENCIES:
   - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
@@ -25,10 +31,12 @@ DEPENDENCIES:
   - flutter_background_geolocation (from `.symlinks/plugins/flutter_background_geolocation/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - CocoaLumberjack
+    - FMDB
 
 EXTERNAL SOURCES:
   background_fetch:
@@ -43,6 +51,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
   background_fetch: 48bc814e7f731763322f4cfc2088407f4e03082d
@@ -50,8 +60,10 @@ SPEC CHECKSUMS:
   device_info: 76ce0b32e13034d1883be4a382433648f9dcee63
   Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
   flutter_background_geolocation: b0d69315a665038cd29d54b4812e25e06ba1436f
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
   shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
+  sqflite: d1612813fa7db7c667bed9f1d1b508deffc56999
 
 PODFILE CHECKSUM: 412af0b770baf0c510169b7be52baea1e495427c
 

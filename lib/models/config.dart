@@ -1053,6 +1053,16 @@ class Config {
   ///
   List<String> schedule;
 
+  /// __Android only__ Force the Android scheduler to use `AlarmManager` (more precise) instead of `JobScheduler`.  Defaults to `false`.
+  ///
+  /// ```dart
+  /// bg.BackgroundGeolocation.ready(bg.Config(
+  ///   schedule: ['1-7 09:00-17:00'],
+  ///   scheduleUseAlarmManager: true
+  /// ));
+  /// ```
+  bool scheduleUseAlarmManager;
+
   /// Configure the plugin to emit sound effects and local-notifications during development.
   ///
   /// Defaults to **`false`**.  When set to **`true`**, the plugin will emit debugging sounds and notifications for life-cycle events of [BackgroundGeolocation].
@@ -1768,6 +1778,7 @@ class Config {
       this.startOnBoot,
       this.heartbeatInterval,
       this.schedule,
+      this.scheduleUseAlarmManager,
       // Logging & Debug
       this.debug,
       this.logLevel,
@@ -1893,6 +1904,8 @@ class Config {
     if (heartbeatInterval != null)
       config['heartbeatInterval'] = heartbeatInterval;
     if (schedule != null) config['schedule'] = schedule;
+    if (scheduleUseAlarmManager != null)
+      config['scheduleUseAlarmManager'] = scheduleUseAlarmManager;
     // Logging & Debug
     if (debug != null) config['debug'] = debug;
     if (logLevel != null) config['logLevel'] = logLevel;

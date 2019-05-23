@@ -144,6 +144,7 @@ class State extends Config {
             forceReloadOnBoot: data['forceReloadOnBoot'],
             forceReloadOnHeartbeat: data['forceReloadOnHeartbeat'],
             forceReloadOnSchedule: data['forceReloadOnSchedule'],
+            scheduleUseAlarmManager: (data['scheduleUseAlarmManager'] != null) ? data['scheduleUseAlarmManager'] : false,
             notification: (data['notification'] != null) ? Notification.fromMap(data['notification']) : null) {
     enabled = data['enabled'];
     trackingMode = data['trackingMode'];
