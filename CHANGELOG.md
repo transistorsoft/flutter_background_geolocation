@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.7] - 2019-05-13
+- [Fixed] Android issue with Firebase Adapter support not working when app is terminated.
+
 ## [1.0.6] - 2019-05-12
 - [Added] New Android config `Config.scheduleUseAlarmManager` to force Android scheduler to use more precise `AlarmManager` instead of `JobScheduler`.
 - [Added] Support for [background_geolocation_firebase](https://github.com/transistorsoft/flutter_background_geolocation_firebase) adapter.
