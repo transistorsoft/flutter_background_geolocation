@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [1.0.8] - 2019-06-04
+- [Fixed] Android `destroyLocations` callback was being executed in background-thread.
+- [Fixed] When Android geofence API receives a `GEOFENCE_NOT_AVAILABLE` error (can occur is Wifi is disabled), geofences must be re-registered.
+- [Fixed] Android `Config.disableStopDetection` was not implemented.
+
 ## [1.0.7] - 2019-05-13
 - [Fixed] Android issue with Firebase Adapter support not working when app is terminated.
 

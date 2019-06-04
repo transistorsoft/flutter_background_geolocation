@@ -7,7 +7,23 @@ class Test {
   ///
   static void applyTestConfig() async {
     List<dynamic> data = [{
-      "identifier": "Jfk",
+      "identifier": "[Flutter] Home",
+      "radius": 200.0,
+      "latitude": 45.5192534,
+      "longitude": -73.6169719,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": false,
+      "loiteringDelay": 0,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.5192534,
+          "longitude": -73.6169719
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Jfk",
       "radius": 200.0,
       "latitude": 45.52193435702239,
       "longitude": -73.61602026242679,
@@ -23,7 +39,7 @@ class Test {
         }
       }
     }, {
-      "identifier": "Laj",
+      "identifier": "[Flutter] Laj",
       "radius": 200.0,
       "latitude": 45.52011166353691,
       "longitude": -73.61188565687189,
@@ -39,7 +55,7 @@ class Test {
         }
       }
     }, {
-      "identifier": "Bernard",
+      "identifier": "[Flutter] Bernard",
       "radius": 200.0,
       "latitude": 45.51890341224348,
       "longitude": -73.60920346871359,
@@ -55,7 +71,7 @@ class Test {
         }
       }
     }, {
-      "identifier": "Park",
+      "identifier": "[Flutter] Park",
       "radius": 200.0,
       "latitude": 45.51793055832324,
       "longitude": -73.60288022069346,
@@ -71,7 +87,7 @@ class Test {
         }
       }
     }, {
-      "identifier": "Dollard",
+      "identifier": "[Flutter] Dollard",
       "radius": 200.0,
       "latitude": 45.51722612373795,
       "longitude": -73.61367125021673,
@@ -119,6 +135,9 @@ class Test {
         fastestLocationUpdateInterval: -1,
         enableTimestampMeta: true,
         stopTimeout: 1,
+        schedule: [
+          //'2-6 09:00-17:00'
+        ],
         url: "http://tracker.transistorsoft.com/locations/$username",
         params: deviceParams,
         geofenceModeHighAccuracy: true,

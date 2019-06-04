@@ -664,6 +664,26 @@ class BackgroundGeolocation {
     return await _methodChannel.invokeMethod('addGeofences', rs);
   }
 
+  /// Returns `true` if the SDK already contains the [Geofence] in its database.
+  ///
+  /// ## Example
+  /// ```dart
+  /// BackgroundGeolocation.geofenceExists('HOME').then((bool exists) {
+  ///   if (!exists) {
+  ///     BackgroundGeolocation.addGeofence(Geofence(
+  ///       identifier: 'HOME',
+  ///       latitude: location.latitude,
+  ///       longitude location.longitude,
+  ///       radius: 200.0,
+  ///       notifyOnEntry: true
+  ///     ));
+  ///   }
+  /// });
+  ///
+  static Future<bool> geofenceExists(String identifier) async {
+    return await _methodChannel.invokeMethod('geofenceExists', identifier);
+  }
+
   /// Removes a [Geofence] having the given [Geofence.identifier]`.
   ///
   /// ## Example

@@ -30,6 +30,8 @@ static NSString *const ACTION_ADD_GEOFENCES = @"addGeofences";
 static NSString *const ACTION_REMOVE_GEOFENCE = @"removeGeofence";
 static NSString *const ACTION_REMOVE_GEOFENCES = @"removeGeofences";
 static NSString *const ACTION_GET_GEOFENCES = @"getGeofences";
+static NSString *const ACTION_GEOFENCE_EXISTS = @"geofenceExists";
+
 static NSString *const ACTION_GET_LOG = @"getLog";
 static NSString *const ACTION_EMAIL_LOG = @"emailLog";
 static NSString *const ACTION_DESTROY_LOG = @"destroyLog";
@@ -142,6 +144,8 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
         [self removeGeofences:result];
     } else if ([self method:ACTION_GET_GEOFENCES is:action]) {
         [self getGeofences:result];
+    } else if ([self method:ACTION_GEOFENCE_EXISTS is:action]) {
+        [self geofenceExists:call.arguments result:result];
     } else if ([self method:ACTION_GET_LOG is:action]) {
         [self getLog:result];
     } else if ([self method:ACTION_DESTROY_LOG is:action]) {
@@ -457,6 +461,12 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
         result(rs);
     } failure:^(NSString* error) {
         result([FlutterError errorWithCode:error message:nil details:nil]);
+    }];
+}
+
+- (void) geofenceExists:(NSString*)identifier result:(FlutterResult)result {
+    [_locationManager geofenceExists:identifier callback:^(BOOL hasGeofence){
+        result(@(hasGeofence));
     }];
 }
 
