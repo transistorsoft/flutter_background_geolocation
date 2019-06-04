@@ -224,6 +224,8 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             removeGeofences(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_GEOFENCES)) {
             getGeofences(result);
+        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GEOFENCE_EXISTS)) {
+            geofenceExists((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_GET_LOG)) {
             getLog(result);
         } else if (call.method.equalsIgnoreCase(ACTION_EMAIL_LOG)) {
@@ -601,6 +603,14 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
                 }
             }
             @Override public void onFailure(String error) { result.error(error, null, null); }
+        });
+    }
+
+    private void geofenceExists(String identifier, final Result result) {
+        BackgroundGeolocation.getInstance(mContext).geofenceExists(identifier, new TSGeofenceExistsCallback() {
+            @Override public void onResult(boolean hasGeofence) {
+                result.success(hasGeofence);
+            }
         });
     }
 
