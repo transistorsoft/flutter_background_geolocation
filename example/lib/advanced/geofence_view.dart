@@ -84,9 +84,13 @@ class _GeofenceViewState extends State<GeofenceView> {
                   ),
                   child: new DropdownButtonHideUnderline(
                     child: new DropdownButton(
-                      value: '200',
+                      value: _radius.toInt().toString(),
                       isDense: true,
-                      onChanged: (String value) {_radius = double.parse(value);},
+                      onChanged: (String value) {
+                        setState(() {
+                          _radius = double.parse(value);
+                        });
+                      },
                       items: [
                         DropdownMenuItem(value: '150', child: new Text('150')),
                         DropdownMenuItem(value: '200', child: new Text('200')),

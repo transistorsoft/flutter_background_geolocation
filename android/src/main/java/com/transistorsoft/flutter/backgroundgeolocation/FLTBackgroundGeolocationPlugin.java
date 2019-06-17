@@ -80,6 +80,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     private static final String JOB_SERVICE_CLASS         = "com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask";
 
     private boolean mIsInitialized;
+    private boolean mReady;
     private Intent mLaunchIntent;
     private Context mContext;
     private PluginRegistry.Registrar mRegistrar;
@@ -96,6 +97,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         Activity activity = registrar.activity();
 
         mContext = registrar.context().getApplicationContext();
+        mReady = false;
 
         if (activity != null) {
             mIsInitialized = false;
@@ -103,7 +105,8 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
 
             mLaunchIntent = activity.getIntent();
 
-            BackgroundGeolocation.getInstance(mContext, mLaunchIntent);
+            BackgroundGeolocation adapter = BackgroundGeolocation.getInstance(mContext, mLaunchIntent);
+            adapter.setActivity(activity);
 
             // We need to know when activity is created / destroyed.
             activity.getApplication().registerActivityLifecycleCallbacks(this);
@@ -275,6 +278,11 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     }
 
     private void ready(Map<String, Object> params, final Result result) {
+        if (mReady) {
+            TSLog.logger.warn(TSLog.warn("#ready already called.  Redirecting to #setConfig"));
+            setConfig(params, result);
+            return;
+        }
         TSConfig config = TSConfig.getInstance(mContext);
 
         if (config.isFirstBoot()) {
@@ -290,7 +298,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
                 }
             }
         }
-
+        mReady = true;
         BackgroundGeolocation.getInstance(mContext).ready(new TSCallback() {
           @Override public void onSuccess() { resultWithState(result); }
           @Override public void onFailure(String error) {
@@ -386,10 +394,11 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             }
         });
 
+
         if (options.containsKey("samples"))         { builder.setSamples((int) options.get("samples")); }
         if (options.containsKey("persist"))         { builder.setPersist((boolean) options.get("persist")); }
         if (options.containsKey("timeout"))         { builder.setTimeout((int) options.get("timeout")); }
-        if (options.containsKey("maximumAge"))      { builder.setMaximumAge((long) options.get("maximumAge")); }
+        if (options.containsKey("maximumAge"))      { builder.setMaximumAge(((Integer) options.get("maximumAge")).longValue()); }
         if (options.containsKey("desiredAccuracy")) { builder.setDesiredAccuracy((int) options.get("desiredAccuracy")); }
         if (options.containsKey("extras")) {
             Object extras = options.get("extras");
