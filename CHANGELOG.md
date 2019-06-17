@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [1.0.9] - 2019-06-17
+- [Fixed] Android bug with `getCurrentPosition` and `maximumAge`, Fixes #80.
+- [Fixed] Odometer issues:  clear odometer reference location on `#stop`, `#startGeofences`.
+- [Fixed] Odometer issues: Android must persist its odometer reference location since the foreground-service is no longer long-lived and the app may be terminated between motionchange events.
+- [Fixed] Return `Service.START_REDELIVER_INTENT` from `HeartbeatService`.  Fixes #79 to prevent `null` Intent being delivered to `HeartbeatService`.
+- [Added] Implement Android [LocationSettingsRequest](https://developer.android.com/training/location/change-location-settings#get-settings).  Determines if device settings is currently configured according to the plugin's desired-settings (eg: gps enabled, location-services enabled).  If the device settings differs, an automatic dialog will perform the required settings changes automatically when user clicks [OK].
+- [Fixed] Android `triggerActivities` was not implemented refactor of `1.x`.
+
 ## [1.0.8] - 2019-06-04
 - [Fixed] Android `destroyLocations` callback was being executed in background-thread.
 - [Fixed] When Android geofence API receives a `GEOFENCE_NOT_AVAILABLE` error (can occur is Wifi is disabled), geofences must be re-registered.

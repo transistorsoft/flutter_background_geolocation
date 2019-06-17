@@ -50,7 +50,9 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
 
 #import <TSBackgroundFetch/TSBackgroundFetch.h>
 
-@implementation FLTBackgroundGeolocationPlugin
+@implementation FLTBackgroundGeolocationPlugin {
+    BOOL ready;
+}
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
 
@@ -81,6 +83,7 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
     self = [super init];
 
     if (self) {
+        ready = NO;
         _locationManager = [TSLocationManager sharedInstance];
 
         // Provide reference to rootViewController for #emailLog method.
@@ -201,6 +204,12 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
 
 #pragma mark API methods
 - (void) ready:(NSDictionary*)params result:(FlutterResult)result {
+    if (ready) {
+        [[TSLocationManager sharedInstance] log:@"warn" message:@"#ready already called.  Redirecting to #setConfig"];
+        [self setConfig:params result:result];
+        return;
+    }
+    ready = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
         TSConfig *config = [TSConfig sharedInstance];
         if (config.isFirstBoot) {
