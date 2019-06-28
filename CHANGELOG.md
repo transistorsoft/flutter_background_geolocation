@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [1.0.10] - 2019-06-25
+- [Fixed] iOS / Android issues with odometer and `getCurrentPosition` when used with `maximumAge` constraint.  Incorrect, old location was being returned instead of latest available.
+- [Fixed] Some Android methods were executing the callback in background-thread, exposed when using flutter dev channel (`#insertLocation`, `#getLocations`, `#getGeofences`, `#sync`).
+- [Fixed] Add `intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)` to `DeviceSettings` request for Android 9 compatibility.
+- [Changed] Tweaks to Android services code to help guard against error `Context.startForegroundService() did not then call Service.startForeground()`.
+- [Fixed] iOS manual `sync` crash in simulator while executing callback when error response is returned from server.
+
 ## [1.0.9] - 2019-06-17
 - [Fixed] Android bug with `getCurrentPosition` and `maximumAge`, Fixes #80.
 - [Fixed] Odometer issues:  clear odometer reference location on `#stop`, `#startGeofences`.

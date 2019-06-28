@@ -55,16 +55,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
-  background_fetch: 48bc814e7f731763322f4cfc2088407f4e03082d
+  background_fetch: 385552e57d3bde2c7a3abd6b1edc76b87823b6c4
   CocoaLumberjack: db7cc9e464771f12054c22ff6947c5a58d43a0fd
-  device_info: 76ce0b32e13034d1883be4a382433648f9dcee63
-  Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
-  flutter_background_geolocation: b0d69315a665038cd29d54b4812e25e06ba1436f
+  device_info: 3ebad48f726348f69abd802f3334a8d1ed795fbd
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  flutter_background_geolocation: fc9b54bdcaedea40e324cae19e9d8aac7bc045d6
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  path_provider: 09407919825bfe3c2deae39453b7a5b44f467873
-  shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
-  sqflite: d1612813fa7db7c667bed9f1d1b508deffc56999
+  path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
+  shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
+  sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
 
 PODFILE CHECKSUM: 412af0b770baf0c510169b7be52baea1e495427c
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.7.1

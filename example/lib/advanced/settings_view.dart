@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
-import 'actions.dart';
+import 'actions.dart' as actions;
 import 'util/test.dart';
 
 
@@ -105,22 +105,22 @@ class _SettingsViewState extends State<SettingsView> {
 
   _onSelectMenu(String action) async {
     switch(action) {
-      case Actions.RESET_ODOMETER:
+      case actions.Actions.RESET_ODOMETER:
         bg.BackgroundGeolocation.setOdometer(0.0);
         break;
-      case Actions.SYNC:
-        Actions.sync(context);
+      case actions.Actions.SYNC:
+        actions.Actions.sync(context);
         break;
-      case Actions.DESTROY_LOCATIONS:
-        Actions.destroyLocations(context);
+      case actions.Actions.DESTROY_LOCATIONS:
+        actions.Actions.destroyLocations(context);
         break;
-      case Actions.EMAIL_LOG:
-        Actions.emailLog(context);
+      case actions.Actions.EMAIL_LOG:
+        actions.Actions.emailLog(context);
         break;
-      case Actions.DESTROY_LOG:
-        Actions.destroyLog(context);
+      case actions.Actions.DESTROY_LOG:
+        actions.Actions.destroyLog(context);
         break;
-      case Actions.REMOVE_GEOFENCES:
+      case actions.Actions.REMOVE_GEOFENCES:
         bg.BackgroundGeolocation.removeGeofences().then((bool success) {
           bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("MESSAGE_SENT"));
         });
@@ -185,14 +185,14 @@ class _SettingsViewState extends State<SettingsView> {
         actions: [
           new PopupMenuButton(
               itemBuilder: (_) => <PopupMenuEntry<String>>[
-                const PopupMenuItem<String>(value: Actions.RESET_ODOMETER, child: ListTile(title: Text('Reset odometer'), leading: Icon(Icons.av_timer))),
-                const PopupMenuItem<String>(value: Actions.SYNC, child: ListTile(title: Text('Sync'), leading: Icon(Icons.cloud_upload))),
-                const PopupMenuItem<String>(value: Actions.DESTROY_LOCATIONS, child: ListTile(title: Text('Destroy locations'), leading: Icon(Icons.delete))),
+                const PopupMenuItem<String>(value: actions.Actions.RESET_ODOMETER, child: ListTile(title: Text('Reset odometer'), leading: Icon(Icons.av_timer))),
+                const PopupMenuItem<String>(value: actions.Actions.SYNC, child: ListTile(title: Text('Sync'), leading: Icon(Icons.cloud_upload))),
+                const PopupMenuItem<String>(value: actions.Actions.DESTROY_LOCATIONS, child: ListTile(title: Text('Destroy locations'), leading: Icon(Icons.delete))),
                 const PopupMenuDivider(),
-                const PopupMenuItem<String>(value: Actions.EMAIL_LOG, child: ListTile(title: Text('Email log'), leading: Icon(Icons.email))),
-                const PopupMenuItem<String>(value: Actions.DESTROY_LOG, child: ListTile(title: Text('Destroy log'), leading: Icon(Icons.delete))),
+                const PopupMenuItem<String>(value: actions.Actions.EMAIL_LOG, child: ListTile(title: Text('Email log'), leading: Icon(Icons.email))),
+                const PopupMenuItem<String>(value: actions.Actions.DESTROY_LOG, child: ListTile(title: Text('Destroy log'), leading: Icon(Icons.delete))),
                 const PopupMenuDivider(),
-                const PopupMenuItem<String>(value: Actions.REMOVE_GEOFENCES, child: ListTile(title: Text('Remove geofences'), leading: Icon(Icons.delete))),
+                const PopupMenuItem<String>(value: actions.Actions.REMOVE_GEOFENCES, child: ListTile(title: Text('Remove geofences'), leading: Icon(Icons.delete))),
                 const PopupMenuDivider(),
                 const PopupMenuItem<String>(value: "power_manager", child: ListTile(title: Text('Settings->Power Manager'), leading: Icon(Icons.settings_power))),
                 const PopupMenuItem<String>(value: "ignore_battery_optimizations", child: ListTile(title: Text('Settings->Ignore Battery Optimizations'), leading: Icon(Icons.battery_alert))),
