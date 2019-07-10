@@ -614,7 +614,7 @@ const PLUGIN_SETTINGS = {
     {'name': 'batchSync', 'group': 'http', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     {'name': 'maxBatchSize', 'group': 'http', 'dataType': 'integer', 'inputType': 'select', 'values': [-1, 50, 100, 250, 500], 'defaultValue': 250},
     {'name': 'maxRecordsToPersist', 'group': 'http', 'dataType': 'integer', 'inputType': 'select', 'values': [-1, 0, 1, 10, 100, 1000], 'defaultValue': -1},
-    {'name': 'maxDaysToPersist', 'group': 'http', 'dataType': 'integer', 'inputType': 'select', 'values': [-1, 1, 2, 3, 4, 5, 6, 7, 14], 'defaultValue': -1},
+    {'name': 'maxDaysToPersist', 'group': 'http', 'dataType': 'integer', 'inputType': 'select', 'values': [-1, 1, 2, 3, 5, 7, 14], 'defaultValue': -1},
     {'name': 'persistMode', 'group': 'http', 'dataType': 'integer', 'inputType': 'select', 'labels': ['ALL', 'LOCATIONS', 'GEOFENCES', 'NONE'], 'values': [2, 1, -1, 0], 'defaultValue': 2},
     // Application
     {'name': 'stopOnTerminate', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': true},
