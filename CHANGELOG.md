@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.11] - 2019-07-10
+- [Fixed] Android issue running enabledchange event in background-thread with flutter 1.7
+
 ## [1.0.10] - 2019-06-25
 - [Fixed] iOS / Android issues with odometer and `getCurrentPosition` when used with `maximumAge` constraint.  Incorrect, old location was being returned instead of latest available.
 - [Fixed] Some Android methods were executing the callback in background-thread, exposed when using flutter dev channel (`#insertLocation`, `#getLocations`, `#getGeofences`, `#sync`).
