@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.0.12] - 2019-07-23
+- [Fixed] Found a few more cases where Android callbacks are being executed in background-thread.  References issue #70.
+
 ## [1.0.11] - 2019-07-10
 - [Fixed] Android issue running enabledchange event in background-thread with flutter 1.7
 
