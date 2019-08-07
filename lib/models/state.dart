@@ -27,6 +27,10 @@ class State extends Config {
   ///
   int trackingMode;
 
+  /// Indicates whether the iOS app was launched in the background.
+  ///
+  bool didLaunchInBackground;
+
   State(dynamic data)
       : super(
             // Common Options
@@ -152,6 +156,9 @@ class State extends Config {
     odometer = (data['odometer'].runtimeType == int)
         ? (data['odometer'] * 1.0)
         : data['odometer'];
+    didLaunchInBackground = (data['didLaunchInBackground'] != null)
+        ? data['didLaunchInBackground']
+        : false;
     map = data;
   }
 

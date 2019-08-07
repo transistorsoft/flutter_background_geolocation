@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [1.1.0] - 2019-08-07
+- [Fixed] Android Geofence `DWELL` transition (`notifyOnDwell: true`) not firing.
+- [Fixed] iOS `logMaxDays` was hard-coded to `7`; Config option not being respected.
+- [Added] Android `Q` support (API 29) with new location permission model `When In Use`.  Android now supports the config option `locationAuthorizationRequest` which was traditionally iOS-only.  Also, Android Q now requires runtime permission from user for `ACTIVITY_RECOGNITION`. 
+- [Changed] Another Android tweak to mitigate against error `Context.startForegroundService() did not then call Service.startForeground()`.
+- [Changed] Add new Android gradle config parameter `appCompatVersion` to replace `supportLibVersion` for better AndroidX compatibility.  If `appCompatVersion` is not found, the plugin's gradle file falls back to old `supportLibVersion`.
+
 ## [1.0.12] - 2019-07-23
 - [Fixed] Found a few more cases where Android callbacks are being executed in background-thread.  References issue #70.
 

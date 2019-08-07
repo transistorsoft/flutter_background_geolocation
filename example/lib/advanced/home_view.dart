@@ -103,6 +103,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
+        locationAuthorizationRequest: "Always",
         reset: false,
         debug: true,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
@@ -119,6 +120,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         foregroundService: true
     )).then((bg.State state) {
       print('[ready] ${state.toMap()}');
+
       if (state.schedule.isNotEmpty) {
         bg.BackgroundGeolocation.startSchedule();
       }
@@ -201,6 +203,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');
     });
+
   }
 
   // Go back to HomeApp

@@ -1202,9 +1202,11 @@ class Config {
   ///
   bool pausesLocationUpdatesAutomatically;
 
-  /// __`[iOS only]`__ Defines the *desired* iOS location-authorization request you *wish* for the user to authorize.
+  /// Defines the *desired* location-authorization request you *wish* for the user to authorize: "When in Use" or "Always".
   ///
   /// **`locationAuthorizationRequest`** tells the plugin the mode it *expects* to have been authorized with *by the user*.  If the user changes this mode in their settings, the plugin will detect this (See [locationAuthorizationAlert]).  Defaults to **`Always`**.  **`WhenInUse`** will display a **blue bar** at top-of-screen informing user that location-services are on.
+  ///
+  /// **Note:**  For *Android*, this option applies only to Android Q (API 29) and later.
   ///
   /// ![](https://dl.dropboxusercontent.com/s/88y3i4nkqq3o9ee/ios-location-authorization-dialog.png?dl=1)
   ///
@@ -1763,6 +1765,7 @@ class Config {
       this.geofenceInitialTriggerEntry,
       this.desiredOdometerAccuracy,
       this.useSignificantChangesOnly,
+      this.locationAuthorizationRequest,
       // ActivityRecognition
       this.isMoving,
       this.stopTimeout,
@@ -1806,7 +1809,6 @@ class Config {
 
       // Geolocation Options
       this.pausesLocationUpdatesAutomatically,
-      this.locationAuthorizationRequest,
       this.locationAuthorizationAlert,
       this.disableLocationAuthorizationAlert,
       // Activity Recognition Options
