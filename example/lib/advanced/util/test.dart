@@ -112,9 +112,10 @@ class Test {
           latitude: item['latitude'],
           longitude: item['longitude'],
           radius: item['radius'],
-          notifyOnDwell: item['notifyOnDwell'],
-          notifyOnEntry: item['notifyOnEntry'],
-          notifyOnExit: item['notifyOnExit'],
+          loiteringDelay: 10000,
+          notifyOnDwell: true,
+          notifyOnEntry: true,
+          notifyOnExit: true,
           extras: item['extras']
       ));
     });

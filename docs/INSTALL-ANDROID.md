@@ -8,7 +8,7 @@ Flutter seems to have a problem with 3rd-party Android libraries which merge the
 
 ```diff
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-+    xmlns:tools="http://schemas.android.com/tools"
++   xmlns:tools="http://schemas.android.com/tools"
     package="com.example.helloworld">
 
     <application
@@ -56,8 +56,8 @@ buildscript {
 +   ext {
 +       compileSdkVersion   = 28                // or higher
 +       targetSdkVersion    = 28                // or higher
-+       supportLibVersion   = "1.0.2"           // or higher
-+       playServicesLocationVersion = "16.0.0"  // or higher
++       appCompatVersion    = "1.0.2"           // or higher
++       playServicesLocationVersion = "17.0.0"  // or higher
 +   }
 
     repositories {
@@ -104,10 +104,8 @@ dependencies {
      testImplementation 'junit:junit:4.12'
 -    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 -    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-+   def supportLibVersion = rootProject.ext.supportLibVersion
-+   androidTestImplementation 'androidx.test:runner:1.1.1'                   // or higher
-+   androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'   // or higher
-+   implementation "androidx.appcompat:appcompat:$supportLibVersion"
++    androidTestImplementation 'androidx.test:runner:1.1.1'                   // or higher
++    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'   // or higher
 }
 
 ```

@@ -1,9 +1,9 @@
 buildscript {
     ext {
-        compileSdkVersion   = 28
-        targetSdkVersion    = 28
-        supportLibVersion   = "1.0.2"
-        playServicesLocationVersion = "16.0.0"
+        compileSdkVersion   = 29
+        targetSdkVersion    = 29
+        appCompatVersion    = "1.0.2"
+        playServicesLocationVersion = "17.0.0"
         removeBackgroundGeolocationDebugSoundsInRelase = true
     }
     repositories {

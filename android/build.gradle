@@ -5,7 +5,7 @@ apply plugin: 'com.android.library'
 
 def DEFAULT_COMPILE_SDK_VERSION                 = 28
 def DEFAULT_PLAY_SERVICES_LOCATION_VERSION      = "16.0.0"
-def DEFAULT_SUPPORT_LIB_VERSION                 = "1.0.2"
+def DEFAULT_APP_COMPAT_VERSION                  = "1.0.2"
 def DEFAULT_OK_HTTP_VERSION                     = "3.12.1"
 def DEFAULT_ANDROID_PERMISSIONS_VERSION         = "0.1.8"
 def DEFAULT_REMOVE_DEBUG_SOUNDS_IN_RELEASE      = true
@@ -24,12 +24,6 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
-
-
-    def removeDebugSounds = safeExtGet('removeBackgroundGeolocationDebugSoundsInRelase', DEFAULT_REMOVE_DEBUG_SOUNDS_IN_RELEASE)
-
-    removeDebugSounds = true
-
 }
 
 repositories {
@@ -39,8 +33,8 @@ repositories {
 }
 
 dependencies {
-    def playServicesLocationVersion =safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
-    def supportLibVersion = safeExtGet('supportLibVersion', DEFAULT_SUPPORT_LIB_VERSION)
+    def playServicesLocationVersion = safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
+    def appCompatVersion = safeExtGet('appCompatVersion', safeExtGet('supportLibVersion', DEFAULT_APP_COMPAT_VERSION))
     def okHttpVersion = safeExtGet('okHttpVersion', DEFAULT_OK_HTTP_VERSION)
     def androidPermissionsVersion = safeExtGet('androidPermissionsVersion', DEFAULT_ANDROID_PERMISSIONS_VERSION)
 
@@ -52,5 +46,5 @@ dependencies {
     implementation 'com.github.tony19:logback-android:1.3.0-2'
     // android-permissions
     implementation "com.intentfilter:android-permissions:$androidPermissionsVersion"
-    implementation "androidx.appcompat:appcompat:$supportLibVersion"
+    implementation "androidx.appcompat:appcompat:$appCompatVersion"
 }
