@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [1.2.0] - 2019-08-17
+- [Added] iOS 13 support.
+
 ## [1.1.0] - 2019-08-07
 - [Fixed] Android Geofence `DWELL` transition (`notifyOnDwell: true`) not firing.
 - [Fixed] iOS `logMaxDays` was hard-coded to `7`; Config option not being respected.
