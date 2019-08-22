@@ -1,12 +1,17 @@
 # CHANGELOG
 
+## [1.2.1] - 2019-08-22
+- [Fixed] Android Initial headless events can be missed when app booted due to motion transition event.
+- [Fixed] Android crash with EventBus `Subscriber already registered error`.
+- [Fixed] iOS `Crash: [TSHttpService postBatch:error:] + 6335064 (TSHttpService.m:253)`
+
 ## [1.2.0] - 2019-08-17
 - [Added] iOS 13 support.
 
 ## [1.1.0] - 2019-08-07
 - [Fixed] Android Geofence `DWELL` transition (`notifyOnDwell: true`) not firing.
 - [Fixed] iOS `logMaxDays` was hard-coded to `7`; Config option not being respected.
-- [Added] Android `Q` support (API 29) with new location permission model `When In Use`.  Android now supports the config option `locationAuthorizationRequest` which was traditionally iOS-only.  Also, Android Q now requires runtime permission from user for `ACTIVITY_RECOGNITION`. 
+- [Added] Android `Q` support (API 29) with new location permission model `When In Use`.  Android now supports the config option `locationAuthorizationRequest` which was traditionally iOS-only.  Also, Android Q now requires runtime permission from user for `ACTIVITY_RECOGNITION`.
 - [Changed] Another Android tweak to mitigate against error `Context.startForegroundService() did not then call Service.startForeground()`.
 - [Changed] Add new Android gradle config parameter `appCompatVersion` to replace `supportLibVersion` for better AndroidX compatibility.  If `appCompatVersion` is not found, the plugin's gradle file falls back to old `supportLibVersion`.
 

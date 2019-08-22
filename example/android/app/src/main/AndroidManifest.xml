@@ -39,7 +39,6 @@
         </activity>
         <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="025736af0c3b480ecc1a6fc8aea17e73cc012049ed117472072b76e5e170953d" />
 
-        <!-- <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="821a6d9e944ecdd84496edea043d3c9541b16bd4f2b3447258bcbe80d6119b20" /> -->
     </application>
 </manifest>
 
