@@ -31,6 +31,9 @@ class GeofencesChangeEvent {
           radius: data['radius'] * 1.0,
           latitude: data['latitude'] * 1.0,
           longitude: data['longitude'] * 1.0,
+          extras: (data['extras'] != null)
+              ? data['extras'].cast<String, dynamic>()
+              : {},
           notifyOnEntry: data['notifyOnEntry'],
           notifyOnExit: data['notifyOnExit'],
           notifyOnDwell: data['notifyOnDwell'],
