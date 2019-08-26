@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [Unreleased]
+- [Fixed] Android `Geofences.extras` not being provided to `#onGeofencesChange` event (issue #110).
+- [Fixed] iOS 10 provides `bool` attributes as `int` in `State`.  Check `runtimeType == int`.  Issue #111.
+
 ## [1.2.1] - 2019-08-22
 - [Fixed] Android Initial headless events can be missed when app booted due to motion transition event.
 - [Fixed] Android crash with EventBus `Subscriber already registered error`.
