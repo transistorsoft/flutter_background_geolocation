@@ -732,7 +732,9 @@ class BackgroundGeolocation {
           loiteringDelay: (loiteringDelay.runtimeType == double)
               ? loiteringDelay.round()
               : loiteringDelay,
-          extras: data['extras'].cast<String, dynamic>()));
+          extras: (data['extras'] != null)
+              ? data['extras'].cast<String, dynamic>()
+              : {}));
     });
     return rs;
   }
