@@ -4,10 +4,12 @@ part of flt_background_geolocation;
 bool _ensureBool(dynamic value) {
   return (value.runtimeType == int) ? (value != 0) : value;
 }
+
 // Android & iOS sometimes differ on their Type; where one returns int, the other might return double.
 int _ensureInt(dynamic value) {
   return (value.runtimeType == double) ? value.round() : value;
 }
+
 // Android & iOS sometimes differ on their Type; where one returns int, the other might return double.
 double _ensureDouble(dynamic value) {
   return (value.runtimeType == int) ? value * 1.0 : value;
