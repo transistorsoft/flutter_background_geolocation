@@ -3,6 +3,8 @@
 ## [Unreleased]
 - [Fixed] Android `Geofences.extras` not being provided to `#onGeofencesChange` event (issue #110).
 - [Fixed] iOS 10 provides `bool` attributes as `int` in `State`.  Check `runtimeType == int`.  Issue #111.
+- [Changed] Upgrade `android-logback` dependency to `2.0.0`
+- [Changed] Android: move some plugin initialization into background-threds (eg: `performLogCleanup`) to help mitigate against ANR "`Context.startForegroundService` did not then call `Service.startForeground`".
 
 ## [1.2.1] - 2019-08-22
 - [Fixed] Android Initial headless events can be missed when app booted due to motion transition event.
