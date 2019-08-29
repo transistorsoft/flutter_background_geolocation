@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## [Unreleased]
+- [Fixed] iOS 13 preventSuspend was not working with iOS 13.  iOS has once again decreased the max time for UIApplication beginBackgroundTask from 180s down to 30s.
 - [Fixed] Android `Geofences.extras` not being provided to `#onGeofencesChange` event (issue #110).
 - [Fixed] iOS 10 provides `bool` attributes as `int` in `State`.  Check `runtimeType == int`.  Issue #111.
 - [Changed] Upgrade `android-logback` dependency to `2.0.0`
