@@ -1,12 +1,12 @@
 # CHANGELOG
 
-## [Unreleased]
+## [1.2.2] - 2019-09-05
 - [Changed] Rebuild iOS `TSLocationManager.framework` with XCode 10 (previous build used XCode 11-beta6).  Replace `@available` macro with `SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO`.
 - [Fixed] iOS 13 preventSuspend was not working with iOS 13.  iOS has once again decreased the max time for UIApplication beginBackgroundTask from 180s down to 30s.
 - [Fixed] Android `Geofences.extras` not being provided to `#onGeofencesChange` event (issue #110).
 - [Fixed] iOS 10 provides `bool` attributes as `int` in `State`.  Check `runtimeType == int`.  Issue #111.
 - [Changed] Upgrade `android-logback` dependency to `2.0.0`
-- [Changed] Android: move some plugin initialization into background-threds (eg: `performLogCleanup`) to help mitigate against ANR "`Context.startForegroundService` did not then call `Service.startForeground`".
+- [Changed] Android: move some plugin initialization into background-threads (eg: `performLogCleanup`) to help mitigate against ANR "`Context.startForegroundService` did not then call `Service.startForeground`".
 
 ## [1.2.1] - 2019-08-22
 - [Fixed] Android Initial headless events can be missed when app booted due to motion transition event.
