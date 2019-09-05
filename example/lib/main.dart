@@ -82,6 +82,8 @@ void backgroundFetchHeadlessTask() async {
 }
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   /// Application selection:  Select the app to boot:
   /// - AdvancedApp
   /// - HelloWorldAp
@@ -106,5 +108,4 @@ void main() {
   bg.BackgroundGeolocation.registerHeadlessTask(backgroundGeolocationHeadlessTask);
   /// Register BackgroundFetch headless-task.
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
-
 }
