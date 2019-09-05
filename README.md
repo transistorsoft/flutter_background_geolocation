@@ -139,7 +139,7 @@ bg.BackgroundGeolocation.ready(bg.Config(
   reset: true,  // <-- true to always apply the supplied config
   distanceFilter: 10.0
 )).then((bg.State state) {
-  print('[ready] success: $state);
+  print('[ready] success: $state');
 });
 ```
 
