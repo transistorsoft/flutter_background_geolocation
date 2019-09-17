@@ -728,6 +728,7 @@ class Config {
   /// | `activity.confidence` | `Integer`| 0-100%      |
   /// | `battery.level`       | `Float`  | 0-100%      |
   /// | `battery.is_charging` | `Boolean`| Is device plugged in?|
+  /// | `mock`                | `Boolean`| `true` when location was recorded from a Mock location app. |
   ///
   String locationTemplate;
 

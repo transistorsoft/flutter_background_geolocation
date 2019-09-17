@@ -3,6 +3,8 @@ package com.transistorsoft.flutter.backgroundgeolocation;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.event.HeadlessEvent;
 import com.transistorsoft.locationmanager.logger.TSLog;
@@ -75,7 +77,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
     }
 
     @Override
-    public void onMethodCall(MethodCall call, MethodChannel.Result result) {
+    public void onMethodCall(MethodCall call, @NonNull MethodChannel.Result result) {
         TSLog.logger.debug("$ " + call.method);
         if (call.method.equalsIgnoreCase("initialized")) {
             synchronized(mHeadlessTaskRegistered) {
@@ -87,6 +89,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
         }
     }
 
+    @SuppressWarnings({"unused"})
     @Subscribe(threadMode=ThreadMode.MAIN)
     public void onHeadlessEvent(HeadlessEvent event) {
 
@@ -190,7 +193,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
 
         // Dispatch back to client for initialization.
         FlutterRunArguments args = new FlutterRunArguments();
-        args.bundlePath = FlutterMain.findAppBundlePath(context);
+        args.bundlePath = FlutterMain.findAppBundlePath();
         args.entrypoint = callbackInfo.callbackName;
         args.libraryPath = callbackInfo.callbackLibraryPath;
         mBackgroundFlutterView.runFromBundle(args);

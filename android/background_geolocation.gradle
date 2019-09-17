@@ -11,6 +11,7 @@ android {
 def purgeBackgroundGeolocationDebugResources(applicationVariants) {
     if ((rootProject.ext.has("removeBackgroundGeolocationDebugSoundsInRelease")) && (rootProject.ext.removeBackgroundGeolocationDebugSoundsInRelease == false)) return
     applicationVariants.all { variant ->
+        if (!variant.hasProperty('mergeResourcesProvider')) return
         if (variant.buildType.name == "release") {
             println("[flutter_background_geolocation] Purging debug resources in release build")
             variant.mergeResourcesProvider.configure {

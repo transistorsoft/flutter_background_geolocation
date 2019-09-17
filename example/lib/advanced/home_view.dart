@@ -66,7 +66,12 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       minimumFetchInterval: 15,
       startOnBoot: true,
       stopOnTerminate: false,
-      enableHeadless: true
+      enableHeadless: true,
+      requiresStorageNotLow: false,
+      requiresBatteryNotLow: false,
+      requiresCharging: false,
+      requiresDeviceIdle: false,
+      requiredNetworkType: BackgroundFetchConfig.NETWORK_TYPE_NONE
     ), () async {
       print('[BackgroundFetch] received event');
 

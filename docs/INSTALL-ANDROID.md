@@ -50,6 +50,7 @@ As an app grows in complexity and imports a variety of 3rd-party modules, it hel
 
 ```diff
 buildscript {
++   ext.kotlin_version = '1.3.0' // Must use 1.3.0 or higher.
 +   ext {
 +       compileSdkVersion   = 28                // or higher
 +       targetSdkVersion    = 28                // or higher
@@ -63,7 +64,7 @@ buildscript {
     }
 
     dependencies {
-+        classpath 'com.android.tools.build:gradle:3.3.1' // or higher
++        classpath 'com.android.tools.build:gradle:3.3.1' // Must use 3.3.1 or higher
     }
 }
 
