@@ -89,6 +89,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    super.initState();
+
     ////
     // 1.  Listen to events (See docs for all 12 available events).
     //
@@ -117,8 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
         stopOnTerminate: false,
         startOnBoot: true,
         debug: true,
-        logLevel: bg.Config.LOG_LEVEL_VERBOSE,
-        reset: true
+        logLevel: bg.Config.LOG_LEVEL_VERBOSE
     )).then((bg.State state) {
       if (!state.enabled) {
         ////
@@ -130,17 +131,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-```
-
-:information_source: **NOTE:** The configuration **`{}`** provided to the `#ready` method is applied **only** when your app is **first booted** &mdash; for every launch thereafter, the plugin will automatically load the last known configuration from persistant storage.  If you wish to **force** the `#ready` method to *always* apply the supplied config `{}`, you can specify **`reset: true`**
-
-```dart
-bg.BackgroundGeolocation.ready(bg.Config(
-  reset: true,  // <-- true to always apply the supplied config
-  distanceFilter: 10.0
-)).then((bg.State state) {
-  print('[ready] success: $state');
-});
 ```
 
 :warning: Do not execute *any* API method which will require accessing location-services until the callback to **`#ready*` executes (eg: `#getCurrentPosition`, `#watchPosition`, `#start`).

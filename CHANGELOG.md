@@ -1,5 +1,39 @@
 # CHANGELOG
 
+## [1.2.3] - 2019-09-16
+- [Changed] Bump background_fetch version to 0.3.0
+- [Changed] Android:  move more location-handling code into background-threads to help mitigate against ANR referencing `Context.startForegroundService`
+- [Changed] Android:  If BackgroundGeolocation adapter is instantiated headless and is enabled, force ActivityRecognitionService to start.
+- [Added] Add `mock` to `locationTemplate` data.
+- [Added] Android now adds 2 extra setup steps. (1) The plugin now hosts its own `proguard-rules.pro` which must be manually added to `app/build.gradle`.  (2)  The plugin now hosts its own custom gradle file which must also be manually `apply from` in your `app/build.gradle`.  This extra gradle file contains a simple method to strip the SDK's debug sound-effects from your release build (1.5M):
+
+`android/app/build.gradle`
+
+:open_file_folder: `android/app/build.gradle`:
+
+```diff
+// flutter_background_geolocation
++Project background_geolocation = project(':flutter_background_geolocation')
+// 1.  Extra gradle file
++apply from: "${background_geolocation.projectDir}/background_geolocation.gradle"
+
+android {
+    .
+    .
+    .
+    buildTypes {
+        release {
+            .
+            .
+            .
+            minifyEnabled true
+            // 2.  background_geolocation requires custom Proguard Rules when used with minifyEnabled
++           proguardFiles "${background_geolocation.projectDir}/proguard-rules.pro"
+        }
+    }
+}
+```
+
 ## [1.2.2] - 2019-09-05
 - [Changed] Rebuild iOS `TSLocationManager.framework` with XCode 10 (previous build used XCode 11-beta6).  Replace `@available` macro with `SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO`.
 - [Fixed] iOS 13 preventSuspend was not working with iOS 13.  iOS has once again decreased the max time for UIApplication beginBackgroundTask from 180s down to 30s.

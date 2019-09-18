@@ -30,19 +30,9 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
-/**
- * Purge flutter_background_geolocation debug sounds from release build.
- */
-def purgeBackgroundGeolocationDebugResources(applicationVariants) {
-    applicationVariants.all { variant ->
-        if (variant.buildType.name == 'release') {
-            variant.mergeResources.doLast {
-                delete(fileTree(dir: variant.mergeResources.outputDir, includes: ['raw_tslocationmanager*']))
-
-            }
-        }
-    }
-}
+// flutter_background_geolocation
+Project background_geolocation = project(':flutter_background_geolocation')
+apply from: "${background_geolocation.projectDir}/background_geolocation.gradle"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -72,15 +62,11 @@ android {
     }
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles "${background_geolocation.projectDir}/proguard-rules.pro"
         }
     }
-
-    //Remove debug sounds from background_geolocation plugin
-    //purgeBackgroundGeolocationDebugResources(applicationVariants)
-
 }
 
 flutter {

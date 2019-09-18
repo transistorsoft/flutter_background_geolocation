@@ -4,7 +4,7 @@ buildscript {
         targetSdkVersion    = 29
         appCompatVersion    = "1.0.2"
         playServicesLocationVersion = "17.0.0"
-        removeBackgroundGeolocationDebugSoundsInRelase = true
+        removeBackgroundGeolocationDebugSoundsInRelease = false
     }
     repositories {
         google()

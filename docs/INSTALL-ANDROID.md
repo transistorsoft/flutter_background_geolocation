@@ -29,9 +29,6 @@ Execution failed for task ':app:processDebugManifest'.
     Suggestion: add 'tools:replace="android:label"' to <application> element at AndroidManifest.xml:15:5-38:19 to override.
 ```
 
-## `background_fetch`
-
-`flutter_background_geolocation` installs a dependency `background_fetch` (also created by [Transistor Software](https://www.transistorsoft.com)).  You must perform the [Android Setup](https://github.com/transistorsoft/flutter_background_fetch/blob/master/help/INSTALL-ANDROID.md) for it as well.
 
 ## `android/gradle.properties`
 
@@ -47,12 +44,13 @@ org.gradle.jvmargs=-Xmx1536M
 
 ## `android/build.gradle`
 
-As an app grows in complexity and imports a variety of 3rd-party modules, it helps to provide some key **"Global Gradle Configuration Properties"** which all modules can align their requested dependency versions to.  `flutter_background_geolocation` **is aware** of these variables and will align itself to them when detected.  One of the most common build errors comes from multiple 3rd-party modules importing different version of `play-services` or `com.android.support` libraries.
+As an app grows in complexity and imports a variety of 3rd-party modules, it helps to provide some key **"Global Gradle Configuration Properties"** which all modules can align their requested dependency versions to.  `flutter_background_geolocation` **is aware** of these variables and will align itself to them when detected.  One of the most common build errors comes from multiple 3rd-party modules importing different version of `play-services` or `support` libraries.
 
 :open_file_folder: `android/build.gradle`:
 
 ```diff
 buildscript {
++   ext.kotlin_version = '1.3.0' // Must use 1.3.0 or higher.
 +   ext {
 +       compileSdkVersion   = 28                // or higher
 +       targetSdkVersion    = 28                // or higher
@@ -66,7 +64,7 @@ buildscript {
     }
 
     dependencies {
-+        classpath 'com.android.tools.build:gradle:3.3.1' // or higher
++        classpath 'com.android.tools.build:gradle:3.3.1' // Must use 3.3.1 or higher
     }
 }
 
@@ -86,6 +84,10 @@ In addition, you should take advantage of the *Global Configuration Properties* 
 :open_file_folder: `android/app/build.gradle`:
 
 ```diff
+// flutter_background_geolocation
++Project background_geolocation = project(':flutter_background_geolocation')
++apply from: "${background_geolocation.projectDir}/background_geolocation.gradle"
+
 android {
 +   compileSdkVersion rootProject.ext.compileSdkVersion
     .
@@ -96,6 +98,16 @@ android {
         .
         .
 +       targetSdkVersion rootProject.ext.targetSdkVersion
+    }
+    buildTypes {
+        release {
+            .
+            .
+            .
+            minifyEnabled true
+            // background_geolocation requires custom Proguard Rules with minifyEnabled
++           proguardFiles "${background_geolocation.projectDir}/proguard-rules.pro"
+        }
     }
 }
 
@@ -109,69 +121,6 @@ dependencies {
 }
 
 ```
-
-## Headless Mechanism with `enableHeadless: true`
-
-If you intend to use the SDK's Android *Headless* mechanism, you must perform the following additional setup:
-
-Create either `Application.kt` or `Application.java` in the same directory as `MainActivity`.
-
-- For `Application.kt`, use the following:
-
-```java
-package your.app.name;
-
-import io.flutter.app.FlutterApplication;
-import io.flutter.plugin.common.PluginRegistry;
-import io.flutter.plugins.GeneratedPluginRegistrant;
-
-import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
-
-class Application : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
-  override fun onCreate() {
-    super.onCreate();
-    FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
-  }
-
-  override fun registerWith(registry: PluginRegistry) {
-    GeneratedPluginRegistrant.registerWith(registry);
-  }
-}
-```
-
-- For `Application.java`, use the following:
-
-```java
-package your.app.name;
-
-import io.flutter.app.FlutterApplication;
-import io.flutter.plugin.common.PluginRegistry;
-import io.flutter.plugins.GeneratedPluginRegistrant;
-
-import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
-
-public class Application extends FlutterApplication implements PluginRegistry.PluginRegistrantCallback {
-  @Override
-  public void onCreate() {
-    super.onCreate();
-    FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
-  }
-
-  @Override
-  public void registerWith(PluginRegistry registry) {
-    GeneratedPluginRegistrant.registerWith(registry);
-  }
-}
-```
-
-Now edit `AndroidManifest.xml` and provide a reference to your custom `Application` class:
-```xml
-    <application
-        android:name=".Application"
-        ...
-```
-
-
 
 ## Configure your license
 
@@ -197,45 +146,17 @@ If you've not yet purchased a license to unlock Android, you can purchase one [h
 </manifest>
 ```
 
-## Proguard Config
+## Android Headless Mode with `enableHeadless: true`
 
-If you've configured `minifyEnabled true` in your `app/build.gradle`, be sure to add the following items to your `proguard-rules.pro`, since the BackgroundGeolocation library is *already* minified.
+If you intend to respond to the BackgroundGeolocation SDK's events with your own `dart` callback while your **app is terminated**, that is *Headless*, See [Android Headless Mode](../../../wiki/Android-Headless-Mode) and perform those additional steps now.
 
-```diff
-buildTypes {
-    release {
-+       minifyEnabled true // <-- here
-        proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-        signingConfig signingConfigs.release
-    }
-}
+```dart
+BackgroundGeolocation.ready(Config(
+  enableHeadless: true  // <--
+));
 ```
 
-### :open_file_folder: `proguard-rules.pro` (`android/app/proguard-rules.pro`)
+## `background_fetch`
 
-```proguard
--keepnames class com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin
--keepnames class io.flutter.app.FlutterActivity
+`flutter_background_geolocation` installs a dependency `background_fetch` (also created by [Transistor Software](https://www.transistorsoft.com)).  You can optionally perform the [Android Setup](https://github.com/transistorsoft/flutter_background_fetch/blob/master/help/INSTALL-ANDROID.md) for it as well.
 
-# BackgroundGeolocation lib tslocationmanager.aar is *already* proguarded
--keep class com.transistorsoft.** { *; }
--dontwarn com.transistorsoft.**
-
-# BackgroundGeolocation (EventBus)
--keepattributes *Annotation*
--keepclassmembers class ** {
-    @org.greenrobot.eventbus.Subscribe <methods>;
-}
--keep enum org.greenrobot.eventbus.ThreadMode { *; }
--keepclassmembers class * extends org.greenrobot.eventbus.util.ThrowableFailureEvent {
-    <init>(java.lang.Throwable);
-}
-
-# logback
--keep class ch.qos.** { *; }
--keep class org.slf4j.** { *; }
--dontwarn ch.qos.logback.core.net.*
-
-# OkHttp3
--dontwarn okio.**
-```
