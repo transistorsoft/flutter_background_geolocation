@@ -84,7 +84,10 @@ In addition, you should take advantage of the *Global Configuration Properties* 
 :open_file_folder: `android/app/build.gradle`:
 
 ```diff
-// flutter_background_geolocation
+apply plugin: 'com.android.application'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+// flutter_background_geolocation (must be placed after the lines above)
 +Project background_geolocation = project(':flutter_background_geolocation')
 +apply from: "${background_geolocation.projectDir}/background_geolocation.gradle"
 
