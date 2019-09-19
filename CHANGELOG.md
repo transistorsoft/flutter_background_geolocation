@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [Unreleased]
+- [Fixed] Custom layouts were not working properly for older OS version < O.  Custom layout will use setBigContentLayout now.  The user will be able to expand the notification to reveal the custom layout.
+
 ## [1.2.3] - 2019-09-16
 - [Changed] Bump background_fetch version to 0.3.0
 - [Changed] Android:  move more location-handling code into background-threads to help mitigate against ANR referencing `Context.startForegroundService`
