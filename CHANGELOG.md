@@ -1,6 +1,7 @@
 # CHANGELOG
 
-## [Unreleased]
+## [1.2.4] - 2019-09-20
+- [Fixed] flutter@1.9.1 deprecated a method `FlutterMain.findBundleAppPath(Context)`, replacing with a new signature the receives no `Context`.  Changing to the new signature breaks people using < flutter 1.9.1.  Will use old signature for now.
 - [Fixed] Custom layouts were not working properly for older OS version < O.  Custom layout will use setBigContentLayout now.  The user will be able to expand the notification to reveal the custom layout.
 
 ## [1.2.3] - 2019-09-16

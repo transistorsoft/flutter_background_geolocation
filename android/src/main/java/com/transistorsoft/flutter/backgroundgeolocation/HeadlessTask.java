@@ -193,7 +193,8 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
 
         // Dispatch back to client for initialization.
         FlutterRunArguments args = new FlutterRunArguments();
-        args.bundlePath = FlutterMain.findAppBundlePath();
+        // Deprecated in flutter 1.9.1.  Leave as-is for now or those on 1.7.8 break.
+        args.bundlePath = FlutterMain.findAppBundlePath(context);
         args.entrypoint = callbackInfo.callbackName;
         args.libraryPath = callbackInfo.callbackLibraryPath;
         mBackgroundFlutterView.runFromBundle(args);
