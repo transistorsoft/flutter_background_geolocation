@@ -361,10 +361,10 @@ class Config {
   /// **WARNING:** `stopOnStationary` will **only** occur due to [stopTimeout] timer elapse.  It will **not** occur by manually executing [BackgroundGeolocation.changePace]:false.
   ///
   /// ```dart
-  /// BackgroundGeolocation.ready({
+  /// BackgroundGeolocation.ready(Config(
   ///   stopOnStationary: true,
   ///   isMoving: true
-  /// }, function(state) {
+  /// )).then((State state) {
   ///   BackgroundGeolocation.start();
   /// });
   /// ```
@@ -416,10 +416,10 @@ class Config {
   /// Defaults to `POST`.  Valid values are `POST`, `PUT` and `OPTIONS`.
   ///
   /// ```dart
-  /// BackgroundGeolocation.ready({
+  /// BackgroundGeolocation.ready(Config(
   ///   url: 'http://my-server.com/locations',
   ///   method: 'PUT'
-  /// });
+  /// ));
   /// ```
   ///
   String method;
@@ -477,7 +477,7 @@ class Config {
   ///     'user_id': 1234,
   ///     'device_id': 'abc123'
   ///   }
-  /// );
+  /// ));
   /// ```
   ///
   /// Observing the HTTP request arriving at your server:
@@ -551,7 +551,7 @@ class Config {
   ///   params: {
   ///     'device_id': 'abc123'
   ///   }
-  /// });
+  /// ));
   /// ```
   ///
   /// Observing incoming requests at your server:
@@ -695,7 +695,7 @@ class Config {
   ///   extras: {
   ///     "foo": "bar"
   ///   }
-  /// )
+  /// ))
   /// ```
   ///
   /// Will result in JSON:
@@ -753,9 +753,9 @@ class Config {
   /// ));
   ///
   /// // Or use a compact [Array] template!
-  /// BackgroundGeolocation.Config((
+  /// BackgroundGeolocation.ready(Config(
   ///   geofenceTemplate: '[<%= latitude %>, <%= longitude %>, "<%= geofence.identifier %>", "<%= geofence.action %>"]'
-  /// )
+  /// ))
   /// ```
   ///
   /// ## Warning:  quoting `String` data.
@@ -847,7 +847,7 @@ class Config {
   /// BackgroundGeolocation.ready(Config(
   ///   url: 'https://my-server.com/locations',
   ///   httpTimeout: 3000
-  /// );
+  /// ));
   /// ```
   ///
   int httpTimeout;
@@ -1057,7 +1057,7 @@ class Config {
   /// __Android only__ Force the Android scheduler to use `AlarmManager` (more precise) instead of `JobScheduler`.  Defaults to `false`.
   ///
   /// ```dart
-  /// bg.BackgroundGeolocation.ready(bg.Config(
+  /// BackgroundGeolocation.ready(Config(
   ///   schedule: ['1-7 09:00-17:00'],
   ///   scheduleUseAlarmManager: true
   /// ));
@@ -1151,7 +1151,7 @@ class Config {
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
   ///   logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE
-  /// });
+  /// ));
   /// ```
   ///
   ///  **See also:**
@@ -1179,11 +1179,11 @@ class Config {
   /// ## Example
   ///
   /// ```dart
-  /// BackgroundGeolocation.ready({
+  /// BackgroundGeolocation.ready(Config(
   ///   reset: true,  // <-- set true to ALWAYS apply supplied config; not just at first launch.
   ///   distanceFilter: 50
-  /// }, (state) => {
-  ///   console.log('Ready with reset: true: ', state.distanceFilter);
+  /// )).then((State state) {
+  ///   print('Ready with reset: true: ${state.distanceFilter}');
   /// });
   /// ```
   ///
@@ -1246,7 +1246,7 @@ class Config {
   ///     'cancelButton': 'Cancel',
   ///     'settingsButton': 'Settings'
   ///   }
-  /// })
+  /// ))
   /// ```
   ///
   Map<String, dynamic> locationAuthorizationAlert;
@@ -1308,7 +1308,7 @@ class Config {
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
   ///   activityType: Config.ACTIVITY_TYPE_OTHER
-  /// );
+  /// ));
   /// ```
   ///
   ///  **Note:**  For more information, see [Apple docs](https://developer.apple.com/reference/corelocation/cllocationmanager/1620567-activitytype?language=objc).
@@ -1323,15 +1323,33 @@ class Config {
   ///
   int stopDetectionDelay;
 
-  /// __`[iOS only]`__ Disable the plugin requesting "Motion & Fitness" authorization from the User.
+  /// Disable the plugin requesting "Motion & Fitness" (ios) or "Physical Activity" (android >= 10) authorization from the User.
   ///
-  /// Defaults to **`false`**.  Set **`true`** to disable iOS [`CMMotionActivityManager`](https://developer.apple.com/reference/coremotion/cmmotionactivitymanager)-based motion-activity updates (eg: `walking`, `in_vehicle`).  This feature requires a device having the **M7** co-processor (ie: iPhone 5s and up).
   ///
-  ///  **Note:** This feature will ask the user for "Health updates" permission using the **`NSMotionUsageDescription`** in your `Info.plist`.  If you do not wish to ask the user for the "Health updates", set this option to `true`; However, you will no longer receive accurate activity data in the recorded locations.
+  /// Defaults to **`false`**.  Set to `true` to disable asking the user for this permission.
   ///
-  ///  **WARNING:** The plugin is **HIGHLY** optimized for motion-activity-updates.  If you **do** disable this, the plugin *will* drain more battery power.  You are **STRONGLY** advised against disabling this.  You should explain to your users with an appropriate `NSMotionUsageDescription` in your `Info.plist` file, for example:
+  /// ## iOS
   ///
+  /// ![](https://dl.dropbox.com/s/v3qt7ry1k4b3iir/ios-motion-permission.png?dl=1)
+  ///
+  /// The plugin is **HIGHLY** optimized for motion-activity-updates.  If you **do** disable this, the plugin *will* drain more battery power.  You are **STRONGLY** advised against disabling this.  You should explain to your users with an appropriate `NSMotionUsageDescription` in your `Info.plist` file, for example:
   /// > "Motion activity detection increases battery efficiency by intelligently toggling location-tracking" off when your device is detected to be stationary.
+  ///
+  /// ## Android
+  ///
+  /// Android 10+ now requires run-time permission from the user for "Physical Activity".
+  /// ![](https://dl.dropbox.com/s/6v4391oz592bdjg/android-permission-physical-activity.png?dl=1)
+  ///
+  /// Traditionally, the `background-geolocation` Android SDK has relied heavily upon the Motion API for determining when to toggle location-services on/off based upon whether the device is *moving* vs *stationary*.
+  /// However, the Android SDK has a fallback "stationary geofence" mechanism just like iOS, the exit of which will cause the plugin to change to the *moving* state, toggle location-services and begin tracking.  This will, of course, require the device moves a distance of typically **200-500 meters** before tracking engages.  With the Motion API authorized, the Android SDK typically requires just **a few meters** of movement for tracking to engage.
+  ///
+  /// ## Example
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.ready(Config(
+  ///   disableMotionActivityUpdates: true
+  /// ));
+  /// ```
   ///
   bool disableMotionActivityUpdates;
 
@@ -1345,7 +1363,7 @@ class Config {
   ///
   ///  **WARNING:** **`preventSuspend: true`** should **only** be used in **very** specific use-cases and should typically **not** be used as it *will* have a **very noticeable impact on battery performance.**  You should carefully manage **`preventSuspend`**, engaging it for controlled periods-of-time.  You should **not** expect to run your app in this mode 24 hours / day, 7 days-a-week.
   ///
-  /// ## Exampler
+  /// ## Example
   ///
   /// ```dart
   /// BackgroundGeolocation.onHeartbeat((HeartbeatEvent event) {
@@ -1383,10 +1401,10 @@ class Config {
   /// ## Example
   ///
   /// ```dart
-  /// BackgroundGeolocation.ready({
+  /// BackgroundGeolocation.ready(Config(
   ///   distanceFilter: 0,            // Must be 0 or locationUpdateInterval is ignored!
   ///   locationUpdateInterval: 5000  // Get a location every 5 seconds
-  /// });
+  /// ));
   /// ```
   ///
   int locationUpdateInterval;
@@ -1481,12 +1499,12 @@ class Config {
   /// // Only trigger tracking for vehicles
   /// BackgroundGeolocation.ready(Config(
   ///   triggerActivities: 'in_vehicle'
-  /// );
+  /// ));
   ///
   /// // Only trigger tracking for on_foot, walking and running
   /// BackgroundGeolocation.ready(Config(
   ///   triggerActivities: 'on_foot, walking, running'
-  /// );
+  /// ));
   /// ```
   ///
   String triggerActivities;

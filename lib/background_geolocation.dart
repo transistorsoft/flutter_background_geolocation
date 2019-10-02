@@ -192,7 +192,7 @@ class BackgroundGeolocation {
   ///
   /// BackgroundGeolocation.reset();
   /// // Reset to documented default-values with overrides
-  /// bgGeo.reset(Config(
+  /// BackgroundGeolocation.reset(Config(
   ///   distanceFilter:  10
   /// ));
   /// ```
@@ -206,7 +206,7 @@ class BackgroundGeolocation {
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
   ///   distanceFilter: 50
-  /// }).then((State state) {
+  /// )).then((State state) {
   ///   print('[ready] - ${state}')
   /// });
   ///
@@ -257,7 +257,7 @@ class BackgroundGeolocation {
   /// ## Example
   ///
   /// ```dart
-  /// BackgroundGeolocation.start.then((State state) {
+  /// BackgroundGeolocation.start().then((State state) {
   ///   print('[start] success - ${state}');
   /// });
   /// ```
@@ -356,7 +356,7 @@ class BackgroundGeolocation {
   /// BackgroundGeolocation.ready(Config(
   ///   url: 'http://my.server.com',
   ///   autoSync: true
-  /// ).then((State state) {
+  /// )).then((State state) {
   ///   BackgroundGeolocation.startGeofences();
   /// });
   /// ```
@@ -620,7 +620,7 @@ class BackgroundGeolocation {
   ///   print('[addGeofence] success');
   /// }.catchError((error) {
   ///   print('[addGeofence] FAILURE: ${error}');
-  //// });
+  /// });
   /// ```
   ///
   /// __Note:__
