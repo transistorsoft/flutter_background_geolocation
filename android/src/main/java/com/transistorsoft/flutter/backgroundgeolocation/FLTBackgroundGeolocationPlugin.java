@@ -494,8 +494,11 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         });
     }
 
-    private void getCount(Result result) {
-        result.success(BackgroundGeolocation.getInstance(mContext).getCount());
+    private void getCount(final Result result) {
+        BackgroundGeolocation.getInstance(mContext).getCount(new TSGetCountCallback() {
+            @Override public void onSuccess(Integer count) { result.success(count); }
+            @Override public void onFailure(String error) { result.error(error, null, null); }
+        });
     }
 
     private void destroyLocations(final Result result) {
@@ -841,9 +844,9 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     }
 
     @Override
-    // TODO this is part of attempt to implement Flutter Headless callbacks.  Not yet working.
+
     public boolean onViewDestroy(FlutterNativeView nativeView) {
-        //return HeadlessTask.setSharedFlutterView(nativeView);
+        BackgroundGeolocation.getInstance(mContext).onActivityDestroy();
         return true;
     }
 
@@ -866,7 +869,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     @Override
     public void onActivityStopped(Activity activity) {
         TSConfig config = TSConfig.getInstance(activity);
-        if (config.getEnabled() && config.getEnableHeadless() && !config.getStopOnTerminate()) {
+        if (config.getEnabled()) {
             TSScheduleManager.getInstance(activity).oneShot(TerminateEvent.ACTION, 10000);
         }
     }
@@ -877,7 +880,6 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     @Override
     public void onActivityDestroyed(Activity activity) {
         if (mRegistrar.activity() == null) {
-            BackgroundGeolocation.getInstance(mContext).onActivityDestroy();
             activity.getApplication().unregisterActivityLifecycleCallbacks(this);
         }
     }

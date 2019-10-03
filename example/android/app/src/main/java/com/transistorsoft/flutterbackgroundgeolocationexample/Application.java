@@ -1,5 +1,7 @@
 package com.transistorsoft.flutterbackgroundgeolocationexample;
 
+import android.util.Log;
+
 import com.transistorsoft.flutter.backgroundfetch.BackgroundFetchPlugin;
 import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
 
@@ -11,6 +13,16 @@ public class Application  extends FlutterApplication implements PluginRegistry.P
     @Override
     public void onCreate() {
         super.onCreate();
+
+        /* For testing Context.startForeground issue.  Simulate a delay launching app.
+        try {
+            Log.i("TSLocationManager", "*************************** SLEEPING START 20000ms");
+            Thread.sleep(20000);
+            Log.i("TSLocationManager", "*************************** SLEEPING DONE");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        */
         FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
         BackgroundFetchPlugin.setPluginRegistrant(this);
     }

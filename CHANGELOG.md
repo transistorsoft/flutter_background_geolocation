@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+- [Added] Android now supports `disableMotionActivityUpdates` for Android 10 which now requires run-time permission for "Physical Activity".  Setting to `true` will not ask user for this permission.  The plugin will fallback to using the "stationary geofence" triggering, like iOS.
+- [Changed] Android:  Ensure all code that accesses the database is performed in background-threads, including all logging (addresses `Context.startForegroundService` ANR issue).
+- [Changed] Android:  Ensure all geofence event-handling is performed in background-threads (addresses `Context.startForegroundService` ANR issue).
+- [Added] Android: implement logic to handle operation without Motion API on Android 10.  v3 has always used a "stationary geofence" like iOS as a fail-safe, but this is now crucial for Android 10 which now requires run-time permission for "Physical Activity".  For those users who [Deny] this permission, Android will trigger tracking in a manner similar to iOS (ie: requiring movement of about 200 meters).  This also requires handling to detect when the device has become stationary.
+
 ## [1.2.4] - 2019-09-20
 - [Fixed] flutter@1.9.1 deprecated a method `FlutterMain.findBundleAppPath(Context)`, replacing with a new signature the receives no `Context`.  Changing to the new signature breaks people using < flutter 1.9.1.  Will use old signature for now.
 - [Fixed] Custom layouts were not working properly for older OS version < O.  Custom layout will use setBigContentLayout now.  The user will be able to expand the notification to reveal the custom layout.
