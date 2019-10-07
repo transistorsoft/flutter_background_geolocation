@@ -49,31 +49,34 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
     }
 
     // Called by FLTBackgroundGeolocationPlugin
-    static boolean register(Context context, List<Object> callbacks) {
-        SharedPreferences prefs = context.getSharedPreferences(HeadlessTask.class.getName(), Context.MODE_PRIVATE);
+    static boolean register(final Context context, final List<Object> callbacks) {
+        BackgroundGeolocation.getThreadPool().execute(new Runnable() {
+            @Override public void run() {
+                SharedPreferences prefs = context.getSharedPreferences(HeadlessTask.class.getName(), Context.MODE_PRIVATE);
 
-        // There is weirdness with the class of these callbacks (Integer vs Long) between assembleDebug vs assembleRelease.
-        Object cb1 = callbacks.get(0);
-        Object cb2 = callbacks.get(1);
+                // There is weirdness with the class of these callbacks (Integer vs Long) between assembleDebug vs assembleRelease.
+                Object cb1 = callbacks.get(0);
+                Object cb2 = callbacks.get(1);
 
-        SharedPreferences.Editor editor = prefs.edit();
-        if (cb1.getClass() == Long.class) {
-            editor.putLong(KEY_REGISTRATION_CALLBACK_ID, (Long) cb1);
-        } else if (cb1.getClass() == Integer.class) {
-            editor.putLong(KEY_REGISTRATION_CALLBACK_ID, ((Integer) cb1).longValue());
-        }
+                SharedPreferences.Editor editor = prefs.edit();
+                if (cb1.getClass() == Long.class) {
+                    editor.putLong(KEY_REGISTRATION_CALLBACK_ID, (Long) cb1);
+                } else if (cb1.getClass() == Integer.class) {
+                    editor.putLong(KEY_REGISTRATION_CALLBACK_ID, ((Integer) cb1).longValue());
+                }
 
-        if (cb2.getClass() == Long.class) {
-            editor.putLong(KEY_CLIENT_CALLBACK_ID, (Long) cb2);
-        } else if (cb2.getClass() == Integer.class) {
-            editor.putLong(KEY_CLIENT_CALLBACK_ID, ((Integer) cb2).longValue());
-        }
-        editor.apply();
+                if (cb2.getClass() == Long.class) {
+                    editor.putLong(KEY_CLIENT_CALLBACK_ID, (Long) cb2);
+                } else if (cb2.getClass() == Integer.class) {
+                    editor.putLong(KEY_CLIENT_CALLBACK_ID, ((Integer) cb2).longValue());
+                }
+                editor.apply();
 
-        sRegistrationCallbackId = prefs.getLong(KEY_REGISTRATION_CALLBACK_ID, -1);
-        sClientCallbackId = prefs.getLong(KEY_CLIENT_CALLBACK_ID, -1);
-
-        return ((sRegistrationCallbackId != -1) && (sClientCallbackId != -1));
+                sRegistrationCallbackId = prefs.getLong(KEY_REGISTRATION_CALLBACK_ID, -1);
+                sClientCallbackId = prefs.getLong(KEY_CLIENT_CALLBACK_ID, -1);
+            }
+        });
+        return true;
     }
 
     @Override
@@ -92,38 +95,26 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
     @SuppressWarnings({"unused"})
     @Subscribe(threadMode=ThreadMode.MAIN)
     public void onHeadlessEvent(HeadlessEvent event) {
-
-        SharedPreferences prefs = event.getContext().getSharedPreferences(getClass().getName(), Context.MODE_PRIVATE);
-        sRegistrationCallbackId = prefs.getLong(KEY_REGISTRATION_CALLBACK_ID, -1);
-        sClientCallbackId = prefs.getLong(KEY_CLIENT_CALLBACK_ID, -1);
-
         String eventName = event.getName();
         TSLog.logger.debug("\uD83D\uDC80 [HeadlessTask " + eventName + "]");
 
-        if ((sRegistrationCallbackId == -1) || (sClientCallbackId == -1)) {
-            TSLog.logger.error(TSLog.error("Invalid Headless Callback ids.  Cannot handle headless event"));
-            return;
-        }
         synchronized (mEvents) {
             mEvents.add(event);
-            if (mBackgroundFlutterView == null) {
-                initFlutterView(event.getContext());
-            }
         }
 
-        synchronized(mHeadlessTaskRegistered) {
-            if (!mHeadlessTaskRegistered.get()) {
-                // Queue up events while background isolate is starting
-                TSLog.logger.debug("[HeadlessTask] waiting for client to initialize");
-            } else {
-                // Callback method name is intentionally left blank.
-                dispatch();
-            }
-        }
+        BackgroundGeolocation.getThreadPool().execute(new TaskRunner(event));
     }
 
     // Send event to Client.
     private void dispatch() {
+        synchronized(mHeadlessTaskRegistered) {
+            if (!mHeadlessTaskRegistered.get()) {
+                // Queue up events while background isolate is starting
+                TSLog.logger.debug("[HeadlessTask] waiting for client to initialize");
+                return;
+            }
+        }
+
         synchronized (mEvents) {
             for (HeadlessEvent event : mEvents) {
                 JSONObject response = new JSONObject();
@@ -177,6 +168,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
     }
 
     private void initFlutterView(Context context) {
+
         FlutterMain.ensureInitializationComplete(context, null);
         FlutterCallbackInformation callbackInfo = FlutterCallbackInformation.lookupCallbackInformation(sRegistrationCallbackId);
         if (callbackInfo == null) {
@@ -198,5 +190,32 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
         args.entrypoint = callbackInfo.callbackName;
         args.libraryPath = callbackInfo.callbackLibraryPath;
         mBackgroundFlutterView.runFromBundle(args);
+    }
+
+    class TaskRunner implements Runnable {
+        private HeadlessEvent mEvent;
+        TaskRunner(HeadlessEvent event) {
+            mEvent = event;
+        }
+        @Override
+        public void run() {
+            SharedPreferences prefs = mEvent.getContext().getSharedPreferences(HeadlessTask.class.getName(), Context.MODE_PRIVATE);
+            sRegistrationCallbackId = prefs.getLong(KEY_REGISTRATION_CALLBACK_ID, -1);
+            sClientCallbackId = prefs.getLong(KEY_CLIENT_CALLBACK_ID, -1);
+
+            if ((sRegistrationCallbackId == -1) || (sClientCallbackId == -1)) {
+                TSLog.logger.error(TSLog.error("Invalid Headless Callback ids.  Cannot handle headless event"));
+                return;
+            }
+
+            BackgroundGeolocation.getUiHandler().post(new Runnable() {
+                @Override public void run() {
+                    if (mBackgroundFlutterView == null) {
+                        initFlutterView(mEvent.getContext());
+                    }
+                    dispatch();
+                }
+            });
+        }
     }
 }
