@@ -13,7 +13,7 @@ public class Application  extends FlutterApplication implements PluginRegistry.P
     @Override
     public void onCreate() {
         // Strict mode.  Should be disabled on RELEASE.
-
+        /*
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
                 .detectDiskWrites()
@@ -27,7 +27,7 @@ public class Application  extends FlutterApplication implements PluginRegistry.P
                 .penaltyLog()
                 .penaltyDeath()
                 .build());
-
+        */
         super.onCreate();
 
         FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);

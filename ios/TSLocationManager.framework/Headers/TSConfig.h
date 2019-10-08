@@ -142,7 +142,9 @@ TSConfig
 
 - (void)updateWithBlock:(void(^)(TSConfigBuilder*))block;
 - (void)updateWithDictionary:(NSDictionary*)config;
+
 - (void)reset;
+- (void)reset:(BOOL)silent;
 
 # pragma mark Events
 - (void)onChange:(NSString*)property callback:(void(^)(id))block;
