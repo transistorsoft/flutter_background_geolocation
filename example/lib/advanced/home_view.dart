@@ -105,7 +105,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     _username = prefs.getString("username");
     Map deviceParams = await bg.Config.deviceParams;
-
+    
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
         locationAuthorizationRequest: "Always",
