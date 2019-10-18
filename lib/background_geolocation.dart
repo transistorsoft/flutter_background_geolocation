@@ -739,6 +739,35 @@ class BackgroundGeolocation {
     return rs;
   }
 
+  /// Retrieve all a single [Geofence] by identifier.
+  ///
+  /// ## Example
+  ///
+  /// ```dart
+  /// Geofence geofence = await BackgroundGeolocation.getGeofence("HOME");
+  /// print('[getGeofence HOME: ${geofence}');
+  /// ```
+  ///
+  static Future<Geofence> getGeofence(String identifier) async {
+    dynamic data = await _methodChannel.invokeMethod('getGeofence', identifier);
+
+    dynamic loiteringDelay = data['loiteringDelay'];
+    return new Geofence(
+        identifier: data['identifier'],
+        radius: data['radius'],
+        latitude: data['latitude'],
+        longitude: data['longitude'],
+        notifyOnEntry: data['notifyOnEntry'],
+        notifyOnExit: data['notifyOnExit'],
+        notifyOnDwell: data['notifyOnDwell'],
+        loiteringDelay: (loiteringDelay.runtimeType == double)
+            ? loiteringDelay.round()
+            : loiteringDelay,
+        extras: (data['extras'] != null)
+            ? data['extras'].cast<String, dynamic>()
+            : {});
+  }
+
   /// Returns the entire contents of the log database.
   ///
   /// Depending on the configured [Config.logLevel], the plugin can store an *immense* amount of helpful logging information for debugging location-tracking problems.

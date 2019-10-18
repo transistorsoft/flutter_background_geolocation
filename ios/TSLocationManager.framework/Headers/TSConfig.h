@@ -161,6 +161,7 @@ TSConfig
 
 # pragma mark Utility methods
 - (NSDictionary*) toDictionary;
+- (NSString*) toJson;
 - (void) registerPlugin:(NSString*)pluginName;
 - (BOOL) hasPluginForEvent:(NSString*)eventName;
 

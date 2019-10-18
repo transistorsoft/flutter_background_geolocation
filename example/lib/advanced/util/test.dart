@@ -127,12 +127,15 @@ class Test {
     String username = prefs.getString("username");
     Map deviceParams = await bg.Config.deviceParams;
 
+    await bg.BackgroundGeolocation.setOdometer(0.0);
+
     await bg.BackgroundGeolocation.setConfig(bg.Config(
         debug: true,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
-        desiredAccuracy: bg.Config.DESIRED_ACCURACY_NAVIGATION,
+        desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
         distanceFilter: 50,
-        locationUpdateInterval: 5000,
+        disableElasticity: false,
+        locationUpdateInterval: 1000,
         fastestLocationUpdateInterval: -1,
         enableTimestampMeta: true,
         stopTimeout: 1,

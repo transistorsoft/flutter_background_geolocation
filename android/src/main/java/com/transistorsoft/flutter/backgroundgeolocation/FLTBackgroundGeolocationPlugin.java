@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -234,6 +236,8 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             removeGeofences(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_GEOFENCES)) {
             getGeofences(result);
+        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_GEOFENCE)) {
+            getGeofence((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GEOFENCE_EXISTS)) {
             geofenceExists((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_GET_LOG)) {
@@ -401,7 +405,6 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             }
         });
 
-
         if (options.containsKey("samples"))         { builder.setSamples((int) options.get("samples")); }
         if (options.containsKey("persist"))         { builder.setPersist((boolean) options.get("persist")); }
         if (options.containsKey("timeout"))         { builder.setTimeout((int) options.get("timeout")); }
@@ -411,7 +414,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             Object extras = options.get("extras");
             if (extras.getClass() == HashMap.class) {
                 try {
-                    builder.setExtras(mapToJson(options));
+                    builder.setExtras(mapToJson((HashMap) extras));
                 } catch (JSONException e) {
                     result.error(e.getMessage(), null, null);
                     e.printStackTrace();
@@ -601,19 +604,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
                 try {
                     List<Map<String, Object>> rs = new ArrayList<>();
                     for (TSGeofence geofence : geofences) {
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("identifier", geofence.getIdentifier());
-                        data.put("latitude", geofence.getLatitude());
-                        data.put("longitude", geofence.getLongitude());
-                        data.put("radius", geofence.getRadius());
-                        data.put("notifyOnEntry", geofence.getNotifyOnEntry());
-                        data.put("notifyOnExit", geofence.getNotifyOnExit());
-                        data.put("notifyOnDwell", geofence.getNotifyOnDwell());
-                        data.put("loiteringDelay", geofence.getLoiteringDelay());
-                        if (geofence.getExtras() != null) {
-                            data.put("extras", jsonToMap(geofence.getExtras()));
-                        }
-                        rs.add(data);
+                        rs.add(geofenceToMap(geofence));
                     }
                     result.success(rs);
                 } catch (JSONException e) {
@@ -625,16 +616,54 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         });
     }
 
+    private void getGeofence(String identifier, final Result result) {
+        if (identifier == null) {
+            result.error("Invalid geofence identifier: " + identifier, null, null);
+            return;
+        }
+        BackgroundGeolocation.getInstance(mContext).getGeofence(identifier, new TSGetGeofenceCallback() {
+            @Override public void onSuccess(TSGeofence geofence) {
+                try {
+                    result.success(geofenceToMap(geofence));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    result.error(e.getMessage(), null, null);
+                }
+            }
+            @Override public void onFailure(String error) { result.error(error, null, null); }
+        });
+    }
+
     private void geofenceExists(String identifier, final Result result) {
+        if (identifier == null) {
+            result.error("Invalid geofence identifier: " + identifier, null, null);
+            return;
+        }
         BackgroundGeolocation.getInstance(mContext).geofenceExists(identifier, new TSGeofenceExistsCallback() {
-            @Override public void onResult(boolean hasGeofence) {
-                result.success(hasGeofence);
+            @Override public void onResult(boolean exists) {
+                result.success(exists);
             }
         });
     }
 
+    private static Map<String, Object> geofenceToMap(TSGeofence geofence) throws JSONException {
+        Map<String, Object> data = new HashMap<>();
+        data.put("identifier", geofence.getIdentifier());
+        data.put("latitude", geofence.getLatitude());
+        data.put("longitude", geofence.getLongitude());
+        data.put("radius", geofence.getRadius());
+        data.put("notifyOnEntry", geofence.getNotifyOnEntry());
+        data.put("notifyOnExit", geofence.getNotifyOnExit());
+        data.put("notifyOnDwell", geofence.getNotifyOnDwell());
+        data.put("loiteringDelay", geofence.getLoiteringDelay());
+        if (geofence.getExtras() != null) {
+            data.put("extras", jsonToMap(geofence.getExtras()));
+        }
+        return data;
+    }
+
     @SuppressWarnings("unchecked")
-    private TSGeofence buildGeofence(Map<String, Object> config) throws TSGeofence.Exception {
+    private static TSGeofence buildGeofence(Map<String, Object> config) throws TSGeofence.Exception {
         TSGeofence.Builder builder = new TSGeofence.Builder();
         if (config.containsKey("identifier"))       { builder.setIdentifier((String) config.get("identifier")); }
         if (config.containsKey("latitude"))         { builder.setLatitude((Double) config.get("latitude")); }
@@ -754,7 +783,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
     // Utility Methods
     //
     @SuppressWarnings("unchecked")
-    private JSONObject mapToJson(Map<String, Object> map) throws JSONException {
+    private static JSONObject mapToJson(Map<String, Object> map) throws JSONException {
         JSONObject jsonData = new JSONObject();
         for (String key : map.keySet()) {
           Object value = map.get(key);
@@ -768,7 +797,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         return jsonData;
     }
 
-    private JSONArray listToJson(List<Object> list) throws JSONException {
+    private static JSONArray listToJson(List<Object> list) throws JSONException {
         JSONArray jsonData = new JSONArray();
         for (Object value : list) {
             jsonData.put(value);

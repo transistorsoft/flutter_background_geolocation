@@ -30,6 +30,7 @@ static NSString *const ACTION_ADD_GEOFENCES = @"addGeofences";
 static NSString *const ACTION_REMOVE_GEOFENCE = @"removeGeofence";
 static NSString *const ACTION_REMOVE_GEOFENCES = @"removeGeofences";
 static NSString *const ACTION_GET_GEOFENCES = @"getGeofences";
+static NSString *const ACTION_GET_GEOFENCE = @"getGeofence";
 static NSString *const ACTION_GEOFENCE_EXISTS = @"geofenceExists";
 
 static NSString *const ACTION_GET_LOG = @"getLog";
@@ -147,6 +148,8 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
         [self removeGeofences:result];
     } else if ([self method:ACTION_GET_GEOFENCES is:action]) {
         [self getGeofences:result];
+    } else if ([self method:ACTION_GET_GEOFENCE is:action]) {
+        [self getGeofence:[call.arguments stringValue] result:result];
     } else if ([self method:ACTION_GEOFENCE_EXISTS is:action]) {
         [self geofenceExists:call.arguments result:result];
     } else if ([self method:ACTION_GET_LOG is:action]) {
@@ -463,6 +466,18 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
     }];
 }
 
+- (void) getGeofence:(NSString*)identifier result:(FlutterResult)result {
+    if (!identifier) {
+        result([FlutterError errorWithCode:[NSString stringWithFormat:@"Invalid identifier: %@", identifier] message:nil details:nil]);
+        return;
+    }
+    [_locationManager getGeofence:identifier success:^(TSGeofence *geofence) {
+        result([geofence toDictionary]);
+    } failure:^(NSString *error) {
+        result([FlutterError errorWithCode:error message:nil details:nil]);
+    }];
+}
+
 - (void) getGeofences:(FlutterResult)result {
     [_locationManager getGeofences:^(NSArray* geofences) {
         NSMutableArray *rs = [NSMutableArray new];
@@ -474,8 +489,35 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
 }
 
 - (void) geofenceExists:(NSString*)identifier result:(FlutterResult)result {
-    [_locationManager geofenceExists:identifier callback:^(BOOL hasGeofence){
-        result(@(hasGeofence));
+    if (!identifier) {
+        result([FlutterError errorWithCode:[NSString stringWithFormat:@"Invalid identifier: %@", identifier] message:nil details:nil]);
+        return;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    [_locationManager geofenceExists:identifier callback:^(BOOL exists){
+        result(@(exists));
     }];
 }
 
