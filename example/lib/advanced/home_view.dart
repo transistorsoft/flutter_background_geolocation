@@ -105,7 +105,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     _username = prefs.getString("username");
     Map deviceParams = await bg.Config.deviceParams;
-    
+
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
         locationAuthorizationRequest: "Always",
@@ -121,10 +121,15 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         autoSync: true,
         url: 'http://tracker.transistorsoft.com/locations/$_username',
         params: deviceParams,
+        headers: {
+          "foo": 'bar',
+          "authentication": "Basic ABC123"
+        },
         heartbeatInterval: 60,
         foregroundService: true
     )).then((bg.State state) {
       print('[ready] ${state.toMap()}');
+
       if (state.schedule.isNotEmpty) {
         bg.BackgroundGeolocation.startSchedule();
       }
@@ -197,11 +202,12 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
 
     bg.BackgroundGeolocation.getCurrentPosition(
-        persist: false,       // <-- do not persist this location
+        persist: true,       // <-- do not persist this location
         desiredAccuracy: 40, // <-- desire an accuracy of 40 meters or less
         maximumAge: 10000,   // <-- Up to 10s old is fine.
         timeout: 30,         // <-- wait 30s before giving up.
-        samples: 3           // <-- sample just 1 location
+        samples: 3,           // <-- sample just 1 location
+        extras: {"getCurrentPosition": true}
     ).then((bg.Location location) {
       print('[getCurrentPosition] - $location');
     }).catchError((error) {
@@ -284,6 +290,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   }
 
   void _onGeofence(bg.GeofenceEvent event) {
+
     print('[${bg.Event.GEOFENCE}] - $event');
 
     bg.BackgroundGeolocation.startBackgroundTask().then((int taskId) {
@@ -298,7 +305,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         bg.BackgroundGeolocation.stopBackgroundTask(taskId);
       });
     });
-
 
     setState(() {
       events.insert(0, Event(bg.Event.GEOFENCE, event, event.toString(compact: false)));

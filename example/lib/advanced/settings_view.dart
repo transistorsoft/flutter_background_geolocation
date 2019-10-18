@@ -608,6 +608,7 @@ const PLUGIN_SETTINGS = {
     {'name': 'activityRecognitionInterval', 'group': 'activity recognition', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 1000, 5000, 10000, 30000], 'defaultValue': 10000},
     {'name': 'stopTimeout', 'group': 'activity recognition', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 1, 5, 10, 15], 'defaultValue': 1},
     {'name': 'disableMotionActivityUpdates', 'group': 'activity recognition', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
+    {'name': 'disableStopDetection', 'group': 'activity recognition', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     // HTTP & Persistence
     {'name': 'url', 'group': 'http', 'inputType': 'text', 'dataType': 'string', 'defaultValue': 'http://your.server.com/endpoint'},
     {'name': 'autoSync', 'group': 'http', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': true},
@@ -633,7 +634,6 @@ const PLUGIN_SETTINGS = {
     // Application
     {'name': 'preventSuspend', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     // Activity Recognition
-    {'name': 'disableStopDetection', 'group': 'activity recognition', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     {'name': 'stopDetectionDelay', 'group': 'activity recognition', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 1, 5, 10, 15], 'defaultValue': 0}
   ],
   'android': [

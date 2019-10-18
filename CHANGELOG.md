@@ -1,6 +1,9 @@
 # CHANGELOG
 
-## Unreleased
+## 1.3.0 - 2019-10-17
+- [Fixed] Android: Fixed issue executing `#changePace` immediately after `#start`.
+- [Fixed] Android:  Add guard against NPR in `calculateMedianAccuracy`
+- [Added] Add new Geofencing methods: `#getGeofence(identifier)` and `#geofenceExists(identifier)`.
 - [Fixed] iOS issue using `disableMotionActivityUpdates: false` with `useSignificantChangesOnly: true` and `reset: true`.  Plugin will accidentally ask for Motion Permission.
 - [Fixed] Resolved a number of Android issues exposed by booting the app in [StrictMode](https://developer.android.com/reference/android/os/StrictMode).  This should definitely help alleviate ANR issues related to `Context.startForegroundService`.
 - [Added] Android now supports `disableMotionActivityUpdates` for Android 10 which now requires run-time permission for "Physical Activity".  Setting to `true` will not ask user for this permission.  The plugin will fallback to using the "stationary geofence" triggering, like iOS.

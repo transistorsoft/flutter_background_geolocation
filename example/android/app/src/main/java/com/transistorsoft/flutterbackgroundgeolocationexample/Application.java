@@ -27,7 +27,8 @@ public class Application  extends FlutterApplication implements PluginRegistry.P
                 .penaltyLog()
                 .penaltyDeath()
                 .build());
-        */
+         */
+
         super.onCreate();
 
         FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
