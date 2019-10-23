@@ -83,9 +83,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
     public void onMethodCall(MethodCall call, @NonNull MethodChannel.Result result) {
         TSLog.logger.debug("$ " + call.method);
         if (call.method.equalsIgnoreCase("initialized")) {
-            synchronized(mHeadlessTaskRegistered) {
-                mHeadlessTaskRegistered.set(true);
-            }
+            mHeadlessTaskRegistered.set(true);
             dispatch();
         } else {
             result.notImplemented();
@@ -107,12 +105,10 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
 
     // Send event to Client.
     private void dispatch() {
-        synchronized(mHeadlessTaskRegistered) {
-            if (!mHeadlessTaskRegistered.get()) {
-                // Queue up events while background isolate is starting
-                TSLog.logger.debug("[HeadlessTask] waiting for client to initialize");
-                return;
-            }
+        if (!mHeadlessTaskRegistered.get()) {
+            // Queue up events while background isolate is starting
+            TSLog.logger.debug("[HeadlessTask] waiting for client to initialize");
+            return;
         }
 
         synchronized (mEvents) {
@@ -123,7 +119,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
                     response.put("event", event.getName());
                     response.put("params", getEventObject(event));
                     mDispatchChannelChannel.invokeMethod("", response);
-                } catch (JSONException e) {
+                } catch (JSONException | IllegalStateException e) {
                     TSLog.logger.error(TSLog.error(e.getMessage()));
                     e.printStackTrace();
                 }

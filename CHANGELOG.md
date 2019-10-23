@@ -1,5 +1,28 @@
 # CHANGELOG
 
+## 1.3.1 - 2019-10-23
+- [Fixed] Android NPE
+```
+Caused by: java.lang.NullPointerException:
+  at com.transistorsoft.locationmanager.service.TrackingService.b (TrackingService.java:172)
+  at com.transistorsoft.locationmanager.service.TrackingService.onStartCommand (TrackingService.java:135)
+```
+- [Added] new `uploadLog` feature for uploading logs directly to a server.  This is an alternative to `emailLog`.
+- [Changed] Migrated logging methods `getLog`, `destroyLog`, `emailLog` to new `Logger` module.  See docs for more information.  Existing log methods on `BackgroundGeolocation` are now `@deprecated`.
+- [Changed] All logging methods (`getLog`, `emailLog` and `uploadLog`) now accept an optional `SQLQuery`.  Eg:
+```dart
+SQLQuery query = new SQLQuery(
+  start: DateTime.parse('2019-10-23 09:00'),
+  end: DateTime.parse('2019-10-23 19:00'),
+  limit: 1000,
+  order: SQLQuery.ORDER_ASC
+);
+
+String log = await Logger.getLog(query)
+Logger.emailLog('foo@bar.com', query);
+Logger.uploadLoad('http://your.server.com/logs', query);
+```
+
 ## 1.3.0 - 2019-10-17
 - [Fixed] Android: Fixed issue executing `#changePace` immediately after `#start`.
 - [Fixed] Android:  Add guard against NPR in `calculateMedianAccuracy`

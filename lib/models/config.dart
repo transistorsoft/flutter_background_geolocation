@@ -729,6 +729,7 @@ class Config {
   /// | `battery.level`       | `Float`  | 0-100%      |
   /// | `battery.is_charging` | `Boolean`| Is device plugged in?|
   /// | `mock`                | `Boolean`| `true` when location was recorded from a Mock location app. |
+  /// | `is_moving`           | `Boolean`| `true` when location was recorded while SDK was in *moving* state. |
   ///
   String locationTemplate;
 
@@ -811,6 +812,8 @@ class Config {
   /// | `activity.confidence` | `Integer`| 0-100%      |
   /// | `battery.level`       | `Float`  | 0-100%      |
   /// | `battery.is_charging` | `Boolean`| Is device plugged in?|
+  /// | `mock`                | `Boolean`| `true` when geofence was recorded from a Mock location app. |
+  /// | `is_moving`           | `Boolean`| `true` when geofence was recorded while SDK was in *moving* state. |
   ///
   String geofenceTemplate;
 
@@ -888,13 +891,6 @@ class Config {
   /// iOS cannot **immediately** engage tracking after a device reboot.  Just like [stopOnTerminate]:false, iOS will not re-boot your app until the device moves beyond the **stationary geofence** around the last known location.  In addition, iOS subscribes to "background-fetch" events, which typically fire about every 15 minutes &mdash; these too are capable of rebooting your app after a device reboot.
   ///
   /// ## Android
-  ///
-  /// Android will reboot the plugin's background-service *immediately* after device reboot.  However, just like [stopOnTerminate]:false, the plugin will be running "headless" without your Application code.  If you wish for your Flutter Application to boot as well, you may configure any of the following **`forceReloadOnXXX`** options:
-  /// - [forceReloadOnLocationChange]
-  /// - [forceReloadOnMotionChange]
-  /// - [forceReloadOnGeofence]
-  /// - [forceReloadOnBoot]
-  /// - [forceReloadOnHeartbeat]
   ///
   ///  **See also:** [enableHeadless]
   ///
@@ -1672,52 +1668,75 @@ class Config {
   ///
   bool foregroundService;
 
+  /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
+  ///
   /// Force launch your terminated App after a [BackgroundGeolocation.onLocation] event.
   ///
   /// When the user terminates your Android app with [BackgroundGeolocation] configured with [stopOnTerminate]:false, the foreground `MainActivity` (where your Flutter app lives) *will* terminate -- only the plugin's pure native background-service is running, **"headless"**, in this case.  The background service will continue tracking the location.  However, the background service *can* optionally **re-launch** your foreground application.
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
+  @Deprecated(
+      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnLocationChange;
 
+  /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
   /// Force launch your terminated App after a [BackgroundGeolocation.onMotionChange] event.
   ///
   /// When the user terminates your Android app with [BackgroundGeolocation] configured with [stopOnTerminate]:false, the foreground `MainActivity` (where your Flutter app lives) *will* terminate -- only the plugin's pure native background-service is running, **"headless"**, in this case.  The background service will continue tracking the location.  However, the background service *can* optionally **re-launch** your foreground application.
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
+  @Deprecated(
+      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnMotionChange;
 
+  /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
+  ///
   /// Force launch your terminated App after a [BackgroundGeolocation.onGeofence] event.
   ///
   /// When the user terminates your Android app with [BackgroundGeolocation] configured with [stopOnTerminate]:false, the foreground `MainActivity` (where your Flutter app lives) *will* terminate -- only the plugin's pure native background-service is running, **"headless"**, in this case.  The background service will continue tracking the location.  However, the background service *can* optionally **re-launch** your foreground application.
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
+  @Deprecated(
+      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnGeofence;
 
+  /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
+  ///
   /// Force launch your terminated App after a device reboot.
   ///
   /// When the user reboots their device with [BackgroundGeolocation] configured with [startOnBoot]:true, only the plugin's pure native background-service begins running, **"headless"**, in this case.  The background service will continue tracking the location.  However, the background service *can* optionally **re-launch** your foreground application.
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
+  @Deprecated(
+      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnBoot;
 
+  /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
+  ///
   /// Force launch your terminated App after a [BackgroundGeolocation.onHeartbeat] event.
   ///
   /// When the user terminates your Android app with [BackgroundGeolocation] configured with [stopOnTerminate]:false, the foreground `MainActivity` (where your Flutter app lives) *will* terminate -- only the plugin's pure native background-service is running, **"headless"**, in this case.  The background service will continue tracking the location.  However, the background service *can* optionally **re-launch** your foreground application.
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
+  @Deprecated(
+      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnHeartbeat;
 
+  /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
+  ///
   /// Force launch your terminated App after a [BackgroundGeolocation.onSchedule] event.
   ///
   /// When the user terminates your Android app with [BackgroundGeolocation] configured with [stopOnTerminate]:false, the foreground `MainActivity` (where your Flutter app lives) *will* terminate -- only the plugin's pure native background-service is running, **"headless"**, in this case.  The background service will continue tracking the location.  However, the background service *can* optionally **re-launch** your foreground application.
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
+  @Deprecated(
+      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnSchedule;
 
   /// __(Android only)__ Configure the persistent foreground notification.
@@ -1749,25 +1768,32 @@ class Config {
   /// ```
   Notification notification;
 
-  /// __Deprecated.__  Use [Notification.priority].
+  /// __@deprecated.__  Use [Notification.priority].
+  @Deprecated('Use `Notification.priority` instead')
   int notificationPriority;
 
-  /// __Deprecated.__  Use [Notification.title].
+  /// __@deprecated.__  Use [Notification.title].
+  @Deprecated('Use `Notificaiton.title` insetad')
   String notificationTitle;
 
-  /// __Deprecated.__  Use [Notification.text].
+  /// __@deprecated.__  Use [Notification.text].
+  @Deprecated('Use `Notification.text` instead')
   String notificationText;
 
-  /// __Deprecated.__  Use [Notification.color].
+  /// __@deprecated.__  Use [Notification.color].
+  @Deprecated('Use `Notification.color` instead')
   String notificationColor;
 
-  /// __Deprecated.__  Use [Notification.smallIcon].
+  /// __@deprecated.__  Use [Notification.smallIcon].
+  @Deprecated('Use `Notification.smallIcon` instead')
   String notificationSmallIcon;
 
-  /// __Deprecated.__  Use [Notification.largeIcon].
+  /// __@deprecated.__  Use [Notification.largeIcon].
+  @Deprecated('Use `Notification.largeIcon` instead')
   String notificationLargeIcon;
 
-  /// __Deprecated.__  Use [Notification.channelName]
+  /// __@deprecated.__  Use [Notification.channelName]
+  @Deprecated('Use `Notification.channelName` instead')
   String notificationChannelName;
 
   Config(

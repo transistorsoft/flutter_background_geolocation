@@ -23,8 +23,9 @@ import 'package:flutter/material.dart';
 
 import 'package:device_info/device_info.dart';
 
-part 'background_geolocation.dart';
-part 'device_settings.dart';
+part 'models/background_geolocation.dart';
+part 'models/device_settings.dart';
+part 'models/logger.dart';
 part 'models/event.dart';
 part 'models/location.dart';
 part 'models/geofence.dart';
@@ -40,6 +41,7 @@ part 'models/state.dart';
 part 'models/sensors.dart';
 part 'models/headless_event.dart';
 part 'models/notification.dart';
+part 'models/sql_query.dart';
 
 const _PLUGIN_PATH = "com.transistorsoft/flutter_background_geolocation";
 

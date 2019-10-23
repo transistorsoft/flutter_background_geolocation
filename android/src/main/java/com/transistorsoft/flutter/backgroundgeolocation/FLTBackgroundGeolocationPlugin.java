@@ -4,12 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +40,7 @@ import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.TSConfig;
 import com.transistorsoft.locationmanager.adapter.callback.*;
 import com.transistorsoft.locationmanager.data.LocationModel;
+import com.transistorsoft.locationmanager.data.SQLQuery;
 import com.transistorsoft.locationmanager.device.DeviceSettingsRequest;
 import com.transistorsoft.locationmanager.event.TerminateEvent;
 import com.transistorsoft.locationmanager.geofence.TSGeofence;
@@ -70,8 +67,6 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
 
     private static final String ACTION_REGISTER_HEADLESS_TASK = "registerHeadlessTask";
     private static final String ACTION_GET_STATE         = "getState";
-    private static final String ACTION_GET_LOG           = "getLog";
-    private static final String ACTION_EMAIL_LOG         = "emailLog";
     private static final String ACTION_START_SCHEDULE    = "startSchedule";
     private static final String ACTION_STOP_SCHEDULE     = "stopSchedule";
     private static final String ACTION_LOG               = "log";
@@ -240,10 +235,14 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             getGeofence((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GEOFENCE_EXISTS)) {
             geofenceExists((String) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(ACTION_GET_LOG)) {
-            getLog(result);
-        } else if (call.method.equalsIgnoreCase(ACTION_EMAIL_LOG)) {
-            emailLog((String) call.arguments, result);
+        } else if (call.method.equalsIgnoreCase(TSLog.ACTION_LOG)) {
+            log((List) call.arguments, result);
+        } else if (call.method.equalsIgnoreCase(TSLog.ACTION_GET_LOG)) {
+            getLog((Map) call.arguments, result);
+        } else if (call.method.equalsIgnoreCase(TSLog.ACTION_EMAIL_LOG)) {
+            emailLog((List) call.arguments, result);
+        } else if (call.method.equalsIgnoreCase(TSLog.ACTION_UPLOAD_LOG)) {
+            uploadLog((List) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_DESTROY_LOG)) {
             destroyLog(result);
         } else if (call.method.equalsIgnoreCase(ACTION_LOG)) {
@@ -697,22 +696,47 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         result.success(taskId);
     }
 
-    private void getLog(final Result result) {
-        BackgroundGeolocation.getInstance(mContext).getLog(new TSGetLogCallback() {
+    private void log(List<String> args, Result result) {
+        String level = args.get(0);
+        String message = args.get(1);
+        TSLog.log(level, message);
+        result.success(true);
+    }
+
+    private void getLog(Map params, final Result result) {
+        SQLQuery query = SQLQuery.fromMap(params);
+        TSLog.getLog(query, new TSGetLogCallback() {
             @Override public void onSuccess(String log) { result.success(log); }
             @Override public void onFailure(String error) { result.error(error, null, null); }
         });
     }
 
-    private void emailLog(String email, final Result result) {
-        BackgroundGeolocation.getInstance(mContext).emailLog(email, mRegistrar.activity(), new TSEmailLogCallback() {
+    private void emailLog(List<Object> args, final Result result) {
+        String email = (String) args.get(0);
+        Map params = (Map) args.get(1);
+
+        SQLQuery query = SQLQuery.fromMap(params);
+
+        TSLog.emailLog(mRegistrar.activity(), email, query, new TSEmailLogCallback() {
             @Override public void onSuccess() { result.success(true); }
             @Override public void onFailure(String error) { result.error(error, null, null); }
         });
     }
 
+    private void uploadLog(List<Object> args, final Result result) {
+        String url = (String) args.get(0);
+        Map params = (Map) args.get(1);
+
+        SQLQuery query = SQLQuery.fromMap(params);
+
+        TSLog.uploadLog(mContext, url, query, new TSCallback() {
+            @Override public void onSuccess() { result.success(true); }
+            @Override public void onFailure(String s) { result.error(s, null, null); }
+        });
+    }
+
     private void destroyLog(final Result result) {
-        BackgroundGeolocation.getInstance(mContext).destroyLog(new TSCallback() {
+        TSLog.destroyLog(new TSCallback() {
             @Override public void onSuccess() { result.success(true); }
             @Override public void onFailure(String error) { result.error(error, null, null); }
         });

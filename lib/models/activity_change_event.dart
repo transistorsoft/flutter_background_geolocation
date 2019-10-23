@@ -14,11 +14,12 @@ class ActivityChangeEvent {
   ///
   /// | Activity Name  |
   /// |----------------|
-  /// | `in_vehicle`   |
-  /// | `on_bicycle`   |
+  /// | `still`        |
   /// | `on_foot`      |
-  /// | `running`      |
   /// | `walking`      |
+  /// | `running`      |
+  /// | `on_bicycle`   |
+  /// | `in_vehicle`   |
   ///
   final String activity;
 
