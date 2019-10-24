@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.3.2 - 2019-10-24
+- [Fixed] Resolve Dart analysis warnings related to `@deprecated`.
+
 ## 1.3.1 - 2019-10-23
 - [Fixed] Android NPE
 ```
