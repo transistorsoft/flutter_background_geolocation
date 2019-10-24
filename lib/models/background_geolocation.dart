@@ -368,7 +368,7 @@ class BackgroundGeolocation {
 
   /// Sends a signal to iOS that you wish to perform a long-running task.
   ///
-  /// iOS will not suspend your app until you signal completion with the [finish] method.  Your callback will be provided with a single parameter `taskId` which you will send to the [finish] method.
+  /// iOS will not suspend your app until you signal completion with the [stopBackgroundTask] method.  Your callback will be provided with a single parameter `taskId` which you will send to the [stopBackgroundTask] method.
   ///
   /// ## Example
   ///
@@ -382,7 +382,7 @@ class BackgroundGeolocation {
   /// });
   /// ```
   ///
-  ///  **WARNING:** iOS provides **exactly** 180s of background-running time.  If your long-running task exceeds this time, the plugin has a fail-safe which will automatically [finish] your **`taskId`** to prevent the OS from force-killing your application.
+  ///  **WARNING:** iOS provides **exactly** 180s of background-running time.  If your long-running task exceeds this time, the plugin has a fail-safe which will automatically [stopBackgroundTask] your **`taskId`** to prevent the OS from force-killing your application.
   ///
   static Future<int> startBackgroundTask() async {
     return await _methodChannel.invokeMethod('startBackgroundTask');

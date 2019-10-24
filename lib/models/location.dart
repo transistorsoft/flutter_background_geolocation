@@ -89,7 +89,7 @@ class Location {
 
   /// Universally Unique Identifier.
   ///
-  /// This property is helpful for debugging location issues.  It can be used to match locations recorded at your server with those within the plugin's [BackgroundGeolocation.log].
+  /// This property is helpful for debugging location issues.  It can be used to match locations recorded at your server with those within the plugin's [Logger.getLog].
   ///
   String uuid;
 

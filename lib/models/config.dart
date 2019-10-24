@@ -1151,8 +1151,8 @@ class Config {
   /// ```
   ///
   ///  **See also:**
-  /// - [BackgroundGeolocation.log]
-  /// - [BackgroundGeolocation.emailLog]
+  /// - [Logger.getLog]
+  /// - [Logger.emailLog]
   /// - [logMaxDays]
   ///
   ///  **WARNING:**  When submitting your app to production, take care to configure the **`logLevel`** appropriately (eg: **`LOG_LEVEL_ERROR`**) since the logs can grow to several megabytes over a period of [logMaxDays].
@@ -1676,8 +1676,6 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  @Deprecated(
-      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnLocationChange;
 
   /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
@@ -1687,8 +1685,6 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  @Deprecated(
-      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnMotionChange;
 
   /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
@@ -1699,8 +1695,6 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  @Deprecated(
-      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnGeofence;
 
   /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
@@ -1711,8 +1705,6 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  @Deprecated(
-      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnBoot;
 
   /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
@@ -1723,8 +1715,6 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  @Deprecated(
-      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnHeartbeat;
 
   /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
@@ -1735,8 +1725,6 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  @Deprecated(
-      'Banned in Android 10.  Do not use.  Use `enableHeadless: true` instead')
   bool forceReloadOnSchedule;
 
   /// __(Android only)__ Configure the persistent foreground notification.
@@ -1769,31 +1757,24 @@ class Config {
   Notification notification;
 
   /// __@deprecated.__  Use [Notification.priority].
-  @Deprecated('Use `Notification.priority` instead')
   int notificationPriority;
 
   /// __@deprecated.__  Use [Notification.title].
-  @Deprecated('Use `Notificaiton.title` insetad')
   String notificationTitle;
 
   /// __@deprecated.__  Use [Notification.text].
-  @Deprecated('Use `Notification.text` instead')
   String notificationText;
 
   /// __@deprecated.__  Use [Notification.color].
-  @Deprecated('Use `Notification.color` instead')
   String notificationColor;
 
   /// __@deprecated.__  Use [Notification.smallIcon].
-  @Deprecated('Use `Notification.smallIcon` instead')
   String notificationSmallIcon;
 
   /// __@deprecated.__  Use [Notification.largeIcon].
-  @Deprecated('Use `Notification.largeIcon` instead')
   String notificationLargeIcon;
 
   /// __@deprecated.__  Use [Notification.channelName]
-  @Deprecated('Use `Notification.channelName` instead')
   String notificationChannelName;
 
   Config(
