@@ -35,6 +35,7 @@ static NSString *const ACTION_GEOFENCE_EXISTS = @"geofenceExists";
 
 static NSString *const ACTION_GET_LOG = @"getLog";
 static NSString *const ACTION_EMAIL_LOG = @"emailLog";
+static NSString *const ACTION_UPLOAD_LOG = @"uploadLog";
 static NSString *const ACTION_DESTROY_LOG = @"destroyLog";
 static NSString *const ACTION_LOG = @"log";
 static NSString *const ACTION_GET_SENSORS = @"getSensors";
@@ -153,8 +154,10 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
     } else if ([self method:ACTION_GEOFENCE_EXISTS is:action]) {
         [self geofenceExists:call.arguments result:result];
     } else if ([self method:ACTION_GET_LOG is:action]) {
-        [self getLog:result];
-    } else if ([self method:ACTION_DESTROY_LOG is:action]) {
+        [self getLog:call.arguments result:result];
+    } else if ([self method:ACTION_UPLOAD_LOG is:action]) {
+        [self uploadLog:call.arguments result:result];
+    }  else if ([self method:ACTION_DESTROY_LOG is:action]) {
         [self destroyLog:result];
     } else if ([self method:ACTION_EMAIL_LOG is:action]) {
         [self emailLog:call.arguments result:result];
@@ -402,6 +405,7 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
 #pragma mark Geofencing Methods
 
 - (void) addGeofence:(NSDictionary*)params result:(FlutterResult)result {
+    
     TSGeofence *geofence = [self buildGeofence:params];
     if (!geofence) {
         NSString *error = [NSString stringWithFormat:@"Invalid geofence data: %@", params];
@@ -438,6 +442,8 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
     if (!params[@"identifier"] || !params[@"radius"] || !params[@"latitude"] || !params[@"longitude"]) {
         return nil;
     }
+    
+
     return [[TSGeofence alloc] initWithIdentifier: params[@"identifier"]
                                            radius: [params[@"radius"] doubleValue]
                                          latitude: [params[@"latitude"] doubleValue]
@@ -494,28 +500,6 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
         return;
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     [_locationManager geofenceExists:identifier callback:^(BOOL exists){
         result(@(exists));
     }];
@@ -523,8 +507,9 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
 
 #pragma mark Logging & Debug Methods
 
-- (void) getLog:(FlutterResult)result {
-    [_locationManager getLog:^(NSString* log) {
+- (void) getLog:(NSDictionary*)params result:(FlutterResult)result {
+    LogQuery *query = [[LogQuery alloc] initWithDictionary:params];
+    [_locationManager getLog:query success:^(NSString* log) {
         result(log);
     } failure:^(NSString* error) {
         result([FlutterError errorWithCode:error message:nil details:nil]);
@@ -540,8 +525,22 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
     }
 }
 
-- (void) emailLog:(NSString*)email result:(FlutterResult)result {
-    [_locationManager emailLog:email success:^{
+- (void) emailLog:(NSArray*)args result:(FlutterResult)result {
+    NSString *email = [args objectAtIndex:0];
+    NSDictionary *params = [args objectAtIndex:1];
+    LogQuery *query = [[LogQuery alloc] initWithDictionary:params];
+    [_locationManager emailLog:email query:query success:^{
+        result(@(YES));
+    } failure:^(NSString* error) {
+        result([FlutterError errorWithCode:error message:nil details:nil]);
+    }];
+}
+
+- (void) uploadLog:(NSArray*)args result:(FlutterResult)result {
+    NSString *url = [args objectAtIndex:0];
+    NSDictionary *params = [args objectAtIndex:1];
+    LogQuery *query = [[LogQuery alloc] initWithDictionary:params];
+    [_locationManager uploadLog:url query:query success:^{
         result(@(YES));
     } failure:^(NSString* error) {
         result([FlutterError errorWithCode:error message:nil details:nil]);

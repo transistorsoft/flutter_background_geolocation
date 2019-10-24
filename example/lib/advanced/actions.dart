@@ -58,7 +58,8 @@ class Actions {
     if (email.length > 0) {
       prefs.setString("email", email);
       util.Dialog.alert(context, 'Email log', 'The log will be processed in the background (it can take some time depending on the size of the log).  Your email client will launch when ready.');
-      bg.BackgroundGeolocation.emailLog(email).then((bool success) {
+
+      bg.Logger.emailLog(email).then((bool success) {
         print('[emailLog] success');
       }).catchError((error) {
         util.Dialog.alert(context, 'Email log Error', error.toString());
@@ -69,7 +70,7 @@ class Actions {
   static void destroyLog(BuildContext context) {
     util.Dialog.confirm(context, "Confirm", "Destroy logs?", (bool confirm) {
       if (!confirm) { return; }
-      bg.BackgroundGeolocation.destroyLog().then((bool success) {
+      bg.Logger.destroyLog().then((bool success) {
         print('destroyLog] success');
       }).catchError((error) {
         print("[destroyLog] ERROR: $error");
