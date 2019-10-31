@@ -104,6 +104,7 @@ typedef enum TSPersistMode : NSInteger {
 @property (nonatomic) NSString* locationsOrderDirection;
 @property (nonatomic) NSInteger httpTimeout;
 @property (nonatomic) TSPersistMode persistMode;
+@property (nonatomic) BOOL disableAutoSyncOnCellular;
 
 // Application
 @property (nonatomic) BOOL stopOnTerminate;
@@ -236,6 +237,7 @@ TSConfig
 @property (nonatomic, readonly) NSString* locationsOrderDirection;
 @property (nonatomic, readonly) NSInteger httpTimeout;
 @property (nonatomic) TSPersistMode persistMode;
+@property (nonatomic) BOOL disableAutoSyncOnCellular;
 
 /// @name Application Properties
 @property (nonatomic, readonly) BOOL stopOnTerminate;

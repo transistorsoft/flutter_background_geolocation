@@ -410,7 +410,14 @@ class Config {
   /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
   int persistMode;
-
+  
+  /// Disable [autoSync] HTTP requests when device is connected to a Cellular connection.
+  /// Defaults to `false`.  Set `true` to allow [autoSync] only when device is connected to Wifi.
+  ///
+  /// __WARNING__ This option is ignored when manually invoking [BackgroundGeolocation.sync].
+  /// 
+  bool disableAutoSyncOnCellular;
+  
   /// The HTTP method to use when creating an HTTP request to your configured [url].
   ///
   /// Defaults to `POST`.  Valid values are `POST`, `PUT` and `OPTIONS`.
@@ -1808,6 +1815,7 @@ class Config {
       this.headers,
       this.extras,
       this.autoSync,
+      this.disableAutoSyncOnCellular,
       this.autoSyncThreshold,
       this.batchSync,
       this.maxBatchSize,
@@ -1929,6 +1937,7 @@ class Config {
     if (headers != null) config['headers'] = headers;
     if (extras != null) config['extras'] = extras;
     if (autoSync != null) config['autoSync'] = autoSync;
+    if (disableAutoSyncOnCellular != null) config['disableAutoSyncOnCellular'] = disableAutoSyncOnCellular;
     if (autoSyncThreshold != null)
       config['autoSyncThreshold'] = autoSyncThreshold;
     if (batchSync != null) config['batchSync'] = batchSync;

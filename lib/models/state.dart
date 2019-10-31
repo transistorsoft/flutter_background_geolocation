@@ -89,6 +89,7 @@ class State extends Config {
             extras: data['extras'].cast<String, dynamic>(),
             autoSync: _ensureBool(data['autoSync']),
             autoSyncThreshold: data['autoSyncThreshold'],
+            disableAutoSyncOnCellular: data['disableAutoSyncOnCellular'],
             batchSync: _ensureBool(data['batchSync']),
             maxBatchSize: data['maxBatchSize'],
             locationTemplate: data['locationTemplate'],

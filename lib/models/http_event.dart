@@ -104,6 +104,17 @@ part of flt_background_geolocation;
 ///
 /// The default HTTP `JSON` schema for both [Location] and [Geofence] can be overridden by the configuration options [Config.locationTemplate] and [Config.geofenceTemplate], allowing you to create any schema you wish.
 ///
+/// ## Disabling HTTP requests on Cellular connections
+///
+/// If you're concerned with Cellular data-usage, you can configure the plugin's HTTP Service to upload only when connected to Wifi:
+///
+/// ```dart
+/// BackgroundGeolocation.ready(Config(
+///   autoSync: true,
+///   disableAutoSyncOnCellular: true
+/// ));
+/// ```
+///
 /// ## HTTP Logging
 ///
 /// You can observe the plugin performing HTTP requests in the logs for both iOS and Android (_See Wiki [Debugging](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Debugging):

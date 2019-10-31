@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.3 - 2019-10-31
+- [Added] New HTTP config `disableAutoSyncOnCellular`.  Set `true` to allow `autoSync` only when device is connected to Wifi.
+- [Changed] Re-factor iOS HTTP Service to be more robust; Replace deprecated `NSURLConnection` with `NSURLSession`.
+
 ## 1.3.2 - 2019-10-24
 - [Fixed] Resolve Dart analysis warnings related to `@deprecated`.
 

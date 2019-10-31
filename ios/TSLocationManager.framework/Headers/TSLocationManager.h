@@ -1,5 +1,5 @@
-#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import <CoreData/CoreData.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AudioToolbox/AudioToolbox.h>
@@ -21,6 +21,10 @@
 #import "TSCurrentPositionRequest.h"
 #import "TSWatchPositionRequest.h"
 #import "LogQuery.h"
+
+FOUNDATION_EXPORT double TSLocationManagerVersionNumber;
+FOUNDATION_EXPORT const unsigned char TSLocationManagerVersionString[];
+FOUNDATION_EXPORT NSString* TSLocationManagerVersion;
 
 @interface TSLocationManager : NSObject <CLLocationManagerDelegate>
 

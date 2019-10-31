@@ -612,6 +612,7 @@ const PLUGIN_SETTINGS = {
     // HTTP & Persistence
     {'name': 'url', 'group': 'http', 'inputType': 'text', 'dataType': 'string', 'defaultValue': 'http://your.server.com/endpoint'},
     {'name': 'autoSync', 'group': 'http', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': true},
+    {'name': 'disableAutoSyncOnCellular', 'group': 'http', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     {'name': 'autoSyncThreshold', 'group': 'http', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 5, 10, 25, 50, 100], 'defaultValue': 0},
     {'name': 'batchSync', 'group': 'http', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     {'name': 'maxBatchSize', 'group': 'http', 'dataType': 'integer', 'inputType': 'select', 'values': [-1, 50, 100, 250, 500], 'defaultValue': 250},
