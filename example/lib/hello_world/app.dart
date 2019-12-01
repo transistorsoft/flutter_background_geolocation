@@ -2,8 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 import '../app.dart';
+import '../config/ENV.dart';
+
 ////
 // For pretty-printing locations as JSON
 // @see _onLocation
@@ -42,6 +45,8 @@ class HelloWorldPage extends StatefulWidget {
 }
 
 class _HelloWorldPageState extends State<HelloWorldPage> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   bool _isMoving;
   bool _enabled;
   String _motionActivity;
@@ -61,26 +66,47 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
   }
 
   Future<Null> _initPlatformState() async {
+    SharedPreferences prefs = await _prefs;
+    String orgname = prefs.getString("orgname");
+    String username = prefs.getString("username");
+
+    // Sanity check orgname & username:  if invalid, go back to HomeApp to re-register device.
+    if (orgname == null || username == null) {
+      return runApp(HomeApp());
+    }
+
+    // Fetch a Transistor demo server Authorization token for tracker.transistorsoft.com.
+    bg.TransistorAuthorizationToken token = await bg.TransistorAuthorizationToken.findOrCreate(orgname, username, ENV.TRACKER_HOST);
+
     // 1.  Listen to events (See docs for all 12 available events).
     bg.BackgroundGeolocation.onLocation(_onLocation, _onLocationError);
     bg.BackgroundGeolocation.onMotionChange(_onMotionChange);
     bg.BackgroundGeolocation.onActivityChange(_onActivityChange);
     bg.BackgroundGeolocation.onProviderChange(_onProviderChange);
     bg.BackgroundGeolocation.onConnectivityChange(_onConnectivityChange);
-
-    int taskId = await bg.BackgroundGeolocation.startBackgroundTask();
-    // an Android foreground-service (with accompanying persist notification) has just launched.
-
+    bg.BackgroundGeolocation.onHttp(_onHttp);
+    bg.BackgroundGeolocation.onAuthorization(_onAuthorization);
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
-        desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
-        distanceFilter: 10.0,
-        stopOnTerminate: false,
-        startOnBoot: true,
+        reset: true,
         debug: true,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
-        reset: true
+        desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
+        distanceFilter: 10.0,
+        url: "${ENV.TRACKER_HOST}/api/locations",
+        authorization: bg.Authorization(  // <-- demo server authenticates with JWT
+          strategy: bg.Authorization.STRATEGY_JWT,
+          accessToken: token.accessToken,
+          refreshToken: token.refreshToken,
+          refreshUrl: "${ENV.TRACKER_HOST}/api/refresh_token",
+          refreshPayload: {
+            'refresh_token': '{refreshToken}'
+          }
+        ),
+        encrypt: false,
+        stopOnTerminate: false,
+        startOnBoot: true
     )).then((bg.State state) {
       setState(() {
         _enabled = state.enabled;
@@ -145,8 +171,6 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
 
   // Go back to HomeApp.
   void _onClickHome() {
-    bg.BackgroundGeolocation.stop();
-    bg.BackgroundGeolocation.removeListeners();
     runApp(HomeApp());
   }
 
@@ -178,6 +202,17 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
     setState(() {
       _motionActivity = event.activity;
     });
+  }
+
+  void _onHttp(bg.HttpEvent event) async {
+    print('[${bg.Event.HTTP}] - $event');
+  }
+
+  void _onAuthorization(bg.AuthorizationEvent event) async {
+    print('[${bg.Event.AUTHORIZATION}] = $event');
+    bg.BackgroundGeolocation.setConfig(bg.Config(
+      url: "${ENV.TRACKER_HOST}/v2/locations"
+    ));
   }
 
   void _onProviderChange(bg.ProviderChangeEvent event) {

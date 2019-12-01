@@ -8,6 +8,7 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:http/http.dart' as http;
 
 import '../app.dart';
+import '../config/ENV.dart';
 import 'map_view.dart';
 import 'event_list.dart';
 import './util/dialog.dart' as util;
@@ -29,7 +30,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   TabController _tabController;
 
-  String _username;
   bool _isMoving;
   bool _enabled;
   String _motionActivity;
@@ -60,32 +60,21 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     initPlatformState();
   }
 
-  Future<Null> initPlatformState() async {
-    // Configure BackgroundFetch (not required by BackgroundGeolocation).
-    BackgroundFetch.configure(BackgroundFetchConfig(
-      minimumFetchInterval: 15,
-      startOnBoot: true,
-      stopOnTerminate: false,
-      enableHeadless: true,
-      requiresStorageNotLow: false,
-      requiresBatteryNotLow: false,
-      requiresCharging: false,
-      requiresDeviceIdle: false,
-      requiredNetworkType: BackgroundFetchConfig.NETWORK_TYPE_NONE
-    ), () async {
-      print('[BackgroundFetch] received event');
+  void initPlatformState() async {
+    SharedPreferences prefs = await _prefs;
+    String orgname = prefs.getString("orgname");
+    String username = prefs.getString("username");
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      int count = 0;
-      if (prefs.get("fetch-count") != null) {
-        count = prefs.getInt("fetch-count");
-      }
-      prefs.setInt("fetch-count", ++count);
-      print('[BackgroundFetch] count: $count');
+    // Sanity check orgname & username:  if invalid, go back to HomeApp to re-register device.
+    if (orgname == null || username == null) {
+      return runApp(HomeApp());
+    }
 
-      BackgroundFetch.finish();
-    });
+    _configureBackgroundGeolocation(orgname, username);
+    _configureBackgroundFetch();
+  }
 
+  void _configureBackgroundGeolocation(orgname, username) async {
     // 1.  Listen to events (See docs for all 13 available events).
     bg.BackgroundGeolocation.onLocation(_onLocation, _onLocationError);
     bg.BackgroundGeolocation.onMotionChange(_onMotionChange);
@@ -100,33 +89,27 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     bg.BackgroundGeolocation.onEnabledChange(_onEnabledChange);
     bg.BackgroundGeolocation.onNotificationAction(_onNotificationAction);
 
-    // Fetch username and devivceParams for posting to tracker.transistorsoft.com
-    final SharedPreferences prefs = await _prefs;
-
-    _username = prefs.getString("username");
-    Map deviceParams = await bg.Config.deviceParams;
+    bg.TransistorAuthorizationToken token = await bg.TransistorAuthorizationToken.findOrCreate(orgname, username, ENV.TRACKER_HOST);
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
-        locationAuthorizationRequest: "Always",
+        // Convenience option to automatically configure the SDK to post to Transistor Demo server.
+        transistorAuthorizationToken: token,
+        // Logging & Debug
         reset: false,
         debug: true,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
+        // Geolocation options
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_NAVIGATION,
         distanceFilter: 10.0,
+        stopTimeout: 1,
+        // HTTP & Persistence
+        autoSync: true,
+        // Application options
         stopOnTerminate: false,
         startOnBoot: true,
         enableHeadless: true,
-        stopTimeout: 1,
-        autoSync: true,
-        url: 'http://tracker.transistorsoft.com/locations/$_username',
-        params: deviceParams,
-        headers: {
-          "foo": 'bar',
-          "authentication": "Basic ABC123"
-        },
-        heartbeatInterval: 60,
-        foregroundService: true
+        heartbeatInterval: 60
     )).then((bg.State state) {
       print('[ready] ${state.toMap()}');
 
@@ -142,6 +125,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     });
 
     // Fetch currently selected tab.
+    SharedPreferences prefs = await _prefs;
     int tabIndex = prefs.getInt("tabIndex");
 
     // Which tab to view?  MapView || EventList.   Must wait until after build before switching tab or bad things happen.
@@ -149,6 +133,33 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       if (tabIndex != null) {
         _tabController.animateTo(tabIndex);
       }
+    });
+  }
+
+  // Configure BackgroundFetch (not required by BackgroundGeolocation).
+  void _configureBackgroundFetch() async {
+    BackgroundFetch.configure(BackgroundFetchConfig(
+        minimumFetchInterval: 15,
+        startOnBoot: true,
+        stopOnTerminate: false,
+        enableHeadless: true,
+        requiresStorageNotLow: false,
+        requiresBatteryNotLow: false,
+        requiresCharging: false,
+        requiresDeviceIdle: false,
+        requiredNetworkType: BackgroundFetchConfig.NETWORK_TYPE_NONE
+    ), () async {
+      print('[BackgroundFetch] received event');
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      int count = 0;
+      if (prefs.get("fetch-count") != null) {
+        count = prefs.getInt("fetch-count");
+      }
+      prefs.setInt("fetch-count", ++count);
+      print('[BackgroundFetch] count: $count');
+
+      BackgroundFetch.finish();
     });
   }
 
@@ -213,7 +224,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');
     });
-
   }
 
   // Go back to HomeApp
@@ -267,7 +277,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     });
   }
 
-  void _onHttp(bg.HttpEvent event) {
+  void _onHttp(bg.HttpEvent event) async {
     print('[${bg.Event.HTTP}] - $event');
 
     setState(() {
@@ -289,16 +299,19 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     });
   }
 
-  void _onGeofence(bg.GeofenceEvent event) {
+  void _onGeofence(bg.GeofenceEvent event) async {
 
     print('[${bg.Event.GEOFENCE}] - $event');
 
-    bg.BackgroundGeolocation.startBackgroundTask().then((int taskId) {
+    bg.BackgroundGeolocation.startBackgroundTask().then((int taskId) async {
       // Execute an HTTP request to test an async operation completes.
-      String url = "http://tracker.transistorsoft.com/devices?company_token=$_username";
-      http.read(url).then((String result) {
+      String url = "${ENV.TRACKER_HOST}/v2/devices";
+      bg.State state = await bg.BackgroundGeolocation.state;
+      http.read(url, headers: {
+        "Authorization": "Bearer ${state.authorization.accessToken}"
+      }).then((String result) {
         print("[http test] success: $result");
-        bg.BackgroundGeolocation.playSound("POP");
+        bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("TEST_MODE_CLICK"));
         bg.BackgroundGeolocation.stopBackgroundTask(taskId);
       }).catchError((dynamic error) {
         print("[http test] failed: $error");
@@ -412,9 +425,9 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   void _onClickTestMode() {
     _testModeClicks++;
 
-    bg.BackgroundGeolocation.playSound('POP');
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("TEST_MODE_CLICK"));
     if (_testModeClicks == 10) {
-      bg.BackgroundGeolocation.playSound('BEEP_ON');
+      bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("TEST_MODE_SUCCESS"));
       Test.applyTestConfig();
     }
     if (_testModeTimer != null) {

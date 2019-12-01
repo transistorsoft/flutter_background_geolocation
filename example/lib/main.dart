@@ -8,6 +8,8 @@ import 'package:flutter_background_geolocation_example/app.dart';
 import 'advanced/app.dart';
 import 'hello_world/app.dart';
 
+import 'config/transistor_auth.dart';
+
 /// Receive events from BackgroundGeolocation in Headless state.
 void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
   print('📬 --> $headlessEvent');
@@ -91,6 +93,16 @@ void main() {
   ///
   SharedPreferences.getInstance().then((SharedPreferences prefs) {
     String appName = prefs.getString("app");
+
+    // Sanitize old-style registration system that only required username.
+    // If we find a valid username but null orgname, reverse them.
+    String orgname = prefs.getString("orgname");
+    String username = prefs.getString("username");
+    if (orgname == null && username != null) {
+      prefs.setString("orgname", username);
+      prefs.remove("username");
+    }
+
     switch(appName) {
       case AdvancedApp.NAME:
         runApp(new AdvancedApp());
@@ -103,7 +115,7 @@ void main() {
         runApp(new HomeApp());
     }
   });
-
+  TransistorAuth.registerErrorHandler();
   /// Register BackgroundGeolocation headless-task.
   bg.BackgroundGeolocation.registerHeadlessTask(backgroundGeolocationHeadlessTask);
   /// Register BackgroundFetch headless-task.

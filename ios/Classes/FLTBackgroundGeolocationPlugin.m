@@ -49,6 +49,9 @@ static NSString *const ACTION_IS_IGNORING_BATTERY_OPTIMIZATIONS = @"isIgnoringBa
 static NSString *const ACTION_REQUEST_SETTINGS = @"requestSettings";
 static NSString *const ACTION_SHOW_SETTINGS = @"showSettings";
 static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
+static NSString *const ACTION_GET_DEVICE_INFO = @"getDeviceInfo";
+static NSString *const ACTION_GET_TRANSISTOR_TOKEN = @"getTransistorToken";
+static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToken";
 
 #import <TSBackgroundFetch/TSBackgroundFetch.h>
 
@@ -79,6 +82,7 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
     [ConnectivityChangeStreamHandler register:registrar];
     [EnabledChangeStreamHandler register:registrar];
     [NotificationActionStreamHandler register:registrar];
+    [AuthorizationStreamHandler register:registrar];
 }
 
 - (instancetype) init {
@@ -87,7 +91,7 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
     if (self) {
         ready = NO;
         _locationManager = [TSLocationManager sharedInstance];
-
+                
         // Provide reference to rootViewController for #emailLog method.
         UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         _locationManager.viewController = root;
@@ -167,6 +171,12 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
         [self log:level message:message result:result];
     } else if ([self method:ACTION_GET_SENSORS is:action]) {
         [self getSensors:result];
+    } else if ([self method:ACTION_GET_DEVICE_INFO is:action]) {
+        [self getDeviceInfo:result];
+    } else if ([self method:ACTION_GET_TRANSISTOR_TOKEN is:action]) {
+        [self getTransistorToken:call.arguments result:result];
+    } else if ([self method:ACTION_DESTROY_TRANSISTOR_TOKEN is:action]) {
+        [self destroyTransistorToken:call.arguments result:result];
     } else if ([self method:ACTION_IS_POWER_SAVE_MODE is:action]) {
         [self isPowerSaveMode:result];
     } else if ([self method:ACTION_IS_IGNORING_BATTERY_OPTIMIZATIONS is:action]) {
@@ -225,6 +235,10 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
             if (reset) {
                 [config reset];
                 [config updateWithDictionary:params];
+            } else if ([params objectForKey:@"authorization"]) {
+                [config updateWithBlock:^(TSConfigBuilder *builder) {
+                    builder.authorization = [TSAuthorization createWithDictionary:[params objectForKey:@"authorization"]];
+                }];
             }
         }
         [self.locationManager ready];
@@ -560,6 +574,33 @@ static NSString *const ACTION_REGISTER_PLUGIN = @"registerPlugin";
           @"motion_hardware": @([_locationManager isMotionHardwareAvailable])
     };
     result(sensors);
+}
+
+- (void) getDeviceInfo:(FlutterResult)result {
+    TSDeviceInfo *deviceInfo = [TSDeviceInfo sharedInstance];
+    result([deviceInfo toDictionary:@"flutter"]);
+}
+
+- (void) getTransistorToken:(NSArray*)args result:(FlutterResult)result {
+    NSString *orgname = [args objectAtIndex:0];
+    NSString *username = [args objectAtIndex:1];
+    NSString *url = [args objectAtIndex:2];
+    
+    [TransistorAuthorizationToken findOrCreateWithOrg:orgname
+                                             username:username
+                                                 url:url
+                                            framework:@"flutter"
+                                              success:^(TransistorAuthorizationToken *token) {
+        result([token toDictionary]);
+    } failure:^(NSError *error) {
+        NSString *errorCode = [NSString stringWithFormat:@"%ld", (long) error.code];
+        result([FlutterError errorWithCode:errorCode message:error.localizedDescription details:nil]);
+    }];
+}
+
+- (void) destroyTransistorToken:(NSString*)url result:(FlutterResult)result {
+    [TransistorAuthorizationToken destroyWithUrl:url];
+    result(@(YES));
 }
 
 - (void) isPowerSaveMode:(FlutterResult)result {

@@ -62,7 +62,7 @@ part of flt_background_geolocation;
 /// - Application boot.
 /// - [BackgroundGeolocation.onHeartbeat] events.
 /// - [BackgroundGeolocation.onConnectivityChange] events.
-/// - __[iOS]__ Background `fetch` events.
+/// - __iOS__ Background `fetch` events.
 ///
 /// ```dart
 /// BackgroundGeolocation.onHttp((HttpEvent response) {

@@ -1,20 +1,5 @@
 part of flt_background_geolocation;
 
-// iOS 10 returns BOOL as 1/0 rather than true/false
-bool _ensureBool(dynamic value) {
-  return (value.runtimeType == int) ? (value != 0) : value;
-}
-
-// Android & iOS sometimes differ on their Type; where one returns int, the other might return double.
-int _ensureInt(dynamic value) {
-  return (value.runtimeType == double) ? value.round() : value;
-}
-
-// Android & iOS sometimes differ on their Type; where one returns int, the other might return double.
-double _ensureDouble(dynamic value) {
-  return (value.runtimeType == int) ? value * 1.0 : value;
-}
-
 /// Expresses the current state of the plugin, including all [Config] options.
 ///
 class State extends Config {
@@ -45,6 +30,10 @@ class State extends Config {
   /// Indicates whether the iOS app was launched in the background.
   ///
   bool didLaunchInBackground;
+
+  /// Indicates if this is the first launch of the app after initial install
+  ///
+  bool isFirstBoot;
 
   State(dynamic data)
       : super(
@@ -98,6 +87,10 @@ class State extends Config {
             maxRecordsToPersist: data['maxRecordsToPersist'],
             locationsOrderDirection: data['locationsOrderDirection'],
             httpTimeout: data['httpTimeout'],
+            encrypt: data['encrypt'],
+            authorization: (data['authorization'] != null)
+                ? Authorization.fromMap(data['authorization'])
+                : null,
             // Application
             stopOnTerminate: _ensureBool(data['stopOnTerminate']),
             startOnBoot: _ensureBool(data['startOnBoot']),
@@ -155,6 +148,7 @@ class State extends Config {
                 ? Notification.fromMap(data['notification'])
                 : null) {
     enabled = _ensureBool(data['enabled']);
+    isFirstBoot = _ensureBool(data['isFirstBoot']);
     trackingMode = data['trackingMode'];
     schedulerEnabled = _ensureBool(data['schedulerEnabled']);
     odometer = _ensureDouble(data['odometer']);

@@ -2,7 +2,9 @@
 /// -------------------------------------------------------------------------------
 /// # [BackgroundGeolocation]
 ///
-/// The primary APIs for the plugin are exposed through the two classes [BackgroundGeolocation] and [Config].
+/// The primary APIs for the plugin are exposed through two classes:
+/// - [BackgroundGeolocation]
+/// - [Config]
 ///
 /// ## 📚 Help
 /// - 📘 [Philosophy of Operation](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Philosophy-of-Operation)
@@ -16,12 +18,11 @@ library flt_background_geolocation;
 
 import 'dart:async';
 import 'dart:ui';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-
-import 'package:device_info/device_info.dart';
 
 part 'models/background_geolocation.dart';
 part 'models/device_settings.dart';
@@ -42,9 +43,28 @@ part 'models/sensors.dart';
 part 'models/headless_event.dart';
 part 'models/notification.dart';
 part 'models/sql_query.dart';
+part 'models/authorization.dart';
+part 'models/device_info.dart';
+part 'models/transistor_authorization_token.dart';
+part 'models/authorization_event.dart';
 
 const _PLUGIN_PATH = "com.transistorsoft/flutter_background_geolocation";
 
 // MethodChannel
 const MethodChannel _methodChannel =
     const MethodChannel("$_PLUGIN_PATH/methods");
+
+// iOS 10 returns BOOL as 1/0 rather than true/false
+bool _ensureBool(dynamic value) {
+  return (value.runtimeType == int) ? (value != 0) : value;
+}
+
+// Android & iOS sometimes differ on their Type; where one returns int, the other might return double.
+int _ensureInt(dynamic value) {
+  return (value.runtimeType == double) ? value.round() : value;
+}
+
+// Android & iOS sometimes differ on their Type; where one returns int, the other might return double.
+double _ensureDouble(dynamic value) {
+  return (value.runtimeType == int) ? value * 1.0 : value;
+}
