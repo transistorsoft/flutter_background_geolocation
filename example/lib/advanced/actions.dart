@@ -25,8 +25,10 @@ class Actions {
       // TODO show spinner.
       bg.BackgroundGeolocation.sync().then((List records) {
         // TODO hide spinner.
+        print('[sync] success');
         bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("MESSAGE_SENT"));
       }).catchError((dynamic error) {
+        util.Dialog.alert(context, "Sync", error.toString());
         print('[sync] ERROR: $error');
       });
     });

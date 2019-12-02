@@ -3,6 +3,8 @@ package com.transistorsoft.flutter.backgroundgeolocation.streams;
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.callback.TSGeofencesChangeCallback;
 import com.transistorsoft.locationmanager.event.GeofencesChangeEvent;
+import com.transistorsoft.locationmanager.geofence.TSGeofenceManager;
+import com.transistorsoft.locationmanager.http.HttpService;
 
 import io.flutter.plugin.common.EventChannel;
 
@@ -15,7 +17,12 @@ public class GeofencesChangeStreamHandler extends StreamHandler implements TSGeo
     @Override
     public void onListen(Object args, EventChannel.EventSink eventSink) {
         super.onListen(args, eventSink);
-        BackgroundGeolocation.getInstance(mContext).onGeofencesChange(this);
+        TSGeofenceManager.getInstance(mContext).onGeofencesChange(this);
+    }
+
+    @Override
+    public void onCancel(Object args) {
+        TSGeofenceManager.getInstance(mContext).removeListener(mEvent, this);
     }
 
     @Override

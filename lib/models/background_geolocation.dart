@@ -21,6 +21,8 @@ const _EVENT_CHANNEL_ENABLEDCHANGE =
     "$_PLUGIN_PATH/events/" + Event.ENABLEDCHANGE;
 const _EVENT_CHANNEL_NOTIFICATIONACTION =
     "$_PLUGIN_PATH/events/" + Event.NOTIFICATIONACTION;
+const _EVENT_CHANNEL_AUTHORIZATION =
+    "$_PLUGIN_PATH/events/" + Event.AUTHORIZATION;
 
 class _Subscription {
   final StreamSubscription<dynamic> subscription;
@@ -130,6 +132,8 @@ class BackgroundGeolocation {
       const EventChannel(_EVENT_CHANNEL_ENABLEDCHANGE);
   static const EventChannel _eventChannelNotificationAction =
       const EventChannel(_EVENT_CHANNEL_NOTIFICATIONACTION);
+  static const EventChannel _eventChannelAuthorization =
+      const EventChannel(_EVENT_CHANNEL_AUTHORIZATION);
 
   // Event Subscriptions
   static List<_Subscription> _subscriptions = new List();
@@ -147,6 +151,7 @@ class BackgroundGeolocation {
   static Stream<ConnectivityChangeEvent> _eventsConnectivityChange;
   static Stream<bool> _eventsEnabledChange;
   static Stream<String> _eventsNotificationAction;
+  static Stream<AuthorizationEvent> _eventsAuthorization;
 
   /// Return the current [State] of the plugin, including all [Config] parameters.
   ///
@@ -876,7 +881,9 @@ class BackgroundGeolocation {
     return completer.future;
   }
 
+  /// Register with the Transistor Software demo server
   ///
+
   /// Do not use.
   static Future<bool> playSound(dynamic soundId) async {
     return await _methodChannel.invokeMethod('playSound', soundId);
@@ -896,6 +903,7 @@ class BackgroundGeolocation {
   /// - [onConnectivityChange]
   /// - [onPowerSaveChange]
   /// - [onNotificationAction]
+  /// - [onAuthorization]
   ///
   /// ## Example
   ///
@@ -903,9 +911,12 @@ class BackgroundGeolocation {
   /// BackgroundGeolocation.removeListeners();
   /// ```
   ///
-  static void removeListeners() {
-    _subscriptions.forEach((_Subscription sub) => sub.subscription.cancel());
+  static Future<bool> removeListeners() async {
+    _subscriptions.forEach((_Subscription sub) async {
+      await sub.subscription.cancel();
+    });
     _subscriptions.clear();
+    return true;
   }
 
   /// Removes a single event-listener.
@@ -1311,6 +1322,32 @@ class BackgroundGeolocation {
           .map((dynamic isPowerSaveMode) => isPowerSaveMode as bool);
     }
     _registerSubscription(_eventsPowerSaveChange.listen(callback), callback);
+  }
+
+  /// Listen to [Authorization] events from [Authorization.refreshUrl].
+  ///
+  /// If you've configured [Config.authorization], this event will be fired when your [Authorization.refreshUrl] returns a response,
+  /// either successfully or not.
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.onAuthorization((Authorization event) {
+  ///   print("[authorization] $event");
+  ///
+  ///   if (event.success) {
+  ///     print("- Authorization response: ${event.response}");
+  ///   } else {
+  ///     print("- Authorization error: ${event.message}");
+  ///   }
+  /// });
+  /// ```
+  ///
+  static void onAuthorization(Function(AuthorizationEvent) callback) {
+    if (_eventsAuthorization == null) {
+      _eventsAuthorization = _eventChannelAuthorization
+          .receiveBroadcastStream()
+          .map((dynamic event) => new AuthorizationEvent(event));
+    }
+    _registerSubscription(_eventsAuthorization.listen(callback), callback);
   }
 
   /// __(Android only)__ Registers a button-click listener on a [Custom Notification Layout](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Custom-Notification-Layout)

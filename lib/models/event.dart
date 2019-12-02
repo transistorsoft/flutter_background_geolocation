@@ -18,4 +18,5 @@ class Event {
   static const ENABLEDCHANGE = "enabledchange";
   static const POWERSAVECHANGE = "powersavechange";
   static const NOTIFICATIONACTION = "notificationaction";
+  static const AUTHORIZATION = "authorization";
 }

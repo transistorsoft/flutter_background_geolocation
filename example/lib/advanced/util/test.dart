@@ -1,5 +1,6 @@
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../config/ENV.dart';
 
 class Test {
   /// My private test field-test config.
@@ -125,12 +126,17 @@ class Test {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String username = prefs.getString("username");
-    Map deviceParams = await bg.Config.deviceParams;
+    String orgname = prefs.getString("orgname");
+
+    // Request a JWT from tracker.transistorsoft.com
+    bg.TransistorAuthorizationToken token = await bg.TransistorAuthorizationToken.findOrCreate(orgname, username, ENV.TRACKER_HOST);
 
     await bg.BackgroundGeolocation.setOdometer(0.0);
 
-    await bg.BackgroundGeolocation.setConfig(bg.Config(
+    await bg.BackgroundGeolocation.reset(bg.Config(
         debug: true,
+        transistorAuthorizationToken: token,
+        encrypt: true,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
         distanceFilter: 50,
@@ -143,8 +149,6 @@ class Test {
         schedule: [
           //'2-6 09:00-17:00'
         ],
-        url: "http://tracker.transistorsoft.com/locations/$username",
-        params: deviceParams,
         geofenceModeHighAccuracy: true,
         stopOnTerminate: false,
         startOnBoot: true,

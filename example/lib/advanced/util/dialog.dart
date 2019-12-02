@@ -14,7 +14,9 @@ const SOUND_MAP = {
     "ERROR": 1006,
     "OPEN": 1502,
     "CLOSE": 1503,
-    "FLOURISH": 1509
+    "FLOURISH": 1509,
+    "TEST_MODE_CLICK": 1130,
+    "TEST_MODE_SUCCESS": 1114
   },
   "android": {
     "LONG_PRESS_ACTIVATE": "DOT_START",
@@ -25,7 +27,9 @@ const SOUND_MAP = {
     "ERROR": "ERROR",
     "OPEN": "OPEN",
     "CLOSE": "CLOSE",
-    "FLOURISH": "POP"
+    "FLOURISH": "POP",
+    "TEST_MODE_CLICK": "POP",
+    "TEST_MODE_SUCCESS": "BEEP_ON"
   }
 };
 

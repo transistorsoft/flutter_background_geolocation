@@ -2,3 +2,4 @@
 #include "Generated.xcconfig"
 FLUTTER_BUILD_MODE=debug
 
+BACKGROUND_GEOLOCATION_ENCRYPTION_PASSWORD=encryption_password_for_SQLite_and_HTTP_requests

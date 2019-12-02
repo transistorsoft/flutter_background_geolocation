@@ -14,6 +14,7 @@
 #import "ConnectivityChangeStreamHandler.h"
 #import "EnabledChangeStreamHandler.h"
 #import "NotificationActionStreamHandler.h"
+#import "AuthorizationStreamHandler.h"
 
 @interface FLTBackgroundGeolocationPlugin : NSObject<FlutterPlugin>
 

@@ -24,6 +24,7 @@ import io.flutter.view.FlutterNativeView;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ActivityChangeStreamHandler;
+import com.transistorsoft.flutter.backgroundgeolocation.streams.AuthorizationStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ConnectivityChangeStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.EnabledChangeStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.GeofenceStreamHandler;
@@ -39,8 +40,11 @@ import com.transistorsoft.flutter.backgroundgeolocation.streams.ScheduleStreamHa
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.TSConfig;
 import com.transistorsoft.locationmanager.adapter.callback.*;
+import com.transistorsoft.locationmanager.config.TSAuthorization;
+import com.transistorsoft.locationmanager.config.TransistorAuthorizationToken;
 import com.transistorsoft.locationmanager.data.LocationModel;
 import com.transistorsoft.locationmanager.data.SQLQuery;
+import com.transistorsoft.locationmanager.device.DeviceInfo;
 import com.transistorsoft.locationmanager.device.DeviceSettingsRequest;
 import com.transistorsoft.locationmanager.event.TerminateEvent;
 import com.transistorsoft.locationmanager.geofence.TSGeofence;
@@ -129,6 +133,7 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
                     new ProviderChangeStreamHandler().register(registrar);
                     new PowerSaveChangeStreamHandler().register(registrar);
                     new NotificationActionStreamHandler().register(registrar);
+                    new AuthorizationStreamHandler().register(registrar);
                 }
             });
 
@@ -258,6 +263,8 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
             requestSettings((List) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_SHOW_SETTINGS)) {
             showSettings((List) call.arguments, result);
+        } else if (call.method.equalsIgnoreCase(DeviceInfo.ACTION_GET_DEVICE_INFO)) {
+            getDeviceInfo(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_PLAY_SOUND)) {
             playSound((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_REGISTER_HEADLESS_TASK)) {
@@ -269,6 +276,10 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         } else if (call.method.equalsIgnoreCase(ACTION_REGISTER_PLUGIN)) {
             // No implementation; iOS only.
             result.success(true);
+        } else if (call.method.equalsIgnoreCase(TransistorAuthorizationToken.ACTION_GET)) {
+            getTransistorToken((List) call.arguments, result);
+        } else if (call.method.equalsIgnoreCase(TransistorAuthorizationToken.ACTION_DESTROY)) {
+            destroyTransistorToken((String) call.arguments, result);
         } else {
             result.notImplemented();
         }
@@ -305,6 +316,13 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
                 config.reset();
                 if (!applyConfig(params, result)) {
                     return;
+                }
+            } else if (params.containsKey(TSAuthorization.NAME)) {
+                Map options = (Map) params.get(TSAuthorization.NAME);
+                if (options != null) {
+                    config.updateWithBuilder()
+                            .setAuthorization(new TSAuthorization((Map<String,Object>)options))
+                            .commit();
                 }
             }
         }
@@ -787,6 +805,10 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         }
     }
 
+    private void getDeviceInfo(Result result) {
+        result.success(DeviceInfo.getInstance(mContext).toMap());
+    }
+
     private void getProviderState(Result result) {
         result.success(BackgroundGeolocation.getInstance(mContext).getProviderState().toMap());
     }
@@ -795,6 +817,35 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         BackgroundGeolocation.getInstance(mContext).requestPermission(new TSRequestPermissionCallback() {
             @Override public void onSuccess(int status) { result.success(status); }
             @Override public void onFailure(int status) { result.error("DENIED", null, status); }
+        });
+    }
+
+    private void getTransistorToken(List<String>args, final Result result) {
+        String orgname = args.get(0);
+        String username = args.get(1);
+        String url = args.get(2);
+
+        TransistorAuthorizationToken.findOrCreate(mContext, orgname, username, url, new TransistorAuthorizationToken.Callback() {
+            @Override public void onSuccess(TransistorAuthorizationToken token) {
+                result.success(token.toMap());
+            }
+            @Override public void onFailure(String error) {
+                result.error("0", error, null);
+            }
+        });
+    }
+
+    private void destroyTransistorToken(String url, final Result result) {
+        TransistorAuthorizationToken.destroyTokenForUrl(mContext, url, new TSCallback() {
+            @Override
+            public void onSuccess() {
+                result.success(true);
+            }
+
+            @Override
+            public void onFailure(String error) {
+                result.error(error, error, null);
+            }
         });
     }
 
@@ -836,9 +887,6 @@ public class FLTBackgroundGeolocationPlugin implements MethodCallHandler, Applic
         }
         return retMap;
     }
-
-
-
 
     private static Map<String, Object> toMap(JSONObject object) throws JSONException {
         Map<String, Object> map = new HashMap<>();

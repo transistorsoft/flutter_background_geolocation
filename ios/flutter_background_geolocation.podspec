@@ -10,12 +10,12 @@ The most sophisticated background location-tracking &amp; geofencing module with
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Transistor Softwrae' => 'info@transistorsoft.com' }
+  s.author           = { 'Transistor Software' => 'info@transistorsoft.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'CocoaLumberjack', '~> 3.0'
+  s.dependency 'CocoaLumberjack', '~> 3.5.0'
 
   s.libraries           = 'sqlite3', 'z'
   s.vendored_frameworks = ['TSLocationManager.framework']

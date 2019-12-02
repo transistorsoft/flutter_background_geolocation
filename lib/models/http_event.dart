@@ -62,7 +62,7 @@ part of flt_background_geolocation;
 /// - Application boot.
 /// - [BackgroundGeolocation.onHeartbeat] events.
 /// - [BackgroundGeolocation.onConnectivityChange] events.
-/// - __[iOS]__ Background `fetch` events.
+/// - __iOS__ Background `fetch` events.
 ///
 /// ```dart
 /// BackgroundGeolocation.onHttp((HttpEvent response) {
@@ -103,6 +103,17 @@ part of flt_background_geolocation;
 /// ## Custom `JSON` Schema:  [Config.locationTemplate] and [Config.geofenceTemplate]
 ///
 /// The default HTTP `JSON` schema for both [Location] and [Geofence] can be overridden by the configuration options [Config.locationTemplate] and [Config.geofenceTemplate], allowing you to create any schema you wish.
+///
+/// ## Disabling HTTP requests on Cellular connections
+///
+/// If you're concerned with Cellular data-usage, you can configure the plugin's HTTP Service to upload only when connected to Wifi:
+///
+/// ```dart
+/// BackgroundGeolocation.ready(Config(
+///   autoSync: true,
+///   disableAutoSyncOnCellular: true
+/// ));
+/// ```
 ///
 /// ## HTTP Logging
 ///
