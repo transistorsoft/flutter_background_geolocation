@@ -79,7 +79,7 @@ class _HomeViewState extends State<_HomeView> {
     TransistorAuth.registerErrorHandler();
 
     _deviceInfo = await bg.DeviceInfo.getInstance();
-
+    
     // Reset selected app.
     final SharedPreferences prefs = await _prefs;
     prefs.setString("app", "");

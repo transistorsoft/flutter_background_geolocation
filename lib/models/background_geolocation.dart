@@ -911,14 +911,12 @@ class BackgroundGeolocation {
   /// BackgroundGeolocation.removeListeners();
   /// ```
   ///
-  static Future<void> removeListeners() {
-    Completer completer = new Completer<bool>();
+  static Future<bool> removeListeners() async {
     _subscriptions.forEach((_Subscription sub) async {
       await sub.subscription.cancel();
-      completer.complete(true);
     });
     _subscriptions.clear();
-    return completer.future;
+    return true;
   }
 
   /// Removes a single event-listener.
