@@ -108,6 +108,7 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
         stopOnTerminate: false,
         startOnBoot: true
     )).then((bg.State state) {
+      print("[ready] ${state.toMap()}");
       setState(() {
         _enabled = state.enabled;
         _isMoving = state.isMoving;
