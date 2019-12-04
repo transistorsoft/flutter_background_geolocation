@@ -149,6 +149,8 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
             result = event.getBootEvent();
         } else if (name.equals(BackgroundGeolocation.EVENT_GEOFENCE)) {
             result = event.getGeofenceEvent().toJson();
+        } else if (name.equals(BackgroundGeolocation.EVENT_GEOFENCES_CHANGE)) {
+            result = event.getGeofencesChangeEvent().toJson();
         } else if (name.equals(BackgroundGeolocation.EVENT_HEARTBEAT)) {
             result = event.getHeartbeatEvent().toJson();
         } else if (name.equals(BackgroundGeolocation.EVENT_CONNECTIVITYCHANGE)) {

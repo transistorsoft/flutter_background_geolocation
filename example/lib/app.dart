@@ -222,7 +222,12 @@ class _HomeViewState extends State<_HomeView> {
       prefs.setString("username", _usernameRaw);
 
       await bg.TransistorAuthorizationToken.destroy(ENV.TRACKER_HOST);
-      await bg.TransistorAuthorizationToken.findOrCreate(_orgname, _username, ENV.TRACKER_HOST);
+      bg.TransistorAuthorizationToken token = await bg.TransistorAuthorizationToken.findOrCreate(_orgname, _username, ENV.TRACKER_HOST);
+
+      bg.BackgroundGeolocation.setConfig(bg.Config(
+        transistorAuthorizationToken: token
+      ));
+
       Navigator.pop(context);
     }
   }
