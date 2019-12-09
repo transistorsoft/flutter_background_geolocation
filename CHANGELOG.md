@@ -1,4 +1,6 @@
 # CHANGELOG
+## 1.4.3 - 2019-12-09
+- Rename folder docs -> help to satisfy dartdoc on pub.dev (API docs were missing).
 
 ## 1.4.2 - 2019-12-03
 - [Fixed] iOS crash when launching first time `-[__NSDictionaryM setObject:forKey:]: object cannot be nil (key: authorization)'`
