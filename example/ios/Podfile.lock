@@ -58,9 +58,9 @@ SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_background_geolocation: fb75a864cb9f43c386fefcf1f4196b4671a408be
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
+  path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
   shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
-  sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
+  sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
 
 PODFILE CHECKSUM: 412af0b770baf0c510169b7be52baea1e495427c

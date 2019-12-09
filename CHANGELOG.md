@@ -1,6 +1,4 @@
 # CHANGELOG
-## 1.4.4 - 2019-12-09
-- Having problems with pub.dev not auto-generating docs.  Remove from .gitignore docs folder.
 
 ## 1.4.3 - 2019-12-09
 - Rename folder docs -> help to satisfy dartdoc on pub.dev (API docs were missing).

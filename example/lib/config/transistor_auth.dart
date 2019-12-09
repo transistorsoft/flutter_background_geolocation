@@ -9,16 +9,15 @@ void _onHttp(bg.HttpEvent event) async {
 
   switch (event.status) {
     case 403:
-      print('TransistorAuth] 403');
-      await bg.TransistorAuthorizationToken.destroy(ENV.TRACKER_HOST);
-      bool success = await TransistorAuth.register();
-      if (success) bg.BackgroundGeolocation.sync();
-      break;
     case 406:
-      print('TransistorAuth] this device requires reqistration');
+      print("TransistorAuth] onHttp status ${event.status}");
       await bg.TransistorAuthorizationToken.destroy(ENV.TRACKER_HOST);
       bool success = await TransistorAuth.register();
-      if (success) bg.BackgroundGeolocation.sync();
+      if (success) {
+        bg.BackgroundGeolocation.sync().catchError((error) {
+          print("[sync] error: $error");
+        });
+      }
       break;
     case 410:
       print('[TransistorAuth] It seems this device has been destroyed from tracker.transistorsoft.com.  The authentication token is no longer valid.  Redirecting to Home page.');
