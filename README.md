@@ -60,8 +60,8 @@ dependencies:
 
 ## :large_blue_diamond: Setup Guides
 
-- [iOS](https://github.com/transistorsoft/flutter_background_geolocation/blob/master/docs/INSTALL-IOS.md)
-- [Android](https://github.com/transistorsoft/flutter_background_geolocation/blob/master/docs/INSTALL-ANDROID.md)
+- [iOS](https://github.com/transistorsoft/flutter_background_geolocation/blob/master/help/INSTALL-IOS.md)
+- [Android](https://github.com/transistorsoft/flutter_background_geolocation/blob/master/help/INSTALL-ANDROID.md)
 
 
 ## :large_blue_diamond: Using the plugin ##
