@@ -14,6 +14,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'config/ENV.dart';
 import 'config/transistor_auth.dart';
 
+import 'registration_view.dart';
 import 'hello_world/app.dart';
 import 'advanced/app.dart';
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
@@ -52,21 +53,15 @@ class _HomeViewState extends State<_HomeView> {
   static const USERNAME_REGEXP = r"^[a-zA-Z0-9_-]*$";
 
   bg.DeviceInfo _deviceInfo;
-  String _orgnameRaw;
   String _orgname;
-  String _usernameRaw;
   String _username;
   String _deviceId;
-
-  final _formKey = GlobalKey<FormState>();
 
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   @override
   void initState() {
     super.initState();
-    _orgnameRaw = '';
     _orgname = '';
-    _usernameRaw = '';
     _username = '';
     _deviceId = '';
     _initPlatformState();
@@ -102,139 +97,29 @@ class _HomeViewState extends State<_HomeView> {
     });
 
     if (!_usernameIsValid(username) || !_usernameIsValid(orgname)) {
-      _showDialog();
+      _showRegistration();
     }
   }
 
-  void _showDialog() {
+  void _showRegistration() async {
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("OPEN"));
 
-    _orgnameRaw = _orgname;
-    _usernameRaw = _username;
+    final result = await Navigator.of(context).push(MaterialPageRoute<Map>(fullscreenDialog: true, builder: (BuildContext context) {
+      return RegistrationView();
+    }));
 
-    TextEditingController _usernameController = new TextEditingController(text: _usernameRaw);
-    TextEditingController _orgnameController = new TextEditingController(text: _orgnameRaw);
-
-    final re = new RegExp(r"\s+\b|\b\s");
-
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return new AlertDialog(
-          contentPadding: const EdgeInsets.all(15.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0))
-          ),
-          content: SizedBox(
-              height: 200.0,
-              child: Form(
-                key: _formKey,
-                child: Column(
-                    children: <Widget>[
-                      new Text('Device Registration', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0), textAlign: TextAlign.center),
-                      new Text(''),
-                      new Text('${_deviceInfo.manufacturer} ${_deviceInfo.model}', style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
-                      ///
-                      /// this consumes too much vertical space on small devices
-                      ///
-                      ///
-                      ///Spacer(),
-                      ///new Text('Please provide an Organization and User identifier to register with the demo server:', style: TextStyle()),
-
-                      ///
-                      new Row(
-                        children: <Widget>[
-                          Expanded(
-                              child: Column(
-                                  children: <Widget>[
-                                    new TextFormField(
-                                      controller: _orgnameController,
-                                      validator: (value) {
-                                        if (!_usernameIsValid(value)) {
-                                          return 'Invalid organization name.';
-                                        } else {
-                                          return null;
-                                        }
-                                      },
-                                      onChanged: (String value) {
-                                        setState(() {
-                                          _orgnameRaw = value;
-                                        });
-                                      },
-                                      autofocus: true,
-                                      decoration: new InputDecoration(
-                                          labelText: 'Organization name', hintText: 'eg. Company name'),
-                                    ),
-                                    new TextFormField(
-                                      controller: _usernameController,
-                                      validator: (value) {
-                                        if (!_usernameIsValid(value)) {
-                                          return 'Invalid username.';
-                                        } else {
-                                          return null;
-                                        }
-                                      },
-                                      onChanged: (String value) {
-                                        value = value.replaceAll(re, "");
-                                        setState(() {
-                                          _usernameRaw = value;
-                                          _deviceId = "${_deviceInfo.model}-$value";
-                                        });
-                                      },
-                                      autofocus: false,
-                                      decoration: new InputDecoration(
-                                          labelText: 'Username', hintText: 'eg. Github username or initials'),
-                                    ),
-                                  ]
-                              )
-                          ),
-                        ],
-                      ),
-                    ]
-                ),
-              )
-
-          ),
-          actions: <Widget>[
-            new FlatButton(
-              child: const Text('CANCEL'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }
-            ),
-            new FlatButton(
-                child: const Text('SAVE'),
-                onPressed: _onClickSave
-            )
-          ],
-        );
-      },
-    );
-  }
-
-  _onClickSave() async {
-    if (_formKey.currentState.validate()) {
+    if (result != null) {
       setState(() {
-        _orgname = _orgnameRaw;
-        _username = _usernameRaw;
+        _orgname = result["orgname"];
+        _username = result["username"];
+        _deviceId = "${_deviceInfo.model}-${result["username"]}";
       });
-      final SharedPreferences prefs = await _prefs;
-      prefs.setString("orgname", _orgnameRaw);
-      prefs.setString("username", _usernameRaw);
-
-      await bg.TransistorAuthorizationToken.destroy(ENV.TRACKER_HOST);
-      bg.TransistorAuthorizationToken token = await bg.TransistorAuthorizationToken.findOrCreate(_orgname, _username, ENV.TRACKER_HOST);
-
-      bg.BackgroundGeolocation.setConfig(bg.Config(
-        transistorAuthorizationToken: token
-      ));
-
-      Navigator.pop(context);
     }
   }
-
+  
   void _onClickNavigate(String appName) async {
-    if (!_usernameIsValid(_username)) {
-      _showDialog();
+    if (!_usernameIsValid(_username) || !_usernameIsValid(_orgname)) {
+      _showRegistration();
       return;
     }
 
@@ -336,7 +221,7 @@ class _HomeViewState extends State<_HomeView> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   FlatButton(onPressed: () {
-                    _showDialog();
+                    _showRegistration();
                   }, child: Text('Edit'), color: Colors.redAccent, textColor: Colors.white),
                   FlatButton(onPressed: () {
                     _launchUrl();
