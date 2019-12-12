@@ -7,10 +7,10 @@ dependencies:
   flutter_map:
     git:
       # Fork with fix for flutter 1.7
-      url: https://github.com/123erfasst/flutter_map.git
+      url: https://github.com/domesticmouse/flutter_map.git
   unicorndial: ^1.1.4
 
-  shared_preferences: ^0.4.0
+  shared_preferences: ^0.5.6
   background_fetch: ^0.3.2
   url_launcher: ^5.2.5
 

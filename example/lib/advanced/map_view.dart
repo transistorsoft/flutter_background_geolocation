@@ -276,7 +276,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     }));
   }
 
-  void _onPositionChanged(MapPosition pos, bool hasGesture, bool isGesture) {
+  void _onPositionChanged(MapPosition pos, bool hasGesture) {
     _mapOptions.crs.scale(_mapController.zoom);
   }
 
