@@ -305,7 +305,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     bg.BackgroundGeolocation.startBackgroundTask().then((int taskId) async {
       // Execute an HTTP request to test an async operation completes.
-      String url = "${ENV.TRACKER_HOST}/v2/devices";
+      String url = "${ENV.TRACKER_HOST}/api/devices";
       bg.State state = await bg.BackgroundGeolocation.state;
       http.read(url, headers: {
         "Authorization": "Bearer ${state.authorization.accessToken}"

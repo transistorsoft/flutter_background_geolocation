@@ -147,7 +147,7 @@ class _HomeViewState extends State<_HomeView> {
   }
 
   void _launchUrl() async {
-    String url = '${ENV.TRACKER_HOST}/$_username';
+    String url = '${ENV.TRACKER_HOST}/$_orgname';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
