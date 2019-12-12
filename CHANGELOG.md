@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.4.5 - 2019-12-12
+- [Changed] Upgrade iOS CocoaLumberjack dependency to ~>3.6.0 from ~>3.5.0.  It seems some other dependency out there is using CocaoLumberjack@3.6.0.
+- [Changed] Fixed example app: flutter_map is messed up again.  Find another fork that works with lastest flutter api.
+
 ## 1.4.4 - 2019-12-12
 - [Fixed] Previous Android version 1.4.3 was corrupted due to two copies of `tslocationmanager.aar` being deployed.
 
