@@ -31,10 +31,9 @@ DEPENDENCIES:
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
-    - FMDB
   trunk:
     - CocoaLumberjack
+    - FMDB
 
 EXTERNAL SOURCES:
   background_fetch:

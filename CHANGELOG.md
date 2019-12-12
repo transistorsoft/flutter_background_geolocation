@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.4.4 - 2019-12-12
+- [Fixed] Previous Android version 1.4.3 was corrupted due to two copies of `tslocationmanager.aar` being deployed.
+
 ## 1.4.3 - 2019-12-09
 - Rename folder docs -> help to satisfy dartdoc on pub.dev (API docs were missing).
 
