@@ -2,24 +2,29 @@ package com.transistorsoft.flutter.backgroundgeolocation.streams;
 
 import android.content.Context;
 
+import com.transistorsoft.flutter.backgroundgeolocation.BackgroundGeolocationModule;
 import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.logger.TSLog;
 
+import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.PluginRegistry;
 
 class StreamHandler implements EventChannel.StreamHandler{
     protected Context mContext;
     protected EventChannel.EventSink mEventSink;
+    private EventChannel mChannel;
     String mEvent;
 
-    public void register(PluginRegistry.Registrar registrar) {
-        mContext = registrar.context();
-        String path = FLTBackgroundGeolocationPlugin.PLUGIN_ID + "/events/" + mEvent;
+    public StreamHandler register(Context context, BinaryMessenger messenger) {
+        mContext = context;
+        String path = BackgroundGeolocationModule.PLUGIN_ID + "/events/" + mEvent;
         TSLog.logger.debug(path);
 
-        new EventChannel(registrar.messenger(), path).setStreamHandler(this);
+        mChannel = new EventChannel(messenger, path);
+        mChannel.setStreamHandler(this);
+        return this;
     }
 
     @Override

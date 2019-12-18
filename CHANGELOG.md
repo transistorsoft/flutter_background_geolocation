@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.5.0 - 2019-12-18
+- [Changed] Upgrade to new Flutter "V2" Plugin API.  See [Upgrading pre 1.12 Android Projects](https://github.com/flutter/flutter/wiki/Upgrading-pre-1.12-Android-projects).  No extra steps required for "Android Headless Mode", it's all automatic now.
+- [Changed] Modified Android Foreground Service intent to not restart activity on click.
+
 ## 1.4.5 - 2019-12-12
 - [Changed] Upgrade iOS CocoaLumberjack dependency to ~>3.6.0 from ~>3.5.0.  It seems some other dependency out there is using CocaoLumberjack@3.6.0.
 - [Changed] Fixed example app: flutter_map is messed up again.  Find another fork that works with lastest flutter api.

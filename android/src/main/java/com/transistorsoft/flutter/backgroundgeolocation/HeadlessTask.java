@@ -2,6 +2,8 @@ package com.transistorsoft.flutter.backgroundgeolocation;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import io.flutter.embedding.engine.FlutterEngine;
+import io.flutter.embedding.engine.dart.DartExecutor;
+import io.flutter.embedding.engine.plugins.shim.ShimPluginRegistry;
 import io.flutter.plugin.common.JSONMethodCodec;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -26,10 +31,7 @@ import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.view.FlutterCallbackInformation;
 import io.flutter.view.FlutterMain;
 
-import io.flutter.view.FlutterNativeView;
-import io.flutter.view.FlutterRunArguments;
-
-public class HeadlessTask implements MethodChannel.MethodCallHandler {
+public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
     private static final String KEY_REGISTRATION_CALLBACK_ID    = "registrationCallbackId";
     private static final String KEY_CLIENT_CALLBACK_ID          = "clientCallbackId";
 
@@ -37,10 +39,13 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
     static private Long sRegistrationCallbackId;
     static private Long sClientCallbackId;
 
-    private FlutterNativeView mBackgroundFlutterView;
-    private MethodChannel mDispatchChannelChannel;
-    private final AtomicBoolean mHeadlessTaskRegistered = new AtomicBoolean(false);
+    private Context mContext;
 
+    // Deprecated V2
+    private MethodChannel mDispatchChannel;
+    private static FlutterEngine sBackgroundFlutterEngine;
+
+    private final AtomicBoolean mHeadlessTaskRegistered = new AtomicBoolean(false);
     private final List<HeadlessEvent> mEvents = new ArrayList<>();
 
     // Called by Application#onCreate.  Must be public.
@@ -50,32 +55,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
 
     // Called by FLTBackgroundGeolocationPlugin
     static boolean register(final Context context, final List<Object> callbacks) {
-        BackgroundGeolocation.getThreadPool().execute(new Runnable() {
-            @Override public void run() {
-                SharedPreferences prefs = context.getSharedPreferences(HeadlessTask.class.getName(), Context.MODE_PRIVATE);
-
-                // There is weirdness with the class of these callbacks (Integer vs Long) between assembleDebug vs assembleRelease.
-                Object cb1 = callbacks.get(0);
-                Object cb2 = callbacks.get(1);
-
-                SharedPreferences.Editor editor = prefs.edit();
-                if (cb1.getClass() == Long.class) {
-                    editor.putLong(KEY_REGISTRATION_CALLBACK_ID, (Long) cb1);
-                } else if (cb1.getClass() == Integer.class) {
-                    editor.putLong(KEY_REGISTRATION_CALLBACK_ID, ((Integer) cb1).longValue());
-                }
-
-                if (cb2.getClass() == Long.class) {
-                    editor.putLong(KEY_CLIENT_CALLBACK_ID, (Long) cb2);
-                } else if (cb2.getClass() == Integer.class) {
-                    editor.putLong(KEY_CLIENT_CALLBACK_ID, ((Integer) cb2).longValue());
-                }
-                editor.apply();
-
-                sRegistrationCallbackId = prefs.getLong(KEY_REGISTRATION_CALLBACK_ID, -1);
-                sClientCallbackId = prefs.getLong(KEY_CLIENT_CALLBACK_ID, -1);
-            }
-        });
+        BackgroundGeolocation.getThreadPool().execute(new RegistrationTask(context, callbacks));
         return true;
     }
 
@@ -93,9 +73,9 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
     @SuppressWarnings({"unused"})
     @Subscribe(threadMode=ThreadMode.MAIN)
     public void onHeadlessEvent(HeadlessEvent event) {
+        mContext = event.getContext();
         String eventName = event.getName();
         TSLog.logger.debug("\uD83D\uDC80 [HeadlessTask " + eventName + "]");
-
         synchronized (mEvents) {
             mEvents.add(event);
         }
@@ -103,8 +83,17 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
         BackgroundGeolocation.getThreadPool().execute(new TaskRunner(event));
     }
 
+    @Override
+    public void run() {
+        dispatch();
+    }
+
     // Send event to Client.
     private void dispatch() {
+        if (sBackgroundFlutterEngine == null) {
+            startBackgroundIsolate();
+        }
+
         if (!mHeadlessTaskRegistered.get()) {
             // Queue up events while background isolate is starting
             TSLog.logger.debug("[HeadlessTask] waiting for client to initialize");
@@ -118,7 +107,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
                     response.put("callbackId", sClientCallbackId);
                     response.put("event", event.getName());
                     response.put("params", getEventObject(event));
-                    mDispatchChannelChannel.invokeMethod("", response);
+                    mDispatchChannel.invokeMethod("", response);
                 } catch (JSONException | IllegalStateException e) {
                     TSLog.logger.error(TSLog.error(e.getMessage()));
                     e.printStackTrace();
@@ -165,29 +154,74 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
         return result;
     }
 
-    private void initFlutterView(Context context) {
-
-        FlutterMain.ensureInitializationComplete(context, null);
-        FlutterCallbackInformation callbackInfo = FlutterCallbackInformation.lookupCallbackInformation(sRegistrationCallbackId);
-        if (callbackInfo == null) {
-            TSLog.logger.error(TSLog.error("Fatal: failed to find callback"));
+    private void startBackgroundIsolate() {
+        if (sBackgroundFlutterEngine != null) {
+            Log.w(BackgroundGeolocation.TAG, "Background isolate already started");
             return;
         }
-        mBackgroundFlutterView = new FlutterNativeView(context, true);
 
-        // Create the Transmitter channel
-        mDispatchChannelChannel = new MethodChannel(mBackgroundFlutterView, FLTBackgroundGeolocationPlugin.PLUGIN_ID + "/headless", JSONMethodCodec.INSTANCE);
-        mDispatchChannelChannel.setMethodCallHandler(this);
+        String appBundlePath = FlutterMain.findAppBundlePath();
+        AssetManager assets = mContext.getAssets();
+        if (appBundlePath != null && !mHeadlessTaskRegistered.get()) {
+            sBackgroundFlutterEngine = new FlutterEngine(mContext);
+            DartExecutor executor = sBackgroundFlutterEngine.getDartExecutor();
+            // Create the Transmitter channel
+            mDispatchChannel = new MethodChannel(executor, BackgroundGeolocationModule.PLUGIN_ID + "/headless", JSONMethodCodec.INSTANCE);
+            mDispatchChannel.setMethodCallHandler(this);
 
-        sPluginRegistrantCallback.registerWith(mBackgroundFlutterView.getPluginRegistry());
+            FlutterCallbackInformation callbackInfo = FlutterCallbackInformation.lookupCallbackInformation(sRegistrationCallbackId);
 
-        // Dispatch back to client for initialization.
-        FlutterRunArguments args = new FlutterRunArguments();
-        // Deprecated in flutter 1.9.1.  Leave as-is for now or those on 1.7.8 break.
-        args.bundlePath = FlutterMain.findAppBundlePath(context);
-        args.entrypoint = callbackInfo.callbackName;
-        args.libraryPath = callbackInfo.callbackLibraryPath;
-        mBackgroundFlutterView.runFromBundle(args);
+            if (callbackInfo == null) {
+                TSLog.logger.error(TSLog.error("Fatal: failed to find callback: " + sRegistrationCallbackId));
+                return;
+            }
+            DartExecutor.DartCallback dartCallback = new DartExecutor.DartCallback(assets, appBundlePath, callbackInfo);
+            executor.executeDartCallback(dartCallback);
+
+            // The pluginRegistrantCallback should only be set in the V1 embedding as
+            // plugin registration is done via reflection in the V2 embedding.
+            if (sPluginRegistrantCallback != null) {
+                sPluginRegistrantCallback.registerWith(new ShimPluginRegistry(sBackgroundFlutterEngine));
+            }
+        }
+    }
+    /**
+     * Persist callbacks in Background-thread.
+     */
+    static class RegistrationTask implements Runnable {
+        private Context mContext;
+        private List<Object> mCallbacks;
+
+        RegistrationTask(Context context, List<Object>callbacks) {
+            mContext = context;
+            mCallbacks = callbacks;
+        }
+
+        @Override
+        public void run() {
+            SharedPreferences prefs = mContext.getSharedPreferences(HeadlessTask.class.getName(), Context.MODE_PRIVATE);
+
+            // There is weirdness with the class of these callbacks (Integer vs Long) between assembleDebug vs assembleRelease.
+            Object cb1 = mCallbacks.get(0);
+            Object cb2 = mCallbacks.get(1);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            if (cb1.getClass() == Long.class) {
+                editor.putLong(KEY_REGISTRATION_CALLBACK_ID, (Long) cb1);
+            } else if (cb1.getClass() == Integer.class) {
+                editor.putLong(KEY_REGISTRATION_CALLBACK_ID, ((Integer) cb1).longValue());
+            }
+
+            if (cb2.getClass() == Long.class) {
+                editor.putLong(KEY_CLIENT_CALLBACK_ID, (Long) cb2);
+            } else if (cb2.getClass() == Integer.class) {
+                editor.putLong(KEY_CLIENT_CALLBACK_ID, ((Integer) cb2).longValue());
+            }
+            editor.apply();
+
+            sRegistrationCallbackId = prefs.getLong(KEY_REGISTRATION_CALLBACK_ID, -1);
+            sClientCallbackId = prefs.getLong(KEY_CLIENT_CALLBACK_ID, -1);
+        }
     }
 
     class TaskRunner implements Runnable {
@@ -206,14 +240,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler {
                 return;
             }
 
-            BackgroundGeolocation.getUiHandler().post(new Runnable() {
-                @Override public void run() {
-                    if (mBackgroundFlutterView == null) {
-                        initFlutterView(mEvent.getContext());
-                    }
-                    dispatch();
-                }
-            });
+            BackgroundGeolocation.getUiHandler().post(HeadlessTask.this);
         }
     }
 }

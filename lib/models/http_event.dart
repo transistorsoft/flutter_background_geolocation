@@ -45,6 +45,8 @@ part of flt_background_geolocation;
 /// - [Config.maxDaysToPersist] elapses and the location is destroyed.
 /// - [Config.maxRecordsToPersist] destroys oldest record in favor of latest.
 ///
+/// ----------------------------------------------------------------------
+///
 /// ## The HTTP Service
 ///
 /// The SDK's HTTP service operates by selecting records from the database, locking them to prevent duplicate requests then uploading to your server.
@@ -53,6 +55,8 @@ part of flt_background_geolocation;
 /// - If your server returns an error or doesn't respond, the HTTP Service will immediately **halt**.
 /// - Configuring [Config.batchSync] __`true`__ instructs the HTTP Service to select *all* records in the database and upload them to your server in a single HTTP request.
 /// - Use [Config.maxBatchSize] to limit the number of records selected for each [Config.batchSync] request.  The HTTP service will execute *synchronous* HTTP *batch* requests until the database is empty.
+///
+/// ----------------------------------------------------------------------
 ///
 /// ## HTTP Failures
 ///
@@ -72,9 +76,13 @@ part of flt_background_geolocation;
 /// });
 /// ```
 ///
+/// ----------------------------------------------------------------------
+///
 /// ## Receiving the HTTP Response.
 ///
 /// You can capture the HTTP response from your server by listening to the [BackgroundGeolocation.onHttp] event.
+///
+/// ----------------------------------------------------------------------
 ///
 /// ## [Config.autoSync]
 ///
@@ -94,15 +102,21 @@ part of flt_background_geolocation;
 ///
 /// The SDK's HTTP Service can be summoned into action at __any time__ via the method [BackgroundGeolocation.sync].
 ///
+/// ----------------------------------------------------------------------
+///
 /// ## [Config.params], [Config.headers] and [Config.extras]
 ///
 /// - The SDK's HTTP Service appends configured [Config.params] to root of the `JSON` data of each HTTP request.
 /// - [Config.headers] are appended to each HTTP Request.
 /// - [Config.extras] are appended to each recorded location and persisted to the database record.
 ///
+/// ----------------------------------------------------------------------
+///
 /// ## Custom `JSON` Schema:  [Config.locationTemplate] and [Config.geofenceTemplate]
 ///
 /// The default HTTP `JSON` schema for both [Location] and [Geofence] can be overridden by the configuration options [Config.locationTemplate] and [Config.geofenceTemplate], allowing you to create any schema you wish.
+///
+/// ----------------------------------------------------------------------
 ///
 /// ## Disabling HTTP requests on Cellular connections
 ///
@@ -114,6 +128,14 @@ part of flt_background_geolocation;
 ///   disableAutoSyncOnCellular: true
 /// ));
 /// ```
+///
+/// ----------------------------------------------------------------------
+///
+/// ## Strong Encryption
+///
+/// The JSON payload in HTTP requests can be encrypted.  See [[Config.encrypt]].
+///
+/// ----------------------------------------------------------------------
 ///
 /// ## HTTP Logging
 ///
@@ -143,6 +165,84 @@ part of flt_background_geolocation;
 /// |4| `🔵HTTP POST`           | SDK's HTTP service attempts an HTTP request to your configured `url`. |
 /// |5| `🔵Response`            | Response from your server.                                            |
 /// |6| `✅DESTROY|UNLOCK`      | After your server returns a __`20x`__ response, the SDK deletes that record from the database.  Otherwise, the SDK will __`UNLOCK`__ that record and try again in the future. |
+///
+/// ----------------------------------------------------------------------
+///
+/// ## Controlling the SDK with HTTP Responses (*RPC*)
+///
+/// The SDK has a *"Remote Procedure Call" (RPC)* mechanism, allowing you to invoke commands upon the SDK's API by returing a JSON response from the server containing the key `"background_geolocation": [...]`.
+///
+/// Within the returned `[...]`, you may return one or more commands to invoke upon the SDK.  Each command takes the form of an `[]`, with a required first element `String command`, along with an optional
+/// second element `Argument:string|boolean|number|Object` depending upon the context of the `command`.
+///
+/// ```dart
+/// {
+///   "background_geolocation": [
+///     ["command1", argument:string|boolean|number|Object],
+///     ["command2"]
+///     .
+///     .
+///     .
+///   ]
+/// }
+/// ```
+///
+/// The SDK will run each of these commands synchronously upon itself.
+///
+/// ### Simple Example: `#stop`
+///
+/// Your server could return a response telling the SDK to [[BackgroundGeolocation.stop]]:
+///
+/// ```json
+/// {
+///   "background_geolocation": [
+///     ["stop"]
+///   ]
+/// }
+/// ```
+///
+/// When returning just a single command, you can optionally omit the root `[ ]`:
+///
+/// ```json
+/// {
+///   "background_geolocation": ["stop"]
+/// }
+/// ```
+///
+/// ### Arguments
+///
+/// The 2nd param to each action is optional but depends upon the context of the command.  For example, `#changePace` requires a `boolean` argument:
+///
+/// ```json
+/// {
+///   "background_geolocation": [
+///     ["changePace", true]
+///   ]
+/// }
+/// ```
+///
+/// ### Object Arguments
+///
+/// Some commands receive an `{ }` argument, like `#setConfig`:
+///
+/// ```json
+/// {
+///   "background_geolocation": ["setConfig", {"distanceFilter": 0, "locationUpdateInterval": 1000}]
+/// }
+/// ```
+///
+/// ### Multiple Actions
+///
+/// You could tell the plugin to both `#start` and `#changePace`:
+///
+/// ```json
+/// {
+///   "background_geolocation": [
+///     ["start"],
+///     ["changePace", true]
+///   ]
+/// }
+/// ```
 ///
 class HttpEvent {
   /// `true` if the HTTP response was successful (`200`, `201`, `204`).
