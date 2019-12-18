@@ -1,11 +1,11 @@
 PODS:
-  - background_fetch (0.1.1):
+  - background_fetch (0.4.0):
     - Flutter
   - CocoaLumberjack (3.6.0):
     - CocoaLumberjack/Core (= 3.6.0)
   - CocoaLumberjack/Core (3.6.0)
   - Flutter (1.0.0)
-  - flutter_background_geolocation (1.4.5):
+  - flutter_background_geolocation (1.5.0):
     - CocoaLumberjack (~> 3.6.0)
     - Flutter
   - FMDB (2.7.5):
@@ -24,6 +24,10 @@ PODS:
     - FMDB (~> 2.7.2)
   - url_launcher (0.0.1):
     - Flutter
+  - url_launcher_macos (0.0.1):
+    - Flutter
+  - url_launcher_web (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
@@ -35,6 +39,8 @@ DEPENDENCIES:
   - shared_preferences_web (from `.symlinks/plugins/shared_preferences_web/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - url_launcher_macos (from `.symlinks/plugins/url_launcher_macos/ios`)
+  - url_launcher_web (from `.symlinks/plugins/url_launcher_web/ios`)
 
 SPEC REPOS:
   trunk:
@@ -60,12 +66,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
+  url_launcher_macos:
+    :path: ".symlinks/plugins/url_launcher_macos/ios"
+  url_launcher_web:
+    :path: ".symlinks/plugins/url_launcher_web/ios"
 
 SPEC CHECKSUMS:
-  background_fetch: 385552e57d3bde2c7a3abd6b1edc76b87823b6c4
+  background_fetch: 81de747c63e1ec3558e222af758c1b5fa2662c70
   CocoaLumberjack: 78b0c238666f4f58db069738ec176f4519557516
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_background_geolocation: 8bd99ba76abb7c29012bc7579a3d32613380778e
+  flutter_background_geolocation: 7d14cf94f187e11b2cb1754134dbaf7638d949c3
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
   shared_preferences: 430726339841afefe5142b9c1f50cb6bd7793e01
@@ -73,6 +83,8 @@ SPEC CHECKSUMS:
   shared_preferences_web: 141cce0c3ed1a1c5bf2a0e44f52d31eeb66e5ea9
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
   url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
+  url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
+  url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
 
 PODFILE CHECKSUM: 412af0b770baf0c510169b7be52baea1e495427c
 

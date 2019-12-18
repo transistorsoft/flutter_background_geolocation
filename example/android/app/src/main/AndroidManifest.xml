@@ -19,10 +19,9 @@
         android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
+            android:name="io.flutter.embedding.android.FlutterActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
             <!-- This keeps the window background of the activity showing
@@ -39,6 +38,10 @@
         </activity>
         <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="025736af0c3b480ecc1a6fc8aea17e73cc012049ed117472072b76e5e170953d" />
         <meta-data android:name="com.transistorsoft.locationmanager.ENCRYPTION_PASSWORD" android:value="transistorsoft" />
+
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
 
     </application>
 </manifest>
