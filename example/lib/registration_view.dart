@@ -34,8 +34,8 @@ class _RegistrationViewState extends State<RegistrationView> {
   void _initPlatformState() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String orgname = await prefs.getString('orgname');
-    String username = await prefs.getString('username');
+    String orgname = prefs.getString('orgname');
+    String username = prefs.getString('username');
     setState(() {
       _orgname = (orgname != null) ? orgname : '';
       _username = (username != null) ? username : '';
@@ -90,8 +90,6 @@ class _RegistrationViewState extends State<RegistrationView> {
           body: new Text('Loading...')
       );
     }
-
-    final re = new RegExp(r"\s+\b|\b\s");
 
     _orgnameController.value = TextEditingValue(text: _orgname, selection: TextSelection.collapsed(offset: _orgname.length));
     _usernameController.value = TextEditingValue(text: _username, selection: TextSelection.collapsed(offset: _username.length));

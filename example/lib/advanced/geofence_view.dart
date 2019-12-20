@@ -5,7 +5,7 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
 
 class GeofenceView extends StatefulWidget {
-  LatLng center;
+  final LatLng center;
   GeofenceView(this.center);
   @override
   State createState() => _GeofenceViewState(this.center);

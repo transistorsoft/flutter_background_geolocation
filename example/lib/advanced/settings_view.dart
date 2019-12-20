@@ -367,9 +367,9 @@ class _SettingsViewState extends State<SettingsView> {
     return Text(label, style: TextStyle(color: Colors.blue, fontSize: 15.0));
   }
 
-  /**
-   * Build geofence test panel for loading a series of geofences along iOS "Freeway Drive" route.
-   */
+  ///
+  /// Build geofence test panel for loading a series of geofences along iOS "Freeway Drive" route.
+  ///
   Widget _buildGeofenceTestPanel() {
 
     List<DropdownMenuItem<String>> radiusItems = new List();

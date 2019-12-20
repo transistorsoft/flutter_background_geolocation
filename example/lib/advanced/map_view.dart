@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 import 'package:flutter_map/flutter_map.dart';
@@ -282,6 +281,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FlutterMap(
       mapController: _mapController,
       options: _mapOptions,
