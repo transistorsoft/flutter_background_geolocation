@@ -131,8 +131,6 @@ class Test {
     // Request a JWT from tracker.transistorsoft.com
     bg.TransistorAuthorizationToken token = await bg.TransistorAuthorizationToken.findOrCreate(orgname, username, ENV.TRACKER_HOST);
 
-    await bg.BackgroundGeolocation.setOdometer(0.0);
-
     await bg.BackgroundGeolocation.reset(bg.Config(
         debug: true,
         transistorAuthorizationToken: token,
@@ -155,6 +153,12 @@ class Test {
         enableHeadless: true,
         heartbeatInterval: -1
     ));
+
+    try {
+      await bg.BackgroundGeolocation.setOdometer(0.0);
+    } catch(error) {
+      print("[setOdometer] ERROR: $error");
+    }
   }
 
   static List<bg.Geofence> getFreewayDriveGeofences(double radius, bool notifyOnEntry, bool notifyOnExit, bool notifyOnDwell, int loiteringDelay) {

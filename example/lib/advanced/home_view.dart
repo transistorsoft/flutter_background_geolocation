@@ -210,7 +210,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   }
 
   // Manually fetch the current position.
-  void _onClickGetCurrentPosition() {
+  void _onClickGetCurrentPosition() async {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
 
     bg.BackgroundGeolocation.getCurrentPosition(
@@ -301,7 +301,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   }
 
   void _onGeofence(bg.GeofenceEvent event) async {
-
     print('[${bg.Event.GEOFENCE}] - $event');
 
     bg.BackgroundGeolocation.startBackgroundTask().then((int taskId) async {

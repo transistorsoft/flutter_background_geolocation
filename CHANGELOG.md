@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 1.6.0 - 2020-01-14
+- [Changed] iOS: Prefix FMDB method-names `databasePool` -> `ts_databasePool` after reports of apps being falsely rejected by Apple for "private API usage".
+- [Fixed] Android: Ensure that `location.hasSpeed()` before attempting to use it for distanceFilter elasticity calculations.  There was a report of a Device returning `Nan` for speed.
+- [Fixed] Android:  Do not throttle http requests after http connect failure when configured with `maxRecordsToPersist`.
+- [Fixed] Android: Respect `disableLocationAuthorizationAlert` for all cases, including `getCurrentPosition`.
+- [Changed] Android: Modify behaviour of geofences-only mode to not periodically request location-updates.  Will use a stationary-geofence of radius geofenceProximityRadius/2 as a trigger to re-evaluate geofences in proximity.
+- [Changed] Authorization refreshUrl will post as application/x-www-form-urlencoded instead of form/multipart
+- [Changed] iOS geofencing mode will not engage Significant Location Changes API when total geofence count <= 18 in order to prevent new iOS 13 "Location summary" popup from showing frequent location access.
+- [Fixed] Android:  Add hack for older devices to fix "GPS Week Rollover" bug where incorrect timestamp is recorded from GPS (typically where year is older by 20 years). 
+- [Fixed] When determining geofences within `geofenceProximityRadius`, add the `location.accuracy` as a buffer against low-accuracy locations.
+- [Changed] Increase default `geofenceProximityRadius: 2000`.
+
 ## 1.5.0 - 2019-12-18
 - [Changed] Upgrade to new Flutter "V2" Plugin API.  See [Upgrading pre 1.12 Android Projects](https://github.com/flutter/flutter/wiki/Upgrading-pre-1.12-Android-projects).  No extra steps required for "Android Headless Mode", it's all automatic now.
 - [Changed] Modified Android Foreground Service intent to not restart activity on click.
