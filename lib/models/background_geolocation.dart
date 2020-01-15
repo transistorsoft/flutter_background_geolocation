@@ -571,6 +571,10 @@ class BackgroundGeolocation {
     return await _methodChannel.invokeMethod('destroyLocations');
   }
 
+  static Future<bool> destroyLocation(String uuid) async {
+    return await _methodChannel.invokeMethod('destroyLocation', uuid);
+  }
+
   /// TODO
   static Future<Location> insertLocation(Map<String, dynamic> params) async {
     return await _methodChannel.invokeMethod('insertLocation', params);

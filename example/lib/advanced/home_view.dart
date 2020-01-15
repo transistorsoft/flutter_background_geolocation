@@ -91,7 +91,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     bg.TransistorAuthorizationToken token = await bg.TransistorAuthorizationToken.findOrCreate(orgname, username, ENV.TRACKER_HOST);
 
-
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
         // Convenience option to automatically configure the SDK to post to Transistor Demo server.
