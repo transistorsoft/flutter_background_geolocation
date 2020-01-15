@@ -106,7 +106,8 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
         ),
         encrypt: false,
         stopOnTerminate: false,
-        startOnBoot: true
+        startOnBoot: true,
+        enableHeadless: true
     )).then((bg.State state) {
       print("[ready] ${state.toMap()}");
       setState(() {

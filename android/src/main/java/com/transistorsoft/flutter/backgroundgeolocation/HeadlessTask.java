@@ -148,6 +148,8 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
             result = event.getPowerSaveChangeEvent().isPowerSaveMode();
         } else if (name.equals(BackgroundGeolocation.EVENT_ENABLEDCHANGE)) {
             result = event.getEnabledChangeEvent();
+        } else if (name.equals(BackgroundGeolocation.EVENT_AUTHORIZATION)) {
+            result = event.getAuthorizationEvent().toJson();
         } else {
             TSLog.logger.warn(TSLog.warn("Unknown Headless Event: " + name));
         }

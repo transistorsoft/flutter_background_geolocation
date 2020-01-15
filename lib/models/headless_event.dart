@@ -147,6 +147,9 @@ class HeadlessEvent {
         case Event.POWERSAVECHANGE:
           event = params;
           break;
+        case Event.AUTHORIZATION:
+          event = new AuthorizationEvent(params);
+          break;
       }
     } catch (e, stacktrace) {
       print('[HeadlessEvent] ‼️ ERROR DECODING EVENT $name: $e');

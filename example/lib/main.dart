@@ -9,6 +9,7 @@ import 'advanced/app.dart';
 import 'hello_world/app.dart';
 
 import 'config/transistor_auth.dart';
+import 'config/env.dart';
 
 /// Receive events from BackgroundGeolocation in Headless state.
 void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
@@ -62,6 +63,12 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
       break;
     case bg.Event.ENABLEDCHANGE:
       bool enabled = headlessEvent.event;
+      break;
+    case bg.Event.AUTHORIZATION:
+      bg.AuthorizationEvent event = headlessEvent.event;
+      bg.BackgroundGeolocation.setConfig(bg.Config(
+        url: "${ENV.TRACKER_HOST}/api/locations"
+      ));
       break;
   }
 }
