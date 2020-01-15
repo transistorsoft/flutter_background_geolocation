@@ -106,7 +106,8 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
         ),
         encrypt: false,
         stopOnTerminate: false,
-        startOnBoot: true
+        startOnBoot: true,
+        enableHeadless: true
     )).then((bg.State state) {
       print("[ready] ${state.toMap()}");
       setState(() {
@@ -211,8 +212,9 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
 
   void _onAuthorization(bg.AuthorizationEvent event) async {
     print('[${bg.Event.AUTHORIZATION}] = $event');
+
     bg.BackgroundGeolocation.setConfig(bg.Config(
-      url: "${ENV.TRACKER_HOST}/v2/locations"
+      url: ENV.TRACKER_HOST + '/api/locations'
     ));
   }
 

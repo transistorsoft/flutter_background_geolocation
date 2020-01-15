@@ -91,7 +91,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     bg.TransistorAuthorizationToken token = await bg.TransistorAuthorizationToken.findOrCreate(orgname, username, ENV.TRACKER_HOST);
 
-
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
         // Convenience option to automatically configure the SDK to post to Transistor Demo server.
@@ -210,7 +209,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   }
 
   // Manually fetch the current position.
-  void _onClickGetCurrentPosition() {
+  void _onClickGetCurrentPosition() async {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
 
     bg.BackgroundGeolocation.getCurrentPosition(
@@ -301,7 +300,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   }
 
   void _onGeofence(bg.GeofenceEvent event) async {
-
     print('[${bg.Event.GEOFENCE}] - $event');
 
     bg.BackgroundGeolocation.startBackgroundTask().then((int taskId) async {

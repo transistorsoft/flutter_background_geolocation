@@ -260,6 +260,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             getCount(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_DESTROY_LOCATIONS)) {
             destroyLocations(result);
+        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_DESTROY_LOCATION)) {
+            destroyLocation((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_SYNC)) {
             sync(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_ODOMETER)) {
@@ -572,6 +574,18 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         BackgroundGeolocation.getInstance(mContext).destroyLocations(new TSCallback() {
             @Override public void onSuccess() { result.success(true); }
             @Override public void onFailure(String error) { result.error(error, null, null); }
+        });
+    }
+
+    public void destroyLocation(final String uuid, final MethodChannel.Result result) {
+        BackgroundGeolocation.getInstance(mContext).destroyLocation(uuid, new TSCallback() {
+            @Override public void onSuccess() {
+                result.success(true);
+            }
+
+            @Override public void onFailure(String error) {
+                result.error(error, null, null);
+            }
         });
     }
 
