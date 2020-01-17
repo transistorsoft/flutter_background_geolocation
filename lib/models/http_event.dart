@@ -189,6 +189,22 @@ part of flt_background_geolocation;
 ///
 /// The SDK will run each of these commands synchronously upon itself.
 ///
+/// ### Supported RPC Commands
+///
+/// | Command               | Arguments                   | Description                               |
+/// |-----------------------|-----------------------------|-------------------------------------------|
+/// | `start`               | None. | `BackgroundGeolocation.start()` |
+/// | `stop`                | None. | `BackgroundGeolocation.stop()` |
+/// | `startGeofences`      | None. | `BackgroundGeolocation.startGeofences()` |
+/// | `changePace`          | `Boolean` | `BackgroundGeolocation.changePace(argument)` |
+/// | `setConfig`           | `{Config}` | `BackgroundGeolocation.setConfig(argument)` |
+/// | `addGeofence`         | `{Geofence}` | `BackgroundGeolocation.addGeofence(argument)` |
+/// | `addGeofences`        | `[{Geofence}, ...]` | `BackgroundGeolocation.addGeofences(argument)` |
+/// | `removeGeofence`      | `identifier:String` | `BackgroundGeolocation.removeGeofence(argument)` |
+/// | `removeGeofences`     | None or `[identifier:String,...]` | `BackgroundGeolocation.removeGeofences(argument)` If provided no argument, remove all; otherwise remove provided list of identifiers |
+/// | `uploadLog`           | `url:String` | The url to upload log to. |
+/// | `destroyLog`          | None | `BackgroundGeolocation.destroyLog` |
+///
 /// ### Simple Example: `#stop`
 ///
 /// Your server could return a response telling the SDK to [[BackgroundGeolocation.stop]]:
