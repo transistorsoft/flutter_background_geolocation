@@ -652,6 +652,7 @@ const PLUGIN_SETTINGS = {
     {'name': 'forceReloadOnLocationChange', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     {'name': 'forceReloadOnGeofence', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     {'name': 'forceReloadOnHeartbeat', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
-    {'name': 'notificationPriority', 'group': 'application', 'dataType': 'string', 'inputType': 'select', 'values': [0, 1, -1, 2, -2], 'labels': ['DEFAULT', 'HIGH', 'LOW', 'MAX', 'MIN'], 'defaultValue': 'DEFAULT'}
+    {'name': 'notificationPriority', 'group': 'application', 'dataType': 'string', 'inputType': 'select', 'values': [0, 1, -1, 2, -2], 'labels': ['DEFAULT', 'HIGH', 'LOW', 'MAX', 'MIN'], 'defaultValue': 'DEFAULT'},
+    {'name': 'disableLocationAuthorizationAlert', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
   ]
 };

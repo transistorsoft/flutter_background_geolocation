@@ -1894,12 +1894,12 @@ class Config {
   ///   TransistorAuthorizationToken.findOrCreate('my-company-name', 'my-username');
   ///
   /// BackgroundGeolocation.ready(Config(
-  ///   url: "$url/v2/locations",
+  ///   url: "$url/api/locations",
   ///   authorization: Authorization(
   ///     strategy: "JWT",
   ///     accessToken: token.accessToken,
   ///     refreshToken: token.refreshToken,
-  ///     refreshUrl: "$url/v2/refresh_token",
+  ///     refreshUrl: "$url/api/refresh_token",
   ///     refreshPayload: {
   ///       "refresh_token": "{refreshToken}"
   ///     },

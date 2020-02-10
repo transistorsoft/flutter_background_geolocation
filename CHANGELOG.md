@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.7.0 - 2020-02-10
+- [Changed] Reference background_fetch dependency @ 0.5.0 with new iOS 13 BGTaskScheduler API.
+
 ## 1.6.1 - 2020-01-17
 - [Added] Implement four new RPC commands `addGeofence`, `removeGeofence`, `addGeofences`, `removeGeofences`.  Document available RPC commands in "HttpGuide".
 

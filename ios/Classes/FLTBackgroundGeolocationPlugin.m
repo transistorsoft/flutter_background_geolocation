@@ -1,5 +1,6 @@
 #import "FLTBackgroundGeolocationPlugin.h"
 
+
 static NSString *const PLUGIN_PATH = @"com.transistorsoft/flutter_background_geolocation";
 static NSString *const METHOD_CHANNEL_NAME      = @"methods";
 
@@ -53,11 +54,10 @@ static NSString *const ACTION_GET_DEVICE_INFO = @"getDeviceInfo";
 static NSString *const ACTION_GET_TRANSISTOR_TOKEN = @"getTransistorToken";
 static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToken";
 
-#import <TSBackgroundFetch/TSBackgroundFetch.h>
-
 @implementation FLTBackgroundGeolocationPlugin {
     BOOL ready;
 }
+
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
 

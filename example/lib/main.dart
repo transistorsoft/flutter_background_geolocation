@@ -74,7 +74,7 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
 }
 
 /// Receive events from BackgroundFetch in Headless state.
-void backgroundFetchHeadlessTask() async {
+void backgroundFetchHeadlessTask(String taskId) async {
   // Get current-position from BackgroundGeolocation in headless mode.
   //bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
   print('[BackgroundFetch] HeadlessTask');
@@ -87,7 +87,7 @@ void backgroundFetchHeadlessTask() async {
   prefs.setInt("fetch-count", ++count);
   print('[BackgroundFetch] count: $count');
 
-  BackgroundFetch.finish();
+  BackgroundFetch.finish(taskId);
 }
 
 void main() {
@@ -104,12 +104,8 @@ void main() {
     // Sanitize old-style registration system that only required username.
     // If we find a valid username but null orgname, reverse them.
     String orgname = prefs.getString("orgname");
-
-
-
-
-
     String username = prefs.getString("username");
+
     if (orgname == null && username != null) {
       prefs.setString("orgname", username);
       prefs.remove("username");
