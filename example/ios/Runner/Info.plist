@@ -4,6 +4,11 @@
 <dict>
 	<key>BACKGROUND_GEOLOCATION_ENCRYPTION_PASSWORD</key>
 	<string>transistorsoft</string>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>foo</string>
+		<string>com.transistorsoft.fetch</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -44,6 +49,7 @@
 		<string>audio</string>
 		<string>fetch</string>
 		<string>location</string>
+		<string>processing</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

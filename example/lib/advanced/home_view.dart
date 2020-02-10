@@ -26,7 +26,7 @@ class HomeView extends StatefulWidget {
   State createState() => HomeViewState();
 }
 
-class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeView> {
+class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeView>, WidgetsBindingObserver {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   TabController _tabController;
 
@@ -44,6 +44,9 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   @override
   void initState() {
     super.initState();
+
+    WidgetsBinding.instance.addObserver(this);
+
     _isMoving = false;
     _enabled = false;
     _motionActivity = 'UNKNOWN';
@@ -58,6 +61,11 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     _tabController.addListener(_handleTabChange);
 
     initPlatformState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("****************** state change: $state");
   }
 
   void initPlatformState() async {
@@ -147,8 +155,8 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         requiresBatteryNotLow: false,
         requiresCharging: false,
         requiresDeviceIdle: false,
-        requiredNetworkType: BackgroundFetchConfig.NETWORK_TYPE_NONE
-    ), () async {
+        requiredNetworkType: NetworkType.NONE
+    ), (String taskId) async {
       print('[BackgroundFetch] received event');
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -159,8 +167,18 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       prefs.setInt("fetch-count", ++count);
       print('[BackgroundFetch] count: $count');
 
-      BackgroundFetch.finish();
+      BackgroundFetch.finish(taskId);
     });
+
+    BackgroundFetch.scheduleTask(TaskConfig(
+        taskId: "foo",
+        delay: 5000,
+        periodic: false,
+        forceAlarmManager: true,
+        stopOnTerminate: false,
+        enableHeadless: true
+    ));
+
   }
 
   void _onClickEnable(enabled) async {
