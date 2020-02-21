@@ -157,7 +157,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         requiresDeviceIdle: false,
         requiredNetworkType: NetworkType.NONE
     ), (String taskId) async {
-      print('[BackgroundFetch] received event');
+      print("[BackgroundFetch] received event $taskId");
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       int count = 0;
@@ -167,12 +167,24 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       prefs.setInt("fetch-count", ++count);
       print('[BackgroundFetch] count: $count');
 
+      if (taskId == 'flutter_background_fetch') {
+        // Test scheduling a custom-task in fetch event.
+        BackgroundFetch.scheduleTask(TaskConfig(
+            taskId: "com.transistorsoft.customtask",
+            delay: 5000,
+            periodic: false,
+            forceAlarmManager: true,
+            stopOnTerminate: false,
+            enableHeadless: true
+        ));
+      }
       BackgroundFetch.finish(taskId);
     });
 
+    // Test scheduling a custom-task.
     BackgroundFetch.scheduleTask(TaskConfig(
-        taskId: "foo",
-        delay: 5000,
+        taskId: "com.transistorsoft.customtask",
+        delay: 10000,
         periodic: false,
         forceAlarmManager: true,
         stopOnTerminate: false,

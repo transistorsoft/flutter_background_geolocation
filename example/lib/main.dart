@@ -77,7 +77,7 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
 void backgroundFetchHeadlessTask(String taskId) async {
   // Get current-position from BackgroundGeolocation in headless mode.
   //bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
-  print('[BackgroundFetch] HeadlessTask');
+  print("[BackgroundFetch] HeadlessTask: $taskId");
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int count = 0;
