@@ -1,5 +1,5 @@
 PODS:
-  - background_fetch (0.5.0):
+  - background_fetch (0.5.3):
     - Flutter
   - CocoaLumberjack (3.6.0):
     - CocoaLumberjack/Core (= 3.6.0)
@@ -72,7 +72,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_web/ios"
 
 SPEC CHECKSUMS:
-  background_fetch: 851da457393a0b284f8bf20c1d5a994c5207dbf4
+  background_fetch: 08db9ba04bf0eb566fc5d29cf48890fb48108b55
   CocoaLumberjack: 78b0c238666f4f58db069738ec176f4519557516
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_background_geolocation: 5046073371cc210a1d128cfbc560533a51130293

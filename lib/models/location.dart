@@ -157,6 +157,7 @@ class Location {
 /// | 1     | Location permission denied  |
 /// | 2     | Network error               |
 /// | 408   | Location timeout            |
+/// | 499   | Location request cancelled  |
 ///
 class LocationError {
   int code;

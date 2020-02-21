@@ -40,6 +40,8 @@ Ensure your app is [migrated to use AndroidX](https://flutter.dev/docs/developme
 org.gradle.jvmargs=-Xmx1536M
 +android.enableJetifier=true
 +android.useAndroidX=true
++android.enableR8=false
+
 ```
 
 ## `android/build.gradle`
@@ -108,6 +110,7 @@ android {
             .
             .
             minifyEnabled true
++           shrinkResources false
             // background_geolocation requires custom Proguard Rules with minifyEnabled
 +           proguardFiles "${background_geolocation.projectDir}/proguard-rules.pro"
         }

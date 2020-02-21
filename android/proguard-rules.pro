@@ -4,9 +4,6 @@
 -dontwarn com.transistorsoft.**
 
 # BackgroundGeolocation (EventBus)
--keepclassmembers class * extends de.greenrobot.event.util.ThrowableFailureEvent {
-    <init>(java.lang.Throwable);
-}
 -keepattributes *Annotation*
 -keepclassmembers class ** {
     @org.greenrobot.eventbus.Subscribe <methods>;
