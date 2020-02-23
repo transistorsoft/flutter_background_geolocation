@@ -31,7 +31,7 @@ PODS:
 
 DEPENDENCIES:
   - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `Flutter`)
   - flutter_background_geolocation (from `.symlinks/plugins/flutter_background_geolocation/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
@@ -51,7 +51,7 @@ EXTERNAL SOURCES:
   background_fetch:
     :path: ".symlinks/plugins/background_fetch/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: Flutter
   flutter_background_geolocation:
     :path: ".symlinks/plugins/flutter_background_geolocation/ios"
   path_provider:
@@ -86,6 +86,6 @@ SPEC CHECKSUMS:
   url_launcher_macos: fd7894421cd39320dce5f292fc99ea9270b2a313
   url_launcher_web: e5527357f037c87560776e36436bf2b0288b965c
 
-PODFILE CHECKSUM: 412af0b770baf0c510169b7be52baea1e495427c
+PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
 
 COCOAPODS: 1.8.4
