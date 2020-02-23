@@ -4,6 +4,7 @@
 
 - [Fixed] iOS bug related to significant-location-changes (SLC) API.  In a previous version, the plugin's geofence manager would stop monitoring SLC if the number of added geofences was < the maximum (20) (in order to not show the new iOS 13 dialog reporting background location usage when infinite-geofencing is not required).  The background-geolocation SDK uses several `CLLocationManager` instances and its `GeofenceManager` maintains its own instance.  However, it turns out that when *any* `CLLocationManager` instance stops monitoring the SLC API, then **ALL** instances stop monitoring SLC, which is highly unexpected and undocumented.  As a result, the plugin would lose its safety mechanism should the stationary geofence fail to trigger and iOS tracking could fail to start in some circumstances.
 - [Fixed] `synchronize` methods in `TSLocationManager` to address Android NPE related to `buildTSLocation`.
+- [Fixed] iOS:  Bug in `accessToken` RegExp in Authorization token-refresh handler.
 
 ### :warning: Breaking Change:  `background_fetch`:
 - [Changed] Reference background_fetch dependency @ 0.5.3 with new iOS 13 BGTaskScheduler API.  See [Updated iOS Setup](https://github.com/transistorsoft/flutter_background_geolocation/blob/master/help/INSTALL-IOS.md#configure-background_fetch).
