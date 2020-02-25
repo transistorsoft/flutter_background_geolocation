@@ -56,6 +56,8 @@ class State extends Config {
                 _ensureBool(data['useSignificantChangesOnly']),
             disableLocationAuthorizationAlert:
                 _ensureBool(data['disableLocationAuthorizationAlert']),
+            showsBackgroundLocationIndicator:
+                _ensureBool(data['showsBackgroundLocationIndicator']),
             enableTimestampMeta: _ensureBool(data['enableTimestampMeta']),
             // Android Options
             geofenceModeHighAccuracy: data['geofenceModeHighAccuracy'],

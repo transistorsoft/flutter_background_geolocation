@@ -65,7 +65,12 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    print("****************** state change: $state");
+    print("[home_view didChangeAppLifecycleState] : $state");
+    if (state == AppLifecycleState.paused) {
+
+    } else if (state == AppLifecycleState.resumed) {
+
+    }
   }
 
   void initPlatformState() async {
