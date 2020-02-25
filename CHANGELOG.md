@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## Unreleased
+- [Added] iOS `Config.showsBackgroundLocationIndicator`, a Boolean indicating whether the status bar changes its appearance when an app uses location services in the background.
+
 ## 1.7.0 - 2020-02-21
 
 - [Fixed] iOS bug related to significant-location-changes (SLC) API.  In a previous version, the plugin's geofence manager would stop monitoring SLC if the number of added geofences was < the maximum (20) (in order to not show the new iOS 13 dialog reporting background location usage when infinite-geofencing is not required).  The background-geolocation SDK uses several `CLLocationManager` instances and its `GeofenceManager` maintains its own instance.  However, it turns out that when *any* `CLLocationManager` instance stops monitoring the SLC API, then **ALL** instances stop monitoring SLC, which is highly unexpected and undocumented.  As a result, the plugin would lose its safety mechanism should the stationary geofence fail to trigger and iOS tracking could fail to start in some circumstances.

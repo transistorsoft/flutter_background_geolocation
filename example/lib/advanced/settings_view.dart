@@ -633,6 +633,7 @@ const PLUGIN_SETTINGS = {
     // Geolocation
     {'name': 'stationaryRadius', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 25, 50, 100, 500, 1000, 5000], 'defaultValue': 25 },
     {'name': 'activityType', 'group': 'geolocation', 'dataType': 'integer', 'inputType': 'select', 'values': [1, 2, 3, 4], 'labels': ['OTHER', 'AUTOMOTIVE_NAVIGATION', 'FITNESS', 'OTHER_NAVIGATION'], 'defaultValue': 'OTHER'},
+    {'name': 'showsBackgroundLocationIndicator', 'group': 'geolocation', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     // Application
     {'name': 'preventSuspend', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     // Activity Recognition

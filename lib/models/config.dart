@@ -1377,6 +1377,16 @@ class Config {
   ///
   bool disableLocationAuthorizationAlert;
 
+  /// [__iOS Only__] A Boolean indicating whether the status bar changes its appearance when an app uses location services in the background.
+  ///
+  /// The default value of this property is `false`. The background location usage indicator is a blue bar or a blue pill in the status bar on iOS; on watchOS the indicator is a small icon. Users can tap the indicator to return to your app.
+  ///
+  /// This property affects only apps that received `Always` authorization. When such an app moves to the background, the system uses this property to determine whether to change the status bar appearance to indicate that location services are in use. Set this value to true to maintain transparency with the user.
+  ///
+  /// For apps with When In Use authorization, the system changes the appearance of the status bar when the app uses location services in the background.
+  ///
+  bool showsBackgroundLocationIndicator;
+
   // Activity Recognition Options
 
   /// __`[iOS only]`__ Presumably, this affects iOS stop-detect algorithm.  Apple is vague about what exactly this option does.
@@ -1973,6 +1983,7 @@ class Config {
       this.pausesLocationUpdatesAutomatically,
       this.locationAuthorizationAlert,
       this.disableLocationAuthorizationAlert,
+      this.showsBackgroundLocationIndicator,
       // Activity Recognition Options
       this.activityType,
       this.stopDetectionDelay,
@@ -2118,6 +2129,9 @@ class Config {
     if (disableLocationAuthorizationAlert != null)
       config['disableLocationAuthorizationAlert'] =
           disableLocationAuthorizationAlert;
+    if (showsBackgroundLocationIndicator != null)
+      config['showsBackgroundLocationIndicator'] =
+          showsBackgroundLocationIndicator;
     // Activity Recognition Options
     if (activityType != null) config['activityType'] = activityType;
     if (stopDetectionDelay != null)
@@ -2141,6 +2155,7 @@ class Config {
       config['allowIdenticalLocations'] = allowIdenticalLocations;
     if (enableTimestampMeta != null)
       config['enableTimestampMeta'] = enableTimestampMeta;
+
     if (speedJumpFilter != null) config['speedJumpFilter'] = speedJumpFilter;
     // Activity Recognition Options
     if (triggerActivities != null)
