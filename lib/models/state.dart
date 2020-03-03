@@ -80,7 +80,7 @@ class State extends Config {
             extras: data['extras'].cast<String, dynamic>(),
             autoSync: _ensureBool(data['autoSync']),
             autoSyncThreshold: data['autoSyncThreshold'],
-            disableAutoSyncOnCellular: data['disableAutoSyncOnCellular'],
+            disableAutoSyncOnCellular: _ensureBool(data['disableAutoSyncOnCellular']),
             batchSync: _ensureBool(data['batchSync']),
             maxBatchSize: data['maxBatchSize'],
             locationTemplate: data['locationTemplate'],
@@ -89,7 +89,7 @@ class State extends Config {
             maxRecordsToPersist: data['maxRecordsToPersist'],
             locationsOrderDirection: data['locationsOrderDirection'],
             httpTimeout: data['httpTimeout'],
-            encrypt: data['encrypt'],
+            encrypt: _ensureBool(data['encrypt']),
             authorization: (data['authorization'] != null)
                 ? Authorization.fromMap(data['authorization'])
                 : null,
