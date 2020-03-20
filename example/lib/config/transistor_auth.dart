@@ -62,7 +62,7 @@ class TransistorAuth {
     if ((state.params != null) && (state.params['device'] != null)) {
       _migrateConfig();
     }
-    await bg.BackgroundGeolocation.removeListener(_onHttp);
+    bg.BackgroundGeolocation.removeListener(_onHttp);
     bg.BackgroundGeolocation.onHttp(_onHttp);
   }
 

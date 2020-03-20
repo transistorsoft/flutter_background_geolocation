@@ -22,7 +22,7 @@ class EventListState extends State<EventList> with AutomaticKeepAliveClientMixin
 
   @override
   Widget build(BuildContext context) {
-
+    super.build(context);
     // Fetch SharedEvents for events data.
     final events = SharedEvents.of(context);
 

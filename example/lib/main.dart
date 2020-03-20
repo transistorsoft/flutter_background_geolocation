@@ -36,36 +36,47 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
       break;
     case bg.Event.LOCATION:
       bg.Location location = headlessEvent.event;
+      print(location);
       break;
     case bg.Event.MOTIONCHANGE:
       bg.Location location = headlessEvent.event;
+      print(location);
       break;
     case bg.Event.GEOFENCE:
       bg.GeofenceEvent geofenceEvent = headlessEvent.event;
+      print(geofenceEvent);
       break;
     case bg.Event.GEOFENCESCHANGE:
       bg.GeofencesChangeEvent event = headlessEvent.event;
+      print(event);
       break;
     case bg.Event.SCHEDULE:
       bg.State state = headlessEvent.event;
+      print(state);
       break;
     case bg.Event.ACTIVITYCHANGE:
       bg.ActivityChangeEvent event = headlessEvent.event;
+      print(event);
       break;
     case bg.Event.HTTP:
       bg.HttpEvent response = headlessEvent.event;
+      print(response);
       break;
     case bg.Event.POWERSAVECHANGE:
       bool enabled = headlessEvent.event;
+      print(enabled);
       break;
     case bg.Event.CONNECTIVITYCHANGE:
       bg.ConnectivityChangeEvent event = headlessEvent.event;
+      print(event);
       break;
     case bg.Event.ENABLEDCHANGE:
       bool enabled = headlessEvent.event;
+      print(enabled);
       break;
     case bg.Event.AUTHORIZATION:
       bg.AuthorizationEvent event = headlessEvent.event;
+      print(event);
       bg.BackgroundGeolocation.setConfig(bg.Config(
         url: "${ENV.TRACKER_HOST}/api/locations"
       ));

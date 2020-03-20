@@ -16,7 +16,7 @@ class SharedEvents extends InheritedWidget {
   SharedEvents({this.events, child: Widget}):super(child: child);
 
   static SharedEvents of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(SharedEvents);
+    return context.dependOnInheritedWidgetOfExactType();
   }
 
   @override

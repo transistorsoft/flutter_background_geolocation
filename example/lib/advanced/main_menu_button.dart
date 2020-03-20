@@ -11,7 +11,12 @@ import 'actions.dart' as actions;
 import 'settings_view.dart';
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
 
-class MainMenuButton extends StatelessWidget {
+class MainMenuButton extends StatefulWidget {
+  @override
+  State createState() => MainMenuButtonState();
+}
+
+class MainMenuButtonState extends State<MainMenuButton> {
   BuildContext _context;
 
   void _onClickMenu() async {
@@ -21,7 +26,7 @@ class MainMenuButton extends StatelessWidget {
 
       // Simulate a long-running async task.
       new Timer(Duration(milliseconds: 250), () {
-        bg.BackgroundGeolocation.finish(taskId);
+        bg.BackgroundGeolocation.stopBackgroundTask(taskId);
       });
 
     });

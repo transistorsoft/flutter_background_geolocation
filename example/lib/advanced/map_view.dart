@@ -259,14 +259,6 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     );
   }
 
-  CircleMarker _buildLocationMarker(bg.Location location) {
-    return new CircleMarker(
-        point: LatLng(location.coords.latitude, location.coords.longitude),
-        color: Colors.indigo,
-        radius: 5.0
-    );
-  }
-
   void _onAddGeofence(LatLng latLng) {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("LONG_PRESS_ACTIVATE"));
 
