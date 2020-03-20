@@ -1,6 +1,8 @@
 # CHANGELOG
 
-## Unreleased
+## 1.7.1 - 2020-03-20
+- [Added] [Android] Add an boolean extra `TSLocationManager: true` to the launch Intent of the foreground-notification, allowing application developers to determine when their app was launched due to a click on the foreground-notification.
+- [Fixed] `Authorization` bug in refresh-url response-data recursive iterator.  Do not recurse into arrays in token-refresh response from server (`tokens` are not likely to be found there, anyway).
 - [Added] iOS `Config.showsBackgroundLocationIndicator`, a Boolean indicating whether the status bar changes its appearance when an app uses location services in the background.
 
 ## 1.7.0 - 2020-02-21
