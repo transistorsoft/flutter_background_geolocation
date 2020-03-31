@@ -2012,7 +2012,7 @@ class Config {
       this.geofenceModeHighAccuracy,
       // Activity Recognition Options
       this.triggerActivities,
-      this.motionTriggerDelay,        
+      this.motionTriggerDelay,
       // Application Options
       this.enableHeadless,
       this.foregroundService,
