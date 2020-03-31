@@ -148,6 +148,7 @@ class Test {
           //'2-6 09:00-17:00'
         ],
         geofenceModeHighAccuracy: true,
+        motionTriggerDelay: 30000,
         stopOnTerminate: false,
         startOnBoot: true,
         enableHeadless: true,

@@ -135,6 +135,7 @@ class State extends Config {
             speedJumpFilter: data['speedJumpFilter'],
             // Activity Recognition Options
             triggerActivities: data['triggerActivities'],
+            motionTriggerDelay: data['motionTriggerDelay'],
             // Application Options
             enableHeadless: data['enableHeadless'],
             foregroundService: data['foregroundService'],

@@ -4,10 +4,10 @@ version: 1.7.0+16
 dependencies:
   flutter:
     sdk: flutter
-  flutter_map:
-    git:
+  flutter_map: ^0.8.2
+    #git:
       # Fork with fix for flutter 1.7
-      url: https://github.com/domesticmouse/flutter_map.git
+    #  url: https://github.com/domesticmouse/flutter_map.git
   unicorndial: ^1.1.4
 
   shared_preferences: ^0.5.6

@@ -1606,6 +1606,13 @@ class Config {
   ///
   String triggerActivities;
 
+  /// __`[Android only]`__  Optionally add a delay in milliseconds to trigger Android into the *moving* state when Motion API reports the device is moving.
+  ///
+  /// This can help prevent false-positive motion-triggering when one moves about their home, for example.  Only if the Motion API stays in the *moving* state for `motionTriggerDelay` milliseconds will the plugin trigger into the *moving* state.
+  /// If the Motion API returns to the `still` state before `motionTriggerDelay` times-out, the trigger to the *moving* state will be cancelled.
+  ///
+  int motionTriggerDelay;
+
   // Application Options
 
   /// __`[Android only]`__ Enables "Headless" operation allowing you to respond to events after you app has been terminated with [stopOnTerminate]:false.
@@ -2005,6 +2012,7 @@ class Config {
       this.geofenceModeHighAccuracy,
       // Activity Recognition Options
       this.triggerActivities,
+      this.motionTriggerDelay,        
       // Application Options
       this.enableHeadless,
       this.foregroundService,
@@ -2160,6 +2168,8 @@ class Config {
     // Activity Recognition Options
     if (triggerActivities != null)
       config['triggerActivities'] = triggerActivities;
+    if (motionTriggerDelay != null)
+      config['motionTriggerDelay'] = motionTriggerDelay;
     if (geofenceModeHighAccuracy != null)
       config['geofenceModeHighAccuracy'] = geofenceModeHighAccuracy;
     // Application Options
