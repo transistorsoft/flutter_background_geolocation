@@ -166,8 +166,9 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     } else if ([self method:ACTION_EMAIL_LOG is:action]) {
         [self emailLog:call.arguments result:result];
     } else if ([self method:ACTION_LOG is:action]) {
-        NSString *level = [call.arguments objectForKey:@"level"];
-        NSString *message = [call.arguments objectForKey:@"message"];
+        NSArray *args = (NSArray*) call.arguments;
+        NSString *level = [args objectAtIndex:0];
+        NSString *message = [args objectAtIndex:1];
         [self log:level message:message result:result];
     } else if ([self method:ACTION_GET_SENSORS is:action]) {
         [self getSensors:result];

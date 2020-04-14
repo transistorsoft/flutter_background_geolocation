@@ -1,4 +1,6 @@
 # CHANGELOG
+## 1.7.3 - 2020-04-14
+- [Fixed] [iOS] Bug in Logger methods.  Args are received in native side with NSArray, not NSDictionary
 
 ## 1.7.2 - 2020-04-08
 - [Added] [Android] Add new `Config.motionTriggerDelay (milliseconds)` for preventing false-positive triggering of location-tracking (while walking around one's house, for example).  If the motion API triggers back to `still` before `motionTriggerDelay` expires, triggering to the *moving* state will be cancelled.
