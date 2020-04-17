@@ -1,4 +1,8 @@
 # CHANGELOG
+
+## Unreleased 
+- [Fixed] Allow firebase-adapter to validate license flavors on same key (eg: .development, .staging).
+
 ## 1.7.3 - 2020-04-14
 - [Fixed] [iOS] Bug in Logger methods.  Args are received in native side with NSArray, not NSDictionary
 
