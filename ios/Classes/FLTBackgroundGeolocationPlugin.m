@@ -564,6 +564,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 
 - (void) log:(NSString*)level message:(NSString*)message result:(FlutterResult)result {
     [_locationManager log:level message:message];
+    result(@(YES));
 }
 
 - (void) getSensors:(FlutterResult)result {
