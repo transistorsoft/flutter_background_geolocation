@@ -154,7 +154,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     } else if ([self method:ACTION_GET_GEOFENCES is:action]) {
         [self getGeofences:result];
     } else if ([self method:ACTION_GET_GEOFENCE is:action]) {
-        [self getGeofence:[call.arguments stringValue] result:result];
+        [self getGeofence:call.arguments result:result];
     } else if ([self method:ACTION_GEOFENCE_EXISTS is:action]) {
         [self geofenceExists:call.arguments result:result];
     } else if ([self method:ACTION_GET_LOG is:action]) {

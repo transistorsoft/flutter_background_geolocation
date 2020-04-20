@@ -52,7 +52,7 @@ class Actions {
 
   static void emailLog(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    
+
     String email = prefs.getString("email");
     if (email == null) {
       email = "";

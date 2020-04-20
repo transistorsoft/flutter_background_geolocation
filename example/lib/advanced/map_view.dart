@@ -96,18 +96,21 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     }
   }
 
-  void _onGeofence(bg.GeofenceEvent event) {
+  void _onGeofence(bg.GeofenceEvent event) async {
     bg.Logger.info('[onGeofence] Flutter received onGeofence event $event');
 
     GeofenceMarker marker = _geofences.firstWhere((GeofenceMarker marker) => marker.geofence.identifier == event.identifier, orElse: () => null );
     if (marker == null) {
-      print("[_onGeofence] failed to find geofence marker: ${event.identifier}");
-      return;
-    }
-
-    if (marker == null) {
-      print('[onGeofence] WARNING - FAILED TO FIND GEOFENCE MARKER FOR GEOFENCE: ${event.identifier}');
-      return;
+      bool exists = await bg.BackgroundGeolocation.geofenceExists(event.identifier);
+      if (exists) {
+        // Maybe this is a boot from a geofence event and geofencechange hasn't yet fired
+        bg.Geofence geofence = await bg.BackgroundGeolocation.getGeofence(event.identifier);
+        marker = GeofenceMarker(geofence);
+        _geofences.add(marker);
+      } else {
+        print("[_onGeofence] failed to find geofence marker: ${event.identifier}");
+        return;
+      }
     }
 
     bg.Geofence geofence = marker.geofence;

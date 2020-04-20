@@ -336,7 +336,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
   void _onGeofence(bg.GeofenceEvent event) async {
     print('[${bg.Event.GEOFENCE}] - $event');
-    bg.Logger.info("*********************** onGeofence: $event");
 
     bg.BackgroundGeolocation.startBackgroundTask().then((int taskId) async {
       // Execute an HTTP request to test an async operation completes.
