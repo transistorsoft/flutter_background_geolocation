@@ -82,7 +82,7 @@
 		</data>
 		<key>Headers/TSGeofenceManager.h</key>
 		<data>
-		LlHclgnJCVhQ5Nj3h0Of9vaZ8+o=
+		AOegjZHFfrPfOt8PuXi0ee2VDJI=
 		</data>
 		<key>Headers/TSGeofencesChangeEvent.h</key>
 		<data>
@@ -138,7 +138,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		7RX0rNJv/oxO95Ody4kayMpDzeg=
+		ZqHZuwZq3ozCI28MvOTNBoR69fI=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -360,11 +360,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			LlHclgnJCVhQ5Nj3h0Of9vaZ8+o=
+			AOegjZHFfrPfOt8PuXi0ee2VDJI=
 			</data>
 			<key>hash2</key>
 			<data>
-			txYh0hNYTRk56ZfXBSwTszSWiU2op2DMUiMstToT4ik=
+			IalcTqLZme8u3H5beE7Lvi+JtHhFEvZwVN5xtXpEINE=
 			</data>
 		</dict>
 		<key>Headers/TSGeofencesChangeEvent.h</key>

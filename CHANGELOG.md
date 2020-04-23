@@ -2,6 +2,7 @@
 
 ## Unreleased 
 - [Fixed] Allow firebase-adapter to validate license flavors on same key (eg: .development, .staging).
+- [Fixed][iOS] iOS geofence listeners on `onGeofence` method *could possibly* fail to be called when a geofence event causes iOS to re-launch the app in the background (this would **not** prevent the plugin posting the geofence event to your `Config.url`, only a failure of the dart `onGeofence` to be fired).
 
 ## 1.7.3 - 2020-04-14
 - [Fixed] [iOS] Bug in Logger methods.  Args are received in native side with NSArray, not NSDictionary
