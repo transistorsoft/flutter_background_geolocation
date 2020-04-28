@@ -44,6 +44,7 @@ class TransistorAuth {
         // TODO throw an Error instead.
         return false;
       }
+
       bg.TransistorAuthorizationToken jwt = await bg.TransistorAuthorizationToken.findOrCreate(orgname, username, ENV.TRACKER_HOST);
 
       await bg.BackgroundGeolocation.setConfig(bg.Config(

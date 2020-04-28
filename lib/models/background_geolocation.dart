@@ -571,6 +571,16 @@ class BackgroundGeolocation {
     return await _methodChannel.invokeMethod('destroyLocations');
   }
 
+  /// Destory a single location by [Location.uuid].
+  ///
+  /// ## Example
+  /// ```dart
+  /// try {
+  ///   await BackgroundGeolocation.destroyLocation(location.uuid);
+  /// } catch(error) {
+  ///   print("[destroyLocation] failed: $error");
+  /// }
+  /// ```
   static Future<bool> destroyLocation(String uuid) async {
     return await _methodChannel.invokeMethod('destroyLocation', uuid);
   }

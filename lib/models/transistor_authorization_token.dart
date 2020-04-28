@@ -167,8 +167,13 @@ class TransistorAuthorizationToken {
           data[FIELD_REFRESH_TOKEN], data[FIELD_EXPIRES], url));
     }).catchError((error) {
       print("[TransistorAuthorizationToken findOrCreate] ERROR: $error");
-      completer.complete(
-          TransistorAuthorizationToken(_DUMMY_TOKEN, _DUMMY_TOKEN, -1, url));
+      if (error.code != "403") {
+        completer.complete(
+            TransistorAuthorizationToken(_DUMMY_TOKEN, _DUMMY_TOKEN, -1, url));
+      } else {
+        throw error;
+      }
+
     });
     return completer.future;
   }

@@ -23,6 +23,7 @@ static NSString *const ACTION_GET_LOCATIONS = @"getLocations";
 static NSString *const ACTION_INSERT_LOCATION = @"insertLocation";
 static NSString *const ACTION_GET_COUNT = @"getCount";
 static NSString *const ACTION_DESTROY_LOCATIONS = @"destroyLocations";
+static NSString *const ACTION_DESTROY_LOCATION  = @"destroyLocation";
 static NSString *const ACTION_SYNC = @"sync";
 static NSString *const ACTION_GET_ODOMETER = @"getOdometer";
 static NSString *const ACTION_SET_ODOMETER = @"setOdometer";
@@ -137,6 +138,8 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
         [self getCount:result];
     } else if ([self method:ACTION_DESTROY_LOCATIONS is:action]) {
         [self destroyLocations:result];
+    } else if ([self method:ACTION_DESTROY_LOCATION is:action]) {
+        [self destroyLocation:call.arguments result:result];
     } else if ([self method:ACTION_SYNC is:action]) {
         [self sync:result];
     } else if ([self method:ACTION_GET_ODOMETER is:action]) {
@@ -407,6 +410,14 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     } else {
         result([FlutterError errorWithCode:@"DESTROY_LOCATIONS_ERROR" message:@"Failed to destroy locations" details:nil]);
     }
+}
+
+- (void) destroyLocation:(NSString*)uuid result:(FlutterResult)result {
+    [_locationManager destroyLocation:uuid success:^{
+        result(@(YES));
+    } failure:^(NSString* error) {
+        result([FlutterError errorWithCode:error message:error details:nil]);
+    }];
 }
 
 - (void) sync:(FlutterResult)result {
