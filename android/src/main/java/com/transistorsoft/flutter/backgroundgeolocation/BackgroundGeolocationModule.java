@@ -577,14 +577,13 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         });
     }
 
-    public void destroyLocation(final String uuid, final MethodChannel.Result result) {
+    private void destroyLocation(final String uuid, final MethodChannel.Result result) {
         BackgroundGeolocation.getInstance(mContext).destroyLocation(uuid, new TSCallback() {
             @Override public void onSuccess() {
                 result.success(true);
             }
-
             @Override public void onFailure(String error) {
-                result.error(error, null, null);
+                result.error(error, error, null);
             }
         });
     }
@@ -889,7 +888,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                 result.success(token.toMap());
             }
             @Override public void onFailure(String error) {
-                result.error("0", error, null);
+                result.error(error, error, null);
             }
         });
     }
