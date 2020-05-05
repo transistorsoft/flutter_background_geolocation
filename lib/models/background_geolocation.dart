@@ -1324,7 +1324,7 @@ class BackgroundGeolocation {
   /// ## Example
   ///
   /// ```dart
-  /// BackgroundGeolocation.oPowerSaveChange((bool isPowerSaveMode) {
+  /// BackgroundGeolocation.onPowerSaveChange((bool isPowerSaveMode) {
   ///   print('[onPowerSaveChange: ${isPowerSaveMode}');
   /// });
   /// ```
