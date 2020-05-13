@@ -147,11 +147,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         _tabController.animateTo(tabIndex);
       }
     });
-
-    List<dynamic> rs = await bg.BackgroundGeolocation.locations;
-    for (dynamic l in rs) {
-      bg.BackgroundGeolocation.destroyLocation(l["uuid"]);
-    }
   }
 
   // Configure BackgroundFetch (not required by BackgroundGeolocation).

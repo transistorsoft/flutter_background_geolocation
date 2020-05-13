@@ -1,6 +1,9 @@
 # CHANGELOG
 
 ## Unreleased 
+- [Fixed][Android] Fix `@UIThread` issue executing location error handler on background-thread.
+- [Changed][Android] Gradle import `tslocationmanager` using `api` instead of `implementation` in order to allow overriding SDK's `AndroidManifest` elements (eg: `<service>` elements).
+- [Fixed][iOS] When upgrading from a version previous `<1.4.0`, if any records exist within plugin's SQLite database, those records could fail to be properly migrated to new schema.
 - [Added] New method `BackgroundGeolocation.destroyLocation(uuid)` for destroying a single location by `Location.uuid`.
 - [Changed] Android library `tslocationmanager.aar` is now compiled using `androidx`.  For backwards-compatibility with those how haven't migrated to `androidX`, a *reverse-jetified* build is included.  Usage is detected automatically based upon `android.useAndroidX` in one's `gradle.properties`.
 - [Fixed] Allow firebase-adapter to validate license flavors on same key (eg: .development, .staging).

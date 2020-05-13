@@ -173,7 +173,6 @@ class TransistorAuthorizationToken {
       } else {
         throw error;
       }
-
     });
     return completer.future;
   }
