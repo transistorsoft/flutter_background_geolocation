@@ -54,7 +54,7 @@ dependencies {
     def androidPermissionsVersion = safeExtGet('androidPermissionsVersion', DEFAULT_ANDROID_PERMISSIONS_VERSION)
     def localBroadcastManagerVersion = safeExtGet('localBroadcastManagerVersion', DEFAULT_LOCAL_BROADCAST_MANAGER_VERSION)
 
-    implementation fileTree(include: ['*.aar'], dir: 'libs')
+    api fileTree(include: ['*.aar'], dir: 'libs')
     implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"

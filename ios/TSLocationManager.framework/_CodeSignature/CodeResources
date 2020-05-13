@@ -106,7 +106,7 @@
 		</data>
 		<key>Headers/TSLocationManager.h</key>
 		<data>
-		FKA7xTmLHvczACHMo2zrds38L+Q=
+		xf12IWdYaMKJIMrZZN32u03ZKJU=
 		</data>
 		<key>Headers/TSPowerSaveChangeEvent.h</key>
 		<data>
@@ -138,7 +138,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		1tJrMfpiVb2UAUKne+B4iYMyrp0=
+		t1rnSldBTBUGNFwIU8E8M9/KtnA=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -426,11 +426,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			FKA7xTmLHvczACHMo2zrds38L+Q=
+			xf12IWdYaMKJIMrZZN32u03ZKJU=
 			</data>
 			<key>hash2</key>
 			<data>
-			Z00eWJBI3cteL86MQipMuUUruxe8p1bZwjbHX7+5YWU=
+			FvDkd7ZrqHRwy46Mvn8I1oeaKzx+ApyGfYKHc23kuR4=
 			</data>
 		</dict>
 		<key>Headers/TSPowerSaveChangeEvent.h</key>
