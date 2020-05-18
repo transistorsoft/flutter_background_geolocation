@@ -1,6 +1,8 @@
 # CHANGELOG
 
 ## Unreleased 
+- [Fixed] `insertLocation` exception (issue #220)
+- [Fixed][iOS] When using `disableStopDetection: true` with `pausesLocationUpdatesAutomatically: true`, the `CLLocationManagerDelegate didPauseLocationUpdates` fired a `motionchange` with `isMoving: true` (should be `false`). 
 - [Fixed][Android] Fix `@UIThread` issue executing location error handler on background-thread.
 - [Changed][Android] Gradle import `tslocationmanager` using `api` instead of `implementation` in order to allow overriding SDK's `AndroidManifest` elements (eg: `<service>` elements).
 - [Fixed][iOS] When upgrading from a version previous `<1.4.0`, if any records exist within plugin's SQLite database, those records could fail to be properly migrated to new schema.

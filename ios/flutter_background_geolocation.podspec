@@ -18,7 +18,6 @@ Pod::Spec.new do |s|
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
   s.dependency 'CocoaLumberjack', '~> 3.6.0'
-  s.dependency 'TrustKit'
 
   s.libraries           = 'sqlite3', 'z'
   s.vendored_frameworks = ['TSLocationManager.framework']
