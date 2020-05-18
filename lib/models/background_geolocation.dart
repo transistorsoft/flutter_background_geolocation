@@ -586,7 +586,7 @@ class BackgroundGeolocation {
   }
 
   /// TODO
-  static Future<Location> insertLocation(Map<String, dynamic> params) async {
+  static Future<String> insertLocation(Map<dynamic, dynamic> params) async {
     return await _methodChannel.invokeMethod('insertLocation', params);
   }
 
