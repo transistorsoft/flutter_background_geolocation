@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Unreleased 
+- [Fixed][Android] `requestPermission` method was always returning `AUTHORIZATION_STATUS_ALWAYS` even when *When in Use* was selected.
 - [Fixed] `insertLocation` exception (issue #220)
 - [Fixed][iOS] When using `disableStopDetection: true` with `pausesLocationUpdatesAutomatically: true`, the `CLLocationManagerDelegate didPauseLocationUpdates` fired a `motionchange` with `isMoving: true` (should be `false`). 
 - [Fixed][Android] Fix `@UIThread` issue executing location error handler on background-thread.
