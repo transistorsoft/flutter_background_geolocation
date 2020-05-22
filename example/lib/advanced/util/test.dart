@@ -144,9 +144,7 @@ class Test {
         enableTimestampMeta: true,
         stopTimeout: 1,
         maxDaysToPersist: 14,
-        schedule: [
-          //'2-6 09:00-17:00'
-        ],
+        schedule: [],
         geofenceModeHighAccuracy: true,
         motionTriggerDelay: 30000,
         stopOnTerminate: false,
