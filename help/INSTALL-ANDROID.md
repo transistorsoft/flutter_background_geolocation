@@ -54,8 +54,8 @@ As an app grows in complexity and imports a variety of 3rd-party modules, it hel
 buildscript {
 +   ext.kotlin_version = '1.3.0' // Must use 1.3.0 or higher.
 +   ext {
-+       compileSdkVersion   = 28                // or higher
-+       targetSdkVersion    = 28                // or higher
++       compileSdkVersion   = 29                // or higher
++       targetSdkVersion    = 29                // or higher
 +       appCompatVersion    = "1.0.2"           // or higher
 +       playServicesLocationVersion = "17.0.0"  // or higher
 +   }
@@ -126,6 +126,26 @@ dependencies {
 +    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'   // or higher
 }
 
+```
+
+## Android 10 and *When in Use* Location Authorization
+
+Android 10 introduces *When in Use* location authorization.  If you're building with `compileSdkVersion 29`, add the following elements to your **`AndroidManifest.xml`**.  This allows your app to continue location-tracking when location-services are initiated while your app is in the foreground.  For example:
+
+```javascript
+onClickStartTracking() {
+    // Initiate tracking while app is in foreground.
+    BackgroundGeolocation.changePace(true);
+}
+```
+
+```diff
+<manifest>
+    <application>
++       <service android:name="com.transistorsoft.locationmanager.service.TrackingService" android:foregroundServiceType="location" />
++       <service android:name="com.transistorsoft.locationmanager.service.LocationRequestService" android:foregroundServiceType="location" />
+    </application>
+</manifest>
 ```
 
 ## Configure your license
