@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased 
+## 1.8.0 - 2020-05-28 
 - [Fixed][Android] `onGeofence` event-handler fails to be fired when `maxRecordsToPersist: 0`.
 - [Fixed][Android] `requestPermission` method was always returning `AUTHORIZATION_STATUS_ALWAYS` even when *When in Use* was selected.
 - [Fixed] `insertLocation` exception (issue #220)
