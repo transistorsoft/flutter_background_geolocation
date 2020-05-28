@@ -6,7 +6,7 @@ homepage: https://github.com/transistorsoft/flutter_background_geolocation
 dependencies:
   flutter:
     sdk: flutter
-  background_fetch: ^0.5.4
+  background_fetch: ^0.5.6
 
 
 flutter:
@@ -19,6 +19,6 @@ flutter:
         pluginClass: FLTBackgroundGeolocationPlugin
 
 environment:
-  sdk: ">=2.0.0-dev.50.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
   flutter: ">=1.10.0 <2.0.0"
 
