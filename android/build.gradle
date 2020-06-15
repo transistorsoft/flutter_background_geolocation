@@ -6,6 +6,9 @@ buildscript {
         google()
         jcenter()
     }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.5.0'
+    }
 }
 
 rootProject.allprojects {
@@ -54,7 +57,7 @@ dependencies {
     def androidPermissionsVersion = safeExtGet('androidPermissionsVersion', DEFAULT_ANDROID_PERMISSIONS_VERSION)
     def localBroadcastManagerVersion = safeExtGet('localBroadcastManagerVersion', DEFAULT_LOCAL_BROADCAST_MANAGER_VERSION)
 
-    api fileTree(include: ['*.aar'], dir: 'libs')
+    api(group: 'com.transistorsoft', name:'tslocationmanager', version: '+')
     implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
