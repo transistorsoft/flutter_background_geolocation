@@ -74,6 +74,14 @@ allprojects {
     repositories {
         google()
         jcenter()
++       maven {
++           // [required] flutter_background_geolocation
++           url "${project(':flutter_background_geolocation').projectDir}/libs"
++       }
++       maven {
++           // [required] background_fetch
++           url "${project(':background_fetch').projectDir}/libs"
++       }
     }
 }
 

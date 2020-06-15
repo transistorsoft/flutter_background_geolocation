@@ -1,10 +1,14 @@
 # CHANGELOG
 
-## 1.8.0 - 2020-05-28 
+## 1.9.0 - 2020-06-15
+- [Fixed][Android] `com.android.tools.build:gradle:4.0.0` no longer allows "*direct local aar dependencies*".  The Android Setup now requires a custom __`maven url`__ to be added to your app's root __`android/build.gradle`__:
+- [Fixed][Android] `onConnectivityChange` can report incorrect value for `enabled` when toggling between Wifi Off / Airplane mode.
+
+## 1.8.0 - 2020-05-28
 - [Fixed][Android] `onGeofence` event-handler fails to be fired when `maxRecordsToPersist: 0`.
 - [Fixed][Android] `requestPermission` method was always returning `AUTHORIZATION_STATUS_ALWAYS` even when *When in Use* was selected.
 - [Fixed] `insertLocation` exception (issue #220)
-- [Fixed][iOS] When using `disableStopDetection: true` with `pausesLocationUpdatesAutomatically: true`, the `CLLocationManagerDelegate didPauseLocationUpdates` fired a `motionchange` with `isMoving: true` (should be `false`). 
+- [Fixed][iOS] When using `disableStopDetection: true` with `pausesLocationUpdatesAutomatically: true`, the `CLLocationManagerDelegate didPauseLocationUpdates` fired a `motionchange` with `isMoving: true` (should be `false`).
 - [Fixed][Android] Fix `@UIThread` issue executing location error handler on background-thread.
 - [Changed][Android] Gradle import `tslocationmanager` using `api` instead of `implementation` in order to allow overriding SDK's `AndroidManifest` elements (eg: `<service>` elements).
 - [Fixed][iOS] When upgrading from a version previous `<1.4.0`, if any records exist within plugin's SQLite database, those records could fail to be properly migrated to new schema.
@@ -48,7 +52,7 @@
 - [Changed] Android: Modify behaviour of geofences-only mode to not periodically request location-updates.  Will use a stationary-geofence of radius geofenceProximityRadius/2 as a trigger to re-evaluate geofences in proximity.
 - [Changed] Authorization refreshUrl will post as application/x-www-form-urlencoded instead of form/multipart
 - [Changed] iOS geofencing mode will not engage Significant Location Changes API when total geofence count <= 18 in order to prevent new iOS 13 "Location summary" popup from showing frequent location access.
-- [Fixed] Android:  Add hack for older devices to fix "GPS Week Rollover" bug where incorrect timestamp is recorded from GPS (typically where year is older by 20 years). 
+- [Fixed] Android:  Add hack for older devices to fix "GPS Week Rollover" bug where incorrect timestamp is recorded from GPS (typically where year is older by 20 years).
 - [Fixed] When determining geofences within `geofenceProximityRadius`, add the `location.accuracy` as a buffer against low-accuracy locations.
 - [Changed] Increase default `geofenceProximityRadius: 2000`.
 
