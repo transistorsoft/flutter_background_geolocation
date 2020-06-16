@@ -2,6 +2,29 @@
 
 ## 1.9.0 - 2020-06-15
 - [Fixed][Android] `com.android.tools.build:gradle:4.0.0` no longer allows "*direct local aar dependencies*".  The Android Setup now requires a custom __`maven url`__ to be added to your app's root __`android/build.gradle`__:
+
+A new step is required for *Android Setup*
+
+:open_file_folder: `android/build.gradle`:
+
+```diff
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
++       maven {
++           // [required] flutter_background_geolocation
++           url "${project(':flutter_background_geolocation').projectDir}/libs"
++       }
++       maven {
++           // [required] background_fetch
++           url "${project(':background_fetch').projectDir}/libs"
++       }
+    }
+}
+```
+
 - [Fixed][Android] `onConnectivityChange` can report incorrect value for `enabled` when toggling between Wifi Off / Airplane mode.
 
 ## 1.8.0 - 2020-05-28
