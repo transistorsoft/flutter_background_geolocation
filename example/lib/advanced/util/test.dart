@@ -7,36 +7,53 @@ class Test {
   /// @private DO NOT USE.
   ///
   static void applyTestConfig() async {
+
     List<dynamic> data = [{
       "identifier": "[Flutter] Home",
       "radius": 200.0,
-      "latitude": 45.5192534,
-      "longitude": -73.6169719,
+      "latitude": 45.51872221233045,
+      "longitude": -73.60041976465013,
       "notifyOnEntry": true,
       "notifyOnExit": true,
-      "notifyOnDwell": false,
-      "loiteringDelay": 0,
+      "notifyOnDwell": true,
+      "loiteringDelay": 60000,
       "extras": {
         "radius": 200,
         "center": {
-          "latitude": 45.5192534,
-          "longitude": -73.6169719
+          "latitude": 45.51872221233045,
+          "longitude": -73.60041976465013,
         }
       }
     }, {
-      "identifier": "[Flutter] Jfk",
+      "identifier": "[Flutter] Parc Outremont",
       "radius": 200.0,
-      "latitude": 45.52193435702239,
-      "longitude": -73.61602026242679,
+      "latitude": 45.51791915253888,
+      "longitude": -73.60480434117284,
       "notifyOnEntry": true,
       "notifyOnExit": true,
-      "notifyOnDwell": false,
+      "notifyOnDwell": true,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.51791915253888,
+          "longitude": -73.60480434117284,
+        }
+      }
+    }, {
+      "identifier": "[Flutter] 5 Saison",
+      "radius": 200.0,
+      "latitude": 45.52193435702239,
+      "longitude": -73.60793815706307,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": true,
       "loiteringDelay": 0,
       "extras": {
         "radius": 200,
         "center": {
           "latitude": 45.52193435702239,
-          "longitude": -73.61602026242679
+          "longitude": -73.60793815706307,
         }
       }
     }, {
@@ -46,7 +63,7 @@ class Test {
       "longitude": -73.61188565687189,
       "notifyOnEntry": true,
       "notifyOnExit": true,
-      "notifyOnDwell": false,
+      "notifyOnDwell": true,
       "loiteringDelay": 0,
       "extras": {
         "radius": 200,
@@ -56,10 +73,10 @@ class Test {
         }
       }
     }, {
-      "identifier": "[Flutter] Bernard",
+      "identifier": "[Flutter] Park Beaubien",
       "radius": 200.0,
-      "latitude": 45.51890341224348,
-      "longitude": -73.60920346871359,
+      "latitude": 45.51536622906458,
+      "longitude": -73.60916110960558,
       "notifyOnEntry": true,
       "notifyOnExit": true,
       "notifyOnDwell": false,
@@ -67,31 +84,31 @@ class Test {
       "extras": {
         "radius": 200,
         "center": {
-          "latitude": 45.51890341224348,
-          "longitude": -73.60920346871359
+          "latitude": 45.51536622906458,
+          "longitude": -73.60916110960558
         }
       }
     }, {
-      "identifier": "[Flutter] Park",
+      "identifier": "[Flutter] Parc & Fairmount",
       "radius": 200.0,
-      "latitude": 45.51793055832324,
-      "longitude": -73.60288022069346,
+      "latitude": 45.5204308608878,
+      "longitude": -73.59730225310089,
       "notifyOnEntry": true,
       "notifyOnExit": true,
-      "notifyOnDwell": false,
-      "loiteringDelay": 0,
+      "notifyOnDwell": true,
+      "loiteringDelay": 60000,
       "extras": {
         "radius": 200,
         "center": {
-          "latitude": 45.51793055832324,
-          "longitude": -73.60288022069346
+          "latitude": 45.5204308608878,
+          "longitude": -73.59730225310089
         }
       }
     }, {
-      "identifier": "[Flutter] Dollard",
+      "identifier": "[Flutter] Parc Couches Tard",
       "radius": 200.0,
-      "latitude": 45.51722612373795,
-      "longitude": -73.61367125021673,
+      "latitude": 45.51744539760233,
+      "longitude": -73.5908963928221,
       "notifyOnEntry": true,
       "notifyOnExit": true,
       "notifyOnDwell": false,
@@ -99,8 +116,184 @@ class Test {
       "extras": {
         "radius": 200,
         "center": {
-          "latitude": 45.51722612373795,
-          "longitude": -73.61367125021673
+          "latitude": 45.51744539760233,
+          "longitude": -73.5908963928221
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Laurier & Côtes Saint Catherines",
+      "radius": 200.0,
+      "latitude": 45.51602235252262,
+      "longitude": -73.59890979915006,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": false,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.51602235252262,
+          "longitude": -73.59890979915006,
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Mountain 1",
+      "radius": 200.0,
+      "latitude": 45.51339446482965,
+      "longitude": -73.5890430151955,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": false,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.51339446482965,
+          "longitude": -73.5890430151955
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Mountain 2",
+      "radius": 200.0,
+      "latitude": 45.511936585973096,
+      "longitude": -73.59662309075495,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": false,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.511936585973096,
+          "longitude": -73.59662309075495
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Mountain 3",
+      "radius": 200.0,
+      "latitude": 45.50873361477508,
+      "longitude": -73.59089814860727,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": false,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.50873361477508,
+          "longitude": -73.59089814860727
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Mountain 4",
+      "radius": 200.0,
+      "latitude": 45.50414694296492,
+      "longitude": -73.5916710539562,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": false,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.50414694296492,
+          "longitude": -73.5916710539562
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Mountain 5",
+      "radius": 200.0,
+      "latitude": 45.50491473767328,
+      "longitude": -73.58654527405864,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": false,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.50491473767328,
+          "longitude": -73.58654527405864
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Mountain Lake",
+      "radius": 200.0,
+      "latitude": 45.49860916086097,
+      "longitude": -73.59621565704647,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": false,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.49860916086097,
+          "longitude": -73.59621565704647
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Park JFK",
+      "radius": 200.0,
+      "latitude": 45.52135522992923,
+      "longitude": -73.61568446341691,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": false,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.52135522992923,
+          "longitude": -73.61568446341691
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Rope Park",
+      "radius": 200.0,
+      "latitude": 45.51335215591131,
+      "longitude": -73.58016477295465,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": true,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.51335215591131,
+          "longitude": -73.58016477295465
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Cafe Union",
+      "radius": 200.0,
+      "latitude": 45.5332674993574,
+      "longitude": -73.61939297593483,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": true,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.5332674993574,
+          "longitude": -73.61939297593483
+        }
+      }
+    }, {
+      "identifier": "[Flutter] Park Laurier",
+      "radius": 200.0,
+      "latitude": 45.53237479609443,
+      "longitude": -73.58741778627864,
+      "notifyOnEntry": true,
+      "notifyOnExit": true,
+      "notifyOnDwell": true,
+      "loiteringDelay": 60000,
+      "extras": {
+        "radius": 200,
+        "center": {
+          "latitude": 45.53237479609443,
+          "longitude": -73.58741778627864,
         }
       }
     }];
@@ -120,6 +313,21 @@ class Test {
           extras: item['extras']
       ));
     });
+
+    /**
+     * TEST:  Inflate geofences > 100 to engage infinite geofencing
+     *
+    for (int n=data.length;n<100;n++) {
+      geofences.add(bg.Geofence(
+        identifier: "BOGUS_$n",
+        latitude: 0.0,
+        longitude: 0.0,
+        radius: 200,
+        notifyOnEntry: true,
+        notifyOnExit: true
+      ));
+    }
+    */
 
     await bg.BackgroundGeolocation.removeGeofences();
     await bg.BackgroundGeolocation.addGeofences(geofences);
