@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 1.9.1 - 2020-07-02
 
 - [Fixed][iOS] Geofence `EXIT` sometimes not firing when using `notifyOnDwell`. 
 - [Changed][Android] Refactor geofencing-only mode to not initiate "Infinite Geofencing" when the total number of added geofences is `< 99` (the maximum number of simultaneous geofences that can be monitored on Android).  This prevents the SDK from periodically requesting location to query "geofences within `geofenceProximityRadius`".  iOS already has this behaviour (where its maximum simultaneous geofences is `19`).
