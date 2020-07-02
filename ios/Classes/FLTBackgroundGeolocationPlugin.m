@@ -92,7 +92,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     if (self) {
         ready = NO;
         _locationManager = [TSLocationManager sharedInstance];
-                
+
         // Provide reference to rootViewController for #emailLog method.
         UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
         _locationManager.viewController = root;
@@ -237,7 +237,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
         } else {
             BOOL reset = (params[@"reset"]) ? [params[@"reset"] boolValue] : YES;
             if (reset) {
-                [config reset];
+                [config reset:YES];
                 [config updateWithDictionary:params];
             } else if ([params objectForKey:@"authorization"]) {
                 [config updateWithBlock:^(TSConfigBuilder *builder) {
@@ -290,9 +290,11 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 
 - (void) reset:(NSDictionary*)params result:(FlutterResult)result {
     TSConfig *config = [TSConfig sharedInstance];
-    [config reset];
     if (params) {
+        [config reset:YES];
         [config updateWithDictionary:params];
+    } else {
+        [config reset];
     }
     result([config toDictionary]);
 }
@@ -431,7 +433,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 #pragma mark Geofencing Methods
 
 - (void) addGeofence:(NSDictionary*)params result:(FlutterResult)result {
-    
+
     TSGeofence *geofence = [self buildGeofence:params];
     if (!geofence) {
         NSString *error = [NSString stringWithFormat:@"Invalid geofence data: %@", params];
@@ -468,7 +470,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     if (!params[@"identifier"] || !params[@"radius"] || !params[@"latitude"] || !params[@"longitude"]) {
         return nil;
     }
-    
+
 
     return [[TSGeofence alloc] initWithIdentifier: params[@"identifier"]
                                            radius: [params[@"radius"] doubleValue]
@@ -525,7 +527,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
         result([FlutterError errorWithCode:[NSString stringWithFormat:@"Invalid identifier: %@", identifier] message:nil details:nil]);
         return;
     }
-    
+
     [_locationManager geofenceExists:identifier callback:^(BOOL exists){
         result(@(exists));
     }];
@@ -598,7 +600,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     NSString *orgname = [args objectAtIndex:0];
     NSString *username = [args objectAtIndex:1];
     NSString *url = [args objectAtIndex:2];
-    
+
     [TransistorAuthorizationToken findOrCreateWithOrg:orgname
                                              username:username
                                                  url:url
