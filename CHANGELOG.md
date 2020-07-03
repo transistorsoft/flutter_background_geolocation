@@ -31,6 +31,13 @@ allprojects {
 }
 ```
 
+You might then clean your android project: 
+
+```sh
+cd android
+./gradlew clean
+```
+
 - [Fixed][Android] `onConnectivityChange` can report incorrect value for `enabled` when toggling between Wifi Off / Airplane mode.
 
 ## 1.8.0 - 2020-05-28
