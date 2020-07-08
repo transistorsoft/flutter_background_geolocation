@@ -1,5 +1,67 @@
 # CHANGELOG
 
+## 1.9.2 - 2020-07-08
+- [Added][Android] New Config option `Notification.sticky` (default `false`) for allowing the Android foreground-service notification to be always shown.  The default behavior is the only show the notification when the SDK is in the *moving* state, but Some developers have expressed the need to provide full disclosure to their users when the SDK is enabled, regardless if the device is stationary with location-services OFF.
+- [Added] Support for providing a native "beforeInsert" block in iOS `AppDelegate.m` and Android `Application.java` / `Application.kt`.  The returned object will be inserted into the SDK's SQLite database and uploaded to your `Config.url`.
+__iOS__ `AppDelegate.m`
+```obj-c
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    [GeneratedPluginRegistrant registerWithRegistry:self];
+    
+    // [OPTIONAL] This block is called before a location is inserted into the background_geolocation SQLite database.
+    // - The returned NSDictionary will be inserted.
+    // - If you return nil, no record will be inserted.
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
+    bgGeo.beforeInsertBlock = ^NSDictionary *(TSLocation *tsLocation) {
+        CLLocation *location = tsLocation.location;
+        
+        NSLog(@"[beforeInsertBlock] %@: %@", tsLocation.uuid, location);
+        
+        // Return a custom schema or nil to cancel SQLite insert.
+        return @{
+            @"lat": @(location.coordinate.latitude),
+            @"lng": @(location.coordinate.longitude),
+            @"battery": @{
+                @"level": tsLocation.batteryLevel,
+                @"is_charging": @(tsLocation.batteryIsCharging)
+            }
+        };
+    };
+    
+    return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+```
+__Android__ `Application.java`
+```java
+public class Application  extends FlutterApplication {
+    @Override
+    public void onCreate() {        
+        super.onCreate();
+
+        BackgroundGeolocation.getInstance(this).setBeforeInsertBlock(new TSBeforeInsertBlock() {
+            @Override
+            public JSONObject onBeforeInsert(TSLocation tsLocation) {
+                Location location = tsLocation.getLocation();
+                JSONObject json = new JSONObject();
+                JSONObject battery = new JSONObject();
+                try {
+                    json.put("lat", location.getLatitude());
+                    json.put("lng", location.getLongitude());
+                    
+                    battery.put("level", tsLocation.getBatteryLevel());
+                    battery.put("is_charging", tsLocation.getBatteryIsCharging());
+                    json.put("battery", battery);
+                    return json;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        });
+    }
+}
+```
+
 ## 1.9.1 - 2020-07-02
 
 - [Fixed][iOS] Geofence `EXIT` sometimes not firing when using `notifyOnDwell`. 
