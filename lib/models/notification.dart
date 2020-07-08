@@ -341,6 +341,11 @@ class Notification {
   /// ```
   int priority;
 
+  /// Configure the Android Foreground Service icon and notification to be displayed __always__.  Defaults to `false`.
+  ///
+  /// The default behaviour is for the notification to be shown only while the SDK detects the device to be *moving*.  Some developers desire to provide full-disclosure to their users when the SDK has been enabled.
+  bool sticky;
+
   /// Configure the name of the plugin's notification-channel used to display the [Config.foregroundService] notification.
   ///
   /// On Android O+, the plugin's foreground-service needs to create a "Notification Channel".  The name of this channel can be seen in:
@@ -453,6 +458,7 @@ class Notification {
         smallIcon: (map['smallIcon'] != null) ? map['smallIcon'] : null,
         largeIcon: (map['largeIcon'] != null) ? map['largeIcon'] : null,
         priority: (map['priority'] != null) ? map['priority'] : null,
+        sticky: (map['sticky'] != null) ? map['sticky'] : null,
         channelName: (map['channelName'] != null) ? map['channelName'] : null,
         strings: (map['strings'] != null)
             ? map['strings'].cast<String, String>()
@@ -470,6 +476,7 @@ class Notification {
       this.smallIcon,
       this.largeIcon,
       this.priority,
+      this.sticky,
       this.strings,
       this.actions});
 
@@ -483,6 +490,7 @@ class Notification {
       "smallIcon": smallIcon,
       "largeIcon": largeIcon,
       "priority": priority,
+      "sticky": sticky,
       "strings": strings,
       "actions": actions
     };
