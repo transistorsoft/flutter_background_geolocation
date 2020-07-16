@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.9.3 - 2010-07-16
+- No changes from `1.9.2`.  This version is merely a bump to satisfy pub.dev penalty for placing http urls in README instead of https.
+
 ## 1.9.2 - 2020-07-08
 - [Added][Android] New Config option `Notification.sticky` (default `false`) for allowing the Android foreground-service notification to be always shown.  The default behavior is the only show the notification when the SDK is in the *moving* state, but Some developers have expressed the need to provide full disclosure to their users when the SDK is enabled, regardless if the device is stationary with location-services OFF.
 - [Added] Support for providing a native "beforeInsert" block in iOS `AppDelegate.m` and Android `Application.java` / `Application.kt`.  The returned object will be inserted into the SDK's SQLite database and uploaded to your `Config.url`.

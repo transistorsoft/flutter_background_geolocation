@@ -16,7 +16,7 @@ Also available for [Cordova](https://github.com/transistorsoft/cordova-backgroun
 
 ----------------------------------------------------------------------------
 
-The **[Android module](http://www.transistorsoft.com/shop/products/flutter-background-geolocation)** requires [purchasing a license](http://www.transistorsoft.com/shop/products/flutter-background-geolocation).  However, it *will* work for **DEBUG** builds.  It will **not** work with **RELEASE** builds [without purchasing a license](http://www.transistorsoft.com/shop/products/flutter-background-geolocation).
+The **[Android module](https://www.transistorsoft.com/shop/products/flutter-background-geolocation)** requires [purchasing a license](https://www.transistorsoft.com/shop/products/flutter-background-geolocation).  However, it *will* work for **DEBUG** builds.  It will **not** work with **RELEASE** builds [without purchasing a license](https://www.transistorsoft.com/shop/products/flutter-background-geolocation).
 
 (2018) This plugin is supported **full-time** and field-tested **daily** since 2013.
 
