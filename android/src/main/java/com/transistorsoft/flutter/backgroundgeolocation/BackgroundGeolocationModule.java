@@ -922,13 +922,20 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         return jsonData;
     }
 
+    @SuppressWarnings("unchecked")
     private static JSONArray listToJson(List<Object> list) throws JSONException {
         JSONArray jsonData = new JSONArray();
         for (Object value : list) {
+            if (value instanceof Map<?, ?>) {
+                value = mapToJson((Map<String, Object>) value);
+            } else if (value instanceof List<?>) {
+                value = listToJson((List<Object>) value);
+            }
             jsonData.put(value);
         }
         return jsonData;
     }
+
     private static Map<String, Object> jsonToMap(JSONObject json) throws JSONException {
         Map<String, Object> retMap = new HashMap<>();
 

@@ -648,11 +648,6 @@ const PLUGIN_SETTINGS = {
     {'name': 'motionTriggerDelay', 'group': 'activity recognition', 'dataType': 'integer', 'inputType': 'select', 'values': [0, 10000, 30000, 60000], 'defaultValue': 0},
     // Application
     {'name': 'enableHeadless', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': true},
-    {'name': 'foregroundService', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
-    {'name': 'forceReloadOnMotionChange', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
-    {'name': 'forceReloadOnLocationChange', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
-    {'name': 'forceReloadOnGeofence', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
-    {'name': 'forceReloadOnHeartbeat', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
     {'name': 'notificationPriority', 'group': 'application', 'dataType': 'string', 'inputType': 'select', 'values': [0, 1, -1, 2, -2], 'labels': ['DEFAULT', 'HIGH', 'LOW', 'MAX', 'MIN'], 'defaultValue': 'DEFAULT'},
     {'name': 'disableLocationAuthorizationAlert', 'group': 'application', 'dataType': 'boolean', 'inputType': 'toggle', 'values': [true, false], 'defaultValue': false},
   ]
