@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## Unreleased
+
 [Fixed][Android] Extras provided with a `List` of `Map` fail to recursively convert the Map to JSON, eg:
 ```dart
 BackgroundGeolocation.ready(bg.Config(
@@ -14,9 +16,7 @@ BackgroundGeolocation.ready(bg.Config(
 [Fixed][iOS] when `getCurrentPosition` is provided with `extras`, those `extras` overwrite any configured `Config.extras` rather than merging.  
 [Fixed][Android] When cancelling Alarms, use `FLAG_UPDATE_CURRENT` instead of `FLAG_CANCEL_CURRENT` -- there are [reports](https://stackoverflow.com/questions/29344971/java-lang-securityexception-too-many-alarms-500-registered-from-pid-10790-u) of older Samsung devices failing to garbadge-collect Alarms, causing the number of alarms to exceed maximum 500, generating an exception.
 
-## Unreleased
-
-## 1.9.3 - 2010-07-16
+## 1.9.3 - 2020-07-16
 - No changes from `1.9.2`.  This version is merely a bump to satisfy pub.dev penalty for placing http urls in README instead of https.
 
 ## 1.9.2 - 2020-07-08
