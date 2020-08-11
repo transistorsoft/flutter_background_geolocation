@@ -2,6 +2,8 @@ package com.transistorsoft.flutterbackgroundgeolocationexample;
 
 import android.os.StrictMode;
 
+import com.transistorsoft.locationmanager.adapter.TSConfig;
+
 import io.flutter.app.FlutterApplication;
 
 public class Application  extends FlutterApplication {
