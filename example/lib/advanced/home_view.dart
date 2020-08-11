@@ -106,29 +106,32 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
+        reset: false,  // <-- lets the Settings screen drive the config rather than re-applying each boot.
         // Convenience option to automatically configure the SDK to post to Transistor Demo server.
         transistorAuthorizationToken: token,
         // Logging & Debug
-        reset: false,
         debug: true,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
         // Geolocation options
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_NAVIGATION,
         distanceFilter: 10.0,
-        stopTimeout: 1,
+        // Activity recognition options
+        stopTimeout: 5,
         // HTTP & Persistence
         autoSync: true,
         // Application options
         stopOnTerminate: false,
+        locationAuthorizationRequest: 'WhenInUse',
         startOnBoot: true,
         enableHeadless: true,
         heartbeatInterval: 60
-    )).then((bg.State state) {
+    )).then((bg.State state) async {
       print('[ready] ${state.toMap()}');
 
       if (state.schedule.isNotEmpty) {
         bg.BackgroundGeolocation.startSchedule();
       }
+
       setState(() {
         _enabled = state.enabled;
         _isMoving = state.isMoving;
@@ -186,23 +189,18 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       BackgroundFetch.finish(taskId);
     });
 
-    // Test scheduling a custom-task.
-    BackgroundFetch.scheduleTask(TaskConfig(
-        taskId: "com.transistorsoft.customtask",
-        delay: 10000,
-        periodic: false,
-        forceAlarmManager: true,
-        stopOnTerminate: false,
-        enableHeadless: true
-    ));
-
   }
 
   void _onClickEnable(enabled) async {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
     if (enabled) {
-      dynamic callback = (bg.State state) {
+      dynamic callback = (bg.State state) async {
         print('[start] success: $state');
+        if (state.locationAuthorizationRequest == 'WhenInUse') {
+          bg.BackgroundGeolocation.setConfig(bg.Config(
+            locationAuthorizationRequest: 'Always'
+          ));
+        }
         setState(() {
           _enabled = state.enabled;
           _isMoving = state.isMoving;
@@ -211,12 +209,16 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       bg.State state = await bg.BackgroundGeolocation.state;
       if (state.trackingMode == 1) {
         bg.BackgroundGeolocation.start().then(callback);
+
       } else {
         bg.BackgroundGeolocation.startGeofences().then(callback);
       }
     } else {
       dynamic callback = (bg.State state) {
         print('[stop] success: $state');
+        bg.BackgroundGeolocation.setConfig(bg.Config(
+          locationAuthorizationRequest: 'WhenInUse'
+        ));
         setState(() {
           _enabled = state.enabled;
           _isMoving = state.isMoving;

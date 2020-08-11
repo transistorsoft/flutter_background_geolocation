@@ -104,7 +104,6 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
             'refresh_token': '{refreshToken}'
           }
         ),
-        encrypt: false,
         stopOnTerminate: false,
         startOnBoot: true,
         enableHeadless: true

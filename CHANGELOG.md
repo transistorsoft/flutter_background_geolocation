@@ -2,7 +2,26 @@
 
 ## Unreleased
 
-[Fixed][Android] Extras provided with a `List` of `Map` fail to recursively convert the Map to JSON, eg:
+- [Added][Android] Add `onChange` listener for `config.locationAuthorizationRequest` to request location-authorization.
+- [Changed][iOS] If `locationAuthorizationRequest == 'WhenInUse'` and the user has granted the higher level of `Always` authorization, do not show `locationAuthorizationAlert`.
+- [Added][iOS] Apple has changed the behaviour of location authorization &mdash; if an app initially requests `When In Use` location authorization then later requests `Always` authorization, iOS will *immediately* show the authorization upgrade dialog (`[Keep using When in Use`] / `[Change to Always allow]`).
+
+**Example**
+```dart
+await bg.BackgroundGeolocation.ready(bg.Config(
+  locationAuthorizationRequest: 'WhenInUse'
+));
+//
+// some time later -- could be immediately after, hours later, days later, etc.
+//
+// Simply update config to "Always" -- iOS will automatically show the authorization upgrade dialog.
+await bg.BackgroundGeolocation.setConfig(bg.Config(
+  locationAuthorizationRequest: 'Always'
+));
+```
+![](![](https://dl.dropbox.com/s/984imwemef2v59q/when-in-use-to-always.gif?dl=1))
+
+- [Fixed][Android] Extras provided with a `List` of `Map` fail to recursively convert the Map to JSON, eg:
 ```dart
 BackgroundGeolocation.ready(bg.Config(
   extras: {
@@ -11,10 +30,10 @@ BackgroundGeolocation.ready(bg.Config(
     }]
   }
 ))
-``` 
+```
 
-[Fixed][iOS] when `getCurrentPosition` is provided with `extras`, those `extras` overwrite any configured `Config.extras` rather than merging.  
-[Fixed][Android] When cancelling Alarms, use `FLAG_UPDATE_CURRENT` instead of `FLAG_CANCEL_CURRENT` -- there are [reports](https://stackoverflow.com/questions/29344971/java-lang-securityexception-too-many-alarms-500-registered-from-pid-10790-u) of older Samsung devices failing to garbadge-collect Alarms, causing the number of alarms to exceed maximum 500, generating an exception.
+- [Fixed][iOS] when `getCurrentPosition` is provided with `extras`, those `extras` overwrite any configured `Config.extras` rather than merging.
+- [Fixed][Android] When cancelling Alarms, use `FLAG_UPDATE_CURRENT` instead of `FLAG_CANCEL_CURRENT` -- there are [reports](https://stackoverflow.com/questions/29344971/java-lang-securityexception-too-many-alarms-500-registered-from-pid-10790-u) of older Samsung devices failing to garbadge-collect Alarms, causing the number of alarms to exceed maximum 500, generating an exception.
 
 ## 1.9.3 - 2020-07-16
 - No changes from `1.9.2`.  This version is merely a bump to satisfy pub.dev penalty for placing http urls in README instead of https.
@@ -26,16 +45,16 @@ __iOS__ `AppDelegate.m`
 ```obj-c
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [GeneratedPluginRegistrant registerWithRegistry:self];
-    
+
     // [OPTIONAL] This block is called before a location is inserted into the background_geolocation SQLite database.
     // - The returned NSDictionary will be inserted.
     // - If you return nil, no record will be inserted.
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     bgGeo.beforeInsertBlock = ^NSDictionary *(TSLocation *tsLocation) {
         CLLocation *location = tsLocation.location;
-        
+
         NSLog(@"[beforeInsertBlock] %@: %@", tsLocation.uuid, location);
-        
+
         // Return a custom schema or nil to cancel SQLite insert.
         return @{
             @"lat": @(location.coordinate.latitude),
@@ -46,7 +65,7 @@ __iOS__ `AppDelegate.m`
             }
         };
     };
-    
+
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 ```
@@ -54,7 +73,7 @@ __Android__ `Application.java`
 ```java
 public class Application  extends FlutterApplication {
     @Override
-    public void onCreate() {        
+    public void onCreate() {
         super.onCreate();
 
         BackgroundGeolocation.getInstance(this).setBeforeInsertBlock(new TSBeforeInsertBlock() {
@@ -66,7 +85,7 @@ public class Application  extends FlutterApplication {
                 try {
                     json.put("lat", location.getLatitude());
                     json.put("lng", location.getLongitude());
-                    
+
                     battery.put("level", tsLocation.getBatteryLevel());
                     battery.put("is_charging", tsLocation.getBatteryIsCharging());
                     json.put("battery", battery);
@@ -83,10 +102,10 @@ public class Application  extends FlutterApplication {
 
 ## 1.9.1 - 2020-07-02
 
-- [Fixed][iOS] Geofence `EXIT` sometimes not firing when using `notifyOnDwell`. 
+- [Fixed][iOS] Geofence `EXIT` sometimes not firing when using `notifyOnDwell`.
 - [Changed][Android] Refactor geofencing-only mode to not initiate "Infinite Geofencing" when the total number of added geofences is `< 99` (the maximum number of simultaneous geofences that can be monitored on Android).  This prevents the SDK from periodically requesting location to query "geofences within `geofenceProximityRadius`".  iOS already has this behaviour (where its maximum simultaneous geofences is `19`).
 - [Fixed][iOS] When using `#ready` with `reset: true` (the default), and `autoSync: false`, the SDK could initiate HTTP service if any records exist within plugin's SQLite database, since `reset: true` causes `autoSync: true` for a fraction of a millisecond, initiating the HTTP Service.
- 
+
 ## 1.9.0 - 2020-06-15
 - [Fixed][Android] `com.android.tools.build:gradle:4.0.0` no longer allows "*direct local aar dependencies*".  The Android Setup now requires a custom __`maven url`__ to be added to your app's root __`android/build.gradle`__:
 
@@ -112,7 +131,7 @@ allprojects {
 }
 ```
 
-You might then clean your android project: 
+You might then clean your android project:
 
 ```sh
 cd android

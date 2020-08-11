@@ -46,6 +46,7 @@
 	<string>Motion always</string>
 	<key>UIBackgroundModes</key>
 	<array>
+		<string>audio</string>
 		<string>fetch</string>
 		<string>location</string>
 		<string>processing</string>
