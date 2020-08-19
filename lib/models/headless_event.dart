@@ -135,8 +135,7 @@ class HeadlessEvent {
           event = new HttpEvent(params);
           break;
         case Event.PROVIDERCHANGE:
-          event = new ProviderChangeEvent(params['enabled'], params['status'],
-              params['network'], params['gps']);
+          event = new ProviderChangeEvent(params);
           break;
         case Event.CONNECTIVITYCHANGE:
           event = new ConnectivityChangeEvent(params['connected']);

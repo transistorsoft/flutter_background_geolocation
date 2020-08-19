@@ -843,39 +843,103 @@ class BackgroundGeolocation {
     return completer.future;
   }
 
-  /// Request location permission.
-  /// __NOTE:__ The methods [start], [startGeofences], [getCurrentPosition] will automatically request location permission.
+  /// Manually request location permission from the user with the configured [Config.locationAuthorizationRequest].
   ///
-  /// The Promise will be fullfilled with a [ProviderChangeEvent.status].
+  /// The method will resolve successful if *either* __`WhenInUse`__ or __`Always`__ is authorized, regardless of [Config.locationAuthorizationRequest].  Otherwise an error will be returned (eg: user denies location permission).
+  ///
+  /// If the user has already provided authorization for location-services, the method will resolve successfully immediately.
+  ///
+  /// If iOS has *already* presented the location authorization dialog and the user has not currently authorized your desired [Config.locationAuthorizationRequest], the SDK will present an error dialog offering to direct the user to your app's Settings screen.
+  /// - To disable this behaviour, see [Config.disableLocationAuthorizationAlert].
+  /// - To customize the text on this dialog, see [Config.locationAuthorizationAlert].
+  ///
+  /// ### ⚠️ Note:
+  /// - The SDK will **already request permission** from the user when you execute [start], [startGeofences], [getCurrentPosition], etc.  You **do not need to explicitly execute this method** with typical use-cases.
   ///
   /// ## Example
   /// ```dart
-  /// bg.BackgroundGeolocation.requestPermission().then((int status) {
-  ///   print("[requestPermission] STATUS: ${status}");
-  ///   switch(status) {
-  ///     case bg.ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS:
-  ///       print("[requestPermission] AUTHORIZATION_STATUS_ALWAYS");
-  ///       break;
-  ///     case bg.ProviderChangeEvent.AUTHORIZATION_STATUS_WHEN_IN_USE:
-  ///       print("[requestPermission] AUTHORIZATION_STATUS_WHEN_IN_USE");
-  ///       break;
-  ///     case bg.ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED:
-  ///       print("[requestPermission] AUTHORIZATION_STATUS_DENIED");
-  ///       break;
-  ///     case bg.ProviderChangeEvent.AUTHORIZATION_STATUS_NOT_DETERMINED:
-  ///       print("[requestPermission] AUTHORIZATION_STATUS_NOT_DETERMINED");
-  ///       break;
-  ///     case bg.ProviderChangeEvent.AUTHORIZATION_STATUS_RESTRICTED:
-  ///       print("[requestPermission] AUTHORIZATION_STATUS_RESTRICTED");
-  ///       break;
+  /// initPlatformState async {
+  ///   // Listen to onProviderChange to be notified when location authorization changes occur.
+  ///   BackgroundGeolocation.onProviderChange((event) {
+  ///     print("[providerchange] $event");
+  ///   });
+  ///
+  ///   // First ready the plugin with your configuration.
+  ///   let State = await BackgroundGeolocation.ready(Config(
+  ///     locationAuthorizationRequest: 'Always'
+  ///   ));
+  ///
+  ///   // Manually request permission with configured locationAuthorizationRequest.
+  ///   try {
+  ///     int status = await BackgroundGeolocation.requestPermission();
+  ///     if (status == ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS) {
+  ///       print("[requestPermission] Authorized Always $status");
+  ///     } else if (status == ProviderChangeEvent.AUTHORIZATION_STATUS_WHEN_IN_USE) {
+  ///       print("[requestPermission] Authorized WhenInUse: $status");
+  ///     }
+  ///   } catch(error) {
+  ///     print("[requestPermission] DENIED: $error");
   ///   }
-  /// }).catchError((dynamic error) {
-  ///   print("[requestPermission] ERROR: ${error}");
-  /// });
+  /// }
   /// ```
+  ///
+  /// ### ℹ️ See also:
+  /// - [Config.locationAuthorizationRequest]
+  /// - [Config.disableLocationAuthorizationAlert]
+  /// - [Config.locationAuthorizationAlert]
+  /// - [requestTemporaryFullAccuracy] (*iOS 14+*)
   ///
   static Future<int> requestPermission() async {
     return await _methodChannel.invokeMethod('requestPermission');
+  }
+
+  /// __`[iOS 14+]`__ iOS 14 has introduced a new __`[Precise: On]`__ switch on the location authorization dialog allowing users to disable high-accuracy location.
+  ///
+  /// The method [`requestTemporaryFullAccuracy` (Apple docs)](https://developer.apple.com/documentation/corelocation/cllocationmanager/3600217-requesttemporaryfullaccuracyauth?language=objc) will allow you to present a dialog to the user requesting temporary *full accuracy* for the lifetime of this application run (until terminate).
+  ///
+  /// ![](https://dl.dropbox.com/s/dj93xpg51vspqk0/ios-14-precise-on.png?dl=1)
+  ///
+  /// ## Configuration &mdash; `Info.plist`
+  ///
+  /// In order to use this method, you must configure your __`Info.plist`__ with the `Dictionary` key:
+  /// __`Privacy - Location Temporary Usage Description Dictionary`__
+  ///
+  /// ![](https://dl.dropbox.com/s/52f5lnjc4d9g8w7/ios-14-Privacy-Location-Temporary-Usage-Description-Dictionary.png?dl=1)
+  ///
+  /// The keys of this `Dictionary` (eg: `Delivery`) are supplied as the first argument to the method.  The `value` will be printed on the dialog shown to the user, explaing the purpose of your request for full accuracy.
+  ///
+  /// If the dialog fails to be presented, an error will be thrown:
+  /// - The Info.plist file doesn’t have an entry for the given purposeKey value.
+  /// - The app is already authorized for full accuracy.
+  /// - The app is in the background.
+  ///
+  /// ![](https://dl.dropbox.com/s/8cc0sniv3pvpetl/ios-14-requestTemporaryFullAccuracy.png?dl=1)
+  ///
+  /// ## Example
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.onProviderChange((ProviderChangeEvent event) {
+  ///   if (event.accuracyAuthorization == ProviderChangeEvent.ACCURACY_AUTHORIZATION_REDUCED) {
+  ///     // Supply "Purpose" key from Info.plist as 1st argument.
+  ///     BackgroundGeolocation.requestTemporaryFullAccuracy("Delivery").then((int accuracyAuthorization) {
+  ///       if (accuracyAuthorization == ProviderChangeEvent.ACCURACY_AUTHORIZATION_FULL) {
+  ///         print("[requestTemporaryFullAccuracy] GRANTED:  $accuracyAuthorization");
+  ///       } else {
+  ///         print("[requestTemporaryFullAccuracy] DENIED:  $accuracyAuthorization");
+  ///       }
+  ///     }).catchError((error) {
+  ///       print("[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: $error");
+  ///     });
+  ///   }
+  /// });
+  /// ```
+  ///
+  /// __See also:__
+  /// - [ProviderChangeEvent.accuracyAuthorization].
+  /// - [What's new in iOS 14 `CoreLocation`](https://levelup.gitconnected.com/whats-new-with-corelocation-in-ios-14-bd28421c95c4)
+  ///
+  static Future<int> requestTemporaryFullAccuracy(String purpose) async {
+    return await _methodChannel.invokeMethod('requestTemporaryFullAccuracy', purpose);
   }
 
   /// Get current state of location-services, including authorization status.
@@ -886,8 +950,7 @@ class BackgroundGeolocation {
     Completer completer = new Completer<ProviderChangeEvent>();
 
     _methodChannel.invokeMethod('getProviderState').then((dynamic data) {
-      completer.complete(new ProviderChangeEvent(
-          data['enabled'], data['status'], data['network'], data['gps']));
+      completer.complete(new ProviderChangeEvent(data));
     }).catchError((e) {
       completer.completeError(e);
     });
@@ -1253,8 +1316,7 @@ class BackgroundGeolocation {
       _eventsProviderChange = _eventChannelProviderChange
           .receiveBroadcastStream()
           .map((dynamic event) {
-        return new ProviderChangeEvent(
-            event['enabled'], event['status'], event['network'], event['gps']);
+        return new ProviderChangeEvent(event);
       });
     }
     _registerSubscription(_eventsProviderChange.listen(callback), callback);
@@ -1421,56 +1483,56 @@ class BackgroundGeolocation {
   /// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
   ///
   /// /// Receives all events from BackgroundGeolocation while app is terminated:
-  /// void headlessTask(bg.HeadlessEvent headlessEvent) async {
+  /// void headlessTask(HeadlessEvent headlessEvent) async {
   ///   print('[HeadlessTask]: ${headlessEvent}');
   ///
   ///   // Implement a 'case' for only those events you're interested in.
   ///   switch(headlessEvent.name) {
-  ///     case bg.Event.TERMINATE:
-  ///       bg.State state = headlessEvent.event;
+  ///     case Event.TERMINATE:
+  ///       State state = headlessEvent.event;
   ///       print('- State: ${state}');
   ///       break;
-  ///     case bg.Event.HEARTBEAT:
-  ///       bg.HeartbeatEvent event = headlessEvent.event;
+  ///     case Event.HEARTBEAT:
+  ///       HeartbeatEvent event = headlessEvent.event;
   ///       print('- HeartbeatEvent: ${event}');
   ///       break;
-  ///     case bg.Event.LOCATION:
-  ///       bg.Location location = headlessEvent.event;
+  ///     case Event.LOCATION:
+  ///       Location location = headlessEvent.event;
   ///       print('- Location: ${location}');
   ///       break;
-  ///     case bg.Event.MOTIONCHANGE:
-  ///       bg.Location location = headlessEvent.event;
+  ///     case Event.MOTIONCHANGE:
+  ///       Location location = headlessEvent.event;
   ///       print('- Location: ${location}');
   ///       break;
-  ///     case bg.Event.GEOFENCE:
-  ///       bg.GeofenceEvent geofenceEvent = headlessEvent.event;
+  ///     case Event.GEOFENCE:
+  ///       GeofenceEvent geofenceEvent = headlessEvent.event;
   ///       print('- GeofenceEvent: ${geofenceEvent}');
   ///       break;
-  ///     case bg.Event.GEOFENCESCHANGE:
-  ///       bg.GeofencesChangeEvent event = headlessEvent.event;
+  ///     case Event.GEOFENCESCHANGE:
+  ///       GeofencesChangeEvent event = headlessEvent.event;
   ///       print('- GeofencesChangeEvent: ${event}');
   ///       break;
-  ///     case bg.Event.SCHEDULE:
-  ///       bg.State state = headlessEvent.event;
+  ///     case Event.SCHEDULE:
+  ///       State state = headlessEvent.event;
   ///       print('- State: ${state}');
   ///       break;
-  ///     case bg.Event.ACTIVITYCHANGE:
-  ///       bg.ActivityChangeEvent event = headlessEvent.event;
+  ///     case Event.ACTIVITYCHANGE:
+  ///       ActivityChangeEvent event = headlessEvent.event;
   ///       print('ActivityChangeEvent: ${event}');
   ///       break;
-  ///     case bg.Event.HTTP:
-  ///       bg.HttpEvent response = headlessEvent.event;
+  ///     case Event.HTTP:
+  ///       HttpEvent response = headlessEvent.event;
   ///       print('HttpEvent: ${response}');
   ///       break;
-  ///     case bg.Event.POWERSAVECHANGE:
+  ///     case Event.POWERSAVECHANGE:
   ///       bool enabled = headlessEvent.event;
   ///       print('ProviderChangeEvent: ${enabled}');
   ///       break;
-  ///     case bg.Event.CONNECTIVITYCHANGE:
-  ///       bg.ConnectivityChangeEvent event = headlessEvent.event;
+  ///     case Event.CONNECTIVITYCHANGE:
+  ///       ConnectivityChangeEvent event = headlessEvent.event;
   ///       print('ConnectivityChangeEvent: ${event}');
   ///       break;
-  ///     case bg.Event.ENABLEDCHANGE:
+  ///     case Event.ENABLEDCHANGE:
   ///       bool enabled = headlessEvent.event;
   ///       print('EnabledChangeEvent: ${enabled}');
   ///       break;

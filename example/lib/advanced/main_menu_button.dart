@@ -21,6 +21,20 @@ class MainMenuButtonState extends State<MainMenuButton> {
 
   void _onClickMenu() async {
     // Text a backgroundTask on menu-click.
+    int accuracyAuthorization = await bg.BackgroundGeolocation.requestTemporaryFullAccuracy("DemoPurpose");
+    print("[requestTemporaryFullAccuracy] $accuracyAuthorization");
+
+    try {
+      int status = await bg.BackgroundGeolocation.requestPermission();
+      if (status == bg.ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS) {
+        print("[requestPermission] authorized Always: $status");
+      } else if (status == bg.ProviderChangeEvent.AUTHORIZATION_STATUS_WHEN_IN_USE) {
+        print("[requestPermission] authorized WhenInUse: $status");
+      }
+    } catch(error) {
+      print("[requestPermission] DENIED: $error");
+    }
+
     bg.BackgroundGeolocation.startBackgroundTask().then((int taskId) {
       print("********* startBackgroundTask: $taskId");
 

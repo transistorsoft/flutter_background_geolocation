@@ -46,6 +46,7 @@ import com.transistorsoft.locationmanager.data.LocationModel;
 import com.transistorsoft.locationmanager.data.SQLQuery;
 import com.transistorsoft.locationmanager.device.DeviceInfo;
 import com.transistorsoft.locationmanager.device.DeviceSettingsRequest;
+import com.transistorsoft.locationmanager.event.LocationProviderChangeEvent;
 import com.transistorsoft.locationmanager.event.TerminateEvent;
 import com.transistorsoft.locationmanager.geofence.TSGeofence;
 import com.transistorsoft.locationmanager.location.TSCurrentPositionRequest;
@@ -101,6 +102,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     private static final String ACTION_REQUEST_SETTINGS  = "requestSettings";
     private static final String ACTION_SHOW_SETTINGS     = "showSettings";
     private static final String ACTION_REGISTER_PLUGIN   = "registerPlugin";
+    private static final String ACTION_REQUEST_TEMPORARY_FULL_ACCURACY = "requestTemporaryFullAccuracy";
 
     private static final String JOB_SERVICE_CLASS         = "com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask";
 
@@ -307,6 +309,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             getProviderState(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_REQUEST_PERMISSION)) {
             requestPermission(result);
+        } else if (call.method.equalsIgnoreCase(ACTION_REQUEST_TEMPORARY_FULL_ACCURACY)) {
+            requestTemporaryFullAccuracy((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_REGISTER_PLUGIN)) {
             // No implementation; iOS only.
             result.success(true);
@@ -868,6 +872,12 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             @Override public void onSuccess(int status) { result.success(status); }
             @Override public void onFailure(int status) { result.error("DENIED", null, status); }
         });
+    }
+
+    // Note:  No Android implementation -- this is an iOS-only mechanism currently.
+    private void requestTemporaryFullAccuracy(String purpose, MethodChannel.Result result) {
+        // Note:  return iOS CLAccuracyAuthorizationFull (0)
+        result.success(LocationProviderChangeEvent.ACCURACY_AUTHORIZATION_FULL);
     }
 
     private void getTransistorToken(List<String>args, final MethodChannel.Result result) {
