@@ -35,6 +35,8 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   String _motionActivity;
   String _odometer;
 
+  DateTime _lastRequestedTemporaryFullAccuracy;
+
   /// My private test mode.  IGNORE.
   int _testModeClicks;
   Timer _testModeTimer;
@@ -69,6 +71,15 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     if (state == AppLifecycleState.paused) {
 
     } else if (state == AppLifecycleState.resumed) {
+      if (!_enabled) return;
+
+      DateTime now = DateTime.now();
+      if (_lastRequestedTemporaryFullAccuracy != null) {
+        Duration dt = _lastRequestedTemporaryFullAccuracy.difference(now);
+        if (dt.inSeconds < 10) return;
+      }
+      _lastRequestedTemporaryFullAccuracy = now;
+      bg.BackgroundGeolocation.requestTemporaryFullAccuracy("DemoPurpose");
 
     }
   }
@@ -121,7 +132,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         autoSync: true,
         // Application options
         stopOnTerminate: false,
-        locationAuthorizationRequest: 'WhenInUse',
+        locationAuthorizationRequest: 'Always',
         startOnBoot: true,
         enableHeadless: true,
         heartbeatInterval: 60
@@ -196,11 +207,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     if (enabled) {
       dynamic callback = (bg.State state) async {
         print('[start] success: $state');
-        if (state.locationAuthorizationRequest == 'WhenInUse') {
-          bg.BackgroundGeolocation.setConfig(bg.Config(
-            locationAuthorizationRequest: 'Always'
-          ));
-        }
         setState(() {
           _enabled = state.enabled;
           _isMoving = state.isMoving;
@@ -209,16 +215,12 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       bg.State state = await bg.BackgroundGeolocation.state;
       if (state.trackingMode == 1) {
         bg.BackgroundGeolocation.start().then(callback);
-
       } else {
         bg.BackgroundGeolocation.startGeofences().then(callback);
       }
     } else {
       dynamic callback = (bg.State state) {
         print('[stop] success: $state');
-        bg.BackgroundGeolocation.setConfig(bg.Config(
-          locationAuthorizationRequest: 'WhenInUse'
-        ));
         setState(() {
           _enabled = state.enabled;
           _isMoving = state.isMoving;
@@ -307,8 +309,20 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     });
   }
 
-  void _onProviderChange(bg.ProviderChangeEvent event) {
+  void _onProviderChange(bg.ProviderChangeEvent event) async {
     print('[${bg.Event.PROVIDERCHANGE}] - $event');
+    if (event.accuracyAuthorization == bg.ProviderChangeEvent.ACCURACY_AUTHORIZATION_REDUCED) {
+      // Supply "Purpose" key from Info.plist as 1st argument.
+      bg.BackgroundGeolocation.requestTemporaryFullAccuracy("DemoPurpose").then((int accuracyAuthorization) {
+        if (accuracyAuthorization == bg.ProviderChangeEvent.ACCURACY_AUTHORIZATION_FULL) {
+          print("[requestTemporaryFullAccuracy] GRANTED:  $accuracyAuthorization");
+        } else {
+          print("[requestTemporaryFullAccuracy] DENIED:  $accuracyAuthorization");
+        }
+      }).catchError((error) {
+        print("[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: $error");
+      });
+    }
     setState(() {
       events.insert(0, Event(bg.Event.PROVIDERCHANGE, event, event.toString()));
     });
