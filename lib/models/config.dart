@@ -1428,7 +1428,7 @@ class Config {
   /// The iOS alert dialog text elements can be configured via [locationAuthorizationAlert] and [locationAuthorizationRequest]
   ///
   /// ![](https://dl.dropbox.com/s/wk66ave2mzq6m6a/ios-locationAuthorizationAlert.jpg?dl=1)
-  /// 
+  ///
   /// ## Android
   ///
   /// Android can detect when the user has configured the device's *Settings->Location* in a manner that does not match your location request (eg: [Config.desiredAccuracy].  For example, if the user configures *Settings->Location->Mode* with *Battery Saving* (ie: Wifi only) but you've specifically requested [DESIRED_ACCURACY_HIGH] (ie: GPS), Android will show a dialog asking the user to confirm the desired changes.  If the user clicks `[OK]`, the OS will automcatically modify the Device settings.

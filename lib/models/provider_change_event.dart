@@ -11,7 +11,7 @@ class ProviderChangeEvent {
 
   static const ACCURACY_AUTHORIZATION_FULL = 0;
   static const ACCURACY_AUTHORIZATION_REDUCED = 1;
-  
+
   /// `true` when device location-services is enabled.
   bool enabled;
 

@@ -939,7 +939,8 @@ class BackgroundGeolocation {
   /// - [What's new in iOS 14 `CoreLocation`](https://levelup.gitconnected.com/whats-new-with-corelocation-in-ios-14-bd28421c95c4)
   ///
   static Future<int> requestTemporaryFullAccuracy(String purpose) async {
-    return await _methodChannel.invokeMethod('requestTemporaryFullAccuracy', purpose);
+    return await _methodChannel.invokeMethod(
+        'requestTemporaryFullAccuracy', purpose);
   }
 
   /// Get current state of location-services, including authorization status.
