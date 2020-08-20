@@ -46,6 +46,7 @@ static NSString *const ACTION_PLAY_SOUND = @"playSound";
 static NSString *const ACTION_REGISTER_HEADLESS_TASK = @"registerHeadlessTask";
 static NSString *const ACTION_INITIALIZED = @"initialized";
 static NSString *const ACTION_REQUEST_PERMISSION = @"requestPermission";
+static NSString *const ACTION_REQUEST_TEMPORARY_FULL_ACCURACY = @"requestTemporaryFullAccuracy";
 static NSString *const ACTION_GET_PROVIDER_STATE = @"getProviderState";
 static NSString *const ACTION_IS_IGNORING_BATTERY_OPTIMIZATIONS = @"isIgnoringBatteryOptimizations";
 static NSString *const ACTION_REQUEST_SETTINGS = @"requestSettings";
@@ -199,6 +200,8 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
         [self getProviderState:result];
     } else if ([self method:ACTION_REQUEST_PERMISSION is:action]) {
         [self requestPermission:result];
+    } else if ([self method:ACTION_REQUEST_TEMPORARY_FULL_ACCURACY is:action]) {
+        [self requestTemporaryFullAccuracy:call.arguments result:result];
     } else if ([self method:ACTION_INITIALIZED is:action]) {
         // Headless task initialization ignored on iOS.
         result(@YES);
@@ -219,6 +222,14 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
         result(status);
     } failure:^(NSNumber *status) {
         result([FlutterError errorWithCode:@"DENIED" message:nil details:status]);
+    }];
+}
+
+- (void) requestTemporaryFullAccuracy:(NSString*)purpose result:(FlutterResult)result {
+    [_locationManager requestTemporaryFullAccuracy:purpose success:^(NSInteger accuracyAuthorization) {
+        result(@(accuracyAuthorization));
+    } failure:^(NSError *error) {
+        result([FlutterError errorWithCode:[NSString stringWithFormat:@"%ld", (long) error.code] message:error.userInfo[@"NSDebugDescription"] details:nil]);
     }];
 }
 

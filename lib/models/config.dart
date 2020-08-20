@@ -391,7 +391,7 @@ class Config {
   ///
   /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
-  /// __WARNING:__ It is highly recommended to let the plugin manage uploading locations to your server, **particularly for Android** when configured with **`stopOnTerminate: false`**, since your Cordova app (where your Javascript lives) *will* terminate &mdash; only the plugin's native Android background service will continue to operate, recording locations and uploading to your server.  The plugin's native HTTP service *is* better at this task than Javascript Ajax requests, since the plugin will automatically retry on server failure.
+  /// __WARNING:__ It is highly recommended to let the plugin manage uploading locations to your server, **particularly for Android** when configured with **`stopOnTerminate: false`**, since your App Component *will* terminate &mdash; only the plugin's native Android background service will continue to operate, recording locations and uploading to your server.  The plugin's native HTTP service *is* better at this task than your own http requests, since the SDK will automatically retry on server failure.
   String url;
 
   /// Allows you to specify which events to persist to the SDK's internal database:  locations | geofences | all (default).
@@ -1290,17 +1290,96 @@ class Config {
   ///
   bool pausesLocationUpdatesAutomatically;
 
-  /// Defines the *desired* location-authorization request you *wish* for the user to authorize: "When in Use" or "Always".
+  /// Defines the *desired* location-authorization request you *wish* for the user to authorize:
+  /// - __`Always`__
+  /// - __`WhenInUse`__
+  /// - __`Any`__
   ///
-  /// **`locationAuthorizationRequest`** tells the plugin the mode it *expects* to have been authorized with *by the user*.  If the user changes this mode in their settings, the plugin will detect this (See [locationAuthorizationAlert]).  Defaults to **`Always`**.  **`WhenInUse`** will display a **blue bar** at top-of-screen informing user that location-services are on.
+  /// **`locationAuthorizationRequest`** tells the plugin the mode it *expects* to have been authorized with *by the user*.  Defaults to __`Always`__.  If you _don't care_ what the user authorizes, you may configure __`locationAuthorizationRequest: "Any"`__.
   ///
-  /// **Note:**  For *Android*, this option applies only to Android Q (API 29) and later.
+  /// If you configure __`locationAuthorizationRequest: 'Always'`__ but the user authorizes only __`[When in Use]`__ , the plugin will detect this and show the [locationAuthorizationAlert] dialog (see [disableLocationAuthorizationAlert] to disable this behaviour).
   ///
-  /// ![](https://dl.dropboxusercontent.com/s/88y3i4nkqq3o9ee/ios-location-authorization-dialog.png?dl=1)
+  /// ## iOS
   ///
-  /// If you configure **`Any`**, the plugin allow the user to choose either `Always` or `WhenInUse`.   The plugin will **not** show the [locationAuthorizationAlert] dialog when the user changes the selection in `Privacy->Location Services`.
+  /// iOS 13 introduced a significant modification to *location authorization* (See this [blog entry](https://medium.com/@transistorsoft/ios-13-and-android-q-support-beb7595d2c24)).  No longer will the __`[Always allow]`__ option appear on the initial authorization dialog.  Instead, iOS will prompt the user with a second "authorization upgrade" dialog, asking the user if they'd like to grant __`[Keep Only While Using ]`__ or __`[Change to Always Allow]`__.
   ///
-  ///  **WARNING:**  Configuring **`WhenInUse`** will disable many of the plugin's features, since iOS forbids any API which operates in the background to operate (such as **geofences**, which the plugin relies upon to automatically engage background tracking).
+  /// ### 1.  __`locationAuthorizationRequest: 'Always'`__:
+  ///
+  /// If your app requests __`locationAuthorizationRequest: 'Always'`__, the user must first authorize __`[Alow While Using App]`__, followed *immediately* by a second dialog prompting the user to upgrade location authorization with __`[Change to Always Allow]`__:
+  ///
+  /// ![](https://dl.dropbox.com/s/0alq10i4pcm2o9q/ios-when-in-use-to-always-CHANGELOG.gif?dl=1)
+  ///
+  /// If the user __denies__ __`Always`__ authorization, the [locationAuthorizationAlert] will be shown (see [disableLocationAuthorizationAlert] to disable this behaviour).
+  ///
+  /// ![](https://dl.dropbox.com/s/wk66ave2mzq6m6a/ios-locationAuthorizationAlert.jpg?dl=1)
+  ///
+  /// ### 2.  __`locationAuthorizationRequest: 'WhenInUse'`__:
+  ///
+  /// Only the initial dialog will be shown:
+  ///
+  /// ![](https://dl.dropbox.com/s/n38qehw3cjhzngy/ios13-location-authorization.png?dl=1)
+  ///
+  /// *However*, if your app *later* uses __`setConfig`__ to change __`locationAuthorizationRequest: 'Always'`__, iOS will *immediately* show the "authorization upgrade" dialog:
+  ///
+  /// ![](https://dl.dropbox.com/s/5syokc8rtrc9q35/ios13-location-authorization-upgrade-always.png?dl=1)
+  ///
+  /// ### 3.  __`locationAuthorizationRequest: 'Any'`__:
+  ///
+  /// The SDK will request `Always` authorization.  The initial location authorization dialog will be shown:
+  ///
+  /// ![](https://dl.dropbox.com/s/n38qehw3cjhzngy/ios13-location-authorization.png?dl=1)
+  ///
+  /// However, at some *unknown time* in the future, iOS will prompt the user with the location authorization upgrade dialog:
+  ///
+  /// ![](https://dl.dropbox.com/s/5syokc8rtrc9q35/ios13-location-authorization-upgrade-always.png?dl=1)
+  ///
+  /// ## Example
+  ///
+  /// ```dart
+  /// initPlatformState() async {
+  ///   // Initially configure for 'WhenInUse'.
+  ///   BackgroundGeolocation.ready(Config(
+  ///     locationAuthorizationRequest: 'WhenInUse',
+  ///     .
+  ///     .
+  ///     .
+  ///   });
+  /// }
+  ///
+  /// onClickStartTracking() async {
+  ///   // Initial location authorization dialog for "When in Use" authotization
+  ///   // will be shown here.
+  ///   await BackgroundGeolocation.start();
+  ///   // some time later -- could be immediately after, hours later, days later, etc.,
+  ///   // you can upgrade the config to 'Always' whenever you wish:
+  ///   _upgradeToAlwaysAllow();
+  /// }
+  ///
+  /// _upgradeToAlwaysAllow {
+  ///   // Simply update `locationAuthorizationRequest` to "Always" -- the SDK
+  ///   // will cause iOS to immediately show the authorization upgrade dialog
+  ///   // for "Change to Always Allow":
+  ///   BackgroundGeolocation.setConfig(Config(
+  ///     locationAuthorizationRequest: 'Always'
+  ///   ));
+  /// }
+  /// ```
+  ///
+  /// ## Android
+  ///
+  /// ### Android 10
+  ///
+  /// Like iOS 12, Android 10 now forces your app to offer *both* __`[Allow all the time]`__ and __`[Allow only while using]`__ options.
+  ///
+  /// ![](https://dl.dropbox.com/s/jv3g2sgap69qhfx/android-10-location-authorization-dialog.png?dl=1)
+  ///
+  ///
+  /// ### Android 11+
+  ///
+  /// Just as in iOS 13, Android 11 has [changed location authorization](https://developer.android.com/preview/privacy/location) and no longer offers the __`[Allow all the time]`__ button on the location authorization dialog.  Instead, Android will now offer a link **Allow in settings**, where the user must *explicity* authorize __`[Allow all the time]`__.
+  ///
+  /// ![](https://dl.dropbox.com/s/kbfwqf2pffwvcc2/android11-location-authorization-always.png?dl=1)
+  /// ![](https://dl.dropbox.com/s/dy65k8b0sgj5cgy/android11-location-authorization-upgrade-settings.png?dl=1)
   ///
   String locationAuthorizationRequest;
 
@@ -1320,7 +1399,7 @@ class Config {
   ///
   /// ##### `@config {String} settingsButton [Settings]` Settings button label
   ///
-  /// ![](s/wyoaf16buwsw7ed/docs-locationAuthorizationAlert.jpg?dl=1)
+  /// ![](https://dl.dropbox.com/s/wk66ave2mzq6m6a/ios-locationAuthorizationAlert.jpg?dl=1)
   ///
   /// ## Example
   ///
@@ -1348,6 +1427,8 @@ class Config {
   ///
   /// The iOS alert dialog text elements can be configured via [locationAuthorizationAlert] and [locationAuthorizationRequest]
   ///
+  /// ![](https://dl.dropbox.com/s/wk66ave2mzq6m6a/ios-locationAuthorizationAlert.jpg?dl=1)
+  /// 
   /// ## Android
   ///
   /// Android can detect when the user has configured the device's *Settings->Location* in a manner that does not match your location request (eg: [Config.desiredAccuracy].  For example, if the user configures *Settings->Location->Mode* with *Battery Saving* (ie: Wifi only) but you've specifically requested [DESIRED_ACCURACY_HIGH] (ie: GPS), Android will show a dialog asking the user to confirm the desired changes.  If the user clicks `[OK]`, the OS will automcatically modify the Device settings.
@@ -1377,7 +1458,7 @@ class Config {
   ///
   bool disableLocationAuthorizationAlert;
 
-  /// [__iOS Only__] A Boolean indicating whether the status bar changes its appearance when an app uses location services in the background.
+  /// __`[iOS Only]`__ A Boolean indicating whether the status bar changes its appearance when an app uses location services in the background.
   ///
   /// The default value of this property is `false`. The background location usage indicator is a blue bar or a blue pill in the status bar on iOS; on watchOS the indicator is a small icon. Users can tap the indicator to return to your app.
   ///
