@@ -1,16 +1,56 @@
 part of flt_background_geolocation;
 
-class _Coords {
+/// Location coordinates (eg: `latitude`, `longitude`, `accuracy`, `speed`, `heading`, etc.
+///
+/// ```dart
+/// BackgroundGeolocation.onLocation((Location location) {
+///   double accuracy = location.coords.accuracy;
+///   double lat      = location.coords.latitude;
+///   double lng      = location.coords.longitude;
+///   double speed    = location.coords.speed;
+///   double heading  = location.coords.heading;
+///   double altitude = location.coords.altitude;
+///
+///   print("[onLocation] $location");
+/// });
+///
+/// State state = await BackgroundGeolocation.ready(Config(
+///   distanceFilter: 10.0
+/// ));
+///
+/// Location location = await BackgroundGeolocation.getCurrentPosition();
+/// print("[getCurrentPosition] location: $location");
+/// ```
+///
+class Coords {
+  /// __`[iOS Only]`__ The current floor within a building.
+  /// Only works in an environment containing indoor-tracking hardware (eg: bluetooth beacons).
   int floor;
+
+  /// Latitude of the location.
   double latitude;
+
+  /// Longitude of the location.
   double longitude;
+
+  /// Accuracy in meters.
   double accuracy;
+
+  /// Altitude above sea-level in meters.
   double altitude;
+
+  /// Heading in degrees.
+  /// ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
   double heading;
+
+  /// Speed in meters / second.
+  /// ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
   double speed;
+
+  /// Altitude accuracy in meters.
   double altitudeAccuracy;
 
-  _Coords(dynamic coords) {
+  Coords(dynamic coords) {
     this.latitude = coords['latitude'] * 1.0;
     this.longitude = coords['longitude'] * 1.0;
     this.accuracy = coords['accuracy'] * 1.0;
@@ -27,28 +67,91 @@ class _Coords {
   }
 }
 
-class _Battery {
+/// Device battery information.
+///
+/// ```dart
+/// BackgroundGeolocation.onLocation((Location location) {
+///   bool isCharging = location.battery.isCharging;
+///   double level    = location.battery.level;
+///
+///   print("[onLocation] Battery state, isCharging: $isCharging, level: $level");
+/// });
+/// ```
+///
+class Battery {
+  /// `true` when device is plugged in to power.
   bool isCharging;
+
+  /// Battery level.  `0.0` = empty; `1.0` = full charge.
   double level;
 
-  _Battery(dynamic battery) {
+  Battery(dynamic battery) {
     this.isCharging = battery['is_charging'];
     this.level = battery['level'] * 1.0;
   }
 }
 
-class _Activity {
+/// Device motion-activity when this `Location` was recorded.
+///
+/// ```dart
+/// BackgroundGeolocation.onLocation((Location location) {
+///   activityType = location.activity.type;
+///   int confidence = location.activity.confidence;
+///
+///   print("[onLocation] Motion activity, type: $activityType, confidence: $confidence");
+/// });
+/// ```
+///
+class Activity {
+  /// The reported device motion activity.
+  ///
+  /// | Activity Name  |
+  /// |----------------|
+  /// | `still`        |
+  /// | `walking`      |
+  /// | `on_foot`      |
+  /// | `running`      |
+  /// | `on_bicycle`   |
+  /// | `in_vehicle`   |
   String type;
+
+  /// Confidence of the reported device motion activity in %.
   int confidence;
 
-  _Activity(dynamic activity) {
+  Activity(dynamic activity) {
     this.type = activity['type'];
     this.confidence = activity['confidence'];
   }
 }
 
-/// Geolocation event object provided to [BackgroundGeolocation.onLocation] and [BackgroundGeolocation.onMotionChange].
+/// Location object provided to:
+/// - [BackgroundGeolocation.onLocation]
+/// - [BackgroundGeolocation.onMotionChange],
+/// - [BackgroundGeolocation.getCurrentPosition].
 ///
+/// ```dart
+/// BackgroundGeolocation.onLocation((Location location) {
+///   double accuracy = location.coords.accuracy;
+///   double lat      = location.coords.latitude;
+///   double lng      = location.coords.longitude;
+///   double speed    = location.coords.speed;
+///   double heading  = location.coords.heading;
+///   double altitude = location.coords.altitude;
+///
+///   print("[onLocation] $location");
+/// });
+///
+/// BackgroundGeolocation.onMotionChange(Location location) {
+///   print("[onMotionChange] $location");
+/// });
+///
+/// State state = await BackgroundGeolocation.ready(Config(
+///   distanceFilter: 10.0
+/// ));
+///
+/// Location location = await BackgroundGeolocation.getCurrentPosition();
+/// print("[getCurrentPosition] location: $location");
+/// ```
 ///
 class Location {
   dynamic map;
@@ -94,24 +197,67 @@ class Location {
   String uuid;
 
   /// Location coordinates.
-  _Coords coords;
+  ///
+  /// See [Coords].
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.onLocation((Location location) {
+  ///   double accuracy = location.coords.accuracy;
+  ///   double lat      = location.coords.latitude;
+  ///   double lng      = location.coords.longitude;
+  ///   double speed    = location.coords.speed;
+  ///   double heading  = location.coords.heading;
+  ///   double altitude = location.coords.altitude;
+  ///
+  ///   print("[onLocation] $location");
+  /// });
+  Coords coords;
 
   /// Corresponding [GeofenceEvent] if this location was recorded due to a [Geofence] transition.
+  ///
+  /// See [GeofenceEvent]
+  ///
   GeofenceEvent geofence;
 
-  /// Device battery-level when this 'Location' was recorded.
-  _Battery battery;
+  /// Device battery-level when this `Location` was recorded.
+  ///
+  /// See [Battery]
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.onLocation((Location location) {
+  ///   bool isCharging = location.battery.isCharging;
+  ///   double level    = location.battery.level;
+  ///
+  ///   print("[onLocation] Battery state, isCharging: $isCharging, level: $level");
+  /// });
+  /// ```
+  ///
+  Battery battery;
 
   /// Device motion-activity when this `Location` was recorded.
-  _Activity activity;
+  ///
+  /// See [Activity]
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.onLocation((Location location) {
+  ///   activityType = location.activity.type;
+  ///   int confidence = location.activity.confidence;
+  ///
+  ///   print("[onLocation] Motion activity, type: $activityType, confidence: $confidence");
+  /// });
+  /// ```
+  ///
+  Activity activity;
 
+  /// Arbitrary extras object from configured [Config.extras].
+  ///
   Map extras;
 
   Location(dynamic params) {
     this.map = params;
-    this.coords = new _Coords(params['coords']);
-    this.battery = new _Battery(params['battery']);
-    this.activity = new _Activity(params['activity']);
+    this.coords = new Coords(params['coords']);
+    this.battery = new Battery(params['battery']);
+    this.activity = new Activity(params['activity']);
 
     this.timestamp = params['timestamp'];
     this.isMoving = params['is_moving'];
