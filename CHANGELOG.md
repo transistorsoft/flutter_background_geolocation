@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 1.10.0+1 &mdash; 2020-08-21
+- [Docs] Improve docs for `Location` class; adding missing docs for `Coords`, `Battery`, `Activity`.
+
 ## 1.10.0 &mdash 2020-08-20
 
 - [Added][iOS] iOS 14 introduces a new switch on the initial location authorization dialog, allowing the user to "disable precise location".  In support of this, a new method `BackgroundGeolocation.requestTemporaryFullAccuracy` has been added for requesting the user enable "temporary high accuracy" (until the next launch of your app), in addition to a new attribute `ProviderChangeEvent.accuracyAuthorization` for learning its state in the event `onProviderChange`:
