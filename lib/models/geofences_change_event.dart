@@ -41,6 +41,7 @@ class GeofencesChangeEvent {
     });
   }
 
+  /// String representation of `GeofencesChangeEvent` for `print` to logs.
   String toString({compact: bool}) {
     if (compact == true) {
       List<String> identifiersOn = [];

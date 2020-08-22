@@ -60,14 +60,17 @@ class TransistorAuthorizationToken {
   TransistorAuthorizationToken(
       this.accessToken, this.refreshToken, this.expires, this.url);
 
+  /// Return full url to `/locations` endpoint.
   String get locationsUrl {
     return "$url/$_LOCATIONS_PATH";
   }
 
+  /// Return full url to refreshUrl endpoint.
   String get refreshUrl {
     return "$url/$_REFRESH_TOKEN_PATH";
   }
 
+  /// Return `Map` of refreshPayload.
   Map<String, String> get refreshPayload {
     return _REFRESH_PAYLOAD;
   }
@@ -85,6 +88,7 @@ class TransistorAuthorizationToken {
         expires: expires);
   }
 
+  /// JSON represention of token.
   String toJson() {
     return jsonEncode({
       FIELD_ACCESS_TOKEN: accessToken,

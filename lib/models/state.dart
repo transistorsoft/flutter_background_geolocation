@@ -162,6 +162,7 @@ class State extends Config {
     map = data;
   }
 
+  /// Return String representation of `State` for `print` to log.
   String toString() {
     return '[State enabled: $enabled, isMoving: $isMoving, trackingMode: $trackingMode, desiredAccuracy: $desiredAccuracy, distanceFilter: $distanceFilter, odometer: $odometer, schedulerEnabled: $schedulerEnabled, foregroundService: $foregroundService]';
   }

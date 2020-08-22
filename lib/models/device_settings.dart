@@ -43,6 +43,7 @@ class DeviceSettingsRequest {
         : null;
   }
 
+  /// Return info as `Map`.
   Map toMap() {
     return {
       "manufacturer": manufacturer,

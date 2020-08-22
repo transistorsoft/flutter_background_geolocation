@@ -276,6 +276,7 @@ class HttpEvent {
     this.responseText = params['responseText'];
   }
 
+  /// `Map` representation of `HttpEvent`.
   Map<String, dynamic> toMap() {
     return {
       'success': success,
@@ -286,6 +287,7 @@ class HttpEvent {
     };
   }
 
+  /// String representation of `HttpEvent` for `print` to logs.
   String toString() {
     return "[HttpEvent " + toMap().toString() + "]";
   }

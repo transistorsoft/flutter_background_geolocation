@@ -32,6 +32,7 @@ class HeartbeatEvent {
     }
   }
 
+  /// String representation of `HeartbeatEvent` for `print` to logs.
   String toString() {
     return '[HeartbeatEvent location:$location]';
   }

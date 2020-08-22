@@ -449,6 +449,7 @@ class Notification {
   ///
   List<String> actions;
 
+  /// Convert supplied `Map` to `Notification` instance.
   static fromMap(Map map) {
     return Notification(
         layout: (map['layout'] != null) ? map['layout'] : null,
@@ -480,6 +481,7 @@ class Notification {
       this.strings,
       this.actions});
 
+  /// Return `Map` representation of `Notification`.
   Map<String, dynamic> toMap() {
     return {
       "layout": layout,
