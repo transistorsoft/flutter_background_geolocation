@@ -51,6 +51,7 @@ class Geofence {
     this.extras = extras;
   }
 
+  /// Return `Geofence` as `Map`.
   Map<String, dynamic> toMap() {
     Map<String, dynamic> params = {};
     if (this.identifier != null) params['identifier'] = this.identifier;
@@ -68,6 +69,7 @@ class Geofence {
     return params;
   }
 
+  /// String representation of `Geofence` for `print` to log.
   String toString() {
     return '[Geofence identifier: $identifier, radius: $radius, $latitude / $longitude, notifyOnEntry:$notifyOnEntry, notifyOnExit:$notifyOnExit, notifyOnDwell: $notifyOnDwell]';
   }

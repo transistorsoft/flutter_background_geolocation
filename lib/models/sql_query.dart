@@ -50,6 +50,7 @@ class SQLQuery {
 
   SQLQuery({this.start, this.end, this.order, this.limit});
 
+  /// Return `Map` representation of `SQLQuery` for communication to native platform.
   Map<String, dynamic> toMap() {
     Map<String, dynamic> query = {};
     if (this.start != null) query["start"] = this.start.millisecondsSinceEpoch;

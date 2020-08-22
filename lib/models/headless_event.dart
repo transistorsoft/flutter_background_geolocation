@@ -157,6 +157,7 @@ class HeadlessEvent {
     }
   }
 
+  /// String representation of `HeadlessEvent` for `print` to logs.
   String toString() {
     return '[HeadlessEvent name: $name, event: $event]';
   }

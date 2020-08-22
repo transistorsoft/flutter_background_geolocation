@@ -154,6 +154,7 @@ class Activity {
 /// ```
 ///
 class Location {
+  /// Original `Map` data received from native code.
   dynamic map;
 
   /// Timestamp in __`ISO 8601` (UTC) format.
@@ -280,6 +281,7 @@ class Location {
     }
   }
 
+  /// String representation of `Location` for `print` to logs.
   String toString({compact: bool}) {
     if (compact == true) {
       return '[Location ${DateTime.parse(timestamp).toLocal()}, isMoving: $isMoving, sample: $sample, $coords]';
@@ -288,6 +290,7 @@ class Location {
     }
   }
 
+  /// Return original `Map` recevied from native code.
   Map toMap() {
     return map;
   }
@@ -314,6 +317,7 @@ class LocationError {
     message = e.message;
   }
 
+  /// String representation of `Location` for `print` to logs.
   String toString() {
     return '[LocationError code: $code, message: $message]';
   }

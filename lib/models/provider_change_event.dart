@@ -78,10 +78,12 @@ class ProviderChangeEvent {
     }
   }
 
+  /// Return String representation of `ProviderChangeEvent` for `print` to logs.
   String toString() {
     return '[ProviderChangeEvent enabled:$enabled, status: $status, network: $network, gps: $gps, accuracyAuthorization: $accuracyAuthorization]';
   }
 
+  /// Return `Map` representaion of `ProviderChangeEvent`
   Map<String, dynamic> toMap() {
     return {
       'enabled': enabled,

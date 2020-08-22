@@ -10,14 +10,24 @@ part of flt_background_geolocation;
 /// ```
 ///
 class DeviceInfo {
+  /// Device model
   String model;
+
+  /// Device manufacturer
   String manufacturer;
+
+  /// Device version
   String version;
+
+  /// Platform iOS | Android
   String platform;
+
+  /// Framework `Flutter|ReactNative|Cordova`
   String framework;
 
   static DeviceInfo _instance;
 
+  /// Retreive an singleton instance of `DeviceInfo`.
   static Future<DeviceInfo> getInstance() async {
     Completer completer = new Completer<DeviceInfo>();
     if (_instance == null) {
@@ -40,6 +50,7 @@ class DeviceInfo {
       this.platform,
       this.framework});
 
+  /// Return as `Map`
   Map<String, dynamic> toMap() {
     return {
       "model": model,

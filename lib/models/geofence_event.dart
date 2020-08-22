@@ -236,6 +236,7 @@ class GeofenceEvent {
     this.extras = params['extras'];
   }
 
+  /// String representation of `GeofenceEvent` for `print` to logs.
   String toString({compact: bool}) {
     return (compact == true)
         ? '$action: $identifier'
