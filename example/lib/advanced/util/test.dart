@@ -339,7 +339,21 @@ class Test {
     // Request a JWT from tracker.transistorsoft.com
     bg.TransistorAuthorizationToken token = await bg.TransistorAuthorizationToken.findOrCreate(orgname, username, ENV.TRACKER_HOST);
 
-    await bg.BackgroundGeolocation.reset(bg.Config(
+    List<String> schedule = [];
+    bg.State state = await bg.BackgroundGeolocation.state;
+
+    // If we're not enabled now, add a test scheulde:
+    if (!state.enabled) {
+      // Create a test schedule to start in 1 minute for duration 1 minute (with 1 min offset between each)
+      DateTime now = DateTime.now();
+      for (int n=0;n<120;n++) {
+        DateTime start = now.add(Duration(minutes: (2*n+1)));
+        DateTime end = start.add(Duration(minutes: 1));
+        schedule.add("1-7 ${start.hour}:${start.minute}-${end.hour}:${end.minute}");
+      }
+    }
+
+    state = await bg.BackgroundGeolocation.reset(bg.Config(
         debug: true,
         transistorAuthorizationToken: token,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
@@ -351,7 +365,18 @@ class Test {
         enableTimestampMeta: true,
         stopTimeout: 1,
         maxDaysToPersist: 14,
-        schedule: [],
+        backgroundPermissionRationale: bg.PermissionRationale(
+
+        ),
+        notification: bg.Notification(
+          layout: 'notification_layout',
+          actions: [
+            "notificationButtonFoo",
+            "notificationButtonBar"
+          ]
+        ),
+        schedule: schedule,
+        extras: {"foo":"bar"},
         geofenceModeHighAccuracy: true,
         motionTriggerDelay: 30000,
         stopOnTerminate: false,
@@ -364,6 +389,11 @@ class Test {
       await bg.BackgroundGeolocation.setOdometer(0.0);
     } catch(error) {
       print("[setOdometer] ERROR: $error");
+    }
+
+    // If provided a schedule, start the schedule.
+    if (!state.schedule.isEmpty) {
+      bg.BackgroundGeolocation.startSchedule();
     }
   }
 

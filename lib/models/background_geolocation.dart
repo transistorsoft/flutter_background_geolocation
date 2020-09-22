@@ -887,7 +887,8 @@ class BackgroundGeolocation {
   /// - [Config.locationAuthorizationRequest]
   /// - [Config.disableLocationAuthorizationAlert]
   /// - [Config.locationAuthorizationAlert]
-  /// - [requestTemporaryFullAccuracy] (*iOS 14+*)
+  /// - [requestTemporaryFullAccuracy] (_iOS 14+_)
+  /// - [Config.backgroundPermissionRationale] (_Android 11+_)
   ///
   static Future<int> requestPermission() async {
     return await _methodChannel.invokeMethod('requestPermission');

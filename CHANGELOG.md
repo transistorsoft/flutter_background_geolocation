@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## Unreleased
+- [Added][Android] Android 11 `targetSdkVersion 30` support for new Android background location permission with new `Config.backgroundLocationRationale`.  Android 11 has [changed location authorization](https://developer.android.com/preview/privacy/location) and no longer offers the __`[Allow all the time]`__ button on the location authorization dialog.  Instead, Android now offers a hook to present a custom dialog to the user where you will explain exactly why you require _"Allow all the time"_ location permission.  This dialog can forward the user directly to your application's __Location Permissions__ screen, where the user must *explicity* authorize __`[Allow all the time]`__.  The Background Geolocation SDK will present this dialog, which can be customized with `Config.backgroundPermissionRationale`.
+
+![](https://dl.dropbox.com/s/343nbrzpaavfser/android11-location-authorization-rn.gif?dl=1)
+
+```dart
+BackgroundGeolocation.ready(Config(
+  locationAuthorizationRequest: 'Always',
+  backgroundPermissionRationale: PermissionRationale(
+    title: "Allow access to this device's location in the background?",
+    message: "In order to allow X, Y and Z in the background, please enable 'Allow all the time' permission",
+    positiveAction: "Change to Allow all the time",
+    negativeAction: "Cancel"
+  )
+));
+```
+- [Fixed][iOS] Add intelligence to iOS preventSuspend logic to determine distance from stationaryLocation using configured stationaryRadius rather than calculated based upon accuracy of stationaryLocation.  If a stationaryLocation were recorded having a poor accuracy (eg: 1000), the device would have to walk at least 1000 meters before preventSuspend would engage tracking-state.
+- [Fixed][Android] Android LocationRequestService, used for getCurrentPosition and motionChange position, could remain running after entering stationary state if a LocationAvailability event was received before the service was shut down.
+- [Fixed][iOS] Ignore didChangeAuthorizationStatus events when disabled and no requestPermissionCallback exists.  The plugin could possibly respond to 3rd-party permission plugin events.
+
 ## 1.10.0+1 &mdash; 2020-08-21
 - [Docs] Improve docs for `Location` class; adding missing docs for `Coords`, `Battery`, `Activity`.
 
@@ -22,10 +42,10 @@ void _onProviderChange(bg.ProviderChangeEvent event) async {
       }
     }).catchError((error) {
       print("[requestTemporaryFullAccuracy] FAILED TO SHOW DIALOG: $error");
-    });      
+    });
   }
 }
-``` 
+```
 These changes are fully compatible with Android, which will always return `ProviderChange.ACCURACY_AUTHORIZATION_FULL`
 
 - [Added][Android] Add `onChange` listener for `config.locationAuthorizationRequest` to request location-authorization.

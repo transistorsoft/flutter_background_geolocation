@@ -29,6 +29,7 @@ class ActivityChangeEvent {
 
   ActivityChangeEvent(this.activity, this.confidence);
 
+  /// String representation of object.
   String toString() {
     return "[ActivityChangeEvent " +
         this.activity.toString() +
@@ -37,6 +38,7 @@ class ActivityChangeEvent {
         "%)]";
   }
 
+  /// Convert object to Map.
   Map<String, dynamic> toMap() {
     return {'activity': activity, 'confidence': confidence};
   }

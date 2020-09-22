@@ -148,6 +148,11 @@ class State extends Config {
             scheduleUseAlarmManager: (data['scheduleUseAlarmManager'] != null)
                 ? data['scheduleUseAlarmManager']
                 : false,
+            backgroundPermissionRationale:
+                (data['backgroundPermissionRationale'] != null)
+                    ? PermissionRationale.fromMap(
+                        data['backgroundPermissionRationale'])
+                    : null,
             notification: (data['notification'] != null)
                 ? Notification.fromMap(data['notification'])
                 : null) {
