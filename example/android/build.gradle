@@ -2,7 +2,7 @@ buildscript {
     ext {
         kotlin_version     = '1.3.72'
         compileSdkVersion   = 30
-        targetSdkVersion    = 29
+        targetSdkVersion    = 30
         appCompatVersion    = "1.0.0"
         playServicesLocationVersion = "17.0.0"
         removeBackgroundGeolocationDebugSoundsInRelease = false

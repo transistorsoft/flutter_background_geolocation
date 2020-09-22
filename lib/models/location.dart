@@ -309,7 +309,9 @@ class Location {
 /// | 499   | Location request cancelled  |
 ///
 class LocationError {
+  /// Error code
   int code;
+  /// Error message
   String message;
 
   LocationError(PlatformException e) {

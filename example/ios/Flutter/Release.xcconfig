@@ -1,5 +1,2 @@
 #include "Pods/Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"
 #include "Generated.xcconfig"
-
-BACKGROUND_GEOLOCATION_ENCRYPTION_PASSWORD=encryption_password_for_SQLite_and_HTTP_requests
-

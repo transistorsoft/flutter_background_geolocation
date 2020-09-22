@@ -199,7 +199,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       }
       BackgroundFetch.finish(taskId);
     });
-
   }
 
   void _onClickEnable(enabled) async {

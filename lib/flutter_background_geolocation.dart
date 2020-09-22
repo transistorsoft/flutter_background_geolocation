@@ -23,6 +23,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 
 part 'models/background_geolocation.dart';
 part 'models/device_settings.dart';
@@ -47,6 +48,7 @@ part 'models/authorization.dart';
 part 'models/device_info.dart';
 part 'models/transistor_authorization_token.dart';
 part 'models/authorization_event.dart';
+part 'models/permission_rationale.dart';
 
 const _PLUGIN_PATH = "com.transistorsoft/flutter_background_geolocation";
 

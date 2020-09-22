@@ -1,11 +1,11 @@
 PODS:
   - background_fetch (0.6.0):
     - Flutter
-  - CocoaLumberjack (3.6.1):
-    - CocoaLumberjack/Core (= 3.6.1)
-  - CocoaLumberjack/Core (3.6.1)
+  - CocoaLumberjack (3.6.2):
+    - CocoaLumberjack/Core (= 3.6.2)
+  - CocoaLumberjack/Core (3.6.2)
   - Flutter (1.0.0)
-  - flutter_background_geolocation (1.10.0):
+  - flutter_background_geolocation (1.10.1):
     - CocoaLumberjack (~> 3.6.0)
     - Flutter
   - FMDB (2.7.5):
@@ -53,15 +53,15 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   background_fetch: 9221ccc02b41aff8a52b2090d9f791c5ed82eaee
-  CocoaLumberjack: b17ae15142558d08bbacf69775fa10c4abbebcc9
+  CocoaLumberjack: bd155f2dd06c0e0b03f876f7a3ee55693122ec94
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_background_geolocation: 3c9537e78ab5290f2bf6c5056f7c751941415d32
+  flutter_background_geolocation: 2a69ce11e28af6d35954654d0e21577682f42c93
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
-  shared_preferences: 430726339841afefe5142b9c1f50cb6bd7793e01
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   sqflite: 4001a31ff81d210346b500c55b17f4d6c7589dd0
-  url_launcher: a1c0cc845906122c4784c542523d8cacbded5626
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
 PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.9.3

@@ -142,6 +142,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                 @Override public void run() {
                     // Init stream-handlers
                     BackgroundGeolocation adapter = BackgroundGeolocation.getInstance(activity);
+                    adapter.setActivity(activity);
                     adapter.removeListeners();
                     synchronized (mStreamHandlers) {
                         mStreamHandlers.add(new LocationStreamHandler().register(mContext, mMessenger));

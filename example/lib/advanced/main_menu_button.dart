@@ -20,6 +20,9 @@ class MainMenuButtonState extends State<MainMenuButton> {
   BuildContext _context;
 
   void _onClickMenu() async {
+    bool isPowerSaveMode = await bg.DeviceSettings.isPowerSaveMode;
+    print("[isPowerSaveMode] $isPowerSaveMode");
+
     // Text a backgroundTask on menu-click.
     int accuracyAuthorization = await bg.BackgroundGeolocation.requestTemporaryFullAccuracy("DemoPurpose");
     print("[requestTemporaryFullAccuracy] $accuracyAuthorization");
