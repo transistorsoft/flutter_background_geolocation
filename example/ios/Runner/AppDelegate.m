@@ -14,7 +14,17 @@
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   [GeneratedPluginRegistrant registerWithRegistry:self];
-            
+    
+    TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
+    
+    [bgGeo setBeforeInsertBlock:^NSDictionary *(TSLocation *location) {
+        NSLog(@"************ BEFOREINSERT: %@", [location toDictionary]);
+        if (false) {
+            return nil;
+        }
+        return [location toDictionary];
+    }];
+    
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 

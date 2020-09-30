@@ -29,13 +29,13 @@ The **[Android module](https://www.transistorsoft.com/shop/products/flutter-back
 
 # Contents
 - ### :books: [API Documentation](https://pub.dartlang.org/documentation/flutter_background_geolocation/latest/flt_background_geolocation/flt_background_geolocation-library.html)
-- ### [Installing the Plugin](#large_blue_diamond-installing-the-plugin)
-- ### [Setup Guides](#large_blue_diamond-setup-guides)
-- ### [Using the plugin](#large_blue_diamond-using-the-plugin)
-- ### [Example](#large_blue_diamond-example)
+- ### [Installing the Plugin](#-installing-the-plugin)
+- ### [Setup Guides](#-setup-guides)
+- ### [Using the plugin](#-using-the-plugin)
+- ### [Example](#l-example)
 - ### [Debugging](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Debugging)
-- ### [Demo Application](#large_blue_diamond-demo-application)
-- ### [Testing Server](#large_blue_diamond-simple-testing-server)
+- ### [Demo Application](#-demo-application)
+- ### [Testing Server](#-simple-testing-server)
 
 
 ## :large_blue_diamond: Installing the Plugin

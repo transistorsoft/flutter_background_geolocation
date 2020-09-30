@@ -40,6 +40,26 @@ android {
     lintOptions {
         disable 'InvalidPackage'
     }
+    // For testing Flavors
+    /*
+    flavorDimensions "app"
+    productFlavors {
+
+        app1 {
+            dimension "app"
+            applicationId "com.transistorsoft.flutterbackgroundgeolocationexample.app1"
+            versionCode 1
+            versionName "1.0"
+        }
+
+        app2 {
+            dimension "app"
+            applicationId "com.transistorsoft.flutterbackgroundgeolocationexample.app2"
+            versionCode 1
+            versionName "1.0"
+        }
+    }
+    */
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
