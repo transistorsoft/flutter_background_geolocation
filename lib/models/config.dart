@@ -159,6 +159,36 @@ class Config {
   ///
   double stationaryRadius;
 
+  /// The default timeout in _seconds_ when requesting a location before the SDK gives up and fires a [LocationError].
+  ///
+  /// Defaults to `60` seconds.
+  ///
+  /// ## Example
+  ///
+  /// ```dart
+  /// // With onLocation event
+  /// BackgroundGeolocation.onLocation((Location location) {
+  ///  print("[onLocation] success $location");
+  /// }, ((LocationError error) {
+  ///   if (error.code == 408) {
+  ///     print("[onLocation] error: LOCATION TIMEOUT $error");
+  ///   }
+  /// });
+  ///
+  /// // With getCurrentPosition:
+  /// try {
+  ///   Location location = await BackgroundGeolocation.getCurrentPosition(samples: 3);
+  /// } catch((dynamic error) {
+  ///   if (error.code == 408) {
+  ///     print("[getCurrentPosition] error: LOCATION TIMEOUT $error");
+  ///   }
+  /// });
+  /// ```
+  ///
+  /// ## See Also:
+  /// - [BackgroundGeolocation.getCurrentPosition]
+  /// - [BackgroundGeolocation.onLocation]
+  ///
   int locationTimeout;
 
   /// Disable automatic, speed-based [distanceFilter] scaling.

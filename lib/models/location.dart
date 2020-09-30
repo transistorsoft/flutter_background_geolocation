@@ -48,6 +48,23 @@ class Coords {
   double speed;
 
   /// Altitude accuracy in meters.
+  ///
+  /// If this location does not have a `altitudeAccuracy`, then `-1` is returned.
+  ///
+  /// ## iOS
+  ///
+  /// When this property contains 0 or a positive number, the value in the altitude property is plus or minus the specified number of meters. When this property contains a negative number, the value in the altitude property is invalid.
+  ///
+  /// Determining the [altitudeAccuracy] requires a device with GPS capabilities. Thus, on some devices, this property always contains a negative value.
+  ///
+  /// ## Android
+  ///
+  /// We define vertical accuracy at 68% confidence. Specifically, as 1-side of the 2-sided range above and below the estimated altitude reported by [altitude], within which there is a 68% probability of finding the true altitude.
+  ///
+  /// In the case where the underlying distribution is assumed Gaussian normal, this would be considered 1 standard deviation.
+  ///
+  /// For example, if [altitude] returns `150`, and [altitudeAccuracy] returns `20` then there is a 68% probability of the true altitude being between `130` and `170` meters.
+  ///
   double altitudeAccuracy;
 
   Coords(dynamic coords) {
@@ -311,6 +328,7 @@ class Location {
 class LocationError {
   /// Error code
   int code;
+
   /// Error message
   String message;
 

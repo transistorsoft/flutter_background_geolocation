@@ -1,16 +1,17 @@
 package com.transistorsoft.flutterbackgroundgeolocationexample;
 
 import android.content.Context;
-import android.os.Build;
-import android.os.PowerManager;
-import android.os.StrictMode;
-import android.provider.Settings;
 import android.util.Log;
 
-import androidx.core.app.NotificationBuilderWithBuilderAccessor;
-
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
+import com.transistorsoft.locationmanager.adapter.callback.TSBeforeInsertBlock;
+import com.transistorsoft.locationmanager.location.TSLocation;
 import com.transistorsoft.locationmanager.logger.TSLog;
+
+import org.json.JSONObject;
+
+import java.util.Arrays;
+import java.util.List;
 
 import io.flutter.app.FlutterApplication;
 
@@ -37,9 +38,11 @@ public class Application  extends FlutterApplication {
                 .build());
 
         */
+
         super.onCreate();
 
     }
+
 
 
 
