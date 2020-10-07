@@ -6,7 +6,9 @@
 ///
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'dart:async';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 import 'package:url_launcher/url_launcher.dart';
@@ -124,6 +126,37 @@ class _HomeViewState extends State<_HomeView> {
     }
 
     final SharedPreferences prefs = await _prefs;
+
+    bool hasDisclosedBackgroundPermission = prefs.containsKey("has_disclosed_background_permission");
+    // [Android] Play Store compatibility requires disclosure of background permission before location runtime permission is requested.
+    if (!hasDisclosedBackgroundPermission && (defaultTargetPlatform == TargetPlatform.android)) {
+      AlertDialog dialog = AlertDialog(
+        title: Text('Background Location Access'),
+
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: <Widget>[
+              Text(
+                  'BG Geo collects location data to enable tracking your trips to work and calculate distance travelled even when the app is closed or not in use.'),
+              Text(''),
+              Text(
+                  'This data will be uploaded to tracker.transistorsoft.com where you may view and/or delete your location history.')
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text('Close'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+      await showDialog(context: context, builder: (BuildContext context) => dialog);
+      prefs.setBool("has_disclosed_background_permission", true);
+    }
+
     prefs.setString("app", appName);
 
     Widget app;

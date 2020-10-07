@@ -94,6 +94,12 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
         distanceFilter: 10.0,
+        backgroundPermissionRationale: bg.PermissionRationale(
+            title: "Allow {applicationName} to access this device's location even when the app is closed or not in use.",
+            message: "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
+            positiveAction: 'Change to "{backgroundPermissionOptionLabel}"',
+            negativeAction: 'Cancel'
+        ),
         url: "${ENV.TRACKER_HOST}/api/locations",
         authorization: bg.Authorization(  // <-- demo server authenticates with JWT
           strategy: bg.Authorization.STRATEGY_JWT,

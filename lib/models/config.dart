@@ -1818,61 +1818,9 @@ class Config {
   ///
   /// ## Android Setup
   ///
-  /// Create either `Application.kt` or `Application.java` in the same directory as `MainActivity`.
+  /// See Wiki [Android Headless Mode](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode)
   ///
-  /// For `Application.kt`, use the following:
-  ///
-  /// ```java
-  /// import io.flutter.app.FlutterApplication;
-  /// import io.flutter.plugin.common.PluginRegistry;
-  /// import io.flutter.plugins.GeneratedPluginRegistrant;
-  ///
-  /// import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
-  ///
-  /// class Application : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
-  ///   override fun onCreate() {
-  ///     super.onCreate();
-  ///     FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
-  ///   }
-  ///
-  ///   override fun registerWith(registry: PluginRegistry) {
-  ///     GeneratedPluginRegistrant.registerWith(registry);
-  ///   }
-  /// }
-  /// ```
-  ///
-  /// For `Application.java`, use the following:
-  ///
-  /// ```java
-  /// import io.flutter.app.FlutterApplication;
-  /// import io.flutter.plugin.common.PluginRegistry;
-  /// import io.flutter.plugins.GeneratedPluginRegistrant;
-  ///
-  /// import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
-  ///
-  /// public class Application extends FlutterApplication implements PluginRegistry.PluginRegistrantCallback {
-  ///   @Override
-  ///   public void onCreate() {
-  ///     super.onCreate();
-  ///     FLTBackgroundGeolocationPlugin.setPluginRegistrant(this);
-  ///   }
-  ///
-  ///   @Override
-  ///   public void registerWith(PluginRegistry registry) {
-  ///     GeneratedPluginRegistrant.registerWith(registry);
-  ///   }
-  /// }
-  /// ```
-  ///
-  /// Which must also be referenced in `AndroidManifest.xml`:
-  ///
-  /// ```xml
-  ///     <application
-  ///         android:name=".Application"
-  ///         ...
-  /// ```
-  ///
-  /// Finally, in your `main.dart`, [BackgroundGeolocation.registerHeadlessTask]:
+  /// In your `main.dart`, [BackgroundGeolocation.registerHeadlessTask]:
   ///
   /// ```dart
   /// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;

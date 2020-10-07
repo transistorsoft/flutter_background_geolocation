@@ -128,6 +128,12 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         distanceFilter: 10.0,
         // Activity recognition options
         stopTimeout: 5,
+        backgroundPermissionRationale: bg.PermissionRationale(
+          title: "Allow {applicationName} to access this device's location even when the app is closed or not in use.",
+          message: "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
+          positiveAction: 'Change to "{backgroundPermissionOptionLabel}"',
+          negativeAction: 'Cancel'
+        ),
         // HTTP & Persistence
         autoSync: true,
         // Application options
