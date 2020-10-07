@@ -28,7 +28,7 @@ The **[Android module](https://www.transistorsoft.com/shop/products/flutter-back
 ![Settings](https://dl.dropboxusercontent.com/s/8oad228siog49kt/settings-framed-350.png?dl=1)
 
 # Contents
-- ### :books: [API Documentation](https://pub.dartlang.org/documentation/flutter_background_geolocation/latest/flt_background_geolocation/flt_background_geolocation-library.html)
+- ### 📚 [API Documentation](https://pub.dartlang.org/documentation/flutter_background_geolocation/latest/flt_background_geolocation/flt_background_geolocation-library.html)
 - ### [Installing the Plugin](#-installing-the-plugin)
 - ### [Setup Guides](#-setup-guides)
 - ### [Using the plugin](#-using-the-plugin)
@@ -38,9 +38,9 @@ The **[Android module](https://www.transistorsoft.com/shop/products/flutter-back
 - ### [Testing Server](#-simple-testing-server)
 
 
-## :large_blue_diamond: Installing the Plugin
+## 🔷 Installing the Plugin
 
-:open_file_folder: **`pubspec.yaml`**:
+📂 **`pubspec.yaml`**:
 
 **Note:** See [Versions](https://pub.dartlang.org/packages/flutter_background_geolocation/#-versions-tab-) for latest available version.
 
@@ -58,21 +58,21 @@ dependencies:
       url: https://github.com/transistorsoft/flutter_background_geolocation.git
 ```
 
-## :large_blue_diamond: Setup Guides
+## 🔷 Setup Guides
 
 - [iOS](https://github.com/transistorsoft/flutter_background_geolocation/blob/master/help/INSTALL-IOS.md)
 - [Android](https://github.com/transistorsoft/flutter_background_geolocation/blob/master/help/INSTALL-ANDROID.md)
 
 
-## :large_blue_diamond: Using the plugin ##
+## 🔷 Using the plugin ##
 
 ```dart
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 ```
 
-:warning: Note `as bg` in the `import`.  This is important to namespace the plugin's classes, which often use common class-names such as `Location`, `Config`, `State`.  You will access every `flutter_background_geolocation` class with the prefix `bg` (ie: "**b**ackground **g**eolocation").
+⚠️ Note `as bg` in the `import`.  This is important to namespace the plugin's classes, which often use common class-names such as `Location`, `Config`, `State`.  You will access every `flutter_background_geolocation` class with the prefix `bg` (ie: "**b**ackground **g**eolocation").
 
-## :large_blue_diamond: Example
+## 🔷 Example
 [Full Example](https://gist.github.com/christocracy/a0464846de8a9c27c7e9de5616082878)
 
 There are three main steps to using `BackgroundGeolocation`:
@@ -133,10 +133,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
 ```
 
-:warning: Do not execute *any* API method which will require accessing location-services until the callback to **`#ready*` executes (eg: `#getCurrentPosition`, `#watchPosition`, `#start`).
+⚠️ Do not execute *any* API method which will require accessing location-services until the callback to **`#ready*` executes (eg: `#getCurrentPosition`, `#watchPosition`, `#start`).
 
 
-## :large_blue_diamond: Demo Application
+## 🔷 Demo Application
 
 A fully-featured Demo App is available in the repo in the [`/example`](./example) folder.
 
@@ -145,7 +145,7 @@ A fully-featured Demo App is available in the repo in the [`/example`](./example
 ![Home](https://dl.dropboxusercontent.com/s/wa43w1n3xhkjn0i/home-framed-350.png?dl=1)
 ![Settings](https://dl.dropboxusercontent.com/s/8oad228siog49kt/settings-framed-350.png?dl=1)
 
-## :large_blue_diamond: [Simple Testing Server](https://github.com/transistorsoft/background-geolocation-console)
+## 🔷 [Simple Testing Server](https://github.com/transistorsoft/background-geolocation-console)
 
 A simple Node-based [web-application](https://github.com/transistorsoft/background-geolocation-console) with SQLite database is available for field-testing and performance analysis.  If you're familiar with Node, you can have this server up-and-running in about **one minute**.
 

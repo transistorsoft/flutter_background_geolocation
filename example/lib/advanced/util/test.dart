@@ -366,7 +366,10 @@ class Test {
         stopTimeout: 1,
         maxDaysToPersist: 14,
         backgroundPermissionRationale: bg.PermissionRationale(
-
+            title: "Allow {applicationName} to access this device's location even when the app is closed or not in use.",
+            message: "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
+            positiveAction: 'Change to "{backgroundPermissionOptionLabel}"',
+            negativeAction: 'Cancel'
         ),
         notification: bg.Notification(
           layout: 'notification_layout',
@@ -392,7 +395,7 @@ class Test {
     }
 
     // If provided a schedule, start the schedule.
-    if (!state.schedule.isEmpty) {
+    if (state.schedule.isNotEmpty) {
       bg.BackgroundGeolocation.startSchedule();
     }
   }
