@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+- [Fixed][iOS] fix bug providing wrong Array of records to `sync` method when no HTTP service is configured.
+- [Fixed][Android] Add extra logic for `isMainActivityActive` to detect when `TSLocationManagerActivity` is active.
+
 ## 1.10.1 &mdash; 2020-09-30
 
 - [Fixed][Android] `isMainActivityActive` reported incorrect results for Android apps configured with "product flavors".  This would cause the SDK to fail to recognize app is in "headless" state and fail to transmit headless events.

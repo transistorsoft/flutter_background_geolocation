@@ -355,8 +355,8 @@ class Test {
 
     state = await bg.BackgroundGeolocation.reset(bg.Config(
         debug: true,
-        transistorAuthorizationToken: token,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
+        transistorAuthorizationToken: token,
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
         distanceFilter: 50,
         disableElasticity: false,
