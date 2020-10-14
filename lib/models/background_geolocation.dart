@@ -214,7 +214,7 @@ class BackgroundGeolocation {
   /// )).then((State state) {
   ///   print('[ready] - ${state}')
   /// });
-  ///
+  /// ```
   static Future<State> ready(Config config) async {
     Map state = await _methodChannel.invokeMethod('ready', config.toMap());
     return new State(state);
