@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- [Fixed][Android] Issue with `requestPermission` not showing `backgroundPermissionRationale` dialog on `targetSdkVersion 29` when using `locationAuthorizationRequest: 'WhenInUse'` followed by upgrade to `Always`.
+- [Added] Added two new `Location.coords` attributes `speed_accuracy` and `heading_accuracy`.
 - [Fixed][iOS] fix bug providing wrong Array of records to `sync` method when no HTTP service is configured.
 - [Fixed][Android] Add extra logic for `isMainActivityActive` to detect when `TSLocationManagerActivity` is active.
 

@@ -43,9 +43,17 @@ class Coords {
   /// ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
   double heading;
 
+  /// Heading accuracy in degrees.
+  /// ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
+  double headingAccuracy;
+
   /// Speed in meters / second.
   /// ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
   double speed;
+
+  /// Speed accuracy in meters / second
+  /// ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
+  double speedAccuracy;
 
   /// Altitude accuracy in meters.
   ///
@@ -73,7 +81,13 @@ class Coords {
     this.accuracy = coords['accuracy'] * 1.0;
     this.altitude = coords['altitude'] * 1.0;
     this.heading = coords['heading'] * 1.0;
+    if (coords['heading_accuracy'] != null) {
+      this.headingAccuracy = coords['heading_accuracy'] * 1.0;
+    }
     this.speed = coords['speed'] * 1.0;
+    if (coords['speed_accuracy'] != null) {
+      this.speedAccuracy = coords['speed_accuracy'] * 1.0;
+    }
     if (coords['altitude_accuracy'] != null) {
       this.altitudeAccuracy = coords['altitude_accuracy'] * 1.0;
     }
