@@ -18,7 +18,7 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
 | Key                                                                        |
 |----------------------------------------------------------------------------|
 | Privacy - Location Always and When In Use Description                      |
-| Privacy - Location When In Use Permission                                  |
+| Privacy - Location When In Use Usage Description                           |
 | Privacy - Motion Usage Description                                         |
 
 ![](https://dl.dropboxusercontent.com/s/wyoejgko6xq4pi4/iOS-permissions.png?dl=1)
