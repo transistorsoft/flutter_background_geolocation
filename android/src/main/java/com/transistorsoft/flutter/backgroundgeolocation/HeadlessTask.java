@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import io.flutter.FlutterInjector;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.dart.DartExecutor;
 import io.flutter.embedding.engine.plugins.shim.ShimPluginRegistry;
@@ -29,7 +30,6 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.view.FlutterCallbackInformation;
-import io.flutter.view.FlutterMain;
 
 public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
     private static final String KEY_REGISTRATION_CALLBACK_ID    = "registrationCallbackId";
@@ -162,7 +162,8 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
             return;
         }
 
-        String appBundlePath = FlutterMain.findAppBundlePath();
+        String appBundlePath =  FlutterInjector.instance().flutterLoader().findAppBundlePath();
+
         AssetManager assets = mContext.getAssets();
         if (appBundlePath != null && !mHeadlessTaskRegistered.get()) {
             sBackgroundFlutterEngine = new FlutterEngine(mContext);

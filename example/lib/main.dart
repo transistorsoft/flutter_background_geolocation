@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
+    as bg;
 import 'package:background_fetch/background_fetch.dart';
 
 import 'package:flutter_background_geolocation_example/app.dart';
@@ -15,10 +16,11 @@ import 'config/env.dart';
 void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
   print('📬 --> $headlessEvent');
 
-  switch(headlessEvent.name) {
+  switch (headlessEvent.name) {
     case bg.Event.TERMINATE:
       try {
-        bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
+        bg.Location location =
+            await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
         print('[getCurrentPosition] Headless: $location');
       } catch (error) {
         print('[getCurrentPosition] Headless ERROR: $error');
@@ -77,9 +79,8 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
     case bg.Event.AUTHORIZATION:
       bg.AuthorizationEvent event = headlessEvent.event;
       print(event);
-      bg.BackgroundGeolocation.setConfig(bg.Config(
-        url: "${ENV.TRACKER_HOST}/api/locations"
-      ));
+      bg.BackgroundGeolocation.setConfig(
+          bg.Config(url: "${ENV.TRACKER_HOST}/api/locations"));
       break;
   }
 }
@@ -133,7 +134,7 @@ void main() {
       prefs.remove("username");
     }
 
-    switch(appName) {
+    switch (appName) {
       case AdvancedApp.NAME:
         runApp(new AdvancedApp());
         break;
@@ -146,8 +147,11 @@ void main() {
     }
   });
   TransistorAuth.registerErrorHandler();
+
   /// Register BackgroundGeolocation headless-task.
-  bg.BackgroundGeolocation.registerHeadlessTask(backgroundGeolocationHeadlessTask);
+  bg.BackgroundGeolocation.registerHeadlessTask(
+      backgroundGeolocationHeadlessTask);
+
   /// Register BackgroundFetch headless-task.
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 }

@@ -138,7 +138,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         autoSync: true,
         // Application options
         stopOnTerminate: false,
-        locationAuthorizationRequest: 'Always',
         startOnBoot: true,
         enableHeadless: true,
         heartbeatInterval: 60
@@ -148,7 +147,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       if (state.schedule.isNotEmpty) {
         bg.BackgroundGeolocation.startSchedule();
       }
-
       setState(() {
         _enabled = state.enabled;
         _isMoving = state.isMoving;
