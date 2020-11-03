@@ -4,12 +4,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
 
-import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
+    as bg;
 import 'package:unicorndial/unicorndial.dart';
 
 import 'actions.dart' as actions;
 import 'settings_view.dart';
-import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
+import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart'
+    as util;
 
 class MainMenuButton extends StatefulWidget {
   @override
@@ -19,41 +21,15 @@ class MainMenuButton extends StatefulWidget {
 class MainMenuButtonState extends State<MainMenuButton> {
   BuildContext _context;
 
-  void _onClickMenu() async {
-    bool isPowerSaveMode = await bg.DeviceSettings.isPowerSaveMode;
-    print("[isPowerSaveMode] $isPowerSaveMode");
-
-    // Text a backgroundTask on menu-click.
-    int accuracyAuthorization = await bg.BackgroundGeolocation.requestTemporaryFullAccuracy("DemoPurpose");
-    print("[requestTemporaryFullAccuracy] $accuracyAuthorization");
-
-    try {
-      int status = await bg.BackgroundGeolocation.requestPermission();
-      if (status == bg.ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS) {
-        print("[requestPermission] authorized Always: $status");
-      } else if (status == bg.ProviderChangeEvent.AUTHORIZATION_STATUS_WHEN_IN_USE) {
-        print("[requestPermission] authorized WhenInUse: $status");
-      }
-    } catch(error) {
-      print("[requestPermission] DENIED: $error");
-    }
-
-    bg.BackgroundGeolocation.startBackgroundTask().then((int taskId) {
-      print("********* startBackgroundTask: $taskId");
-
-      // Simulate a long-running async task.
-      new Timer(Duration(milliseconds: 250), () {
-        bg.BackgroundGeolocation.stopBackgroundTask(taskId);
-      });
-
-    });
-  }
+  void _onClickMenu() async {}
 
   void _onClickSettings() {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("OPEN"));
-    Navigator.of(_context).push(MaterialPageRoute<Null>(fullscreenDialog: true, builder: (BuildContext context) {
-      return SettingsView();
-    }));
+    Navigator.of(_context).push(MaterialPageRoute<Null>(
+        fullscreenDialog: true,
+        builder: (BuildContext context) {
+          return SettingsView();
+        }));
   }
 
   void _onClickResetOdometer() {
@@ -72,9 +48,45 @@ class MainMenuButtonState extends State<MainMenuButton> {
     actions.Actions.destroyLocations(_context);
   }
 
+  void _onClickRequestPermission() async {
+    bg.ProviderChangeEvent providerState = await bg.BackgroundGeolocation.providerState;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Request Permission"),
+          content: Text("Current Authorization status: ${providerState.status}"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('WhenInUse'),
+              onPressed: () async {
+                _requestPermission('WhenInUse');
+              },
+            ),
+            FlatButton(
+              child: Text('Always'),
+              onPressed: () async {
+                _requestPermission('Always');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _requestPermission(String request) async {
+    Navigator.of(context).pop();
+    await bg.BackgroundGeolocation.setConfig(bg.Config(locationAuthorizationRequest: request));
+    int status = await bg.BackgroundGeolocation.requestPermission();
+    print("[requestPermission] status: $status");
+    util.Dialog.alert(context, "Request Permission", "Authorization status: $status");
+  }
+
   @override
   Widget build(BuildContext context) {
-
     double buttonBottomPadding = 50.0;
     var mediaQueryData = MediaQuery.of(context);
     if (_isIPhoneX(mediaQueryData)) {
@@ -108,8 +120,7 @@ class MainMenuButtonState extends State<MainMenuButton> {
               foregroundColor: Colors.black,
               mini: true,
               child: Icon(Icons.delete),
-              onPressed: _onClickDestroyLocations)
-      ),
+              onPressed: _onClickDestroyLocations)),
       UnicornButton(
           hasLabel: true,
           labelText: "Email log",
@@ -119,8 +130,7 @@ class MainMenuButtonState extends State<MainMenuButton> {
               foregroundColor: Colors.black,
               mini: true,
               child: Icon(Icons.email),
-              onPressed: _onClickEmailLog)
-      ),
+              onPressed: _onClickEmailLog)),
       UnicornButton(
           hasLabel: true,
           labelText: "Upload locations",
@@ -130,8 +140,7 @@ class MainMenuButtonState extends State<MainMenuButton> {
               foregroundColor: Colors.black,
               mini: true,
               child: Icon(Icons.cloud_upload),
-              onPressed: _onClickSync)
-      ),
+              onPressed: _onClickSync)),
       UnicornButton(
           hasLabel: true,
           labelText: "Reset odometer",
@@ -141,8 +150,17 @@ class MainMenuButtonState extends State<MainMenuButton> {
               foregroundColor: Colors.black,
               mini: true,
               child: Icon(Icons.av_timer),
-              onPressed: _onClickResetOdometer)
-      ),
+              onPressed: _onClickResetOdometer)),
+      UnicornButton(
+        hasLabel: true,
+        labelText: "Request Permission",
+        currentButton: FloatingActionButton(
+            heroTag: "request permission",
+            backgroundColor: bgColor,
+            foregroundColor: Colors.black,
+            mini: true,
+            child: Icon(Icons.lock_open),
+            onPressed: _onClickRequestPermission)),
       UnicornButton(
           hasLabel: true,
           labelText: "Settings",
@@ -152,8 +170,7 @@ class MainMenuButtonState extends State<MainMenuButton> {
               foregroundColor: Colors.black,
               mini: true,
               child: Icon(Icons.settings),
-              onPressed: _onClickSettings)
-      )
+              onPressed: _onClickSettings))
     ];
   }
 

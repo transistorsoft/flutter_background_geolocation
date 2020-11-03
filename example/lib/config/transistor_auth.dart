@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
+    as bg;
 import 'ENV.dart';
 import '../app.dart';
 
 void _onHttp(bg.HttpEvent event) async {
-
   switch (event.status) {
     case 403:
     case 406:
@@ -20,7 +20,8 @@ void _onHttp(bg.HttpEvent event) async {
       }
       break;
     case 410:
-      print('[TransistorAuth] It seems this device has been destroyed from tracker.transistorsoft.com.  The authentication token is no longer valid.  Redirecting to Home page.');
+      print(
+          '[TransistorAuth] It seems this device has been destroyed from tracker.transistorsoft.com.  The authentication token is no longer valid.  Redirecting to Home page.');
       SharedPreferences prefs = await SharedPreferences.getInstance();
       // Remove username from prefs.  This will cause the registration dialog to appear once redirected to home page,
       // forcing the user to re-register for a transistor authorization token.
@@ -45,11 +46,12 @@ class TransistorAuth {
         return false;
       }
 
-      bg.TransistorAuthorizationToken jwt = await bg.TransistorAuthorizationToken.findOrCreate(orgname, username, ENV.TRACKER_HOST);
+      bg.TransistorAuthorizationToken jwt =
+          await bg.TransistorAuthorizationToken.findOrCreate(
+              orgname, username, ENV.TRACKER_HOST);
 
-      await bg.BackgroundGeolocation.setConfig(bg.Config(
-        transistorAuthorizationToken: jwt
-      ));
+      await bg.BackgroundGeolocation.setConfig(
+          bg.Config(transistorAuthorizationToken: jwt));
       return true;
     } catch (error) {
       print("[ERROR] $error");
@@ -71,14 +73,13 @@ class TransistorAuth {
     print("[TransistorAuth] migrateConfig");
     await bg.TransistorAuthorizationToken.destroy(ENV.TRACKER_HOST);
     bg.BackgroundGeolocation.reset(bg.Config(
-      debug: true,
-      logLevel: bg.Config.LOG_LEVEL_VERBOSE,
-      desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
-      distanceFilter: 10.0,
-      stopOnTerminate: false,
-      startOnBoot: true,
-      url: "${ENV.TRACKER_HOST}/api/locations",
-      params: {}
-    ));
+        debug: true,
+        logLevel: bg.Config.LOG_LEVEL_VERBOSE,
+        desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
+        distanceFilter: 10.0,
+        stopOnTerminate: false,
+        startOnBoot: true,
+        url: "${ENV.TRACKER_HOST}/api/locations",
+        params: {}));
   }
 }

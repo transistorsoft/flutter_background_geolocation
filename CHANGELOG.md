@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## Unreleased
+## 1.10.2 &mdash; 2020-11-03
 
+- [Fixed][iOS] When requesting `WhenInUse` location permission, if user grants "Allow Once" then you attempt to upgrade to `Always`, iOS simply does nothing and the `requestPermission` callback would not be called.  Implemented a `500ms` buffer timer to detect if the iOS showed a system dialog (signalled by the firing of `WillResignActive` life-cycle notification).  If the app does *not* `WillResignActive`, the buffer timer will fire, causing the callback to `requestPermission` to fire. 
 - [Fixed][Android] Issue with `requestPermission` not showing `backgroundPermissionRationale` dialog on `targetSdkVersion 29` when using `locationAuthorizationRequest: 'WhenInUse'` followed by upgrade to `Always`.
 - [Added] Added two new `Location.coords` attributes `speed_accuracy` and `heading_accuracy`.
 - [Fixed][iOS] fix bug providing wrong Array of records to `sync` method when no HTTP service is configured.

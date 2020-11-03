@@ -991,9 +991,7 @@ class BackgroundGeolocation {
   /// ```
   ///
   static Future<bool> removeListeners() async {
-    _subscriptions.forEach((_Subscription sub) async {
-      await sub.subscription.cancel();
-    });
+    await Future.wait(_subscriptions.map((sub) => sub.subscription.cancel()));
     _subscriptions.clear();
     return true;
   }

@@ -10,10 +10,9 @@ class Event {
 
 /// Shared data container for all widgets in app.
 class SharedEvents extends InheritedWidget {
-
   final List<Event> events;
 
-  SharedEvents({this.events, child: Widget}):super(child: child);
+  SharedEvents({this.events, child: Widget}) : super(child: child);
 
   static SharedEvents of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType();

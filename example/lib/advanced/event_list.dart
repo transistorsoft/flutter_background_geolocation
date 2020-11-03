@@ -8,8 +8,8 @@ class EventList extends StatefulWidget {
   State createState() => EventListState();
 }
 
-class EventListState extends State<EventList> with AutomaticKeepAliveClientMixin<EventList> {
-
+class EventListState extends State<EventList>
+    with AutomaticKeepAliveClientMixin<EventList> {
   @override
   bool get wantKeepAlive {
     return true;
@@ -34,14 +34,15 @@ class EventListState extends State<EventList> with AutomaticKeepAliveClientMixin
             itemCount: events.events.length,
             itemBuilder: (BuildContext context, int index) => InputDecorator(
                 decoration: InputDecoration(
-                    //contentPadding: EdgeInsets.only(left: 5.0, top: 0.0, bottom: 5.0),
-                    isDense: true,
-                    labelStyle: TextStyle(color: Colors.blue, fontSize: 24.0, fontWeight: FontWeight.bold),
-                    labelText: events.events[index].name,
+                  //contentPadding: EdgeInsets.only(left: 5.0, top: 0.0, bottom: 5.0),
+                  isDense: true,
+                  labelStyle: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold),
+                  labelText: events.events[index].name,
                 ),
-                child: Text(events.events[index].content, style: TextStyle(color: Colors.black, fontSize: 16.0))
-            )
-        )
-    );
+                child: Text(events.events[index].content,
+                    style: TextStyle(color: Colors.black, fontSize: 16.0)))));
   }
 }

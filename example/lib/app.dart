@@ -10,7 +10,8 @@ import 'package:flutter/foundation.dart';
 import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
+    as bg;
 import 'package:url_launcher/url_launcher.dart';
 
 import 'config/ENV.dart';
@@ -19,7 +20,8 @@ import 'config/transistor_auth.dart';
 import 'registration_view.dart';
 import 'hello_world/app.dart';
 import 'advanced/app.dart';
-import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart' as util;
+import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart'
+    as util;
 
 class HomeApp extends StatefulWidget {
   @override
@@ -38,11 +40,9 @@ class _HomeAppState extends State<HomeApp> {
         theme: Theme.of(context).copyWith(
             accentColor: Colors.black,
             primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
-              bodyColor: Colors.black,
-            )
-        ),
-        home: new _HomeView()
-    );
+                  bodyColor: Colors.black,
+                )),
+        home: new _HomeView());
   }
 }
 
@@ -76,7 +76,7 @@ class _HomeViewState extends State<_HomeView> {
     TransistorAuth.registerErrorHandler();
 
     _deviceInfo = await bg.DeviceInfo.getInstance();
-    
+
     // Reset selected app.
     final SharedPreferences prefs = await _prefs;
     prefs.setString("app", "");
@@ -95,7 +95,9 @@ class _HomeViewState extends State<_HomeView> {
     setState(() {
       _orgname = (orgname != null) ? orgname : '';
       _username = (username != null) ? username : '';
-      _deviceId = (username != null) ? "${_deviceInfo.model}-$_username" : _deviceInfo.model;
+      _deviceId = (username != null)
+          ? "${_deviceInfo.model}-$_username"
+          : _deviceInfo.model;
     });
 
     if (!_usernameIsValid(username) || !_usernameIsValid(orgname)) {
@@ -106,9 +108,11 @@ class _HomeViewState extends State<_HomeView> {
   void _showRegistration() async {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("OPEN"));
 
-    final result = await Navigator.of(context).push(MaterialPageRoute<Map>(fullscreenDialog: true, builder: (BuildContext context) {
-      return RegistrationView();
-    }));
+    final result = await Navigator.of(context).push(MaterialPageRoute<Map>(
+        fullscreenDialog: true,
+        builder: (BuildContext context) {
+          return RegistrationView();
+        }));
 
     if (result != null) {
       setState(() {
@@ -118,7 +122,7 @@ class _HomeViewState extends State<_HomeView> {
       });
     }
   }
-  
+
   void _onClickNavigate(String appName) async {
     if (!_usernameIsValid(_username) || !_usernameIsValid(_orgname)) {
       _showRegistration();
@@ -127,12 +131,13 @@ class _HomeViewState extends State<_HomeView> {
 
     final SharedPreferences prefs = await _prefs;
 
-    bool hasDisclosedBackgroundPermission = prefs.containsKey("has_disclosed_background_permission");
+    bool hasDisclosedBackgroundPermission =
+        prefs.containsKey("has_disclosed_background_permission");
     // [Android] Play Store compatibility requires disclosure of background permission before location runtime permission is requested.
-    if (!hasDisclosedBackgroundPermission && (defaultTargetPlatform == TargetPlatform.android)) {
+    if (!hasDisclosedBackgroundPermission &&
+        (defaultTargetPlatform == TargetPlatform.android)) {
       AlertDialog dialog = AlertDialog(
         title: Text('Background Location Access'),
-
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
@@ -153,14 +158,15 @@ class _HomeViewState extends State<_HomeView> {
           ),
         ],
       );
-      await showDialog(context: context, builder: (BuildContext context) => dialog);
+      await showDialog(
+          context: context, builder: (BuildContext context) => dialog);
       prefs.setBool("has_disclosed_background_permission", true);
     }
 
     prefs.setString("app", appName);
 
     Widget app;
-    switch(appName) {
+    switch (appName) {
       case HelloWorldApp.NAME:
         app = new HelloWorldApp();
         break;
@@ -176,7 +182,9 @@ class _HomeViewState extends State<_HomeView> {
   }
 
   bool _usernameIsValid(String username) {
-    return (username != null) && new RegExp(USERNAME_REGEXP).hasMatch(username) && (username.length > 0);
+    return (username != null) &&
+        new RegExp(USERNAME_REGEXP).hasMatch(username) &&
+        (username.length > 0);
   }
 
   void _launchUrl() async {
@@ -189,12 +197,12 @@ class _HomeViewState extends State<_HomeView> {
   }
 
   @override
-  Widget build (BuildContext context) {
+  Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: const Text('Background Geolocation'),
-            backgroundColor: Colors.amberAccent,
-            brightness: Brightness.light,
+          title: const Text('Background Geolocation'),
+          backgroundColor: Colors.amberAccent,
+          brightness: Brightness.light,
         ),
         body: Container(
             color: Colors.black87,
@@ -203,7 +211,11 @@ class _HomeViewState extends State<_HomeView> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   Center(
-                    child: Text("Example Applications", style: TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold)),
+                    child: Text("Example Applications",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold)),
                   ),
                   Expanded(
                       child: Container(
@@ -212,12 +224,15 @@ class _HomeViewState extends State<_HomeView> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
-                                _buildApplicationButton('Hello World App', onPressed: () { _onClickNavigate("hello_world"); }),
-                                _buildApplicationButton('Advanced App', onPressed: () { _onClickNavigate("advanced"); })
-                              ]
-                          )
-                      )
-                  ),
+                                _buildApplicationButton('Hello World App',
+                                    onPressed: () {
+                                  _onClickNavigate("hello_world");
+                                }),
+                                _buildApplicationButton('Advanced App',
+                                    onPressed: () {
+                                  _onClickNavigate("advanced");
+                                })
+                              ]))),
                   Container(
                       color: Colors.white,
                       padding: EdgeInsets.all(5.0),
@@ -227,42 +242,42 @@ class _HomeViewState extends State<_HomeView> {
                           children: <Widget>[
                             Container(
                                 margin: EdgeInsets.all(10.0),
-                                child: Text("These apps will post locations to Transistor Software's demo server.  You can view your tracking in the browser by visiting:")
-                            ),
+                                child: Text(
+                                    "These apps will post locations to Transistor Software's demo server.  You can view your tracking in the browser by visiting:")),
                             Center(
-                                child: Text("${ENV.TRACKER_HOST}/$_orgname", style: TextStyle(fontWeight: FontWeight.bold))
-                            ),
+                                child: Text("${ENV.TRACKER_HOST}/$_orgname",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold))),
                             Container(
                                 color: Colors.white,
                                 margin: EdgeInsets.all(0.0),
                                 child: new ListTile(
-                                  leading: const Icon(Icons.account_box),
-                                  title: Text("Org: $_orgname"),
-                                  subtitle: Text("Device ID: $_deviceId"),
-                                  selected: true
-                                )
-                            )
-                          ]
-                      )
-                  )
-                ]
-            )
-        ),
+                                    leading: const Icon(Icons.account_box),
+                                    title: Text("Org: $_orgname"),
+                                    subtitle: Text("Device ID: $_deviceId"),
+                                    selected: true))
+                          ]))
+                ])),
         bottomNavigationBar: BottomAppBar(
             color: Colors.white,
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  FlatButton(onPressed: () {
-                    _showRegistration();
-                  }, child: Text('Edit'), color: Colors.redAccent, textColor: Colors.white),
-                  FlatButton(onPressed: () {
-                    _launchUrl();
-                  }, child: Text('View Tracking'), color: Colors.blue, textColor: Colors.white),
-                ]
-            )
-        )
-    );
+                  FlatButton(
+                      onPressed: () {
+                        _showRegistration();
+                      },
+                      child: Text('Edit'),
+                      color: Colors.redAccent,
+                      textColor: Colors.white),
+                  FlatButton(
+                      onPressed: () {
+                        _launchUrl();
+                      },
+                      child: Text('View Tracking'),
+                      color: Colors.blue,
+                      textColor: Colors.white),
+                ])));
   }
 
   MaterialButton _buildApplicationButton(String text, {onPressed: Function}) {
