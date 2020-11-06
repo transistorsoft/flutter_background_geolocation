@@ -377,7 +377,7 @@ class Test {
     state = await bg.BackgroundGeolocation.reset(bg.Config(
         debug: true,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
-        //transistorAuthorizationToken: token,
+        transistorAuthorizationToken: token,
         desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
         distanceFilter: 50,
         disableElasticity: false,
@@ -386,7 +386,6 @@ class Test {
         enableTimestampMeta: true,
         stopTimeout: 1,
         maxDaysToPersist: 14,
-        url: 'http://192.168.11.22:4000/lab/locations',
         backgroundPermissionRationale: bg.PermissionRationale(
             title:
                 "Allow {applicationName} to access this device's location even when the app is closed or not in use.",
