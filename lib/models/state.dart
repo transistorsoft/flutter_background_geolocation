@@ -90,7 +90,6 @@ class State extends Config {
             maxRecordsToPersist: data['maxRecordsToPersist'],
             locationsOrderDirection: data['locationsOrderDirection'],
             httpTimeout: data['httpTimeout'],
-            encrypt: _ensureBool(data['encrypt']),
             authorization: (data['authorization'] != null)
                 ? Authorization.fromMap(data['authorization'])
                 : null,

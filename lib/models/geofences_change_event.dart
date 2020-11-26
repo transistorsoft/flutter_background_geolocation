@@ -19,7 +19,7 @@ class GeofencesChangeEvent {
 
   GeofencesChangeEvent(List on, List off) {
     this.off = off.cast<String>();
-    this.on = new List<Geofence>();
+    this.on = [];
 
     on.forEach((dynamic data) {
       dynamic loiteringDelay = data['loiteringDelay'];

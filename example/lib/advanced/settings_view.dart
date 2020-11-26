@@ -819,14 +819,6 @@ const PLUGIN_SETTINGS = {
       'values': [2, 1, -1, 0],
       'defaultValue': 2
     },
-    {
-      'name': 'encrypt',
-      'group': 'http',
-      'dataType': 'boolean',
-      'inputType': 'toggle',
-      'values': [true, false],
-      'defaultValue': false
-    },
     // Application
     {
       'name': 'stopOnTerminate',

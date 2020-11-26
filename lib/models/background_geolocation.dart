@@ -136,7 +136,7 @@ class BackgroundGeolocation {
       const EventChannel(_EVENT_CHANNEL_AUTHORIZATION);
 
   // Event Subscriptions
-  static List<_Subscription> _subscriptions = new List();
+  static List<_Subscription> _subscriptions = [];
   // Stream Listeners
   static Stream<Location> _eventsLocation;
   static Stream<Location> _eventsMotionChange;

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.11.0 &mdash; 2021-01-16
+
+- [Changed] Remove `Config.encrypt` feature.  This feature has always been flagging a Security Issue with Google Play Console and now the iOS `TSLocationManager` is being flagged for a virus by *Avast* *MacOS:Pirrit-CS[PUP]*.  This seems to be a false-positive due to importing [RNCryptor](https://github.com/RNCryptor/RNCryptor) package.
+- [Fixed][Android] If `stopAfterElapsedMinutes` was configured with a value greater-than `stopTimeout`, the event would fail to fire.
+
 ## 1.10.3 &mdash; 2020-11-05
 
 - [Fixed][iOS] Fix issue with iOS buffer-timer with requestPermission.  Could execute callback twice.
