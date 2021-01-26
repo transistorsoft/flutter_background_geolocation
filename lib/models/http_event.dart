@@ -174,12 +174,6 @@ part of flt_background_geolocation;
 ///
 /// ----------------------------------------------------------------------
 ///
-/// ## Strong Encryption
-///
-/// The JSON payload in HTTP requests can be encrypted.  See [[Config.encrypt]].
-///
-/// ----------------------------------------------------------------------
-///
 /// ## HTTP Logging
 ///
 /// You can observe the plugin performing HTTP requests in the logs for both iOS and Android (_See Wiki [Debugging](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Debugging):
