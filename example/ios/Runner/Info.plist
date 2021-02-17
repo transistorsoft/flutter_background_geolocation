@@ -2,26 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-		<string>fetch</string>
-		<string>location</string>
-		<string>processing</string>
-	</array>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>When in use</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Always and WhenInUse Description</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location always</string>
-	<key>NSMotionUsageDescription</key>
-	<string>Motion always</string>
-	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
-	<dict>
-		<key>DemoPurpose</key>
-		<string>CHANGEME: provide high accuracy location-tracking</string>
-	</dict>
 	<key>BACKGROUND_GEOLOCATION_ENCRYPTION_PASSWORD</key>
 	<string>transistorsoft</string>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
@@ -56,6 +36,26 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Always and WhenInUse Description</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Location always</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>DemoPurpose</key>
+		<string>CHANGEME: provide high accuracy location-tracking</string>
+	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>When in use</string>
+	<key>NSMotionUsageDescription</key>
+	<string>Motion always</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>audio</string>
+		<string>fetch</string>
+		<string>location</string>
+		<string>processing</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

@@ -245,9 +245,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     }).catchError((e) {
       print('[changePace] ERROR: ' + e.code.toString());
     });
-
-    if (!_isMoving) {
-    }
   }
 
   // Manually fetch the current position.

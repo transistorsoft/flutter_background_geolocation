@@ -15,15 +15,14 @@
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
   [GeneratedPluginRegistrant registerWithRegistry:self];
     
+    
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     
-    [bgGeo setBeforeInsertBlock:^NSDictionary *(TSLocation *location) {
-        NSLog(@"************ BEFOREINSERT: %@", [location toDictionary]);
-        if (false) {
-            return nil;
-        }
-        return [location toDictionary];
+    [bgGeo onHttp:^(TSHttpEvent *event) {
+        NSLog(@"******** response: %@", event);
     }];
+            
+    
     
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }

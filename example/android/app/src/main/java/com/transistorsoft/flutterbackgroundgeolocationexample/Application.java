@@ -40,11 +40,6 @@ public class Application  extends FlutterApplication {
         */
 
         super.onCreate();
-
     }
-
-
-
-
 }
 

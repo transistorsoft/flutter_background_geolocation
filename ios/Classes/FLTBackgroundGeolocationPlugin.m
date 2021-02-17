@@ -318,6 +318,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 
 - (void) changePace:(BOOL)isMoving result:(FlutterResult)result {
     [_locationManager changePace:isMoving];
+    result(@(isMoving));
 }
 
 - (void) getCurrentPosition:(NSDictionary*)options result:(FlutterResult)result {

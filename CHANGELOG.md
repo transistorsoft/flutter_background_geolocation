@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.11.1 &mdash; 2021-02-17
+
+- [Fixed][iOS] `startOnBoot: false` was not being respected.
+- [Fixed][Android] If multiple simultaneous calls to `getCurrentPosition` are executed, the location permission handler could hang and not return, causing neither `getCurrentPosition` request to execute.
+
 ## 1.11.0 &mdash; 2021-01-26
 
 - [Changed] Remove `Config.encrypt` feature.  This feature has always been flagging a Security Issue with Google Play Console and now the iOS `TSLocationManager` is being flagged for a virus by *Avast* *MacOS:Pirrit-CS[PUP]*.  This seems to be a false-positive due to importing [RNCryptor](https://github.com/RNCryptor/RNCryptor) package.
