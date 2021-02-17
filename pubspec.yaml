@@ -6,8 +6,8 @@ homepage: https://github.com/transistorsoft/flutter_background_geolocation
 dependencies:
   flutter:
     sdk: flutter
-  meta: ^1.0.5
-  background_fetch: ^0.6.0
+  meta: ^1.2.4
+  background_fetch: ">=0.6.0 <0.7.0"
 
 flutter:
   plugin:
