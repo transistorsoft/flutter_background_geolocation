@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.dependency 'CocoaLumberjack', '~> 3.6.0'
 
   s.libraries           = 'sqlite3', 'z'
-  s.vendored_frameworks = ['TSLocationManager.framework']
+  s.vendored_frameworks = ['TSLocationManager.xcframework']
 
   s.static_framework = true
 

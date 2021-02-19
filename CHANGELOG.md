@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 2.0.0 &mdash; 2021-02-19
+
+* [Changed][iOS] Migrate `TSLocationManager.framework` to new `.xcframework` for *MacCatalyst* support with new Apple silcon.
+
+### :warning: Breaking Change:  Requires `cocoapods >= 1.10+`.
+
+*iOS'* new `.xcframework` requires *cocoapods >= 1.10+*:
+
+```console
+$ pod --version
+// if < 1.10.0
+$ sudo gem install cocoapods
+```
+
+### :warning: Breaking Change: `background_fetch`.
+
+- See [Breaking Changes with `background_fetch@0.7.0`](https://github.com/transistorsoft/flutter_background_fetch/blob/master/CHANGELOG.md#070---2021-02-11)
+
 ## 1.11.1 &mdash; 2021-02-17
 
 - [Fixed][iOS] `startOnBoot: false` was not being respected.
