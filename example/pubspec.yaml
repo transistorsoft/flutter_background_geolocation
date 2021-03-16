@@ -4,7 +4,7 @@ version: 1.11.1+28
 dependencies:
   flutter:
     sdk: flutter
-  flutter_map: ^0.11.0
+  flutter_map: ^0.12.0
     #git:
       # Fork with fix for flutter 1.7
     #  url: https://github.com/domesticmouse/flutter_map.git
@@ -12,7 +12,7 @@ dependencies:
   http: ^0.13.0
 
   shared_preferences: ^2.0.4
-  background_fetch: ^0.7.1
+  background_fetch: ^1.0.0-nullsafety.1
   url_launcher: ^6.0.2
 
   # The following adds the Cupertino Icons font to your application.
