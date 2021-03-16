@@ -5,6 +5,7 @@ pubspec = YAML.load_file('../pubspec.yaml')
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html
 #
 Pod::Spec.new do |s|
+  s.cocoapods_version   = '>= 1.10.0'
   s.name             = pubspec['name']
   s.version          = pubspec['version']
   s.summary          = pubspec['description']
@@ -20,7 +21,7 @@ Pod::Spec.new do |s|
   s.dependency 'CocoaLumberjack', '~> 3.6.0'
 
   s.libraries           = 'sqlite3', 'z'
-  s.vendored_frameworks = ['TSLocationManager.framework']
+  s.vendored_frameworks = ['TSLocationManager.xcframework']
 
   s.static_framework = true
 

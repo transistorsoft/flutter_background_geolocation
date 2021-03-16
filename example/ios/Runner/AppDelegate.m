@@ -13,18 +13,21 @@
 
 - (BOOL)application:(UIApplication *)application
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  [GeneratedPluginRegistrant registerWithRegistry:self];
+    [GeneratedPluginRegistrant registerWithRegistry:self];
     
     
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
     
-    [bgGeo onHttp:^(TSHttpEvent *event) {
-        NSLog(@"******** response: %@", event);
-    }];
-            
-    
-    
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+    bgGeo.beforeInsertBlock = ^NSDictionary* (TSLocation *location) {
+        NSLog(@"[BackgroundGeolocation] beforeInsertBlock: %@", location);
+        BOOL doInsert = YES;
+        //
+        // Your logic here
+        //
+        return (doInsert) ? [location toDictionary] : nil;
+    };
+        
+    return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 @end
