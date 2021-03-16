@@ -299,13 +299,13 @@ part of flt_background_geolocation;
 ///
 class HttpEvent {
   /// `true` if the HTTP response was successful (`200`, `201`, `204`).
-  bool success;
+  bool? success;
 
   /// HTTP response status.
-  int status;
+  int? status;
 
   /// HTTP response text.
-  String responseText;
+  String? responseText;
 
   HttpEvent(dynamic params) {
     this.success = params['success'];
@@ -318,8 +318,8 @@ class HttpEvent {
     return {
       'success': success,
       'status': status,
-      'responseText': (responseText.length > 100)
-          ? (responseText.substring(0, 100) + '...')
+      'responseText': (responseText!.length > 100)
+          ? (responseText!.substring(0, 100) + '...')
           : responseText
     };
   }

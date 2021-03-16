@@ -13,7 +13,7 @@ class ProviderChangeEvent {
   static const ACCURACY_AUTHORIZATION_REDUCED = 1;
 
   /// `true` when device location-services is enabled.
-  bool enabled;
+  bool? enabled;
 
   /// `AUTORIZATION_STATUS`
   ///
@@ -27,13 +27,13 @@ class ProviderChangeEvent {
   /// | [AUTHORIZATION_STATUS_ALWAYS]         | iOS & Android |
   /// | [AUTHORIZATION_STATUS_WHEN_IN_USE]    | iOS & Android 10+ |
   ///
-  int status;
+  int? status;
 
   /// `true` if network location provider is enabled.
-  bool network;
+  bool? network;
 
   /// `true` if GPS location provider is enabled.
-  bool gps;
+  bool? gps;
 
   /// __`[iOS 14+]`__ iOS 14 has introduced a new __`[Precise: On]`__ switch on the location authorization dialog allowing users to disable high-accuracy location.
   ///
@@ -62,7 +62,7 @@ class ProviderChangeEvent {
   /// - [BackgroundGeolocation.requestTemporaryFullAccuracy]
   /// - [What's new in iOS 14 `CoreLocation`](https://levelup.gitconnected.com/whats-new-with-corelocation-in-ios-14-bd28421c95c4)
   ///
-  int accuracyAuthorization;
+  int? accuracyAuthorization;
 
   // event['enabled'], event['status'], event['network'], event['gps']);
   ProviderChangeEvent(dynamic event) {

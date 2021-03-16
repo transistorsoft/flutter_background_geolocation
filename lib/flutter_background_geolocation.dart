@@ -57,16 +57,16 @@ const MethodChannel _methodChannel =
     const MethodChannel("$_PLUGIN_PATH/methods");
 
 // iOS 10 returns BOOL as 1/0 rather than true/false
-bool _ensureBool(dynamic value) {
+bool? _ensureBool(dynamic value) {
   return (value.runtimeType == int) ? (value != 0) : value;
 }
 
 // Android & iOS sometimes differ on their Type; where one returns int, the other might return double.
-int _ensureInt(dynamic value) {
+int? _ensureInt(dynamic value) {
   return (value.runtimeType == double) ? value.round() : value;
 }
 
 // Android & iOS sometimes differ on their Type; where one returns int, the other might return double.
-double _ensureDouble(dynamic value) {
+double? _ensureDouble(dynamic value) {
   return (value.runtimeType == int) ? value * 1.0 : value;
 }

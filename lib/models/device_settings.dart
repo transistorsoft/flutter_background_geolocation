@@ -7,32 +7,32 @@ part of flt_background_geolocation;
 ///
 class DeviceSettingsRequest {
   /// Device manufacturer.
-  String manufacturer;
+  String? manufacturer;
 
   /// Device model
-  String model;
+  String? model;
 
   /// OS version
-  String version;
+  String? version;
 
   /// Flag showing whether you've already shown this screen to the user.
-  bool seen;
+  bool? seen;
 
   /// The [DateTime] you last showed this screen to the user.
-  DateTime lastSeenAt;
+  DateTime? lastSeenAt;
 
   /// The settings screen to be shown (eg: [DeviceSettings.IGNORE_BATTERY_OPTIMIZATIONS], [DeviceSettings.POWER_MANAGER]).
   ///
   /// This property is set automatically.
-  String action;
+  String? action;
 
   DeviceSettingsRequest(
-      {@required String action,
-      String manufacturer,
-      String model,
-      String version,
-      bool seen,
-      int lastSeenAt}) {
+      {required String? action,
+      String? manufacturer,
+      String? model,
+      String? version,
+      bool? seen,
+      required int lastSeenAt}) {
     this.action = action;
     this.manufacturer = manufacturer;
     this.model = model;
@@ -137,7 +137,7 @@ class DeviceSettings {
   /// bool isPowerSaveMode = await DeviceSettings.isPowerSaveMode;
   /// ```
   ///
-  static Future<bool> get isPowerSaveMode async {
+  static Future<bool?> get isPowerSaveMode async {
     return await _methodChannel.invokeMethod('isPowerSaveMode');
   }
 
@@ -152,7 +152,7 @@ class DeviceSettings {
   /// bool isIgnoring = await DeviceSettings.isIgnoringBatteryOptimizations;
   /// ```
   ///
-  static Future<bool> get isIgnoringBatteryOptimizations async {
+  static Future<bool?> get isIgnoringBatteryOptimizations async {
     return await _methodChannel.invokeMethod('isIgnoringBatteryOptimizations');
   }
 
@@ -208,7 +208,7 @@ class DeviceSettings {
   ///
   static Future<DeviceSettingsRequest> showIgnoreBatteryOptimizations() async {
     List<dynamic> args = [IGNORE_BATTERY_OPTIMIZATIONS];
-    Map request = await _methodChannel.invokeMethod('requestSettings', args);
+    Map request = await (_methodChannel.invokeMethod('requestSettings', args) as FutureOr<Map<dynamic, dynamic>>);
     return new DeviceSettingsRequest(
         action: request['action'],
         manufacturer: request['manufacturer'],
@@ -284,7 +284,7 @@ class DeviceSettings {
   ///
   static Future<DeviceSettingsRequest> showPowerManager() async {
     List<dynamic> args = [POWER_MANAGER];
-    Map request = await _methodChannel.invokeMethod('requestSettings', args);
+    Map request = await (_methodChannel.invokeMethod('requestSettings', args) as FutureOr<Map<dynamic, dynamic>>);
     return new DeviceSettingsRequest(
         action: request['action'],
         manufacturer: request['manufacturer'],
@@ -295,7 +295,7 @@ class DeviceSettings {
   }
 
   /// This method is designed to be executed from a [showPowerManager] or [showIgnoreBatteryOptimizations] callback.
-  static Future<bool> show(DeviceSettingsRequest request) async {
+  static Future<bool?> show(DeviceSettingsRequest request) async {
     List<dynamic> args = [request.action];
     return await _methodChannel.invokeMethod('showSettings', args);
   }
