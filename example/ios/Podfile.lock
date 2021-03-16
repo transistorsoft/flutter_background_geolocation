@@ -8,16 +8,8 @@ PODS:
   - flutter_background_geolocation (2.0.0):
     - CocoaLumberjack (~> 3.6.0)
     - Flutter
-  - FMDB (2.7.5):
-    - FMDB/standard (= 2.7.5)
-  - FMDB/standard (2.7.5)
-  - path_provider (0.0.1):
-    - Flutter
   - shared_preferences (0.0.1):
     - Flutter
-  - sqflite (0.0.2):
-    - Flutter
-    - FMDB (>= 2.7.5)
   - url_launcher (0.0.1):
     - Flutter
 
@@ -25,15 +17,12 @@ DEPENDENCIES:
   - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
   - Flutter (from `Flutter`)
   - flutter_background_geolocation (from `.symlinks/plugins/flutter_background_geolocation/ios`)
-  - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
-  - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 SPEC REPOS:
   trunk:
     - CocoaLumberjack
-    - FMDB
 
 EXTERNAL SOURCES:
   background_fetch:
@@ -42,24 +31,17 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_background_geolocation:
     :path: ".symlinks/plugins/flutter_background_geolocation/ios"
-  path_provider:
-    :path: ".symlinks/plugins/path_provider/ios"
   shared_preferences:
     :path: ".symlinks/plugins/shared_preferences/ios"
-  sqflite:
-    :path: ".symlinks/plugins/sqflite/ios"
   url_launcher:
     :path: ".symlinks/plugins/url_launcher/ios"
 
 SPEC CHECKSUMS:
   background_fetch: f77e9d12c29db274e83565952268ec846eac7252
   CocoaLumberjack: bd155f2dd06c0e0b03f876f7a3ee55693122ec94
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_background_geolocation: e20f56c7b8978c65d14330b581ff12e12ef0292e
-  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
+  flutter_background_geolocation: d2db36d81f6b6cbfcc9ea6ab31fd268f7b01a46b
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
-  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
 PODFILE CHECKSUM: e5ee00144d04e7b168ba7ea28a9753540e444f3d

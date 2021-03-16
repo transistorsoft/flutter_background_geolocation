@@ -190,6 +190,11 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       prefs.setInt("fetch-count", ++count);
       print('[BackgroundFetch] count: $count');
 
+      await bg.BackgroundGeolocation.getCurrentPosition(
+        extras: {
+          "taskId": taskId
+        }
+      );
       if (taskId == 'flutter_background_fetch') {
         // Test scheduling a custom-task in fetch event.
         BackgroundFetch.scheduleTask(TaskConfig(
@@ -357,7 +362,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       // Execute an HTTP request to test an async operation completes.
       String url = "${ENV.TRACKER_HOST}/api/devices";
       bg.State state = await bg.BackgroundGeolocation.state;
-      http.read(url, headers: {
+      http.read(Uri.parse(url), headers: {
         "Authorization": "Bearer ${state.authorization.accessToken}"
       }).then((String result) {
         print("[http test] success: $result");
