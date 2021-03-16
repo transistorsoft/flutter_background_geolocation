@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 2.0.0 &mdash; 2021-02-19
+## 2.0.0 &mdash; 2021-03-16
 
 * [Changed][iOS] Migrate `TSLocationManager.framework` to new `.xcframework` for *MacCatalyst* support with new Apple silcon.
 
