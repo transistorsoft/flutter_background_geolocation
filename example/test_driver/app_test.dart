@@ -2,8 +2,6 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 import 'dart:convert';
-import 'package:colorize/colorize.dart';
-
 
 FlutterDriver driver;
 
@@ -89,9 +87,9 @@ void main() {
 
 void _group(String name, Function callback) async {
   setUpAll(() async {
-    Colorize header = Colorize("[Test Group] - $name");
-    header.green();
-    print(header);
+    //Colorize header = Colorize("[Test Group] - $name");
+    //header.green();
+    print("[Test Group] - $name");
     driver = await FlutterDriver.connect();
 
   });
@@ -117,9 +115,9 @@ void _test(String action, Function(String) callback, [int timeout]) async {
 }
 
 void log(String command, String message) {
-  Colorize header = Colorize("[FlutterDriver #$command]");
-  header.yellow();
-  Colorize response = Colorize(message);
-  response.darkGray();
-  print("$header - $response");
+  //Colorize header = Colorize("[FlutterDriver #$command]");
+  //header.yellow();
+  //Colorize response = Colorize(message);
+  //response.darkGray();
+  print("[FlutterDriver #$command]");
 }
