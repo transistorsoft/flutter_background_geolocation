@@ -5,13 +5,13 @@ part of flt_background_geolocation;
 class AuthorizationEvent {
   /// `true` when an authorization request to [Authorization.refreshUrl] was successful.
   ///
-  bool? success;
+  bool success;
 
   /// When [success] `false`, this is the error message from [Authorization.refreshUrl].
-  String? error;
+  String error;
 
   /// when [success] `true`, this is the data returned from [Authorization.refreshUrl].
-  Map? response;
+  Map response;
 
   AuthorizationEvent(Map data) {
     success = _ensureBool(data['success']);

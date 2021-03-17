@@ -5,7 +5,7 @@ part of flt_background_geolocation;
 class ConnectivityChangeEvent {
   /// `true` when the device has access to a network connection.
   ///
-  final bool? connected;
+  final bool connected;
 
   ConnectivityChangeEvent(this.connected);
 

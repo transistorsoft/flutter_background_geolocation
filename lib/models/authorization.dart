@@ -72,7 +72,7 @@ class Authorization {
   static const String STRATEGY_JWT = "jwt";
 
   /// Authorization strategy.  Only [JWT](https://jwt.io/) is currently supported.
-  String? strategy = STRATEGY_JWT;
+  String strategy = STRATEGY_JWT;
 
   /// Authorization token (eg: [JWT](https://jwt.io/)) required for authorization by your server at [Config.url].
   ///
@@ -81,7 +81,7 @@ class Authorization {
   /// `"Authorization": "Bearer XXX.YYY.ZZZ"`
   ///
   /// You do **not** need to manually configure [Config.headers] with the `Authorization` parameter.  It is all **automatic**.
-  String? accessToken;
+  String accessToken;
 
   /// The url to your authorization server that provides new [accessToken] when expired.
   ///
@@ -115,7 +115,7 @@ class Authorization {
   ///
   /// When the response from the server is received, the event [BackgroundGeolocation.onAuthorization] will be fired, provided with the [AuthorizationEvent].
   ///
-  String? refreshUrl;
+  String refreshUrl;
 
   /// The url to your authorization server that provides new [accessToken] when expired.
   ///
@@ -148,7 +148,7 @@ class Authorization {
   /// ```
   ///
   /// When the response from the server is received, the event [BackgroundGeolocation.onAuthorization] will be fired, provided with the [AuthorizationEvent].
-  String? refreshToken;
+  String refreshToken;
 
   /// Refresh payload will be encoded into the FORM POST to the [refreshUrl] when requesting a new [accessToken] after expiration.
   ///
@@ -181,10 +181,10 @@ class Authorization {
   ///   -F 'foo=another arbitrary field' \
   ///   https://auth.your.server.com/tokens
   ///
-  Map? refreshPayload;
+  Map refreshPayload;
 
   /// Token expiry time in seconds
-  int? expires = -1;
+  int expires = -1;
 
   static fromMap(Map map) {
     return Authorization(

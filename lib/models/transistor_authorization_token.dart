@@ -45,13 +45,13 @@ class TransistorAuthorizationToken {
   static const String FIELD_EXPIRES = "expires";
 
   /// The authorization token to provide to [Authorization.accessToken]
-  String? accessToken;
+  String accessToken;
 
   /// The token used to request to provide to [Authorization.refreshToken]
-  String? refreshToken;
+  String refreshToken;
 
   /// The expiry time of the [Authorization.accessToken]
-  int? expires;
+  int expires;
 
   /// The base-url of Transistor Demo server where this token came from.
   /// __Read only__
@@ -111,7 +111,7 @@ class TransistorAuthorizationToken {
   /// ### ℹ️ See also:
   /// - [findOrCreate]
   ///
-  static Future<bool?> destroy(String url) async {
+  static Future<bool> destroy(String url) async {
     return await _methodChannel.invokeMethod('destroyTransistorToken', url);
   }
 
@@ -178,6 +178,6 @@ class TransistorAuthorizationToken {
         throw error;
       }
     });
-    return completer.future as FutureOr<TransistorAuthorizationToken>;
+    return completer.future;
   }
 }

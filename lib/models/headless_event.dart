@@ -77,7 +77,7 @@ part of flt_background_geolocation;
 class HeadlessEvent {
   /// The name of the [Event]
   ///
-  String? name;
+  String name;
 
   /// The corresponding event-object.
   ///
@@ -102,7 +102,7 @@ class HeadlessEvent {
   ///
   dynamic event;
 
-  HeadlessEvent(String? name, dynamic params) {
+  HeadlessEvent(String name, dynamic params) {
     this.name = name;
 
     try {

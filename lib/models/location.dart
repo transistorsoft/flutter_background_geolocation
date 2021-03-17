@@ -25,35 +25,35 @@ part of flt_background_geolocation;
 class Coords {
   /// __`[iOS Only]`__ The current floor within a building.
   /// Only works in an environment containing indoor-tracking hardware (eg: bluetooth beacons).
-  int? floor;
+  int floor;
 
   /// Latitude of the location.
-  double? latitude;
+  double latitude;
 
   /// Longitude of the location.
-  double? longitude;
+  double longitude;
 
   /// Accuracy in meters.
-  double? accuracy;
+  double accuracy;
 
   /// Altitude above sea-level in meters.
-  double? altitude;
+  double altitude;
 
   /// Heading in degrees.
   /// ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
-  double? heading;
+  double heading;
 
   /// Heading accuracy in degrees.
   /// ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
-  double? headingAccuracy;
+  double headingAccuracy;
 
   /// Speed in meters / second.
   /// ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
-  double? speed;
+  double speed;
 
   /// Speed accuracy in meters / second
   /// ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
-  double? speedAccuracy;
+  double speedAccuracy;
 
   /// Altitude accuracy in meters.
   ///
@@ -73,7 +73,7 @@ class Coords {
   ///
   /// For example, if [altitude] returns `150`, and [altitudeAccuracy] returns `20` then there is a 68% probability of the true altitude being between `130` and `170` meters.
   ///
-  double? altitudeAccuracy;
+  double altitudeAccuracy;
 
   Coords(dynamic coords) {
     this.latitude = coords['latitude'] * 1.0;
@@ -111,10 +111,10 @@ class Coords {
 ///
 class Battery {
   /// `true` when device is plugged in to power.
-  bool? isCharging;
+  bool isCharging;
 
   /// Battery level.  `0.0` = empty; `1.0` = full charge.
-  double? level;
+  double level;
 
   Battery(dynamic battery) {
     this.isCharging = battery['is_charging'];
@@ -144,10 +144,10 @@ class Activity {
   /// | `running`      |
   /// | `on_bicycle`   |
   /// | `in_vehicle`   |
-  String? type;
+  String type;
 
   /// Confidence of the reported device motion activity in %.
-  int? confidence;
+  int confidence;
 
   Activity(dynamic activity) {
     this.type = activity['type'];
@@ -192,23 +192,23 @@ class Location {
   ///
   /// Eg: `2018-01-01T12:00:01.123Z'.
   ///
-  String? timestamp;
+  String timestamp;
 
   /// Event which caused this location to be recorded.
   ///
   /// `motionchange | heartbeat | providerchange | geofence`
   ///
-  String? event;
+  String event;
 
   /// __`[Android only]`__ `true` if the location was provided by a Mock location app.
-  bool? mock;
+  bool mock;
 
   /// `true` if this Location is just 1 of several samples before settling upon a final location.
   ///
   /// Multiple samples are requested when using [BackgroundGeolocation.getCurrentPosition] or when the plugin is performing a [BackgroundGeolocation.onMotionChange].
   /// If you're manually uploading locations to your server, you should __ignore__ those with `location.sample == true`.
   ///
-  bool? sample;
+  bool sample;
 
   /// The current distance traveled.
   ///
@@ -216,17 +216,17 @@ class Location {
   /// - [BackgroundGeolocation.setOdometer]
   /// - [BackgroundGeolocation.odometer]
   ///
-  double? odometer;
+  double odometer;
 
   /// `true` if this `Location` was recored while the device was in-motion.
   ///
-  bool? isMoving;
+  bool isMoving;
 
   /// Universally Unique Identifier.
   ///
   /// This property is helpful for debugging location issues.  It can be used to match locations recorded at your server with those within the plugin's [Logger.getLog].
   ///
-  String? uuid;
+  String uuid;
 
   /// Location coordinates.
   ///
@@ -243,13 +243,13 @@ class Location {
   ///
   ///   print("[onLocation] $location");
   /// });
-  Coords? coords;
+  Coords coords;
 
   /// Corresponding [GeofenceEvent] if this location was recorded due to a [Geofence] transition.
   ///
   /// See [GeofenceEvent]
   ///
-  GeofenceEvent? geofence;
+  GeofenceEvent geofence;
 
   /// Device battery-level when this `Location` was recorded.
   ///
@@ -264,7 +264,7 @@ class Location {
   /// });
   /// ```
   ///
-  Battery? battery;
+  Battery battery;
 
   /// Device motion-activity when this `Location` was recorded.
   ///
@@ -279,11 +279,11 @@ class Location {
   /// });
   /// ```
   ///
-  Activity? activity;
+  Activity activity;
 
   /// Arbitrary extras object from configured [Config.extras].
   ///
-  Map? extras;
+  Map extras;
 
   Location(dynamic params) {
     this.map = params;
@@ -315,14 +315,14 @@ class Location {
   /// String representation of `Location` for `print` to logs.
   String toString({compact: bool}) {
     if (compact == true) {
-      return '[Location ${DateTime.parse(timestamp!).toLocal()}, isMoving: $isMoving, sample: $sample, $coords]';
+      return '[Location ${DateTime.parse(timestamp).toLocal()}, isMoving: $isMoving, sample: $sample, $coords]';
     } else {
       return '[Location ${map.toString()}]';
     }
   }
 
   /// Return original `Map` recevied from native code.
-  Map? toMap() {
+  Map toMap() {
     return map;
   }
 }
@@ -341,10 +341,10 @@ class Location {
 ///
 class LocationError {
   /// Error code
-  int? code;
+  int code;
 
   /// Error message
-  String? message;
+  String message;
 
   LocationError(PlatformException e) {
     code = int.parse(e.code);

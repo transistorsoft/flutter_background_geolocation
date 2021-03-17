@@ -236,17 +236,17 @@ class Notification {
   ///   )
   /// ));
   /// ```
-  String? layout;
+  String layout;
 
   /// Configure the *title* of the persistent notification in the Notification Bar when running with [Config.foregroundService] __`true`__
   ///
   /// Defaults to the application name from `AndroidManifest`.  When running the service with [Config.foregroundService]: true, Android requires a persistent notification.  This will configure the **title** of that notification.
-  String? title;
+  String title;
 
   /// Configure the *text* of the persistent notification in the Notification Bar when running with [Config.foregroundService] __`true`__
   ///
   /// Defaults to *"Location service activated"*.  When running the service with [Config.foregroundService]: true, Android requires a persistent notification.  This will configure the **text** of that notification.
-  String? text;
+  String text;
 
   /// Configure the *color* of the persistent notification icon in the Notification Bar when running with [Config.foregroundService] __`true`__
   ///
@@ -255,7 +255,7 @@ class Notification {
   /// Supported formats are:
   /// - `#RRGGBB`
   /// - `#AARRGGBB`
-  String? color;
+  String color;
 
   /// Configure the *small icon* of the persistent notification in the Notification Bar when running with [Config.foregroundService] __`true`__
   ///
@@ -285,7 +285,7 @@ class Notification {
   ///
   /// ### ℹ️ See also:
   /// - [largeIcon]
-  String? smallIcon;
+  String smallIcon;
 
   /// Configure the *large icon* of the persistent notification in the Notification Bar when running with [Config.foregroundService] __`true`__
   ///
@@ -316,7 +316,7 @@ class Notification {
   /// ### ℹ️ See also:
   /// - [smallIcon]
   ///
-  String? largeIcon;
+  String largeIcon;
 
   /// When running the service with [Config.foregroundService]: true, Android requires a persistent notification in the Notification Bar.  This will control the **priority** of that notification as well as the position of the notificaiton-bar icon.
   ///
@@ -339,12 +339,12 @@ class Notification {
   ///   )
   /// ));
   /// ```
-  int? priority;
+  int priority;
 
   /// Configure the Android Foreground Service icon and notification to be displayed __always__.  Defaults to `false`.
   ///
   /// The default behaviour is for the notification to be shown only while the SDK detects the device to be *moving*.  Some developers desire to provide full-disclosure to their users when the SDK has been enabled.
-  bool? sticky;
+  bool sticky;
 
   /// Configure the name of the plugin's notification-channel used to display the [Config.foregroundService] notification.
   ///
@@ -373,7 +373,7 @@ class Notification {
   /// ));
   /// ```
   ///
-  String? channelName;
+  String channelName;
 
   ///
   /// Custom strings to render into `<TextView />` elements of a custom notification [layout].
@@ -404,7 +404,7 @@ class Notification {
   /// ));
   /// ```
   ///
-  Map<String, String>? strings;
+  Map<String, String> strings;
 
   ///
   /// Declare click listeners for `<Button />` elements of a custom notification [layout].
@@ -447,7 +447,7 @@ class Notification {
   /// });
   /// ```
   ///
-  List<String>? actions;
+  List<String> actions;
 
   /// Convert supplied `Map` to `Notification` instance.
   static fromMap(Map map) {

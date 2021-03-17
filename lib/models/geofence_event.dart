@@ -214,16 +214,16 @@ part of flt_background_geolocation;
 ///
 class GeofenceEvent {
   /// [Geofence.identifier] of the [Geofence] which fired.
-  String? identifier;
+  String identifier;
 
   /// The transition event that caused the geofence to fire (ENTER | EXIT | DWELL).
-  String? action;
+  String action;
 
   /// The [Location] where this geofence triggered.
-  Location? location;
+  Location location;
 
   /// Optional [Geofence.extras]
-  Map? extras;
+  Map extras;
 
   GeofenceEvent(Map params) {
     // Remove geofence from location to prevent recursive creation of GeofenceEvent.

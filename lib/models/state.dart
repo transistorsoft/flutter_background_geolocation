@@ -3,15 +3,15 @@ part of flt_background_geolocation;
 /// Expresses the current state of the plugin, including all [Config] options.
 ///
 class State extends Config {
-  Map? map;
+  Map map;
 
   /// Whether the plugin is current stopped or started ([BackgroundGeolocation.stop] / [BackgroundGeolocation.start]).
   ///
-  bool? enabled;
+  bool enabled;
 
   /// Whether the plugin's [Config.schedule] has been activated with [BackgroundGeolocation.startSchedule].
   ///
-  bool? schedulerEnabled;
+  bool schedulerEnabled;
 
   /// Current distance traveled.
   ///
@@ -19,21 +19,21 @@ class State extends Config {
   /// - [BackgroundGeolocation.setOdometer].
   /// - [BackgroundGeolocation.odometer].
   ///
-  double? odometer;
+  double odometer;
 
   /// Whether the plugin is in the location-tracking mode ([BackgroundGeolocation.start] or geofences-only mode ([BackgroundGeolocation.startGeofences]).
   /// - `1` = Location + Geofence tracking (ie: [BackgroundGeolocation.start]).
   /// - `0` = Geofences-only tracking (ie: [BackgroundGeolocation.startGeofences]).
   ///
-  int? trackingMode;
+  int trackingMode;
 
   /// Indicates whether the iOS app was launched in the background.
   ///
-  bool? didLaunchInBackground;
+  bool didLaunchInBackground;
 
   /// Indicates if this is the first launch of the app after initial install
   ///
-  bool? isFirstBoot;
+  bool isFirstBoot;
 
   State(dynamic data)
       : super(

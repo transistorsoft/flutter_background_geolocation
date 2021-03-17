@@ -248,7 +248,7 @@ class Logger {
   /// 09-19 11:12:55.226 [c.t.l.BackgroundGeolocationService onActivityRecognitionResult] still (100%)
   ///```
   ///
-  static Future<String?> getLog([SQLQuery? query]) async {
+  static Future<String> getLog([SQLQuery query]) async {
     query = (query != null) ? query : new SQLQuery();
     return await _methodChannel.invokeMethod('getLog', query.toMap());
   }
@@ -275,7 +275,7 @@ class Logger {
   /// });
   /// ```
   ///
-  static Future<bool?> emailLog(String email, [SQLQuery? query]) async {
+  static Future<bool> emailLog(String email, [SQLQuery query]) async {
     query = (query != null) ? query : new SQLQuery();
     return await _methodChannel
         .invokeMethod('emailLog', [email, query.toMap()]);
@@ -328,7 +328,7 @@ class Logger {
   /// | **`platform`** | *iOS or Android* |
   /// | **`version`** | *OS version* |
   ///
-  static Future<bool?> uploadLog(String url, [SQLQuery? query]) async {
+  static Future<bool> uploadLog(String url, [SQLQuery query]) async {
     query = (query != null) ? query : new SQLQuery();
     return await _methodChannel.invokeMethod('uploadLog', [url, query.toMap()]);
   }
@@ -341,7 +341,7 @@ class Logger {
   /// Logger.destroyLog();
   /// ```
   ///
-  static Future<bool?> destroyLog() async {
+  static Future<bool> destroyLog() async {
     return await _methodChannel.invokeMethod('destroyLog');
   }
 }

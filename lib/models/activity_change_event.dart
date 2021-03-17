@@ -21,11 +21,11 @@ class ActivityChangeEvent {
   /// | `on_bicycle`   |
   /// | `in_vehicle`   |
   ///
-  final String? activity;
+  final String activity;
 
   /// Confidence of the reported device motion activity in %.
   ///
-  final int? confidence;
+  final int confidence;
 
   ActivityChangeEvent(this.activity, this.confidence);
 
