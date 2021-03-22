@@ -54,10 +54,10 @@ class Geofence {
   /// Return `Geofence` as `Map`.
   Map<String, dynamic> toMap() {
     Map<String, dynamic> params = {};
-    if (this.identifier != null) params['identifier'] = this.identifier;
-    if (this.radius != null) params['radius'] = this.radius;
-    if (this.latitude != null) params['latitude'] = this.latitude;
-    if (this.longitude != null) params['longitude'] = this.longitude;
+    params['identifier'] = this.identifier;
+    params['radius'] = this.radius;
+    params['latitude'] = this.latitude;
+    params['longitude'] = this.longitude;
     if (this.notifyOnEntry != null)
       params['notifyOnEntry'] = this.notifyOnEntry;
     if (this.notifyOnExit != null) params['notifyOnExit'] = this.notifyOnExit;

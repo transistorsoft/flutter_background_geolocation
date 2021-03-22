@@ -1415,7 +1415,7 @@ class BackgroundGeolocation {
           .map((dynamic isPowerSaveMode) => isPowerSaveMode as bool);
     }
     _registerSubscription(
-        _eventsPowerSaveChange!.listen(callback as void Function(bool)?),
+        _eventsPowerSaveChange!.listen(callback),
         callback);
   }
 

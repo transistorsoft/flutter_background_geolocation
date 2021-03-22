@@ -21,10 +21,8 @@ import 'dart:ui';
 import 'dart:convert';
 import 'package:collection/collection.dart' show IterableExtension;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 part 'models/background_geolocation.dart';
 part 'models/device_settings.dart';
