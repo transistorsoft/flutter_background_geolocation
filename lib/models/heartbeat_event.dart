@@ -20,7 +20,7 @@ class HeartbeatEvent {
   ///     }
   ///   );
   /// });
-  Location location;
+  Location? location;
 
   HeartbeatEvent(dynamic event) {
     if (event['location'] != null) {

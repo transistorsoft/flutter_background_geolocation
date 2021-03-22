@@ -25,13 +25,14 @@ class DeviceInfo {
   /// Framework `Flutter|ReactNative|Cordova`
   String framework;
 
-  static DeviceInfo _instance;
+  static DeviceInfo? _instance;
 
   /// Retreive an singleton instance of `DeviceInfo`.
   static Future<DeviceInfo> getInstance() async {
     Completer completer = new Completer<DeviceInfo>();
     if (_instance == null) {
-      Map map = await _methodChannel.invokeMethod('getDeviceInfo');
+      Map map = await (_methodChannel.invokeMethod('getDeviceInfo')
+          as FutureOr<Map<dynamic, dynamic>>);
       _instance = new DeviceInfo(
           model: map['model'],
           manufacturer: map['manufacturer'],
@@ -40,15 +41,15 @@ class DeviceInfo {
           framework: map['framework']);
     }
     completer.complete(_instance);
-    return completer.future;
+    return completer.future as FutureOr<DeviceInfo>;
   }
 
   DeviceInfo(
-      {this.model,
-      this.manufacturer,
-      this.version,
-      this.platform,
-      this.framework});
+      {required this.model,
+      required this.manufacturer,
+      required this.version,
+      required this.platform,
+      required this.framework});
 
   /// Return as `Map`
   Map<String, dynamic> toMap() {

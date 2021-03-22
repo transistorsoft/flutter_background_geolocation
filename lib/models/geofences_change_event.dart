@@ -9,13 +9,13 @@ class GeofencesChangeEvent {
   ///
   /// The plugin ceases active-monitoring upon those [Geofence] whose center coordinate lies outside of [Config.geofenceProximityRadius].  `off` is a list of those [Geofence.identifier].
   ///
-  List<String> off;
+  late List<String> off;
 
   /// List of [Geofence] which the plugin has just begun active-monitoring upon.
   ///
   /// The plugin active-monitors only those [Geofence] whose center coordinate lies within [Config.geofenceProximityRadius].  `on` is a list of those [Geofence].
   ///
-  List<Geofence> on;
+  late List<Geofence> on;
 
   GeofencesChangeEvent(List on, List off) {
     this.off = off.cast<String>();

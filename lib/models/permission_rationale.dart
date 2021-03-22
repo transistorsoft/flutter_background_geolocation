@@ -1,13 +1,13 @@
 part of flt_background_geolocation;
 
 class PermissionRationale {
-  String title;
+  String? title;
 
-  String message;
+  String? message;
 
-  String positiveAction;
+  String? positiveAction;
 
-  String negativeAction;
+  String? negativeAction;
 
   PermissionRationale(
       {this.title, this.message, this.positiveAction, this.negativeAction});
@@ -22,7 +22,7 @@ class PermissionRationale {
             (map['negativeAction'] != null) ? map['negativeAction'] : null);
   }
 
-  Map<String, String> toMap() {
+  Map<String, String?> toMap() {
     return {
       "title": this.title,
       "message": this.message,

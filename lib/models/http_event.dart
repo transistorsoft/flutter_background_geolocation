@@ -299,13 +299,13 @@ part of flt_background_geolocation;
 ///
 class HttpEvent {
   /// `true` if the HTTP response was successful (`200`, `201`, `204`).
-  bool success;
+  late bool success;
 
   /// HTTP response status.
-  int status;
+  late int status;
 
   /// HTTP response text.
-  String responseText;
+  late String responseText;
 
   HttpEvent(dynamic params) {
     this.success = params['success'];
