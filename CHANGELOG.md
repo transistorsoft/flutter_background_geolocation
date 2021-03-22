@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 3.0.0-nullsafety.0 &mdash; 2021-03-22
+## 4.0.0-nullsafety.0 &mdash; 2021-03-22
 
 * [Added] Dart nullsafety.
 
