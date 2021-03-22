@@ -1414,9 +1414,7 @@ class BackgroundGeolocation {
           .receiveBroadcastStream()
           .map((dynamic isPowerSaveMode) => isPowerSaveMode as bool);
     }
-    _registerSubscription(
-        _eventsPowerSaveChange!.listen(callback),
-        callback);
+    _registerSubscription(_eventsPowerSaveChange!.listen(callback), callback);
   }
 
   /// Listen to [Authorization] events from [Authorization.refreshUrl].
