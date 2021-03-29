@@ -21,9 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import io.flutter.FlutterInjector;
 import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.dart.DartExecutor;
+import io.flutter.embedding.engine.loader.ApplicationInfoLoader;
+import io.flutter.embedding.engine.loader.FlutterApplicationInfo;
 import io.flutter.embedding.engine.plugins.shim.ShimPluginRegistry;
 import io.flutter.plugin.common.JSONMethodCodec;
 import io.flutter.plugin.common.MethodCall;
@@ -162,7 +163,8 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
             return;
         }
 
-        String appBundlePath =  FlutterInjector.instance().flutterLoader().findAppBundlePath();
+        FlutterApplicationInfo info = ApplicationInfoLoader.load(mContext);
+        String appBundlePath = info.flutterAssetsDir;
 
         AssetManager assets = mContext.getAssets();
         if (appBundlePath != null && !mHeadlessTaskRegistered.get()) {
