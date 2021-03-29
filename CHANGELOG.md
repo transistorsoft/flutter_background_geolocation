@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 2.0.1 &mdash; 2021-03-29
+
+* [Fixed][Android] Flutter 2 did something to break Headless registration.
+
 ## 2.0.0 &mdash; 2021-03-16
 
 * [Changed][iOS] Migrate `TSLocationManager.framework` to new `.xcframework` for *MacCatalyst* support with new Apple silcon.
