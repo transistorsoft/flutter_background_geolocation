@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.0.0-nullsafety.1 &mdash; 2021-04-01
+
+* [Fixed][Android] Flutter 2 breaks Android Headless mode with null-pointer exception.
+
 ## 4.0.0-nullsafety.0 &mdash; 2021-03-22
 
 * [Added] Dart nullsafety.
