@@ -35,6 +35,10 @@ class State extends Config {
   ///
   late bool isFirstBoot;
 
+  /// Indicates if the app was launched after the device was rebooted.
+  ///
+  late bool didDeviceReboot;
+
   State(Map data)
       : super(
             // Common Options
@@ -162,6 +166,9 @@ class State extends Config {
     odometer = _ensureDouble(data['odometer'])!;
     didLaunchInBackground = (data['didLaunchInBackground'] != null)
         ? _ensureBool(data['didLaunchInBackground'])!
+        : false;
+    didDeviceReboot = (data['didDeviceReboot'] != null)
+        ? _ensureBool(data['didDeviceReboot'])!
         : false;
     map = data;
   }

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 4.0.0-nullsafety.2 &mdash; 2021-04-08
+
+* [Added] New `State` param `State.didDeviceReboot`, signals if the device was rebooted.
+* [Added] Added new `locationTemplate` property `timestampMeta`.
+
 ## 4.0.0-nullsafety.1 &mdash; 2021-04-01
 
 * [Fixed][Android] Flutter 2 breaks Android Headless mode with null-pointer exception.
