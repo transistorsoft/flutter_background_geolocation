@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 2.0.2 &mdash; 2021-04-08
+
+* [Added] New `State` param `State.didDeviceReboot`, signals if the device was rebooted.
+* [Added] Added new `locationTemplate` property `timestampMeta`.
+
 ## 2.0.1 &mdash; 2021-03-29
 
 * [Fixed][Android] Flutter 2 did something to break Headless registration.
