@@ -767,7 +767,7 @@ class Config {
   /// | `battery.is_charging` | `Boolean`| Is device plugged in?|
   /// | `mock`                | `Boolean`| `true` when location was recorded from a Mock location app. |
   /// | `is_moving`           | `Boolean`| `true` when location was recorded while SDK was in *moving* state. |
-  ///
+  /// | `timestampMeta`       | `Object` | Renders timestamp meta-data.  See [Config.enableTimestampMeta].|
   String locationTemplate;
 
   /// Optional custom template for rendering `geofence` JSON request data in HTTP requests.
@@ -851,6 +851,7 @@ class Config {
   /// | `battery.is_charging` | `Boolean`| Is device plugged in?|
   /// | `mock`                | `Boolean`| `true` when geofence was recorded from a Mock location app. |
   /// | `is_moving`           | `Boolean`| `true` when geofence was recorded while SDK was in *moving* state. |
+  /// | `timestampMeta`       | `Object` | Renders timestamp meta-data.  See [Config.enableTimestampMeta].|
   ///
   String geofenceTemplate;
 
