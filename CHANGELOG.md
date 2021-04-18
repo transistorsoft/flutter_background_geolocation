@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.0.3 &mdash; 2021-04-18
+* [Fixed][Android] Implmementing State.didDeviceReboot in previous version introduced a source of ANR due time required to generate and persist JSON Config.  Solution is to simply perform in Background-thread.
+
 ## 2.0.2 &mdash; 2021-04-08
 
 * [Added] New `State` param `State.didDeviceReboot`, signals if the device was rebooted.
