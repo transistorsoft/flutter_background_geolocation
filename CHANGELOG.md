@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.0.0-nullsafety.4 &mdash; 2021-04-20
+* [Fixed][Android] Don't synchronize access to ThreadPool.  Addresses ANR issues
+* [Fixed] `DeviceSettings` `_CastError (type 'Future<dynamic>' is not a subtype of type 'FutureOr<bool>' in type cast)`
+
 ## 4.0.0-nullsafety.3 &mdash; 2021-04-19
 
 * [Fixed][Android] Implmementing State.didDeviceReboot in previous version introduced a source of ANR due time required to generate and persist JSON Config.  Solution is to simply perform in Background-thread.
