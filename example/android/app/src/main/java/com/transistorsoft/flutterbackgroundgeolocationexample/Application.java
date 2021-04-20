@@ -32,6 +32,7 @@ public class Application  extends FlutterApplication {
                 .penaltyDeath()
                 .build());
         */
+
         super.onCreate();
 
         // Adding a custom beforeInsertBlock.  If your callback returns null, the insert into the plugin's SQLite db

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.0.4 &mdash; 2021-04-20
+* [Fixed][Android] Don't synchronize access to ThreadPool.  Addresses ANR issues.
+
 ## 2.0.3 &mdash; 2021-04-18
 * [Fixed][Android] Implmementing State.didDeviceReboot in previous version introduced a source of ANR due time required to generate and persist JSON Config.  Solution is to simply perform in Background-thread.
 
