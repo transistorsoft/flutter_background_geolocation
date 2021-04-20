@@ -138,7 +138,7 @@ class DeviceSettings {
   /// ```
   ///
   static Future<bool> get isPowerSaveMode async {
-    return await (_methodChannel.invokeMethod('isPowerSaveMode')
+    return await (_methodChannel.invokeMethod<bool>('isPowerSaveMode')
         as FutureOr<bool>);
   }
 
@@ -154,8 +154,8 @@ class DeviceSettings {
   /// ```
   ///
   static Future<bool> get isIgnoringBatteryOptimizations async {
-    return await (_methodChannel.invokeMethod('isIgnoringBatteryOptimizations')
-        as FutureOr<bool>);
+    return await (_methodChannel.invokeMethod<bool>(
+        'isIgnoringBatteryOptimizations') as FutureOr<bool>);
   }
 
   /// Shows the Android *Ignore Battery Optimizations* settings screen.
@@ -210,8 +210,8 @@ class DeviceSettings {
   ///
   static Future<DeviceSettingsRequest> showIgnoreBatteryOptimizations() async {
     List<dynamic> args = [IGNORE_BATTERY_OPTIMIZATIONS];
-    Map request = await (_methodChannel.invokeMethod('requestSettings', args)
-        as FutureOr<Map<dynamic, dynamic>>);
+    Map request = await (_methodChannel.invokeMethod<Map<dynamic, dynamic>>(
+        'requestSettings', args) as FutureOr<Map<dynamic, dynamic>>);
     return new DeviceSettingsRequest(
         action: request['action'],
         manufacturer: request['manufacturer'],
@@ -287,8 +287,8 @@ class DeviceSettings {
   ///
   static Future<DeviceSettingsRequest> showPowerManager() async {
     List<dynamic> args = [POWER_MANAGER];
-    Map request = await (_methodChannel.invokeMethod('requestSettings', args)
-        as FutureOr<Map<dynamic, dynamic>>);
+    Map request = await (_methodChannel.invokeMethod<Map<dynamic, dynamic>>(
+        'requestSettings', args) as FutureOr<Map<dynamic, dynamic>>);
     return new DeviceSettingsRequest(
         action: request['action'],
         manufacturer: request['manufacturer'],
@@ -301,7 +301,7 @@ class DeviceSettings {
   /// This method is designed to be executed from a [showPowerManager] or [showIgnoreBatteryOptimizations] callback.
   static Future<bool> show(DeviceSettingsRequest request) async {
     List<dynamic> args = [request.action];
-    return await (_methodChannel.invokeMethod('showSettings', args)
+    return await (_methodChannel.invokeMethod<bool>('showSettings', args)
         as FutureOr<bool>);
   }
 }
