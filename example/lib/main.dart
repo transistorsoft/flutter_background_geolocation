@@ -17,13 +17,17 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
   print('📬 --> $headlessEvent');
 
   switch (headlessEvent.name) {
+    case bg.Event.BOOT:
+      bg.State state = await bg.BackgroundGeolocation.state;
+      print("📬 didDeviceReboot: ${state.didDeviceReboot}");
+      break;
     case bg.Event.TERMINATE:
       try {
         bg.Location location =
             await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
-        print('[getCurrentPosition] Headless: $location');
+        print("[getCurrentPosition] Headless: $location");
       } catch (error) {
-        print('[getCurrentPosition] Headless ERROR: $error');
+        print("[getCurrentPosition] Headless ERROR: $error");
       }
       break;
     case bg.Event.HEARTBEAT:

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.0.5 &mdash; 2021-04-21
+- [Fixed][Android] Fix threading issue `ConcurrentMmodificationException` in `TSConfig`
+
 ## 2.0.4 &mdash; 2021-04-20
 * [Fixed][Android] Don't synchronize access to ThreadPool.  Addresses ANR issues.
 

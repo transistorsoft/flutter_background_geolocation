@@ -18,7 +18,7 @@ public class Application  extends FlutterApplication {
         // Strict mode.  Should be disabled on RELEASE.
         // NOTE:  This is NOT required for background_geolocation
         //
-        /*
+
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
                 .detectDiskWrites()
@@ -31,7 +31,7 @@ public class Application  extends FlutterApplication {
                 .penaltyLog()
                 .penaltyDeath()
                 .build());
-        */
+
 
         super.onCreate();
 

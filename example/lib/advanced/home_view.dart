@@ -143,6 +143,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         heartbeatInterval: 60
     )).then((bg.State state) async {
       print('[ready] ${state.toMap()}');
+      print('[didDeviceReboot] ${state.didDeviceReboot}');
 
       if (state.schedule.isNotEmpty) {
         bg.BackgroundGeolocation.startSchedule();
