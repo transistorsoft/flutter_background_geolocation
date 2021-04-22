@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.0.0-nullsafety.5 &mdash; 2021-04-22
+* [Fixed][Android] Fix threading issue `ConcurrentMmodificationException` in `TSConfig`.
+
 ## 4.0.0-nullsafety.4 &mdash; 2021-04-20
 * [Fixed][Android] Don't synchronize access to ThreadPool.  Addresses ANR issues
 * [Fixed] `DeviceSettings` `_CastError (type 'Future<dynamic>' is not a subtype of type 'FutureOr<bool>' in type cast)`
