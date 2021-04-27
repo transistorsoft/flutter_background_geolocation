@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.0.0-nullsafety.6 &mdash; 2021-04-26
+* [Fixed] Nullsafety casting bug in `DeviceInfo`, `DeviceSettings`.
+
 ## 4.0.0-nullsafety.5 &mdash; 2021-04-22
 * [Fixed][Android] Fix threading issue `ConcurrentMmodificationException` in `TSConfig`.
 

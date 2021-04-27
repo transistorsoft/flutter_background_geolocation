@@ -31,8 +31,7 @@ class DeviceInfo {
   static Future<DeviceInfo> getInstance() async {
     Completer completer = new Completer<DeviceInfo>();
     if (_instance == null) {
-      Map map = await (_methodChannel.invokeMethod<Map<dynamic, dynamic>>(
-          'getDeviceInfo') as FutureOr<Map<dynamic, dynamic>>);
+      Map map = (await _methodChannel.invokeMapMethod('getDeviceInfo'))!;
       _instance = new DeviceInfo(
           model: map['model'],
           manufacturer: map['manufacturer'],
