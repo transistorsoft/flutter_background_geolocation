@@ -6,7 +6,7 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart'
     as util;
 import 'geofence_view.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'util/geospatial.dart';
 
 class MapView extends StatefulWidget {
