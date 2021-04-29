@@ -4,10 +4,11 @@ version: 1.11.1+28
 dependencies:
   flutter:
     sdk: flutter
-  flutter_map: ^0.12.0
-    #git:
-      # Fork with fix for flutter 1.7
-    #  url: https://github.com/domesticmouse/flutter_map.git
+  flutter_map:
+    git:
+      url: https://github.com/fleaflet/flutter_map
+      ref: issues/829-nullsafety
+
   unicorndial: ^1.1.5
   http: ^0.13.0
 

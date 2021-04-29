@@ -1,5 +1,5 @@
 import 'dart:math' show pi, cos, sin, asin, tan, atan2, log;
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 
 ///
 /// Geospatial helper functions for calculating Geofence Hit markers on map_view
