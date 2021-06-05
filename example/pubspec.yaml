@@ -24,8 +24,10 @@ environment:
 
 dev_dependencies:
   test: ^1.5.1
-  flutter_driver:
-    sdk: flutter
+  ##
+  # DISABLED with non-nullsafety apps.
+  #flutter_driver:
+  #  sdk: flutter
   flutter_background_geolocation:
     path: ../
 

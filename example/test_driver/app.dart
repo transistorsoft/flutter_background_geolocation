@@ -8,6 +8,9 @@
 /// to the TestDriver for evalution.
 ///
 
+/**
+ * DISABLED
+ *
 import 'package:flutter_driver/driver_extension.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -318,3 +321,7 @@ class _TestAppState extends State<TestApp> {
     );
   }
 }
+
+ *
+ *
+ */
