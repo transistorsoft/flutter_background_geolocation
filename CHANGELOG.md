@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 2.1.0 &mdash; 2021-06-07
+- [Changed] `Config.authorization` will perform regexp on the received response, searching for keys such as `accessToken`, `access_token`, `refreshToken`, `refresh_token`.
+
 ## 2.0.5 &mdash; 2021-04-21
 - [Fixed][Android] Fix threading issue `ConcurrentMmodificationException` in `TSConfig`
 
