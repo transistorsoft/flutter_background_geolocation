@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.0.0-nullsafety.7 &mdash; 2021-06-07
+* [Changed] `Config.authorization` will perform regexp on the received response, searching for keys such as `accessToken`, `access_token`, `refreshToken`, `refresh_token`, rather than performing regexp on the data itself.
+
 ## 4.0.0-nullsafety.6 &mdash; 2021-04-26
 * [Fixed] Nullsafety casting bug in `DeviceInfo`, `DeviceSettings`.
 
