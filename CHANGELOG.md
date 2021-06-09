@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.0.1 &mdash; 2021-06-09
+- Same as previous version.  Simply performed flutter format on dart code to satisfy dart analyzer on pub.dev
+
 ## 4.0.0 &mdash; 2021-06-09
 * Release nullsafety version as 4.0.0.
 * [Changed] Add extra logic block to isMainActivityActive to compare launchActivity with baseActivity className
