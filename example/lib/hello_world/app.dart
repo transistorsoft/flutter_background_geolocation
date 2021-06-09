@@ -166,7 +166,7 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
     bg.BackgroundGeolocation.getCurrentPosition(
             persist: true, // <-- do persist this location
             desiredAccuracy: 0, // <-- desire best possible accuracy
-            timeout: 30000, // <-- wait 30s before giving up.
+            timeout: 30, // <-- wait 30s before giving up.
             samples: 3 // <-- sample 3 location before selecting best.
             )
         .then((bg.Location location) {

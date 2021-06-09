@@ -398,9 +398,11 @@ class Test {
             actions: ["notificationButtonFoo", "notificationButtonBar"]),
         schedule: schedule,
         extras: {"foo": "bar"},
+        autoSync: true,
         geofenceModeHighAccuracy: true,
         motionTriggerDelay: 30000,
         stopOnTerminate: false,
+
         startOnBoot: true,
         enableHeadless: true,
         heartbeatInterval: -1));

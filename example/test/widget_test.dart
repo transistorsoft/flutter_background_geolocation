@@ -4,6 +4,7 @@
 // find child widgets in the widget tree, read text, and verify that the values of widget properties
 // are correct.
 
+/* DISABLED WITH NON-NULLSAFETLY
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_background_geolocation_example/main.dart';
@@ -11,3 +12,4 @@ import 'package:flutter_background_geolocation_example/main.dart';
 void main() {
 
 }
+*/

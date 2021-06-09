@@ -17,13 +17,17 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
   print('📬 --> $headlessEvent');
 
   switch (headlessEvent.name) {
+    case bg.Event.BOOT:
+      bg.State state = await bg.BackgroundGeolocation.state;
+      print("📬 didDeviceReboot: ${state.didDeviceReboot}");
+      break;
     case bg.Event.TERMINATE:
       try {
         bg.Location location =
             await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
-        print('[getCurrentPosition] Headless: $location');
+        print("[getCurrentPosition] Headless: $location");
       } catch (error) {
-        print('[getCurrentPosition] Headless ERROR: $error');
+        print("[getCurrentPosition] Headless ERROR: $error");
       }
       break;
     case bg.Event.HEARTBEAT:
@@ -88,25 +92,14 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
 /// Receive events from BackgroundFetch in Headless state.
 void backgroundFetchHeadlessTask(HeadlessTask task) async {
   String taskId = task.taskId;
-  bool timeout = task.timeout;
 
-  if (timeout) {
-    BackgroundFetch.finish(taskId);
-    return;
-  }
-  // Get current-position from BackgroundGeolocation in headless mode.
-  //bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
-  /*
-  String taskId = task.taskId;
-  bool timeout = task.timeout;
   // Is this a background_fetch timeout event?  If so, simply #finish and bail-out.
-  if (timeout) {
+  if (task.timeout) {
     print("[BackgroundFetch] HeadlessTask TIMEOUT: $taskId");
     BackgroundFetch.finish(taskId);
     return;
   }
 
-   */
   print("[BackgroundFetch] HeadlessTask: $taskId");
 
   SharedPreferences prefs = await SharedPreferences.getInstance();

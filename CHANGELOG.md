@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 4.0.0 &mdash; 2021-06-09
+* Release nullsafety version as 4.0.0.
 * [Changed] Add extra logic block to isMainActivityActive to compare launchActivity with baseActivity className
 
 ## 4.0.0-nullsafety.7 &mdash; 2021-06-07
@@ -32,6 +33,27 @@
 ## 4.0.0-nullsafety.0 &mdash; 2021-03-22
 
 * [Added] Dart nullsafety.
+
+## 2.1.0 &mdash; 2021-06-07
+- [Changed] `Config.authorization` will perform regexp on the received response, searching for keys such as `accessToken`, `access_token`, `refreshToken`, `refresh_token`.
+
+## 2.0.5 &mdash; 2021-04-21
+- [Fixed][Android] Fix threading issue `ConcurrentMmodificationException` in `TSConfig`
+
+## 2.0.4 &mdash; 2021-04-20
+* [Fixed][Android] Don't synchronize access to ThreadPool.  Addresses ANR issues.
+
+## 2.0.3 &mdash; 2021-04-18
+* [Fixed][Android] Implmementing State.didDeviceReboot in previous version introduced a source of ANR due time required to generate and persist JSON Config.  Solution is to simply perform in Background-thread.
+
+## 2.0.2 &mdash; 2021-04-08
+
+* [Added] New `State` param `State.didDeviceReboot`, signals if the device was rebooted.
+* [Added] Added new `locationTemplate` property `timestampMeta`.
+
+## 2.0.1 &mdash; 2021-03-29
+
+* [Fixed][Android] Flutter 2 did something to break Headless registration.
 
 ## 2.0.0 &mdash; 2021-03-16
 
