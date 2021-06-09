@@ -77,7 +77,7 @@ part of flt_background_geolocation;
 class HeadlessEvent {
   /// The name of the [Event]
   ///
-  String name;
+  late String name;
 
   /// The corresponding event-object.
   ///

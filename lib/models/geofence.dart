@@ -4,42 +4,42 @@ part of flt_background_geolocation;
 ///
 class Geofence {
   /// Unique identifier.
-  String identifier;
+  late String identifier;
 
   /// Circular geofence radius.
-  double radius;
+  late double radius;
 
   /// Latitude of the Geofence center.
-  double latitude;
+  late double latitude;
 
   /// Longitude of the Geofence center.
-  double longitude;
+  late double longitude;
 
   /// Set `true` to fire on entering the geofence.
-  bool notifyOnEntry;
+  bool? notifyOnEntry;
 
   /// Set `true` fire on exiting the geofence.
-  bool notifyOnExit;
+  bool? notifyOnExit;
 
   /// Set `true` to fire only after remaining withing geofence for [loiteringDelay] milliseconds.
-  bool notifyOnDwell;
+  bool? notifyOnDwell;
 
   /// The number of milliseconds the device must remain within geofence before firing [notifyOnDwell] event.
-  int loiteringDelay;
+  int? loiteringDelay;
 
   /// Arbitrary key/values to append to the recorded geofence record.
-  Map<String, dynamic> extras;
+  Map<String, dynamic>? extras;
 
   Geofence(
-      {@required String identifier,
-      @required double radius,
-      @required double latitude,
-      @required double longitude,
-      bool notifyOnEntry,
-      bool notifyOnExit,
-      bool notifyOnDwell,
-      int loiteringDelay,
-      Map<String, dynamic> extras}) {
+      {required String identifier,
+      required double radius,
+      required double latitude,
+      required double longitude,
+      bool? notifyOnEntry,
+      bool? notifyOnExit,
+      bool? notifyOnDwell,
+      int? loiteringDelay,
+      Map<String, dynamic>? extras}) {
     this.identifier = identifier;
     this.radius = radius * 1.0;
     this.latitude = latitude * 1.0;
@@ -54,10 +54,10 @@ class Geofence {
   /// Return `Geofence` as `Map`.
   Map<String, dynamic> toMap() {
     Map<String, dynamic> params = {};
-    if (this.identifier != null) params['identifier'] = this.identifier;
-    if (this.radius != null) params['radius'] = this.radius;
-    if (this.latitude != null) params['latitude'] = this.latitude;
-    if (this.longitude != null) params['longitude'] = this.longitude;
+    params['identifier'] = this.identifier;
+    params['radius'] = this.radius;
+    params['latitude'] = this.latitude;
+    params['longitude'] = this.longitude;
     if (this.notifyOnEntry != null)
       params['notifyOnEntry'] = this.notifyOnEntry;
     if (this.notifyOnExit != null) params['notifyOnExit'] = this.notifyOnExit;

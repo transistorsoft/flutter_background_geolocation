@@ -3,15 +3,15 @@ part of flt_background_geolocation;
 /// Expresses the current state of the plugin, including all [Config] options.
 ///
 class State extends Config {
-  Map map;
+  late Map map;
 
   /// Whether the plugin is current stopped or started ([BackgroundGeolocation.stop] / [BackgroundGeolocation.start]).
   ///
-  bool enabled;
+  late bool enabled;
 
   /// Whether the plugin's [Config.schedule] has been activated with [BackgroundGeolocation.startSchedule].
   ///
-  bool schedulerEnabled;
+  late bool schedulerEnabled;
 
   /// Current distance traveled.
   ///
@@ -19,27 +19,27 @@ class State extends Config {
   /// - [BackgroundGeolocation.setOdometer].
   /// - [BackgroundGeolocation.odometer].
   ///
-  double odometer;
+  late double odometer;
 
   /// Whether the plugin is in the location-tracking mode ([BackgroundGeolocation.start] or geofences-only mode ([BackgroundGeolocation.startGeofences]).
   /// - `1` = Location + Geofence tracking (ie: [BackgroundGeolocation.start]).
   /// - `0` = Geofences-only tracking (ie: [BackgroundGeolocation.startGeofences]).
   ///
-  int trackingMode;
+  late int trackingMode;
 
   /// Indicates whether the iOS app was launched in the background.
   ///
-  bool didLaunchInBackground;
+  late bool didLaunchInBackground;
 
   /// Indicates if this is the first launch of the app after initial install
   ///
-  bool isFirstBoot;
+  late bool isFirstBoot;
 
   /// Indicates if the app was launched after the device was rebooted.
   ///
-  bool didDeviceReboot;
+  late bool didDeviceReboot;
 
-  State(dynamic data)
+  State(Map data)
       : super(
             // Common Options
             desiredAccuracy: _ensureInt(data['desiredAccuracy']),
@@ -159,16 +159,16 @@ class State extends Config {
             notification: (data['notification'] != null)
                 ? Notification.fromMap(data['notification'])
                 : null) {
-    enabled = _ensureBool(data['enabled']);
-    isFirstBoot = _ensureBool(data['isFirstBoot']);
+    enabled = _ensureBool(data['enabled'])!;
+    isFirstBoot = _ensureBool(data['isFirstBoot'])!;
     trackingMode = data['trackingMode'];
-    schedulerEnabled = _ensureBool(data['schedulerEnabled']);
-    odometer = _ensureDouble(data['odometer']);
+    schedulerEnabled = _ensureBool(data['schedulerEnabled'])!;
+    odometer = _ensureDouble(data['odometer'])!;
     didLaunchInBackground = (data['didLaunchInBackground'] != null)
-        ? _ensureBool(data['didLaunchInBackground'])
+        ? _ensureBool(data['didLaunchInBackground'])!
         : false;
     didDeviceReboot = (data['didDeviceReboot'] != null)
-        ? _ensureBool(data['didDeviceReboot'])
+        ? _ensureBool(data['didDeviceReboot'])!
         : false;
     map = data;
   }

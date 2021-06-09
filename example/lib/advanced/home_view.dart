@@ -190,12 +190,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       }
       prefs.setInt("fetch-count", ++count);
       print('[BackgroundFetch] count: $count');
-
-      await bg.BackgroundGeolocation.getCurrentPosition(
-        extras: {
-          "taskId": taskId
-        }
-      );
+      
       if (taskId == 'flutter_background_fetch') {
         // Test scheduling a custom-task in fetch event.
         BackgroundFetch.scheduleTask(TaskConfig(

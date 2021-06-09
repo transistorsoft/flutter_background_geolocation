@@ -1,6 +1,3 @@
-/**
- * DISABLED
- *
 // Imports the Flutter Driver API
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
@@ -90,8 +87,9 @@ void main() {
 
 void _group(String name, Function callback) async {
   setUpAll(() async {
-    String header = "[Test Group] - $name";
-    print(header);
+    //Colorize header = Colorize("[Test Group] - $name");
+    //header.green();
+    print("[Test Group] - $name");
     driver = await FlutterDriver.connect();
 
   });
@@ -117,10 +115,10 @@ void _test(String action, Function(String) callback, [int timeout]) async {
 }
 
 void log(String command, String message) {
-  String header = "[FlutterDriver #$command]";
-  print("$header - $message");
+  //Colorize header = Colorize("[FlutterDriver #$command]");
+  //header.yellow();
+  //Colorize response = Colorize(message);
+  //response.darkGray();
+  print("[FlutterDriver #$command]");
 }
 
- *
- *
- */

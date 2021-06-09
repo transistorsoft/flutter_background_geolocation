@@ -1,5 +1,39 @@
 # CHANGELOG
 
+## 4.0.0 &mdash; 2021-06-09
+* Release nullsafety version as 4.0.0.
+* [Changed] Add extra logic block to isMainActivityActive to compare launchActivity with baseActivity className
+
+## 4.0.0-nullsafety.7 &mdash; 2021-06-07
+* [Changed] `Config.authorization` will perform regexp on the received response, searching for keys such as `accessToken`, `access_token`, `refreshToken`, `refresh_token`, rather than performing regexp on the data itself.
+
+## 4.0.0-nullsafety.6 &mdash; 2021-04-26
+* [Fixed] Nullsafety casting bug in `DeviceInfo`, `DeviceSettings`.
+
+## 4.0.0-nullsafety.5 &mdash; 2021-04-22
+* [Fixed][Android] Fix threading issue `ConcurrentMmodificationException` in `TSConfig`.
+
+## 4.0.0-nullsafety.4 &mdash; 2021-04-20
+* [Fixed][Android] Don't synchronize access to ThreadPool.  Addresses ANR issues
+* [Fixed] `DeviceSettings` `_CastError (type 'Future<dynamic>' is not a subtype of type 'FutureOr<bool>' in type cast)`
+
+## 4.0.0-nullsafety.3 &mdash; 2021-04-19
+
+* [Fixed][Android] Implmementing State.didDeviceReboot in previous version introduced a source of ANR due time required to generate and persist JSON Config.  Solution is to simply perform in Background-thread.
+
+## 4.0.0-nullsafety.2 &mdash; 2021-04-08
+
+* [Added] New `State` param `State.didDeviceReboot`, signals if the device was rebooted.
+* [Added] Added new `locationTemplate` property `timestampMeta`.
+
+## 4.0.0-nullsafety.1 &mdash; 2021-04-01
+
+* [Fixed][Android] Flutter 2 breaks Android Headless mode with null-pointer exception.
+
+## 4.0.0-nullsafety.0 &mdash; 2021-03-22
+
+* [Added] Dart nullsafety.
+
 ## 2.1.0 &mdash; 2021-06-07
 - [Changed] `Config.authorization` will perform regexp on the received response, searching for keys such as `accessToken`, `access_token`, `refreshToken`, `refresh_token`.
 
@@ -55,7 +89,7 @@ $ sudo gem install cocoapods
 
 ## 1.10.2 &mdash; 2020-11-03
 
-- [Fixed][iOS] When requesting `WhenInUse` location permission, if user grants "Allow Once" then you attempt to upgrade to `Always`, iOS simply does nothing and the `requestPermission` callback would not be called.  Implemented a `500ms` buffer timer to detect if the iOS showed a system dialog (signalled by the firing of `WillResignActive` life-cycle notification).  If the app does *not* `WillResignActive`, the buffer timer will fire, causing the callback to `requestPermission` to fire. 
+- [Fixed][iOS] When requesting `WhenInUse` location permission, if user grants "Allow Once" then you attempt to upgrade to `Always`, iOS simply does nothing and the `requestPermission` callback would not be called.  Implemented a `500ms` buffer timer to detect if the iOS showed a system dialog (signalled by the firing of `WillResignActive` life-cycle notification).  If the app does *not* `WillResignActive`, the buffer timer will fire, causing the callback to `requestPermission` to fire.
 - [Fixed][Android] Issue with `requestPermission` not showing `backgroundPermissionRationale` dialog on `targetSdkVersion 29` when using `locationAuthorizationRequest: 'WhenInUse'` followed by upgrade to `Always`.
 - [Added] Added two new `Location.coords` attributes `speed_accuracy` and `heading_accuracy`.
 - [Fixed][iOS] fix bug providing wrong Array of records to `sync` method when no HTTP service is configured.

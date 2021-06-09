@@ -76,7 +76,7 @@ class Config {
   static const int PERSIST_MODE_GEOFENCE = -1;
   static const int PERSIST_MODE_NONE = 0;
 
-  Map _map;
+  Map? _map;
 
   /// Specify the desired-accuracy of the geolocation system.
   ///
@@ -101,7 +101,7 @@ class Config {
   /// For platform-specific information about location accuracy, see the corresponding API docs:
   /// - [Android](https://developer.android.com/reference/com/google/android/gms/location/LocationRequest.html#PRIORITY_BALANCED_POWER_ACCURACY)
   /// - [iOS](https://developer.apple.com/reference/corelocation/cllocationmanager/1423836-desiredaccuracy?language=objc)
-  int desiredAccuracy;
+  int? desiredAccuracy;
 
   /// The minimum distance (measured in meters) a device must move horizontally before an update event is generated.
   ///
@@ -143,7 +143,7 @@ class Config {
   /// Compare now background-geolocation in the scope of a city.  In this image, the left-hand track is from a cab-ride, while the right-hand track is walking speed.
   ///
   /// ![distanceFilter at city scale](https://dl.dropboxusercontent.com/s/yx8uv2zsimlogsp/distance-filter-city.png?dl=1)
-  double distanceFilter;
+  double? distanceFilter;
 
   /// __`[iOS only]`__ The minimum distance the device must move beyond the stationary location for aggressive background-tracking to engage.
   ///
@@ -157,7 +157,7 @@ class Config {
   ///
   ///  **WARNING:** iOS will not detect the exact moment the device moves out of the stationary-radius.  In normal conditions, it will typically take **~200 meters** before the plugin begins tracking.
   ///
-  double stationaryRadius;
+  double? stationaryRadius;
 
   /// The default timeout in _seconds_ when requesting a location before the SDK gives up and fires a [LocationError].
   ///
@@ -189,19 +189,19 @@ class Config {
   /// - [BackgroundGeolocation.getCurrentPosition]
   /// - [BackgroundGeolocation.onLocation]
   ///
-  int locationTimeout;
+  int? locationTimeout;
 
   /// Disable automatic, speed-based [distanceFilter] scaling.
   ///
   /// Defaults to **`false`**.  Set **`true`** to disable automatic, speed-based [distanceFilter] elasticity.
   ///
-  bool disableElasticity;
+  bool? disableElasticity;
 
   /// Controls the scale of automatic speed-based [distanceFilter] elasticity.
   ///
   /// Increasing `elasticityMultiplier` will result in fewer location samples as speed increases.  A value of `0` has the same effect as [disableElasticity]:true.
   ///
-  double elasticityMultiplier;
+  double? elasticityMultiplier;
 
   /// Set `true` in order to disable constant background-tracking.  Locations will be recorded only periodically.
   ///
@@ -227,7 +227,7 @@ class Config {
   /// ## Example **`useSignificantChanges: false` (Default)**
   /// ![](https://dl.dropboxusercontent.com/s/hcxby3sujqanv9q/useSignificantChangesOnly-false.png?dl=1)
   ///
-  bool useSignificantChangesOnly;
+  bool? useSignificantChangesOnly;
 
   /// Automatically [BackgroundGeolocation.stop] tracking after x minutes.
   ///
@@ -241,7 +241,7 @@ class Config {
   /// });
   /// ```
   ///
-  int stopAfterElapsedMinutes;
+  int? stopAfterElapsedMinutes;
 
   /// The radius around current location to query for geofences to activate monitoring upon.
   ///
@@ -253,13 +253,13 @@ class Config {
   ///
   /// ![](https://dl.dropboxusercontent.com/s/7sggka4vcbrokwt/geofenceProximityRadius_iphone6_spacegrey_portrait.png?dl=1)
   ///
-  int geofenceProximityRadius;
+  int? geofenceProximityRadius;
 
   /// When a device is already within a just-created geofence, fire the **enter** transition immediately.
   ///
   /// Defaults to `true`.  Set `false` to disable triggering a geofence immediately if device is already inside it.
   ///
-  bool geofenceInitialTriggerEntry;
+  bool? geofenceInitialTriggerEntry;
 
   /// __`[Android only]`__ Enable high-accuracy for **geofence-only** mode (See [BackgroundGeolocation.startGeofences]).
   ///
@@ -298,13 +298,13 @@ class Config {
   /// ## Example `geofenceModeHighAccuracy: true` &mdash; Transition events are **nearly instantaneous**.
   /// ![](https://dl.dropbox.com/s/w53hqn7f7n1ug1o/geofenceModeHighAccuracy-true.png?dl=1)
   ///
-  bool geofenceModeHighAccuracy;
+  bool? geofenceModeHighAccuracy;
 
   /// The maximum location accuracy allowed for a location to be used for [Location.odometer] calculations.
   ///
   /// Defaults to `100`.  If a location arrives having **`accuracy > desiredOdometerAccuracy`**, that location will not be used to update the odometer.  If you only want to calculate odometer from GPS locations, you could set **`desiredOdometerAccuracy: 10`**.  This will prevent odometer updates when a device is moving around indoors, in a shopping mall, for example.
   ///
-  double desiredOdometerAccuracy;
+  double? desiredOdometerAccuracy;
 
   /// Configure the initial tracking-state after [BackgroundGeolocation.start] is called.
   ///
@@ -324,7 +324,7 @@ class Config {
   /// // each [distanceFilter] meters.
   /// ```
   ///
-  bool isMoving;
+  bool? isMoving;
 
   /// Minutes to wait in *moving* state with no movement before considering the device *stationary*.
   ///
@@ -334,13 +334,13 @@ class Config {
   ///
   /// **WARNING:** Setting a value > 15 min is **not** recommended, particularly for Android.
   ///
-  int stopTimeout;
+  int? stopTimeout;
 
   /// Controls the sample-rate of the activity-recognition system.
   ///
   /// Defaults to `10000` (10 seconds).  This is primarily an **Android** option, since only Android can constantly monitor the activity-detection API in the background (iOS uses a "stationary geofence" to detect device-motion).  The desired time between activity detections. Larger values will result in fewer activity detections while improving battery life. A value of 0 will result in activity detections at the fastest possible rate.
   ///
-  int activityRecognitionInterval;
+  int? activityRecognitionInterval;
 
   /// The minimum motion-activity confidence to conclude a device is moving.
   ///
@@ -355,7 +355,7 @@ class Config {
   ///   minimumActivityRecognitionConfidence: 50 // <-- trigger less confidently.
   /// ));
   ///
-  int minimumActivityRecognitionConfidence;
+  int? minimumActivityRecognitionConfidence;
 
   /// Disable motion-activity related stop-detection.
   ///
@@ -382,7 +382,7 @@ class Config {
   ///
   /// Location-services **will never turn OFF** if you set this to **`true`**!  It will be purely up to you or the user to execute [BackgroundGeolocation.changePace]:false or [BackgroundGeolocation.stop] to turn off location-services.
   ///
-  bool disableStopDetection;
+  bool? disableStopDetection;
 
   /// Automatically [BackgroundGeolocation.stop] when the [stopTimeout] elapses.
   ///
@@ -399,7 +399,7 @@ class Config {
   /// });
   /// ```
   ///
-  bool stopOnStationary;
+  bool? stopOnStationary;
 
   /// Your server **`url`** where you wish to `POST` locations to.
   ///
@@ -422,7 +422,7 @@ class Config {
   /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
   /// __WARNING:__ It is highly recommended to let the plugin manage uploading locations to your server, **particularly for Android** when configured with **`stopOnTerminate: false`**, since your App Component *will* terminate &mdash; only the plugin's native Android background service will continue to operate, recording locations and uploading to your server.  The plugin's native HTTP service *is* better at this task than your own http requests, since the SDK will automatically retry on server failure.
-  String url;
+  String? url;
 
   /// Allows you to specify which events to persist to the SDK's internal database:  locations | geofences | all (default).
   ///
@@ -439,14 +439,14 @@ class Config {
   ///
   /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
-  int persistMode;
+  int? persistMode;
 
   /// Disable [autoSync] HTTP requests when device is connected to a Cellular connection.
   /// Defaults to `false`.  Set `true` to allow [autoSync] only when device is connected to Wifi.
   ///
   /// __WARNING__ This option is ignored when manually invoking [BackgroundGeolocation.sync].
   ///
-  bool disableAutoSyncOnCellular;
+  bool? disableAutoSyncOnCellular;
 
   /// The HTTP method to use when creating an HTTP request to your configured [url].
   ///
@@ -459,7 +459,7 @@ class Config {
   /// ));
   /// ```
   ///
-  String method;
+  String? method;
 
   /// The root property of the JSON schema where location-data will be attached.
   ///
@@ -501,7 +501,7 @@ class Config {
   /// }
   /// ```
   ///
-  String httpRootProperty;
+  String? httpRootProperty;
 
   /// Optional HTTP **`params`** appended to the JSON body of each HTTP request.
   ///
@@ -537,7 +537,7 @@ class Config {
   /// ```
   /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
-  Map<String, dynamic> params;
+  Map<String, dynamic>? params;
 
   /// Optional HTTP headers applied to each HTTP request.
   ///
@@ -571,7 +571,7 @@ class Config {
   ///  **Note:**  The plugin automatically applies a number of required headers, including `"content-type": "application/json"`
   /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
-  Map<String, dynamic> headers;
+  Map<String, dynamic>? headers;
 
   /// Optional arbitrary key/values `{}` applied to each recorded location.
   ///
@@ -614,7 +614,7 @@ class Config {
   ///
   /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
-  Map<String, dynamic> extras;
+  Map<String, dynamic>? extras;
 
   /// Immediately upload each recorded location to your configured [url].
   ///
@@ -628,7 +628,7 @@ class Config {
   /// - [maxBatchSize]
   /// - __HTTP Guide__ at [HttpEvent].
   ///
-  bool autoSync;
+  bool? autoSync;
 
   /// The minimum number of persisted records the plugin must accumulate before triggering an [autoSync] action.
   ///
@@ -647,7 +647,7 @@ class Config {
   ///
   /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
-  int autoSyncThreshold;
+  int? autoSyncThreshold;
 
   /// POST multiple locations to your [url] in a single HTTP request.
   ///
@@ -655,7 +655,7 @@ class Config {
   ///
   /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
-  bool batchSync;
+  bool? batchSync;
 
   /// Controls the number of records attached to **each** batch HTTP request.
   ///
@@ -665,7 +665,7 @@ class Config {
   ///
   /// __See also:__ __HTTP Guide__ at [HttpEvent].
   ///
-  int maxBatchSize;
+  int? maxBatchSize;
 
   /// Optional custom template for rendering `location` JSON request data in HTTP requests.
   ///
@@ -768,7 +768,8 @@ class Config {
   /// | `mock`                | `Boolean`| `true` when location was recorded from a Mock location app. |
   /// | `is_moving`           | `Boolean`| `true` when location was recorded while SDK was in *moving* state. |
   /// | `timestampMeta`       | `Object` | Renders timestamp meta-data.  See [Config.enableTimestampMeta].|
-  String locationTemplate;
+  ///
+  String? locationTemplate;
 
   /// Optional custom template for rendering `geofence` JSON request data in HTTP requests.
   ///
@@ -852,26 +853,25 @@ class Config {
   /// | `mock`                | `Boolean`| `true` when geofence was recorded from a Mock location app. |
   /// | `is_moving`           | `Boolean`| `true` when geofence was recorded while SDK was in *moving* state. |
   /// | `timestampMeta`       | `Object` | Renders timestamp meta-data.  See [Config.enableTimestampMeta].|
-  ///
-  String geofenceTemplate;
+  String? geofenceTemplate;
 
   /// Maximum number of days to store a geolocation in plugin's SQLite database.
   ///
   /// When your server fails to respond with **`HTTP 200 OK`**, the plugin will continue periodically attempting to upload to your server server until **`maxDaysToPersist`** when it will give up and remove the location from the database.
   ///
-  int maxDaysToPersist;
+  int? maxDaysToPersist;
 
   /// Maximum number of records to persist in plugin's SQLite database.
   ///
   /// Default `-1` means **no limit**.
   ///
-  int maxRecordsToPersist;
+  int? maxRecordsToPersist;
 
   /// Controls the order that locations are selected from the database (and uploaded to your server).
   ///
   /// Defaults to ascending (`ASC`), where oldest locations are synced first.  Descending (`DESC`) uploads latest locations first.
   ///
-  String locationsOrderDirection;
+  String? locationsOrderDirection;
 
   /// HTTP request timeout in **milliseconds**.
   ///
@@ -891,13 +891,13 @@ class Config {
   /// ));
   /// ```
   ///
-  int httpTimeout;
+  int? httpTimeout;
 
   /// Configure the SDK's HTTP service to authenticate with your server (eg: JWT)
   ///
   /// See [Authorization] for more information.
   ///
-  Authorization authorization;
+  Authorization? authorization;
 
   /// Controls whether to continue location-tracking after application is **terminated**.
   ///
@@ -924,7 +924,7 @@ class Config {
   /// - [enableHeadless]
   /// - __HTTP Guide__ at [HttpEvent].
   ///
-  bool stopOnTerminate;
+  bool? stopOnTerminate;
 
   /// Controls whether to resume location-tracking after device is **rebooted**.
   ///
@@ -938,7 +938,7 @@ class Config {
   ///
   ///  **See also:** [enableHeadless]
   ///
-  bool startOnBoot;
+  bool? startOnBoot;
 
   /// Controls the rate (in seconds) the [BackgroundGeolocation.onHeartbeat] event will fire.
   ///
@@ -967,7 +967,7 @@ class Config {
   ///   });
   /// })
   ///
-  int heartbeatInterval;
+  int? heartbeatInterval;
 
   /// Configures an automated, cron-like schedule for the plugin to [BackgroundGeolocation.start] / [BackgroundGeolocation.stop] tracking at pre-defined times.
   ///
@@ -1092,7 +1092,7 @@ class Config {
   ///
   /// The Android Scheduler uses [`AlarmManager`](https://developer.android.com/reference/android/app/AlarmManager#setExactAndAllowWhileIdle(int,%20long,%20android.app.PendingIntent)) and *typically* operates on-the-minute.
   ///
-  List<String> schedule;
+  List<String>? schedule;
 
   /// __Android only__ Force the Android scheduler to use `AlarmManager` (more precise) instead of `JobScheduler`.  Defaults to `false`.
   ///
@@ -1102,7 +1102,7 @@ class Config {
   ///   scheduleUseAlarmManager: true
   /// ));
   /// ```
-  bool scheduleUseAlarmManager;
+  bool? scheduleUseAlarmManager;
 
   /// Configure the plugin to emit sound effects and local-notifications during development.
   ///
@@ -1120,7 +1120,7 @@ class Config {
   ///
   /// [![Foo](https://dl.dropbox.com/s/1k3b2nyvfzsf5h7/debug-sound-fx.png?dl=1)](https://www.transistorsoft.com/docs/background-geolocation-debug-sounds)
   ///
-  bool debug;
+  bool? debug;
 
   /// Controls the volume of recorded events in the plugin's logging database.
   ///
@@ -1201,7 +1201,7 @@ class Config {
   ///
   ///  **WARNING:**  When submitting your app to production, take care to configure the **`logLevel`** appropriately (eg: **`LOG_LEVEL_ERROR`**) since the logs can grow to several megabytes over a period of [logMaxDays].
   ///
-  int logLevel;
+  int? logLevel;
 
   /// Maximum number of days to persist a log-entry in database.
   ///
@@ -1210,7 +1210,7 @@ class Config {
   ///  **See also:**
   /// - [logLevel]
   ///
-  int logMaxDays;
+  int? logMaxDays;
 
   /// Forces [BackgroundGeolocation.ready] to apply supplied [Config] with each application launch.
   ///
@@ -1227,7 +1227,7 @@ class Config {
   /// });
   /// ```
   ///
-  bool reset;
+  bool? reset;
 
   //
   // iOS Options
@@ -1241,7 +1241,7 @@ class Config {
   ///
   /// The default behavior of the plugin is to turn **off** location-services *automatically* when the device is detected to be stationary for [stopTimeout] minutes.  When set to `false`, location-services will **never** be turned off (and [disableStopDetection] will automatically be set to `true`) -- it's your responsibility to turn them off when you no longer need to track the device.  This feature should **not** generally be used.  [preventSuspend] will no longer work either.
   ///
-  bool pausesLocationUpdatesAutomatically;
+  bool? pausesLocationUpdatesAutomatically;
 
   /// Defines the *desired* location-authorization request you *wish* for the user to authorize:
   /// - __`Always`__
@@ -1379,7 +1379,7 @@ class Config {
   ///
   /// ![](https://dl.dropbox.com/s/a01e0c6750bqylr/android11-location-authorization-cordova-targetSdkVersion29.gif?dl=1)
   ///
-  String locationAuthorizationRequest;
+  String? locationAuthorizationRequest;
 
   /// __`[iOS only]`__ Controls the text-elements of the plugin's location-authorization dialog.
   ///
@@ -1413,7 +1413,7 @@ class Config {
   /// ))
   /// ```
   ///
-  Map<String, dynamic> locationAuthorizationAlert;
+  Map<String, dynamic>? locationAuthorizationAlert;
 
   /// Disables automatic authorization alert when plugin detects the user has disabled location authorization.
   ///
@@ -1454,7 +1454,7 @@ class Config {
   /// ));
   /// ```
   ///
-  bool disableLocationAuthorizationAlert;
+  bool? disableLocationAuthorizationAlert;
 
   /// __`[iOS Only]`__ A Boolean indicating whether the status bar changes its appearance when an app uses location services in the background.
   ///
@@ -1464,7 +1464,7 @@ class Config {
   ///
   /// For apps with When In Use authorization, the system changes the appearance of the status bar when the app uses location services in the background.
   ///
-  bool showsBackgroundLocationIndicator;
+  bool? showsBackgroundLocationIndicator;
 
   // Activity Recognition Options
 
@@ -1489,7 +1489,7 @@ class Config {
   ///
   ///  **Note:**  For more information, see [Apple docs](https://developer.apple.com/reference/corelocation/cllocationmanager/1620567-activitytype?language=objc).
   ///
-  int activityType;
+  int? activityType;
 
   /// __`[iOS only]`__ Allows the iOS stop-detection system to be delayed from activating.
   ///
@@ -1497,7 +1497,7 @@ class Config {
   ///
   /// You can experience the iOS stop-detection system at work by configuring [debug]:true.  After the device stops moving (stopped at a traffic light, for example), the plugin will emit sound-effects and local-notifications about "Location-services: OFF / ON".
   ///
-  int stopDetectionDelay;
+  int? stopDetectionDelay;
 
   /// Disable the plugin requesting "Motion & Fitness" (ios) or "Physical Activity" (android >= 10) authorization from the User.
   ///
@@ -1527,7 +1527,7 @@ class Config {
   /// ));
   /// ```
   ///
-  bool disableMotionActivityUpdates;
+  bool? disableMotionActivityUpdates;
 
   // Application Options
 
@@ -1552,7 +1552,7 @@ class Config {
   /// ));
   /// ```
   ///
-  bool preventSuspend;
+  bool? preventSuspend;
 
   //
   // Android Options
@@ -1583,7 +1583,7 @@ class Config {
   /// ));
   /// ```
   ///
-  int locationUpdateInterval;
+  int? locationUpdateInterval;
 
   /// __`[Android only]`__ Explicitly set the fastest interval for location updates, in milliseconds.
   ///
@@ -1601,13 +1601,13 @@ class Config {
   ///
   ///  **Note:** See [Android docs](https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest.html#setFastestInterval(long))
   ///
-  int fastestLocationUpdateInterval;
+  int? fastestLocationUpdateInterval;
 
   /// __`[Android only]`__ Sets the maximum wait time in milliseconds for location updates.
   ///
   /// Defaults to `0` (no defer).  If you pass a value at least 2x larger than the interval specified with [locationUpdateInterval], then location delivery may be delayed and multiple locations can be delivered at once. Locations are determined at the [locationUpdateInterval] rate, but can be delivered in batch after the interval you set in this method. This **can consume less battery** and **give more accurate locations**, depending on the device's hardware capabilities. You should set this value to be as large as possible for your needs if you don't need immediate location delivery.
   ///
-  int deferTime;
+  int? deferTime;
 
   /// __`[Android only]`__ Allow recording locations which are duplicates of the previous.
   ///
@@ -1620,7 +1620,7 @@ class Config {
   ///
   /// An identical location is often generated when changing state from *stationary* -> *moving*, where a single location is first requested (the [BackgroundGeolocation.onMotionChange] location) before turning on regular location updates.  Changing geolocation config params can also generate a duplicate location (eg: changing [distanceFilter]).
   ///
-  bool allowIdenticalLocations;
+  bool? allowIdenticalLocations;
 
   /// __`[Android-only]`__ Enable extra timestamp meta data to be appended to each recorded location, including system-time.
   ///
@@ -1642,7 +1642,7 @@ class Config {
   /// }
   /// ```
   ///
-  bool enableTimestampMeta;
+  bool? enableTimestampMeta;
 
   /// Experimental filter to ignore anomalous locations that suddenly jump an unusual distance from last.
   /// The SDK will calculate an apparent speed and distance relative to last known location.  If the location suddenly
@@ -1650,7 +1650,7 @@ class Config {
   ///
   /// __`Android-only`__ The measurement is in meters/second.  The default is to throw away any location which apparently moved at 300 meters/second from last known location.
   ///
-  int speedJumpFilter;
+  int? speedJumpFilter;
 
   // Activity Recognition Options
 
@@ -1683,7 +1683,7 @@ class Config {
   /// ));
   /// ```
   ///
-  String triggerActivities;
+  String? triggerActivities;
 
   /// __`[Android only]`__  Optionally add a delay in milliseconds to trigger Android into the *moving* state when Motion API reports the device is moving (eg: `on_foot`, `in_vehicle`)
   ///
@@ -1720,7 +1720,7 @@ class Config {
   ///  04-08 10:58:19.381 TSLocationManager:   ⏰ Cancel OneShot: MOTION_TRIGGER_DELAY <-- timer cancelled
   /// ```
   ///
-  int motionTriggerDelay;
+  int? motionTriggerDelay;
 
   // Application Options
 
@@ -1811,7 +1811,7 @@ class Config {
   /// }
   /// ```
   ///
-  bool enableHeadless;
+  bool? enableHeadless;
 
   /// __`[Android only]`__ Configure the plugin service to run as a more robust "Foreground Service".
   ///
@@ -1831,7 +1831,7 @@ class Config {
   ///
   /// :blue_book: For more information, see the [Android Service](https://developer.android.com/reference/android/app/Service.html#startForeground(int,%20android.app.Notification)) docs.
   ///
-  bool foregroundService;
+  bool? foregroundService;
 
   /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
   ///
@@ -1841,7 +1841,7 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  bool forceReloadOnLocationChange;
+  bool? forceReloadOnLocationChange;
 
   /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
   /// Force launch your terminated App after a [BackgroundGeolocation.onMotionChange] event.
@@ -1850,7 +1850,7 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  bool forceReloadOnMotionChange;
+  bool? forceReloadOnMotionChange;
 
   /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
   ///
@@ -1860,7 +1860,7 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  bool forceReloadOnGeofence;
+  bool? forceReloadOnGeofence;
 
   /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
   ///
@@ -1870,7 +1870,7 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  bool forceReloadOnBoot;
+  bool? forceReloadOnBoot;
 
   /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
   ///
@@ -1880,7 +1880,7 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  bool forceReloadOnHeartbeat;
+  bool? forceReloadOnHeartbeat;
 
   /// __@deprecated:  Banned in Android 10.  Use [enableHeadless] instead__
   ///
@@ -1890,7 +1890,7 @@ class Config {
   ///
   ///  **WARNING:** When the background service re-launches your application, it will *briefly* appear in the foreground before *immediately* minimizing.  If the user has their phone on at the time, they will see a brief flash of your app appearing and minimizing.
   ///
-  bool forceReloadOnSchedule;
+  bool? forceReloadOnSchedule;
 
   /// __(Android only)__ Configure the persistent foreground notification.
   ///
@@ -1919,28 +1919,28 @@ class Config {
   ///   )
   /// ))
   /// ```
-  Notification notification;
+  Notification? notification;
 
   /// __@deprecated.__  Use [Notification.priority].
-  int notificationPriority;
+  int? notificationPriority;
 
   /// __@deprecated.__  Use [Notification.title].
-  String notificationTitle;
+  String? notificationTitle;
 
   /// __@deprecated.__  Use [Notification.text].
-  String notificationText;
+  String? notificationText;
 
   /// __@deprecated.__  Use [Notification.color].
-  String notificationColor;
+  String? notificationColor;
 
   /// __@deprecated.__  Use [Notification.smallIcon].
-  String notificationSmallIcon;
+  String? notificationSmallIcon;
 
   /// __@deprecated.__  Use [Notification.largeIcon].
-  String notificationLargeIcon;
+  String? notificationLargeIcon;
 
   /// __@deprecated.__  Use [Notification.channelName]
-  String notificationChannelName;
+  String? notificationChannelName;
 
   /// *Convenience* option to automatically configures the SDK to upload locations to the Transistor Software demo server at http://tracker.transistorsoft.com (or your own local instance of [background-geolocation-console](https://github.com/transistorsoft/background-geolocation-console))
   ///
@@ -1982,7 +1982,7 @@ class Config {
   /// ));
   /// ```
   ///
-  TransistorAuthorizationToken transistorAuthorizationToken;
+  TransistorAuthorizationToken? transistorAuthorizationToken;
 
   /// (__Android 11+__) Configure the dialog presented to the user when *Always* location permission is requested.
   ///
@@ -2026,7 +2026,7 @@ class Config {
   /// - [BackgroundGeolocation.requestPermission]
   /// - [Location udpates in Android 11](https://developer.android.com/about/versions/11/privacy/location)
   ///
-  PermissionRationale backgroundPermissionRationale;
+  PermissionRationale? backgroundPermissionRationale;
 
   Config(
       {
@@ -2137,11 +2137,11 @@ class Config {
     if (_map == null) {
       _map = new Map<String, dynamic>();
     }
-    _map[key] = value;
+    _map![key] = value;
     return this;
   }
 
-  Map toMap() {
+  Map? toMap() {
     if (_map != null) {
       return _map;
     }
@@ -2150,8 +2150,8 @@ class Config {
 
     // Were we provided a Transistor token?  Auto-config the url and authorization.
     if (transistorAuthorizationToken != null) {
-      url = transistorAuthorizationToken.locationsUrl;
-      authorization = transistorAuthorizationToken.authorizationConfig;
+      url = transistorAuthorizationToken!.locationsUrl;
+      authorization = transistorAuthorizationToken!.authorizationConfig;
     }
 
     // Geolocation Options
@@ -2207,7 +2207,7 @@ class Config {
     if (locationsOrderDirection != null)
       config['locationsOrderDirection'] = locationsOrderDirection;
     if (httpTimeout != null) config['httpTimeout'] = httpTimeout;
-    if (authorization != null) config['authorization'] = authorization.toMap();
+    if (authorization != null) config['authorization'] = authorization!.toMap();
     // Application
     if (stopOnTerminate != null) config['stopOnTerminate'] = stopOnTerminate;
     if (startOnBoot != null) config['startOnBoot'] = startOnBoot;
@@ -2303,8 +2303,8 @@ class Config {
       config['notificationChannelName'] = notificationChannelName;
     if (backgroundPermissionRationale != null)
       config['backgroundPermissionRationale'] =
-          backgroundPermissionRationale.toMap();
-    if (notification != null) config['notification'] = notification.toMap();
+          backgroundPermissionRationale!.toMap();
+    if (notification != null) config['notification'] = notification!.toMap();
 
     // Detect obsolete notification* fields and re-map to Notification instance.
     if ((notificationPriority != null) ||
@@ -2324,7 +2324,7 @@ class Config {
           smallIcon: notificationSmallIcon,
           largeIcon: notificationLargeIcon,
           priority: notificationPriority);
-      config['notification'] = notification.toMap();
+      config['notification'] = notification!.toMap();
     }
 
     return config;
@@ -2340,6 +2340,6 @@ class Config {
         '${deviceInfo.model}-${deviceInfo.version}'.replaceAll(re, '-');
     map['uuid'] = uuid;
     map['framework'] = 'flutter';
-    return map;
+    return map as FutureOr<Map<String, dynamic>>;
   }
 }

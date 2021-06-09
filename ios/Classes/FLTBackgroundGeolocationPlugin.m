@@ -317,6 +317,11 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 }
 
 - (void) changePace:(BOOL)isMoving result:(FlutterResult)result {
+    TSConfig *config = [TSConfig sharedInstance];
+    if (!config.enabled) {
+        result([FlutterError errorWithCode:@"0" message:@"BackgroundGeolocation is disabled" details:nil]);
+        return;
+    }
     [_locationManager changePace:isMoving];
     result(@(isMoving));
 }

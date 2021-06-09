@@ -37,24 +37,24 @@ class SQLQuery {
   static const int ORDER_DESC = -1;
 
   /// Start date of logs to select
-  DateTime start;
+  DateTime? start;
 
   /// End date of logs to select.
-  DateTime end;
+  DateTime? end;
 
   /// Limit number of records returned.
-  int limit;
+  int? limit;
 
   /// Ordering of results [SQLQuery.ORDER_ASC] or [SQLQuery.ORDER_DESC].
-  int order;
+  int? order;
 
   SQLQuery({this.start, this.end, this.order, this.limit});
 
   /// Return `Map` representation of `SQLQuery` for communication to native platform.
   Map<String, dynamic> toMap() {
     Map<String, dynamic> query = {};
-    if (this.start != null) query["start"] = this.start.millisecondsSinceEpoch;
-    if (this.end != null) query["end"] = this.end.millisecondsSinceEpoch;
+    if (this.start != null) query["start"] = this.start!.millisecondsSinceEpoch;
+    if (this.end != null) query["end"] = this.end!.millisecondsSinceEpoch;
     if (this.limit != null) query["limit"] = this.limit;
     if (this.order != null) query["order"] = this.order;
     return query;

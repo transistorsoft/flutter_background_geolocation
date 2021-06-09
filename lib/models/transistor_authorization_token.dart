@@ -112,7 +112,8 @@ class TransistorAuthorizationToken {
   /// - [findOrCreate]
   ///
   static Future<bool> destroy(String url) async {
-    return await _methodChannel.invokeMethod('destroyTransistorToken', url);
+    return await (_methodChannel.invokeMethod<bool>(
+        'destroyTransistorToken', url) as FutureOr<bool>);
   }
 
   /// Returns a *JSON Web Token* ([JWT](https://jwt.io/)) suitable for [Authorization] with the Transistor Software demo server at http://tracker.transistorsoft.com.
@@ -175,9 +176,9 @@ class TransistorAuthorizationToken {
         completer.complete(
             TransistorAuthorizationToken(_DUMMY_TOKEN, _DUMMY_TOKEN, -1, url));
       } else {
-        throw error;
+        throw Error(error);
       }
     });
-    return completer.future;
+    return completer.future as FutureOr<TransistorAuthorizationToken>;
   }
 }

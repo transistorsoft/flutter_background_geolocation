@@ -92,14 +92,15 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
 /// Receive events from BackgroundFetch in Headless state.
 void backgroundFetchHeadlessTask(HeadlessTask task) async {
   String taskId = task.taskId;
-  print("[BackgroundFetch] HeadlessTask: $taskId");
-  bool timeout = task.timeout;
+
   // Is this a background_fetch timeout event?  If so, simply #finish and bail-out.
-  if (timeout) {
+  if (task.timeout) {
     print("[BackgroundFetch] HeadlessTask TIMEOUT: $taskId");
     BackgroundFetch.finish(taskId);
     return;
   }
+
+  print("[BackgroundFetch] HeadlessTask: $taskId");
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int count = 0;

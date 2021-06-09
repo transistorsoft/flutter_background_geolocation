@@ -248,9 +248,10 @@ class Logger {
   /// 09-19 11:12:55.226 [c.t.l.BackgroundGeolocationService onActivityRecognitionResult] still (100%)
   ///```
   ///
-  static Future<String> getLog([SQLQuery query]) async {
+  static Future<String> getLog([SQLQuery? query]) async {
     query = (query != null) ? query : new SQLQuery();
-    return await _methodChannel.invokeMethod('getLog', query.toMap());
+    return await (_methodChannel.invokeMethod<String>('getLog', query.toMap()))
+        as FutureOr<String>;
   }
 
   /// Email the result of [getLog] using device's mail client.  Provide an optional [SQLQuery] to contrain results between dates.
@@ -275,10 +276,10 @@ class Logger {
   /// });
   /// ```
   ///
-  static Future<bool> emailLog(String email, [SQLQuery query]) async {
+  static Future<bool> emailLog(String email, [SQLQuery? query]) async {
     query = (query != null) ? query : new SQLQuery();
-    return await _methodChannel
-        .invokeMethod('emailLog', [email, query.toMap()]);
+    return await (_methodChannel.invokeMethod<bool?>(
+        'emailLog', [email, query.toMap()])) as FutureOr<bool>;
   }
 
   /// Upload the result of [getLog] to provided url.  Provide an optional [SQLQuery] to contrain results between dates.  The file-upload
@@ -328,9 +329,10 @@ class Logger {
   /// | **`platform`** | *iOS or Android* |
   /// | **`version`** | *OS version* |
   ///
-  static Future<bool> uploadLog(String url, [SQLQuery query]) async {
+  static Future<bool> uploadLog(String url, [SQLQuery? query]) async {
     query = (query != null) ? query : new SQLQuery();
-    return await _methodChannel.invokeMethod('uploadLog', [url, query.toMap()]);
+    return await (_methodChannel.invokeMethod<bool>(
+        'uploadLog', [url, query.toMap()])) as FutureOr<bool>;
   }
 
   /// Destroy the entire contents of plugin's log database.
@@ -342,6 +344,7 @@ class Logger {
   /// ```
   ///
   static Future<bool> destroyLog() async {
-    return await _methodChannel.invokeMethod('destroyLog');
+    return await (_methodChannel.invokeMethod<bool>('destroyLog'))
+        as FutureOr<bool>;
   }
 }
