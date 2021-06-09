@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.0.0 &mdash; 2021-06-09
+* [Changed] Add extra logic block to isMainActivityActive to compare launchActivity with baseActivity className
+
 ## 4.0.0-nullsafety.7 &mdash; 2021-06-07
 * [Changed] `Config.authorization` will perform regexp on the received response, searching for keys such as `accessToken`, `access_token`, `refreshToken`, `refresh_token`, rather than performing regexp on the data itself.
 

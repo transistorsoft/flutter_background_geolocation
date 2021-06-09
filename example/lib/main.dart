@@ -86,7 +86,14 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
 }
 
 /// Receive events from BackgroundFetch in Headless state.
-void backgroundFetchHeadlessTask(String taskId) async {
+void backgroundFetchHeadlessTask(HeadlessTask task) async {
+  String taskId = task.taskId;
+  bool timeout = task.timeout;
+
+  if (timeout) {
+    BackgroundFetch.finish(taskId);
+    return;
+  }
   // Get current-position from BackgroundGeolocation in headless mode.
   //bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
   /*
