@@ -17,7 +17,7 @@
     
     
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
-    
+        
     bgGeo.beforeInsertBlock = ^NSDictionary* (TSLocation *location) {
         NSLog(@"[BackgroundGeolocation] beforeInsertBlock: %@", location);
         BOOL doInsert = YES;
