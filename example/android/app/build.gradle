@@ -41,19 +41,21 @@ android {
         disable 'InvalidPackage'
     }
     // For testing Flavors
+    // $ flutter run --flavor qa
+    // $ flutter run --flavor dev
     /*
     flavorDimensions "app"
     productFlavors {
-        app1 {
+        qa {
             dimension "app"
-            applicationId "com.transistorsoft.flutterbackgroundgeolocationexample.app1"
+            applicationIdSuffix ".qa"
             versionCode 1
             versionName "1.0"
         }
 
-        app2 {
+        dev {
             dimension "app"
-            applicationId "com.transistorsoft.flutterbackgroundgeolocationexample.app2"
+            applicationIdSuffix ".dev"
             versionCode 1
             versionName "1.0"
         }
