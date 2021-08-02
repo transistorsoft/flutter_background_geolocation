@@ -17,7 +17,7 @@ import './util/test.dart';
 import 'shared_events.dart';
 
 // For pretty-printing location JSON
-JsonEncoder encoder = new JsonEncoder.withIndent("     ");
+JsonEncoder encoder = new JsonEncoder.withIndent("    ");
 
 /// The main home-screen of the AdvancedApp.  Builds the Scaffold of the App.
 ///
@@ -494,6 +494,11 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     _tabController.removeListener(_handleTabChange);
     _tabController.dispose();
     super.dispose();
+
+    bg.BackgroundGeolocation.setOdometer(0.0).catchError((error) {
+      print('************ dispose [setOdometer] ERROR $error');
+    });
+
   }
 
   void _handleTabChange() async {

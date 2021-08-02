@@ -1041,7 +1041,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     public void onActivityStopped(Activity activity) {
         TSConfig config = TSConfig.getInstance(activity);
         if (config.getEnabled()) {
-            TSScheduleManager.getInstance(activity).oneShot(TerminateEvent.ACTION, 10000);
+            TSScheduleManager.getInstance(activity).oneShot(TerminateEvent.ACTION, 10000, true);
         }
     }
 

@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## [4.2.0] &mdash; 2021-08-02
+* [Changed][Android] Update Android default `okhttp` version to `4.9.1`.
+* [Changed][Android] Update Android `eventbus` to `3.2.0`.
+* [Changed][Android] Update Android `android-permissions` to import from *MavenCentral* instead of deprecated `jCenter`.
+* [Changed][iOS] Re-compile iOS `TSLocationManager` using XCode 12.4 instead of `12.5.1`.
+* [Fixed][Android] Fix an edge-case requesting motion permission.  If `getCurrentPosition()` is executed before `.start()`, the Android SDK fails to request motion permission.
+
 ## 4.0.2 &mdash; 2021-06-11
 * [Fixed][iOS] Reports 2 reports of iOS crash `NSInvalidArgumentException (TSLocation.m line 178)` with iOS 14
 .x.  Wrap JSON serialization in @try/@catch block.  iOS JSON serialization docs state the supplied NSError err
