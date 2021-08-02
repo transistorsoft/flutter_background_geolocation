@@ -33,7 +33,9 @@ class MainMenuButtonState extends State<MainMenuButton> {
   }
 
   void _onClickResetOdometer() {
-    bg.BackgroundGeolocation.setOdometer(0.0);
+    bg.BackgroundGeolocation.setOdometer(0.0).catchError((error) {
+      print('********** [resetOdometer] ERROR: $error');
+    });
   }
 
   void _onClickEmailLog() async {

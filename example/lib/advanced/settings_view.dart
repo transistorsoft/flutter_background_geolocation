@@ -791,8 +791,8 @@ const PLUGIN_SETTINGS = {
       'group': 'http',
       'dataType': 'integer',
       'inputType': 'select',
-      'values': [-1, 50, 100, 250, 500],
-      'defaultValue': 250
+      'values': [-1, 5, 10, 50, 100],
+      'defaultValue': -1
     },
     {
       'name': 'maxRecordsToPersist',

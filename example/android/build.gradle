@@ -1,9 +1,9 @@
 buildscript {
     ext {
         kotlin_version     = '1.3.72'
-        compileSdkVersion   = 30
+        compileSdkVersion   = 31
         targetSdkVersion    = 30
-        appCompatVersion    = "1.2.0"
+        appCompatVersion    = "1.3.1"
         playServicesLocationVersion = "18.0.0"
         removeBackgroundGeolocationDebugSoundsInRelease = false
     }
@@ -33,6 +33,7 @@ allprojects {
         }
     }
 }
+
 
 rootProject.buildDir = '../build'
 subprojects {

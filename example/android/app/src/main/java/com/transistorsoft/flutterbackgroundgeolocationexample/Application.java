@@ -1,6 +1,10 @@
 package com.transistorsoft.flutterbackgroundgeolocationexample;
 
+import android.Manifest;
 import android.os.StrictMode;
+import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.callback.TSBeforeInsertBlock;
@@ -18,7 +22,8 @@ public class Application  extends FlutterApplication {
         // Strict mode.  Should be disabled on RELEASE.
         // NOTE:  This is NOT required for background_geolocation
         //
-
+        
+        /*
         StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
                 .detectDiskWrites()
@@ -31,9 +36,12 @@ public class Application  extends FlutterApplication {
                 .penaltyLog()
                 .penaltyDeath()
                 .build());
-
+        */
 
         super.onCreate();
+
+        int status = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        Log.d(BackgroundGeolocation.TAG, "*************** status: " + status);
 
         // Adding a custom beforeInsertBlock.  If your callback returns null, the insert into the plugin's SQLite db
         // will be cancelled.  If there is no record inserted into SQLite, there will be no HTTP request.
