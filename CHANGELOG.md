@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [4.2.1] &mdash; 2021-08-03
+* [Changed][Android] Revert default `okHttpVersion` back to `3.12.13`.  `4.x` requires `minSdkVersion 21` (*Android 5*).
+
 ## [4.2.0] &mdash; 2021-08-02
 * [Changed][Android] Update Android default `okhttp` version to `4.9.1`.
 * [Changed][Android] Update Android `eventbus` to `3.2.0`.
