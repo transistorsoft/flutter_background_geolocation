@@ -40,9 +40,6 @@ public class Application  extends FlutterApplication {
 
         super.onCreate();
 
-        int status = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
-        Log.d(BackgroundGeolocation.TAG, "*************** status: " + status);
-
         // Adding a custom beforeInsertBlock.  If your callback returns null, the insert into the plugin's SQLite db
         // will be cancelled.  If there is no record inserted into SQLite, there will be no HTTP request.
         BackgroundGeolocation.getInstance(this).setBeforeInsertBlock(new TSBeforeInsertBlock() {
