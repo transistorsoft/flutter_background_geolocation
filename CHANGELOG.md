@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## [4.2.2] &mdash; 2021-07-01
+* [Fixed][Android] Fixed crash reported by Huawei device, where verticalAccuracy returns NaN.
+* [Fixed][iOS] add config change listeners for `heartbeatInterval` and `preventSuspend` to dynamically update interval when changed with `setConfig`.
+
 ## [4.2.1] &mdash; 2021-08-03
 * [Changed][Android] Revert default `okHttpVersion` back to `3.12.13`.  `4.x` requires `minSdkVersion 21` (*Android 5*).
 
