@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## [4.2.3] &mdash; 2021-07-02
+* [Fixed][iOS] `Authorization.refreshPayload refreshToken` was not performing a String replace on the `{refreshToken}` template, instead over-writing the entire string.  Eg:  if provided with `'refresh_token': 'Bearer {refreshToken}`, `Bearer ` would be over-written and replaced with only the refresh-token.
+
 ## [4.2.2] &mdash; 2021-07-01
 * [Fixed][Android] Fixed crash reported by Huawei device, where verticalAccuracy returns NaN.
 * [Fixed][iOS] add config change listeners for `heartbeatInterval` and `preventSuspend` to dynamically update interval when changed with `setConfig`.

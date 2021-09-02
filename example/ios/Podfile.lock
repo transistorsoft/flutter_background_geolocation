@@ -5,7 +5,7 @@ PODS:
     - CocoaLumberjack/Core (= 3.7.2)
   - CocoaLumberjack/Core (3.7.2)
   - Flutter (1.0.0)
-  - flutter_background_geolocation (4.0.2):
+  - flutter_background_geolocation (4.2.3):
     - CocoaLumberjack (~> 3.7.2)
     - Flutter
   - shared_preferences (0.0.1):
@@ -40,7 +40,7 @@ SPEC CHECKSUMS:
   background_fetch: a07dfad941a3de26ba3c3c516f97e11da20b95d2
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  flutter_background_geolocation: 5c5754282837dabecb09539e5bb5274a964f67c8
+  flutter_background_geolocation: 0655d3683168b9bca06f96da60bd6ce5408f43b8
   shared_preferences: af6bfa751691cdc24be3045c43ec037377ada40d
   url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
