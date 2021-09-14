@@ -86,6 +86,13 @@ class MainMenuButtonState extends State<MainMenuButton> {
     int status = await bg.BackgroundGeolocation.requestPermission();
     print("[requestPermission] status: $status");
     util.Dialog.alert(context, "Request Permission", "Authorization status: $status");
+
+    bg.ProviderChangeEvent providerState = await bg.BackgroundGeolocation.providerState;
+    if ((providerState.status == bg.ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS) && (providerState.accuracyAuthorization == bg.ProviderChangeEvent.ACCURACY_AUTHORIZATION_REDUCED)) {
+      // Request full accuracy.
+      //int status = await bg.BackgroundGeolocation.requestTemporaryFullAccuracy("Demo Purpose");
+      //util.Dialog.alert(context, "Request Full Accuracy", "Accuracy Authorization: ${status}");
+    }
   }
 
   @override
