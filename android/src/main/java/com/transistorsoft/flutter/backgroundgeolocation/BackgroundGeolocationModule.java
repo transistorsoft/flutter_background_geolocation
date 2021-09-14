@@ -876,10 +876,15 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         });
     }
 
-    // Note:  No Android implementation -- this is an iOS-only mechanism currently.
-    private void requestTemporaryFullAccuracy(String purpose, MethodChannel.Result result) {
-        // Note:  return iOS CLAccuracyAuthorizationFull (0)
-        result.success(LocationProviderChangeEvent.ACCURACY_AUTHORIZATION_FULL);
+    private void requestTemporaryFullAccuracy(String purpose, final MethodChannel.Result result) {
+        BackgroundGeolocation.getInstance(mContext).requestTemporaryFullAccuracy(purpose, new TSRequestPermissionCallback() {
+            @Override public void onSuccess(int accuracyAuthorization) {
+                result.success(accuracyAuthorization);
+            }
+            @Override public void onFailure(int accuracyAuthorization) {
+                result.success(accuracyAuthorization);
+            }
+        });
     }
 
     private void getTransistorToken(List<String>args, final MethodChannel.Result result) {
