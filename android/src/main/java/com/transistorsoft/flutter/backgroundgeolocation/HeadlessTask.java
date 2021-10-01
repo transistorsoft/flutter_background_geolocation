@@ -151,6 +151,8 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
             result = event.getEnabledChangeEvent();
         } else if (name.equals(BackgroundGeolocation.EVENT_AUTHORIZATION)) {
             result = event.getAuthorizationEvent().toJson();
+        } else if (name.equalsIgnoreCase(BackgroundGeolocation.EVENT_NOTIFICATIONACTION)) {
+            result = event.getNotificationEvent();
         } else {
             TSLog.logger.warn(TSLog.warn("Unknown Headless Event: " + name));
         }

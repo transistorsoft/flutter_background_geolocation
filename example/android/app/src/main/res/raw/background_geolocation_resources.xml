@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Control shrinking of background_geolocation debug sound FX files in build.
+    In the example app, we want to preserve these sound FX.
+
+    NOTE:  In your own app, you'll want to use tools:discard
+    since these sound files consume about 1.5M.
+
+    eg:
+    <resources xmlns:tools="http://schemas.android.com/tools"
+        tools:keep=""
+        tools:discard="@raw/tslocationmanager*"
+    />
+/>
+
+-->
+
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@raw/tslocationmanager*"
+    tools:discard="" />

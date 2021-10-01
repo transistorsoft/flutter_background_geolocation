@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.3.1 &mdash; 2021-10-01
+* [Fixed][Android] Android custom layout (`Config.notification.layout`) events not working in Headless mode.
+
 ## 4.3.0 &mdash; 2021-09-13
 
 * [Added][Android] Implement new Android 12 "reduced accuracy" mechanism`requestTemporaryFullAccuracy`.
