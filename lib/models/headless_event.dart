@@ -99,6 +99,7 @@ class HeadlessEvent {
   /// | [Event.CONNECTIVITYCHANGE]   | [ConnectivityChangeEvent]             |
   /// | [Event.POWERSAVECHANGE]      | `bool enabled`                        |
   /// | [Event.ENABLEDCHANGE]        | `bool enabled`                        |
+  /// | [Event.NOTIFICATIONACTION]   | `String buttonId`                     |
   ///
   dynamic event;
 
@@ -148,6 +149,9 @@ class HeadlessEvent {
           break;
         case Event.AUTHORIZATION:
           event = new AuthorizationEvent(params);
+          break;
+        case Event.NOTIFICATIONACTION:
+          event = params;
           break;
       }
     } catch (e, stacktrace) {

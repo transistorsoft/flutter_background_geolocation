@@ -340,19 +340,27 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     @SuppressWarnings("unchecked")
     private void ready(Map<String, Object> params, final MethodChannel.Result result) {
+        boolean reset = (!params.containsKey("reset")) || (boolean) params.get("reset");
+        TSConfig config = TSConfig.getInstance(mContext);
+
         if (mReady) {
-            TSLog.logger.warn(TSLog.warn("#ready already called.  Redirecting to #setConfig"));
-            setConfig(params, result);
+            if (reset) {
+                TSLog.logger.warn(TSLog.warn("#ready already called.  Redirecting to #setConfig"));
+                setConfig(params, result);
+            } else {
+                TSLog.logger.warn(TSLog.warn("#ready already called.  Config ignored since reset:false"));
+                resultWithState(result);
+            }
             return;
         }
-        TSConfig config = TSConfig.getInstance(mContext);
+
+        mReady = true;
 
         if (config.isFirstBoot()) {
             if (!applyConfig(params, result)) {
                 return;
             }
         } else {
-            boolean reset = (!params.containsKey("reset")) || (boolean) params.get("reset");
             if (reset) {
                 config.reset();
                 if (!applyConfig(params, result)) {
@@ -367,7 +375,6 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                 }
             }
         }
-        mReady = true;
         BackgroundGeolocation.getInstance(mContext).ready(new TSCallback() {
             @Override public void onSuccess() { resultWithState(result); }
             @Override public void onFailure(String error) {

@@ -3,12 +3,14 @@
   <groupId>com.transistorsoft</groupId>
   <artifactId>tslocationmanager</artifactId>
   <versioning>
-    <latest>3.1.33</latest>
-    <release>3.1.33</release>
+    <latest>3.1.35</latest>
+    <release>3.1.35</release>
     <versions>
       <version>3.1.32</version>
       <version>3.1.33</version>
+      <version>3.1.34</version>
+      <version>3.1.35</version>
     </versions>
-    <lastUpdated>20210914133755</lastUpdated>
+    <lastUpdated>20211109165821</lastUpdated>
   </versioning>
 </metadata>

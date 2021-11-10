@@ -62,7 +62,6 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
-
     // Method Channel
     NSString *path = [NSString stringWithFormat:@"%@/%@", PLUGIN_PATH, METHOD_CHANNEL_NAME];
     FlutterMethodChannel* channel = [FlutterMethodChannel methodChannelWithName:path binaryMessenger:[registrar messenger]];
@@ -235,9 +234,17 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 
 #pragma mark API methods
 - (void) ready:(NSDictionary*)params result:(FlutterResult)result {
+    BOOL reset = (params[@"reset"]) ? [params[@"reset"] boolValue] : YES;
+    TSLocationManager *locationManager = [TSLocationManager sharedInstance];
+
     if (ready) {
-        [[TSLocationManager sharedInstance] log:@"warn" message:@"#ready already called.  Redirecting to #setConfig"];
-        [self setConfig:params result:result];
+        if (reset) {
+            [locationManager log:@"warn" message:@"#ready already called.  Redirecting to #setConfig"];
+            [self setConfig:params result:result];
+        } else {
+            [locationManager log:@"warn" message:@"#ready already called.  Ignored Config since reset: false"];
+            result([[TSConfig sharedInstance] toDictionary]);
+        }
         return;
     }
     ready = YES;
@@ -246,7 +253,6 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
         if (config.isFirstBoot) {
             [config updateWithDictionary:params];
         } else {
-            BOOL reset = (params[@"reset"]) ? [params[@"reset"] boolValue] : YES;
             if (reset) {
                 [config reset:YES];
                 [config updateWithDictionary:params];

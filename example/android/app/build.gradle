@@ -37,6 +37,11 @@ apply from: "${background_geolocation.projectDir}/background_geolocation.gradle"
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     lintOptions {
         disable 'InvalidPackage'
     }
@@ -84,12 +89,12 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
-            shrinkResources false
-            useProguard true
+            shrinkResources true
             proguardFiles "${background_geolocation.projectDir}/proguard-rules.pro"
         }
     }
 }
+
 
 flutter {
     source '../..'

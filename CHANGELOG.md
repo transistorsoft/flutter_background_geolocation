@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 4.3.1 &mdash; 2021-10-01
+* [Fixed][Android] Android custom layout (`Config.notification.layout`) events not working in Headless mode.
+* [Fixed] Fix to `reset:false` behaviour.  When `.ready()` was called a 2nd time, the plugin would apply the config anyway, bypassing `reset:false`.
+* [Added] New `Authorization.strategy "SAS"` (alternative to default `JWT`).
+
 ## 4.3.0 &mdash; 2021-09-13
 
 * [Added][Android] Implement new Android 12 "reduced accuracy" mechanism`requestTemporaryFullAccuracy`.
