@@ -1,10 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
-
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart'
     as util;
 import 'actions.dart' as actions;
@@ -192,7 +189,7 @@ class _SettingsViewState extends State<SettingsView> {
 
     return new Scaffold(
         appBar: new AppBar(
-            brightness: Brightness.light,
+            foregroundColor: Colors.black,
             leading: IconButton(
                 onPressed: _onClickClose,
                 icon: Icon(Icons.close),
@@ -335,7 +332,7 @@ class _SettingsViewState extends State<SettingsView> {
       value = value.round();
     }
 
-    List<DropdownMenuItem<String>> menuItems = new List();
+    List<DropdownMenuItem<String>> menuItems = [];
     bool foundCurrentValue = false;
     values.forEach((dynamic item) {
       if (item == value) {
@@ -423,7 +420,7 @@ class _SettingsViewState extends State<SettingsView> {
   /// Build geofence test panel for loading a series of geofences along iOS "Freeway Drive" route.
   ///
   Widget _buildGeofenceTestPanel() {
-    List<DropdownMenuItem<String>> radiusItems = new List();
+    List<DropdownMenuItem<String>> radiusItems = [];
     radiusItems
         .add(new DropdownMenuItem(child: Text('100 meters'), value: '100'));
     radiusItems
@@ -439,7 +436,7 @@ class _SettingsViewState extends State<SettingsView> {
     radiusItems
         .add(new DropdownMenuItem(child: Text('10000 meters'), value: '10000'));
 
-    List<DropdownMenuItem<String>> loiteringDelayItems = new List();
+    List<DropdownMenuItem<String>> loiteringDelayItems = [];
     loiteringDelayItems
         .add(new DropdownMenuItem(child: Text('1000 ms'), value: '1000'));
     loiteringDelayItems

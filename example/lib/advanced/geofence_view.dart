@@ -60,12 +60,12 @@ class _GeofenceViewState extends State<GeofenceView> {
 
     return new Scaffold(
         appBar: new AppBar(
-            brightness: Brightness.light,
             leading: IconButton(
                 onPressed: _onClickClose,
                 icon: Icon(Icons.close),
                 color: Colors.black),
             title: const Text('Add Geofence'),
+            foregroundColor: Colors.black,
             backgroundColor: Theme.of(context).bottomAppBarColor,
             iconTheme: IconThemeData(color: Colors.black),
             actions: [

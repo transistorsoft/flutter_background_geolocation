@@ -36,12 +36,10 @@ class _HomeAppState extends State<HomeApp> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = ThemeData();
     return new MaterialApp(
-        theme: Theme.of(context).copyWith(
-            accentColor: Colors.black,
-            primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
-                  bodyColor: Colors.black,
-                )),
+        theme: theme.copyWith(
+            colorScheme: theme.colorScheme.copyWith(secondary:Colors.black)),
         home: new _HomeView());
   }
 }
@@ -201,8 +199,8 @@ class _HomeViewState extends State<_HomeView> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Background Geolocation'),
-          backgroundColor: Colors.amberAccent,
-          brightness: Brightness.light,
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.amberAccent
         ),
         body: Container(
             color: Colors.black87,
@@ -263,20 +261,33 @@ class _HomeViewState extends State<_HomeView> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  FlatButton(
+                  SizedBox(
+                    width: 140,
+                    child: ElevatedButton(
                       onPressed: () {
                         _showRegistration();
                       },
                       child: Text('Edit'),
-                      color: Colors.redAccent,
-                      textColor: Colors.white),
-                  FlatButton(
-                      onPressed: () {
-                        _launchUrl();
-                      },
-                      child: Text('View Tracking'),
-                      color: Colors.blue,
-                      textColor: Colors.white),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
+                      )
+                  )),
+                      //color: Colors.redAccent,
+                      //textColor: Colors.white),
+                  SizedBox(
+                      width: 140,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          _launchUrl();
+                        },
+                        child: Text('View Tracking'),
+                        style: ButtonStyle(
+                            //foregroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
+                            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue))
+                        )
+                  )
+                      //color: Colors.blue,
+                      //textColor: Colors.white),
                 ])));
   }
 

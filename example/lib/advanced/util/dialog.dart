@@ -50,14 +50,14 @@ class Dialog {
           title: Text(title),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('Cancel'),
               onPressed: () {
                 callback(false);
                 Navigator.of(context).pop();
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('Confirm'),
               onPressed: () {
                 callback(true);
@@ -80,7 +80,7 @@ class Dialog {
           title: Text(title),
           content: Text(message),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text("Ok"),
               onPressed: () {
                 if (callback != null) {
@@ -132,12 +132,12 @@ class Dialog {
             ]),
           ),
           actions: <Widget>[
-            new FlatButton(
+            new TextButton(
                 child: Text('Cancel'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 }),
-            new FlatButton(
+            new TextButton(
                 child: Text('Submit'),
                 onPressed: () {
                   Navigator.of(context).pop();
