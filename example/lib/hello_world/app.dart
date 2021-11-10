@@ -22,11 +22,12 @@ class HelloWorldApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = ThemeData();
     return new MaterialApp(
       title: 'BackgroundGeolocation Demo',
-      theme: Theme.of(context).copyWith(
-          accentColor: Colors.black,
+      theme: theme.copyWith(
           bottomAppBarColor: Colors.amberAccent,
+          colorScheme: theme.colorScheme.copyWith(secondary:Colors.black),
           primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
                 bodyColor: Colors.black,
               )),
@@ -242,7 +243,7 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
             icon: Icon(Icons.home, color: Colors.black),
             onPressed: _onClickHome),
         title: const Text('BG Geo'),
-        brightness: Brightness.light,
+        foregroundColor: Colors.black,
         actions: <Widget>[
           Switch(value: _enabled, onChanged: _onClickEnable),
         ],

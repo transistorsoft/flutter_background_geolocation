@@ -1,4 +1,4 @@
-import 'dart:math' show pi, cos, sin, asin, tan, atan2, log;
+import 'dart:math' show cos, sin, asin, tan, atan2, log;
 import 'package:latlong2/latlong.dart';
 
 ///

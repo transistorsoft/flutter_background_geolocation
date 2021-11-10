@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
-import 'dart:async';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
@@ -61,13 +60,13 @@ class MainMenuButtonState extends State<MainMenuButton> {
           title: Text("Request Permission"),
           content: Text("Current Authorization status: ${providerState.status}"),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('WhenInUse'),
               onPressed: () async {
                 _requestPermission('WhenInUse');
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('Always'),
               onPressed: () async {
                 _requestPermission('Always');

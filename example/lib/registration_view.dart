@@ -101,21 +101,21 @@ class _RegistrationViewState extends State<RegistrationView> {
 
     return new Scaffold(
       appBar: new AppBar(
-          brightness: Brightness.light,
           leading: IconButton(
               onPressed: _onClickClose,
               icon: Icon(Icons.close),
               color: Colors.black),
           title: const Text('Device Registration', textAlign: TextAlign.right),
+          foregroundColor: Colors.black,
           backgroundColor: Colors.amberAccent,
           iconTheme: IconThemeData(color: Colors.black),
           actions: <Widget>[
-            MaterialButton(
+            TextButton(
                 onPressed: _onClickSave,
                 child: Text("REGISTER",
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black)),
-                height: 50.0)
+                        fontWeight: FontWeight.bold, color: Colors.blue)),
+                )
           ]),
       body: Form(
         key: _formKey,

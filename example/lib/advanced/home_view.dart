@@ -418,7 +418,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
           centerTitle: true,
           leading: IconButton(onPressed: _onClickHome, icon: Icon(Icons.home, color: Colors.black)),
           backgroundColor: Theme.of(context).bottomAppBarColor,
-          brightness: Brightness.light,
+          foregroundColor: Colors.black,
           actions: <Widget>[
             Switch(value: _enabled, onChanged: _onClickEnable
             ),
@@ -455,9 +455,12 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
                       icon: Icon(Icons.gps_fixed),
                       onPressed: _onClickGetCurrentPosition,
                     ),
-                    FlatButton(
+                    TextButton(
                         child: Text('$_motionActivity · $_odometer km'),
                         onPressed: _onClickTestMode,
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black)
+                        )
                     ),
                     MaterialButton(
                         minWidth: 50.0,
