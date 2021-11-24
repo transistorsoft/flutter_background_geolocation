@@ -1,6 +1,7 @@
 package com.transistorsoft.flutterbackgroundgeolocationexample;
 
 import android.Manifest;
+import android.location.Location;
 import android.os.StrictMode;
 import android.util.Log;
 
@@ -49,6 +50,14 @@ public class Application  extends FlutterApplication {
                 //
                 // Your logic here
                 //
+                /**
+                 * For example, you could do something like this:
+                 *
+                Location location = tsLocation.getLocation();
+                if (location.getAccuracy() >= 10) {
+                    doInsert = false;
+                }
+                */
                 return (doInsert) ? tsLocation.toJson() : null;
             }
         });

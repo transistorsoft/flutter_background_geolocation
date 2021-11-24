@@ -43,6 +43,10 @@ class EventListState extends State<EventList>
                   labelText: events.events[index].name,
                 ),
                 child: Text(events.events[index].content,
-                    style: TextStyle(color: Colors.black, fontSize: 16.0)))));
+                    style: TextStyle(color: Colors.black, fontSize: 16.0)
+                )
+            )
+        )
+    );
   }
 }
