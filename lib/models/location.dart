@@ -201,14 +201,14 @@ class Location {
   late String event;
 
   /// __`[Android only]`__ `true` if the location was provided by a Mock location app.
-  bool? mock;
+  late bool mock;
 
   /// `true` if this Location is just 1 of several samples before settling upon a final location.
   ///
   /// Multiple samples are requested when using [BackgroundGeolocation.getCurrentPosition] or when the plugin is performing a [BackgroundGeolocation.onMotionChange].
   /// If you're manually uploading locations to your server, you should __ignore__ those with `location.sample == true`.
   ///
-  bool? sample;
+  late bool sample;
 
   /// The current distance traveled.
   ///
@@ -297,16 +297,13 @@ class Location {
     this.odometer = params['odometer'] * 1.0;
 
     this.sample = (params['sample'] != null) ? params['sample'] : false;
+    this.event = (params['event'] != null) ? params['event'] : '';
 
-    if (params['event'] != null) {
-      this.event = params['event'];
-    }
     if (params['geofence'] != null) {
       this.geofence = new GeofenceEvent(params['geofence']);
     }
-    if (params['mock'] != null) {
-      this.mock = params['mock'];
-    }
+    this.mock = (params['mock'] != null) ? params['mock'] : false;
+
     if (params['extras'] != null) {
       this.extras = params['extras'];
     }

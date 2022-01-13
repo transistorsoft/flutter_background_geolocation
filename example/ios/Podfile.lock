@@ -1,24 +1,24 @@
 PODS:
-  - background_fetch (1.0.1):
+  - background_fetch (1.0.3):
     - Flutter
   - CocoaLumberjack (3.7.2):
     - CocoaLumberjack/Core (= 3.7.2)
   - CocoaLumberjack/Core (3.7.2)
   - Flutter (1.0.0)
-  - flutter_background_geolocation (4.3.1):
+  - flutter_background_geolocation (4.3.2):
     - CocoaLumberjack (~> 3.7.2)
     - Flutter
-  - shared_preferences (0.0.1):
+  - shared_preferences_ios (0.0.1):
     - Flutter
-  - url_launcher (0.0.1):
+  - url_launcher_ios (0.0.1):
     - Flutter
 
 DEPENDENCIES:
   - background_fetch (from `.symlinks/plugins/background_fetch/ios`)
   - Flutter (from `Flutter`)
   - flutter_background_geolocation (from `.symlinks/plugins/flutter_background_geolocation/ios`)
-  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
-  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -31,18 +31,18 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_background_geolocation:
     :path: ".symlinks/plugins/flutter_background_geolocation/ios"
-  shared_preferences:
-    :path: ".symlinks/plugins/shared_preferences/ios"
-  url_launcher:
-    :path: ".symlinks/plugins/url_launcher/ios"
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  background_fetch: 2edffc19a5a465c47f073efa35db57f7910738fa
+  background_fetch: 8fa13640fc6e658a7c2e9a2dbc07af8650af215c
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  flutter_background_geolocation: e60fed11c655f75eec6ccc7463c131734a92f33b
-  shared_preferences: 5033afbb22d372e15aff8ff766df9021b845f273
-  url_launcher: b6e016d912f04be9f5bf6e8e82dc599b7ba59649
+  flutter_background_geolocation: 8ae4b04fcebd4a9e258881d8f93d3c1c33ef77fb
+  shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
+  url_launcher_ios: 02f1989d4e14e998335b02b67a7590fa34f971af
 
 PODFILE CHECKSUM: e5ee00144d04e7b168ba7ea28a9753540e444f3d
 
