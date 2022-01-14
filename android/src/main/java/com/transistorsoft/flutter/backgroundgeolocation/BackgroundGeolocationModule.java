@@ -124,6 +124,30 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         mIsAttachedToEngine.set(true);
         mMethodChannel = new MethodChannel(messenger, METHOD_CHANNEL_NAME);
         mMethodChannel.setMethodCallHandler(this);
+
+        // This is not production worthy and doesn't work in all scenarios (when terminated)
+        // this was simply the easiest way to demonstrate the question - 
+        // "Is there another spot to initialize these handlers that would let callers in non-Activity driven isolates to subscribe?"
+        // I understand, from the code here, that these handlers are destroyed when the activity is updated.
+
+        // If these are removed - the call to `bg.BackgroundGeolocation.onLocation` inside `backgroundMain` method of `main.dart` 
+        // of the example will fail, as the EventChannels are not established.
+        synchronized (mStreamHandlers) {
+            mStreamHandlers.add(new LocationStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new MotionChangeStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new ActivityChangeStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new GeofencesChangeStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new GeofenceStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new HeartbeatStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new HttpStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new ScheduleStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new ConnectivityChangeStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new EnabledChangeStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new ProviderChangeStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new PowerSaveChangeStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new NotificationActionStreamHandler().register(mContext, mMessenger));
+            mStreamHandlers.add(new AuthorizationStreamHandler().register(mContext, mMessenger));
+        }
     }
 
     void onDetachedFromEngine() {

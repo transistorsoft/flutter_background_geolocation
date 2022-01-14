@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
@@ -10,7 +14,7 @@ import 'advanced/app.dart';
 import 'hello_world/app.dart';
 
 import 'config/transistor_auth.dart';
-import 'config/env.dart';
+import 'config/ENV.dart';
 
 /// Receive events from BackgroundGeolocation in Headless state.
 void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
@@ -116,6 +120,11 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
+  var channel = const MethodChannel(
+      'com.transistorsoft.flutterbackgroundgeolocationexample/background_service');
+  var callbackHandle = PluginUtilities.getCallbackHandle(backgroundMain);
+  channel.invokeMethod('startService', callbackHandle.toRawHandle());
+
   /// Application selection:  Select the app to boot:
   /// - AdvancedApp
   /// - HelloWorldAp
@@ -154,4 +163,57 @@ void main() {
 
   /// Register BackgroundFetch headless-task.
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
+}
+
+/// This method is executed as a standalone isolate, hosted by a foreground service.
+void backgroundMain() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  print("[BackgroundMain] Running");
+
+  /// Requesting anything over the [MethodChannel] always works, because
+  /// the MethodChannel is instantiated within `onAttachedToEngine`
+  ///
+  /// Running, Terminated, doesn't matter - I can request this here in the background
+  final state = await bg.BackgroundGeolocation.state;
+  print("[BackgroundMain] State: $state");
+
+  // You can set config, start, stop, etc.
+  await bg.BackgroundGeolocation.setConfig(bg.Config(autoSync: false));
+
+  // Methods that require an activity (like requesting permissions)
+  // should be handled in the UI isolate, and not here. The consuming application
+  // can and should handle this.
+
+  /// No [EventChannel]s work here, because they're tied to the activity lifecycle.
+  /// However, they shouldn't need an activity, because the headless task isn't
+  /// tied to an activity, correct?
+  ///
+  /// If you create the [EventChannel]s during `onAttachedToEngine`, they work.
+  /// However, since listeners are cleaned up and event channels cleared based on
+  /// the Activity lifecycle - they will quit working after terminate.
+  bg.BackgroundGeolocation.onLocation(
+      (p0) => print("[BackgroundMain] - Location - $p0"));
+
+  /// Periodically request status from the plugin
+  Timer.periodic(Duration(seconds: 5), (_) async {
+    final count = await bg.BackgroundGeolocation.count;
+    final locations = await bg.BackgroundGeolocation.locations;
+
+    print("[BackgroundMain] =======================================");
+    print("[BackgroundMain] Num pending locations: $count");
+    print("[BackgroundMain] Pending locations - $locations");
+
+    print("[BackgroundMain] =======================================");
+
+    // If desired - you can thrash the enabled / disabled status while terminated
+    // Simply uncomment the below.
+
+    // final state = await bg.BackgroundGeolocation.state;
+    // if (state.enabled) {
+    //   await bg.BackgroundGeolocation.stop();
+    // } else {
+    //   await bg.BackgroundGeolocation.start();
+    // }
+  });
 }

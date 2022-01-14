@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart'
     as util;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
 
-import './config/env.dart';
+import './config/ENV.dart';
 
 class RegistrationView extends StatefulWidget {
   @override
@@ -111,11 +110,11 @@ class _RegistrationViewState extends State<RegistrationView> {
           iconTheme: IconThemeData(color: Colors.black),
           actions: <Widget>[
             TextButton(
-                onPressed: _onClickSave,
-                child: Text("REGISTER",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.blue)),
-                )
+              onPressed: _onClickSave,
+              child: Text("REGISTER",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.blue)),
+            )
           ]),
       body: Form(
         key: _formKey,

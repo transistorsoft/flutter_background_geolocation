@@ -7,6 +7,7 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
@@ -43,6 +44,11 @@
 
         <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="025736af0c3b480ecc1a6fc8aea17e73cc012049ed117472072b76e5e170953d" />
         <meta-data android:name="com.transistorsoft.locationmanager.ENCRYPTION_PASSWORD" android:value="transistorsoft" />
+
+     <service    
+            android:name="com.transistorsoft.flutterbackgroundgeolocationexample.BackgroundService"
+            android:enabled="true"
+            android:exported="false" />
 
         <meta-data
             android:name="flutterEmbedding"
