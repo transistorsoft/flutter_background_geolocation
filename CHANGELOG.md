@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 4.3.3 &mdash; 2022-01-19
+* [Fixed][iOS] Regression bug in iOS SAS authorization strategy
+* [Fixed][Android] logLevel not defaulting to LOG_LEVEL_OFF on first install.
+* [Fixed][Android] Some device report that locationAuthorizationAlert is not auto-hiding the invisible TSLocationManagerActivity in some cases.
+* [Changed] Provide default values for Location parameters defined as `late` (Location.event, Location.mock).  Location.event will be empty-string when there is no corresponding event.
+
 ## 4.3.2 &mdash; 2021-11-24
 * [Fixed][iOS} iOS Config.authorization did not allow http response status 201
 
