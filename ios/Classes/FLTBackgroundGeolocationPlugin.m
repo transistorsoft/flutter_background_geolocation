@@ -211,6 +211,11 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     }
 }
 
+// See issue https://github.com/flutter/flutter/issues/44256#issuecomment-583507578
+- (void)detachFromEngineForRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
+    NSLog(@"[BackgroundGeolocation detachFromEngineForRegistrar -- NO IMPLEMENTATION");
+}
+
 - (void) getProviderState:(FlutterResult)result {
     TSProviderChangeEvent *event = [_locationManager getProviderState];
     result([event toDictionary]);
