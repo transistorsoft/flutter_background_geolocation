@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.GoogleApiAvailability;
+
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ActivityChangeStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.AuthorizationStreamHandler;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.ConnectivityChangeStreamHandler;
