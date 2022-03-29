@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.3.5 &mdash; 2022-03-29
+* Config.authorization:  append Config.headers with request to refreshUrl
+
 ## 4.3.4 &mdash; 2022-02-16
 * [Android] While testing adding 20k geofences, the Logger can cause an `OutOfMemory` error.  Define a dedicated thread executor `Executors.newFixedThreadPool(2)` for posting log messages in background.
 * [iOS] remote event-listeners in onAppTerminate to prevent onEnabledChange event being fired in a dying app configured for `stopOnTerminate: true`
