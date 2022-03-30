@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.4.0 &mdash; 2022-03-30
+* [Android] Upgrade `android-permissions` dependency from 0.1.8 -> 2.1.6.
+* [iOS] Rebuild `TSLocationManager.xcframework` with XCode 13.3
+
 ## 4.3.5 &mdash; 2022-03-29
 * Config.authorization:  append Config.headers with request to refreshUrl
 
