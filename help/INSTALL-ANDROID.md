@@ -53,15 +53,15 @@ As an app grows in complexity and imports a variety of 3rd-party modules, it hel
 buildscript {
 +   ext.kotlin_version = '1.3.0' // Must use 1.3.0 or higher.
 +   ext {
-+       compileSdkVersion   = 29                // or higher
-+       targetSdkVersion    = 29                // or higher
++       compileSdkVersion   = 31                // or higher
++       targetSdkVersion    = 31                // or higher
 +       appCompatVersion    = "1.0.2"           // or higher
 +       playServicesLocationVersion = "17.0.0"  // or higher
 +   }
 
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -72,7 +72,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
 +       maven {
 +           // [required] flutter_background_geolocation
 +           url "${project(':flutter_background_geolocation').projectDir}/libs"
