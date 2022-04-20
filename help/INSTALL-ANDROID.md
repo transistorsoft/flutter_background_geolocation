@@ -51,12 +51,12 @@ As an app grows in complexity and imports a variety of 3rd-party modules, it hel
 
 ```diff
 buildscript {
-+   ext.kotlin_version = '1.3.0' // Must use 1.3.0 or higher.
+    ext.kotlin_version = '1.3.0' // Must use 1.3.0 OR HIGHER
 +   ext {
 +       compileSdkVersion   = 31                // or higher
 +       targetSdkVersion    = 31                // or higher
-+       appCompatVersion    = "1.0.2"           // or higher
-+       playServicesLocationVersion = "17.0.0"  // or higher
++       appCompatVersion    = "1.1.0"           // or higher
++       playServicesLocationVersion = "19.0.1"  // or higher
 +   }
 
     repositories {
@@ -65,6 +65,7 @@ buildscript {
     }
 
     dependencies {
+         // Of ALREADY HIGHER than 3.3.1, DO NOT CHANGE
 +        classpath 'com.android.tools.build:gradle:3.3.1' // Must use 3.3.1 or higher
     }
 }
