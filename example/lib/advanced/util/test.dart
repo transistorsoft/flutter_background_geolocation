@@ -370,7 +370,7 @@ class Test {
         DateTime start = now.add(Duration(minutes: (2 * n + 1)));
         DateTime end = start.add(Duration(minutes: 1));
         schedule
-            .add("1-7 ${start.hour}:${start.minute}-${end.hour}:${end.minute}");
+            .add("1-7 ${start.hour}:${start.minute}-${end.hour}:${end.minute} geofence");
       }
     }
 
@@ -402,7 +402,6 @@ class Test {
         geofenceModeHighAccuracy: true,
         motionTriggerDelay: 30000,
         stopOnTerminate: false,
-
         startOnBoot: true,
         enableHeadless: true,
         heartbeatInterval: -1));

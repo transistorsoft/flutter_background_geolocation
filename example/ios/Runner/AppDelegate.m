@@ -15,7 +15,10 @@
     didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [GeneratedPluginRegistrant registerWithRegistry:self];
     
-    
+    /**
+     * Undocumented feature:  This is a native hook for each location recorded by background-geolocation.
+     * Return null to cancel the SQLite insert (and corresponding HTTP request)
+     *
     TSLocationManager *bgGeo = [TSLocationManager sharedInstance];
         
     bgGeo.beforeInsertBlock = ^NSDictionary* (TSLocation *location) {
@@ -26,7 +29,7 @@
         //
         return (doInsert) ? [location toDictionary] : nil;
     };
-        
+     */
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
