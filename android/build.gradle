@@ -27,6 +27,8 @@ def DEFAULT_APP_COMPAT_VERSION                  = "1.4.1"
 def DEFAULT_OK_HTTP_VERSION                     = "3.12.13"
 def DEFAULT_ANDROID_PERMISSIONS_VERSION         = "2.1.6"
 def DEFAULT_LOCAL_BROADCAST_MANAGER_VERSION     = "1.1.0"
+def DEFAULT_LIFE_CYCLE_RUNTIME_VERSION          = "2.4.1"
+def DEFAULT_LIFE_CYCLE_EXTENSIONS_VERSION       = "2.2.0"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -56,6 +58,8 @@ dependencies {
     def okHttpVersion = safeExtGet('okHttpVersion', DEFAULT_OK_HTTP_VERSION)
     def androidPermissionsVersion = safeExtGet('androidPermissionsVersion', DEFAULT_ANDROID_PERMISSIONS_VERSION)
     def localBroadcastManagerVersion = safeExtGet('localBroadcastManagerVersion', DEFAULT_LOCAL_BROADCAST_MANAGER_VERSION)
+    def lifeCycleRuntimeVersion = safeExtGet('lifeCycleRuntimeVersion', DEFAULT_LIFE_CYCLE_RUNTIME_VERSION)
+    def lifeCycleExtensionsVersion = safeExtGet('lifeCycleExtensionsVersion', DEFAULT_LIFE_CYCLE_EXTENSIONS_VERSION)
 
     api(group: 'com.transistorsoft', name:'tslocationmanager', version: '+')
     implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
@@ -67,4 +71,7 @@ dependencies {
     implementation "io.github.nishkarsh:android-permissions:$androidPermissionsVersion"
     implementation "androidx.localbroadcastmanager:localbroadcastmanager:$localBroadcastManagerVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
+    // LifeCycleObserver
+    implementation "androidx.lifecycle:lifecycle-runtime:$lifeCycleRuntimeVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifeCycleExtensionsVersion"
 }

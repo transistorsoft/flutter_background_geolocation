@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 4.6.0 &mdash; 2022-05-06
+* [Android] Android 12 support for executing `.start()` and `.getCurrentPosition()` while the plugin is disabled and in the background.  This is a bypass of new Android 12 restrictions for starting foreground-services in the background by taking advantage of AlarmManager.
+
+```
+Fatal Exception: android.app.ForegroundServiceStartNotAllowedException: startForegroundService() not allowed due to mAllowStartForeground false: service
+```
+
 ## 4.5.0 &mdash; 2022-04-29
 * [Android] Add a few extra manufacturer-specific `Intent` for `DeviceSettings.showPowerManager()`.
 * [Android] Minimum `compileSdkVersion 31` is now required.
