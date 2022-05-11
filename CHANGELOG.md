@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## 4.6.2 &mdash; 2022-05-11
+* [Android] Fix issue device reboot behaviour related to change in `4.6.1` for Android 11.  Could produce multiple motionchange requests after airplane-mode togged off after reboot.
 ## 4.6.1 &mdash; 2022-05-11
 * [Android] If on device reboot location-services fails to provide a location (eg: timeout, airplane mode), the plugin would rely on motion API events to try again.  This is a problem if the motion api is disabled.  Instead, the SDK will keep trying to retrieve a location.
 * [Android] Android 12 support for `ForegroundServiceStartNotAllowedException`:  immediately launch the SDK's `TrackingService` as soon as `.start()` executes.  If a location-timeout occurs while fetching the onMotionChange position after device reboot with `startOnBoot: true`, the `ForegroundServiceStartNotAllowedException` could be raised.
