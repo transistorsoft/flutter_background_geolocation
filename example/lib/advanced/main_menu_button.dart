@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
-import 'package:unicorndial/unicorndial.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 import 'actions.dart' as actions;
 import 'settings_view.dart';
@@ -106,80 +106,59 @@ class MainMenuButtonState extends State<MainMenuButton> {
     _context = context;
     return Container(
       padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, buttonBottomPadding),
-      child: UnicornDialer(
-          onMainButtonPressed: _onClickMenu,
-          hasBackground: false,
-          parentButtonBackground: Colors.black,
-          orientation: UnicornOrientation.VERTICAL,
-          parentButton: Icon(Icons.add, color: Colors.black),
-          childButtons: _buildMenuItems(context)),
+      margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
+      child: SpeedDial(
+          icon: Icons.add,
+          activeIcon: Icons.close,
+          renderOverlay: false,
+          spacing: 10.0,
+          backgroundColor: Colors.black,
+          children: _buildMenuItems(context)),
     );
   }
 
-  List<UnicornButton> _buildMenuItems(BuildContext context) {
+  List<SpeedDialChild> _buildMenuItems(BuildContext context) {
     Color bgColor = Theme.of(context).bottomAppBarColor;
 
-    return <UnicornButton>[
-      UnicornButton(
-          hasLabel: true,
-          labelText: "Destroy locations",
-          currentButton: FloatingActionButton(
-              heroTag: "destroy locations",
-              backgroundColor: bgColor,
-              foregroundColor: Colors.black,
-              mini: true,
-              child: Icon(Icons.delete),
-              onPressed: _onClickDestroyLocations)),
-      UnicornButton(
-          hasLabel: true,
-          labelText: "Email log",
-          currentButton: FloatingActionButton(
-              heroTag: "email log",
-              backgroundColor: bgColor,
-              foregroundColor: Colors.black,
-              mini: true,
-              child: Icon(Icons.email),
-              onPressed: _onClickEmailLog)),
-      UnicornButton(
-          hasLabel: true,
-          labelText: "Upload locations",
-          currentButton: FloatingActionButton(
-              heroTag: "upload",
-              backgroundColor: bgColor,
-              foregroundColor: Colors.black,
-              mini: true,
-              child: Icon(Icons.cloud_upload),
-              onPressed: _onClickSync)),
-      UnicornButton(
-          hasLabel: true,
-          labelText: "Reset odometer",
-          currentButton: FloatingActionButton(
-              heroTag: "reset odometer",
-              backgroundColor: bgColor,
-              foregroundColor: Colors.black,
-              mini: true,
-              child: Icon(Icons.av_timer),
-              onPressed: _onClickResetOdometer)),
-      UnicornButton(
-        hasLabel: true,
-        labelText: "Request Permission",
-        currentButton: FloatingActionButton(
-            heroTag: "request permission",
-            backgroundColor: bgColor,
-            foregroundColor: Colors.black,
-            mini: true,
-            child: Icon(Icons.lock_open),
-            onPressed: _onClickRequestPermission)),
-      UnicornButton(
-          hasLabel: true,
-          labelText: "Settings",
-          currentButton: FloatingActionButton(
-              heroTag: "settings",
-              backgroundColor: bgColor,
-              foregroundColor: Colors.black,
-              mini: true,
-              child: Icon(Icons.settings),
-              onPressed: _onClickSettings))
+    return <SpeedDialChild>[
+      SpeedDialChild(
+          label: "Settings",
+          backgroundColor: bgColor,
+          foregroundColor: Colors.black,
+          child: Icon(Icons.settings),
+          onTap: _onClickSettings),
+      SpeedDialChild(
+        label: "Email log",
+        backgroundColor: bgColor,
+        foregroundColor: Colors.black,
+        child: Icon(Icons.email),
+        onTap: _onClickEmailLog),
+      SpeedDialChild(
+          label: "Upload locations",
+          backgroundColor: bgColor,
+          foregroundColor: Colors.black,
+          child: Icon(Icons.cloud_upload),
+          onTap: _onClickSync),
+      SpeedDialChild(
+          label: "Reset odometer",
+          backgroundColor: bgColor,
+          foregroundColor: Colors.black,
+          child: Icon(Icons.av_timer),
+          onTap: _onClickResetOdometer),
+      SpeedDialChild(
+          label: "Request Permission",
+          backgroundColor: bgColor,
+          foregroundColor: Colors.black,
+          child: Icon(Icons.lock_open),
+          onTap: _onClickRequestPermission),
+      SpeedDialChild(
+        //hasLabel: true,
+          label: "Destroy locations",
+          backgroundColor: bgColor,
+          foregroundColor: Colors.black,
+          child: Icon(Icons.delete),
+          onTap: _onClickDestroyLocations)
+
     ];
   }
 
