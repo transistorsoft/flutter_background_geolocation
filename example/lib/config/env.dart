@@ -1,3 +1,3 @@
 class ENV {
-  static const TRACKER_HOST = 'http://tracker.transistorsoft.com';
+  static const TRACKER_HOST = 'https://tracker.transistorsoft.com';
 }

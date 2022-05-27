@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 4.6.3 &mdash; 2022-05-27
+* [Android] Fix bug in Android 12 support for executing `.start()` in background while terminated.  Used `JobScheduler` ONESHOT instead of `AlarmManager`.
+* [Android] Plugin could be placed into an infinite loop requesting motionchange position in some cases.
+* [Android] Address `ConcurrentModificationException` in `onPermissionGranted`.
+
 ## 4.6.2 &mdash; 2022-05-11
 * [Android] Fix issue device reboot behaviour related to change in `4.6.1` for Android 11.  Could produce multiple motionchange requests after airplane-mode togged off after reboot.
 ## 4.6.1 &mdash; 2022-05-11
