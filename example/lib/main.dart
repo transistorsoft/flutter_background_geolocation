@@ -24,7 +24,13 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
     case bg.Event.TERMINATE:
       try {
         bg.Location location =
-            await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
+            await bg.BackgroundGeolocation.getCurrentPosition(
+                samples: 1,
+                extras: {
+                  "event": "terminate",
+                  "headless": true
+                }
+            );
         print("[getCurrentPosition] Headless: $location");
       } catch (error) {
         print("[getCurrentPosition] Headless ERROR: $error");
@@ -33,7 +39,13 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
     case bg.Event.HEARTBEAT:
       /* DISABLED getCurrentPosition on heartbeat
       try {
-        bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
+        bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(
+          samples: 1,
+          extras: {
+            "event": "heartbeat",
+            "headless": true
+          }
+        );
         print('[getCurrentPosition] Headless: $location');
       } catch (error) {
         print('[getCurrentPosition] Headless ERROR: $error');
@@ -101,6 +113,19 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
   }
 
   print("[BackgroundFetch] HeadlessTask: $taskId");
+
+  try {
+    var location = await bg.BackgroundGeolocation.getCurrentPosition(
+        samples: 1,
+        extras: {
+          "event": "background-fetch",
+          "headless": true
+        }
+    );
+    print("[location] $location");
+  } catch(error) {
+    print("[location] ERROR: $error");
+  }
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int count = 0;
