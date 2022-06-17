@@ -654,6 +654,15 @@ const PLUGIN_SETTINGS = {
       'defaultValue': 1
     },
     {
+      'name': 'locationAuthorizationRequest',
+      'group': 'geolocation',
+      'dataType': 'string',
+      'inputType': 'select',
+      'labels': ['Always', 'WhenInUse'],
+      'values': ['Always', 'WhenInUse'],
+      'defaultValue': 'Always'
+    },
+    {
       'name': 'desiredAccuracy',
       'group': 'geolocation',
       'dataType': 'integer',

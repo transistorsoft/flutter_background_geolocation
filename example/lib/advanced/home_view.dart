@@ -200,9 +200,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       print('[BackgroundFetch] count: $count');
 
       if (taskId == 'flutter_background_fetch') {
-        bg.BackgroundGeolocation.sync();
-
-
         try {
           // Fetch current position
           var location = await bg.BackgroundGeolocation.getCurrentPosition(
