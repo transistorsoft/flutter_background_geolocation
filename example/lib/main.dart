@@ -36,6 +36,7 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
       } catch (error) {
         print("[getCurrentPosition] Headless ERROR: $error");
       }
+
       break;
     case bg.Event.HEARTBEAT:
       /* DISABLED getCurrentPosition on heartbeat
