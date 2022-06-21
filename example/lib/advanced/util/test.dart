@@ -382,6 +382,7 @@ class Test {
         distanceFilter: 50,
         disableElasticity: false,
         locationUpdateInterval: 1000,
+        locationAuthorizationRequest: "Always",
         fastestLocationUpdateInterval: -1,
         enableTimestampMeta: true,
         stopTimeout: 1,

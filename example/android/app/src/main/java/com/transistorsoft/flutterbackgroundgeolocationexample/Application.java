@@ -42,6 +42,7 @@ public class Application  extends FlutterApplication {
 
         super.onCreate();
 
+
         // Adding a custom beforeInsertBlock.  If your callback returns null, the insert into the plugin's SQLite db
         // will be cancelled.  If there is no record inserted into SQLite, there will be no HTTP request.
         /*

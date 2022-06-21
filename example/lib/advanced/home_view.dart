@@ -69,7 +69,15 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print("[home_view didChangeAppLifecycleState] : $state");
     if (state == AppLifecycleState.paused) {
+
       // Do nothing.
+      /* For testing location access in background on Android 12.
+      new Timer(Duration(seconds: 21), () async {
+        var location = await bg.BackgroundGeolocation.getCurrentPosition();
+        print("************ [location] $location");
+      });
+      */
+
     } else if (state == AppLifecycleState.resumed) {
       if (!_enabled) return;
 
@@ -190,8 +198,22 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       }
       prefs.setInt("fetch-count", ++count);
       print('[BackgroundFetch] count: $count');
-      
+
       if (taskId == 'flutter_background_fetch') {
+        try {
+          // Fetch current position
+          var location = await bg.BackgroundGeolocation.getCurrentPosition(
+              samples: 1,
+              extras: {
+                "event": "background-fetch",
+                "headless": false
+              }
+          );
+          print("[location] $location");
+        } catch(error) {
+          print("[location] ERROR: $error");
+        }
+
         // Test scheduling a custom-task in fetch event.
         BackgroundFetch.scheduleTask(TaskConfig(
             taskId: "com.transistorsoft.customtask",
@@ -296,6 +318,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
   void _onMotionChange(bg.Location location) {
     print('[${bg.Event.MOTIONCHANGE}] - $location');
+
     setState(() {
       events.insert(0, Event(bg.Event.MOTIONCHANGE, location, location.toString(compact:true)));
       _isMoving = location.isMoving;

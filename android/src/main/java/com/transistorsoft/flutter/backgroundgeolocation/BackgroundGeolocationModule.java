@@ -452,7 +452,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                 result.success(isMoving);
             }
             @Override public void onFailure(String error) {
-                result.error("0", error, null);
+                result.error(error.toString(), null, null);
             }
         });
     }

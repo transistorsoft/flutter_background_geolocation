@@ -20,7 +20,9 @@ class MainMenuButton extends StatefulWidget {
 class MainMenuButtonState extends State<MainMenuButton> {
   BuildContext _context;
 
-  void _onClickMenu() async {}
+  void _onClickMenu() async {
+
+  }
 
   void _onClickSettings() {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("OPEN"));
@@ -81,6 +83,12 @@ class MainMenuButtonState extends State<MainMenuButton> {
   void _requestPermission(String request) async {
     Navigator.of(context).pop();
     await bg.BackgroundGeolocation.setConfig(bg.Config(locationAuthorizationRequest: request));
+
+    bg.BackgroundGeolocation.start();
+    bg.BackgroundGeolocation.requestPermission();
+    bg.BackgroundGeolocation.requestPermission();
+    bg.BackgroundGeolocation.requestPermission();
+    bg.BackgroundGeolocation.requestPermission();
 
     int status = await bg.BackgroundGeolocation.requestPermission();
     print("[requestPermission] status: $status");
