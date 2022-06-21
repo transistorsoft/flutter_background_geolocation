@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 4.7.0 &mdash; Unreleased
+## 4.7.0 &mdash; 2022-06-21
 * [Android] Fix bug in `onProviderChange` event:  not properly detecting when location-services disabled.
 * [Android] __Android 12__:  Guard `Context.startForegroundService` with `try / catch`: the plugin will now catch exception `ForegroundServiceStartNotAllowedException` and automatically retry with an `AlarmManager` *oneShot* event.
 * [Android] __Android 12__: Refactor foreground-service management for Android 12:  A way has been found to restore the traditional behaviour of foreground-services, allowing them to stop when no longer required (eg: where the plugin is in the stationary state).
