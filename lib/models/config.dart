@@ -132,7 +132,7 @@ class Config {
   ///   => 30
   ///   multiplier = rounded_speed / 5
   ///   => 30 / 5 = 6
-  ///   adjusted_distance_filter = multiplier * distanceFilter * elasticityMultipiler
+  ///   adjusted_distance_filter = multiplier * distanceFilter * elasticityMultiplier
   ///   => 6 * 50 = 300 meters
   /// ```
   ///
