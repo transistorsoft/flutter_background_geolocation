@@ -1,10 +1,10 @@
 buildscript {
     ext {
-        kotlin_version     = '1.5.31'
-        compileSdkVersion   = 32
-        targetSdkVersion    = 31
-        appCompatVersion    = "1.4.1"
-        playServicesLocationVersion = "19.0.1"
+        kotlin_version     = '1.6.21'
+        compileSdkVersion   = 33
+        targetSdkVersion    = 33
+        appCompatVersion    = "1.4.2"
+        playServicesLocationVersion = "20.0.0"
         removeBackgroundGeolocationDebugSoundsInRelease = false
     }
     repositories {
@@ -13,7 +13,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.android.tools.build:gradle:7.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }

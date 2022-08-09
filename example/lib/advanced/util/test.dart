@@ -395,9 +395,11 @@ class Test {
             positiveAction: 'Change to "{backgroundPermissionOptionLabel}"',
             negativeAction: 'Cancel'),
         notification: bg.Notification(
+            sticky: false,
             layout: 'notification_layout',
             actions: ["notificationButtonFoo", "notificationButtonBar"]),
         schedule: schedule,
+        scheduleUseAlarmManager: true,
         extras: {"foo": "bar"},
         autoSync: true,
         geofenceModeHighAccuracy: true,
@@ -415,7 +417,7 @@ class Test {
 
     // If provided a schedule, start the schedule.
     if (state.schedule.isNotEmpty) {
-      bg.BackgroundGeolocation.startSchedule();
+      await bg.BackgroundGeolocation.startSchedule();
     }
   }
 
