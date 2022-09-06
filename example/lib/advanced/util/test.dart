@@ -326,7 +326,7 @@ class Test {
           longitude: item['longitude'],
           radius: item['radius'],
           loiteringDelay: 10000,
-          notifyOnDwell: true,
+          notifyOnDwell: false,
           notifyOnEntry: true,
           notifyOnExit: true,
           extras: item['extras']));

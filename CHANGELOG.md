@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.7.2 &mdash; 2022-09-06
+* Add new iOS 15 `CLLocation` attribute `Location.ellipsoidal_altitude` *The altitude as a height above the World Geodetic System 1984 (WGS84) ellipsoid, measured in meters*.  Android `Location.altitude` has always returned *ellipsoidal altutude*, so both `Location.altitude` and `Location.ellipsoidal_altitude` will return the same value.
+
 ## 4.7.1 &mdash; 2022-08-08
 * [Android] Fix `java.lang.IllegalArgumentException `TSProviderManager.handleProviderChangeEvent`.
 * [Android] `startOnBoot: false` with `stopOnTerminate: false` could start-on-boot.
