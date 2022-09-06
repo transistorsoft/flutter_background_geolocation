@@ -36,8 +36,13 @@ class Coords {
   /// Accuracy in meters.
   late double accuracy;
 
-  /// Altitude above sea-level in meters.
+  /// [iOS] Altitude above sea-level in meters.
+  /// [Android] The altitude of this location in meters above the WGS84 reference ellipsoid.
+  /// - See [ellipsoidal_altitude]
   late double altitude;
+
+  /// The altitude of this location in meters above the WGS84 reference ellipsoid.
+  late double ellipsoidal_altitude;
 
   /// Heading in degrees.
   /// ⚠️ Note:  Only present when location came from GPS.  `-1` otherwise.
@@ -80,6 +85,7 @@ class Coords {
     this.longitude = coords['longitude'] * 1.0;
     this.accuracy = coords['accuracy'] * 1.0;
     this.altitude = coords['altitude'] * 1.0;
+    this.ellipsoidal_altitude = coords['ellipsoidal_altitude'] * 1.0;
     this.heading = coords['heading'] * 1.0;
     if (coords['heading_accuracy'] != null) {
       this.headingAccuracy = coords['heading_accuracy'] * 1.0;
