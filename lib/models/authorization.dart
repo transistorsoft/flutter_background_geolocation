@@ -67,6 +67,7 @@ class Authorization {
   static const String _REFRESH_URL = "refreshUrl";
   static const String _REFRESH_TOKEN = "refreshToken";
   static const String _REFRESH_PAYLOAD = "refreshPayload";
+  static const String _REFRESH_HEADERS = "refreshHeaders";
   static const String _EXPIRES = "expires";
 
   static const String STRATEGY_JWT = "jwt";
@@ -160,11 +161,11 @@ class Authorization {
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
   ///   authorization: Authorization(
-  ///     "strategy": "JWT",
-  ///     "accessToken": "XXX.YYY.ZZZ",
-  ///     "refreshUrl": "https://auth.domain.com/tokens",
-  ///     "refreshToken": "smTsfaspfgaadsfgqZerUt0wueflasdfkaxjdfeKIacb",
-  ///     "refreshPayload": {
+  ///     strategy: "JWT",
+  ///     accessToken: "XXX.YYY.ZZZ",
+  ///     refreshUrl: "https://auth.domain.com/tokens",
+  ///     refreshToken: "smTsfaspfgaadsfgqZerUt0wueflasdfkaxjdfeKIacb",
+  ///     refreshPayload: {
   ///       "my_refresh_token": "{refreshToken}", // <-- replaced with configured refreshToken above.
   ///       "grant_type": "refresh_token",        // <-- arbitrary fields required by your auth server
   ///       "foo": "another arbitrary field"
@@ -183,6 +184,34 @@ class Authorization {
   ///
   Map? refreshPayload;
 
+  /// Optional refreshHeaders applied on requests to [refreshUrl]
+  /// Defaults to: `{"Authorization":  "Bearer {accessToken}"}`
+  ///
+  /// The template variable `{accessToken}` will automatically be replaced with your app's current auth token.
+  ///
+  /// If you do not want *any* headers applied on requests to {refreshUrl}, provide an empty `{}`.
+  ///
+  /// ## Example
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.ready(Config(
+  ///   authorization: Authorization(
+  ///     strategy: "JWT",
+  ///     accessToken: "XXX.YYY.ZZZ",
+  ///     refreshUrl: "https://auth.domain.com/tokens",
+  ///     refreshToken: "smTsfaspfgaadsfgqZerUt0wueflasdfkaxjdfeKIacb",
+  ///     refreshPayload: {
+  ///       "my_refresh_token": "{refreshToken}", // <-- replaced with configured refreshToken above.
+  ///       "grant_type": "refresh_token",        // <-- arbitrary fields required by your auth server
+  ///       "foo": "another arbitrary field"
+  ///     },
+  ///     refreshHeaders: {}  // <-- Empty {} to provide no refreshHeaders.
+  ///   )
+  /// ));
+  /// ```
+  ///
+  Map? refreshHeaders;
+
   /// Token expiry time in seconds
   int? expires = -1;
 
@@ -195,6 +224,8 @@ class Authorization {
         refreshUrl: (map[_REFRESH_URL] != null) ? map[_REFRESH_URL] : null,
         refreshPayload:
             (map[_REFRESH_PAYLOAD] != null) ? map[_REFRESH_PAYLOAD] : null,
+        refreshHeaders:
+            (map[_REFRESH_HEADERS] != null) ? map[_REFRESH_HEADERS] : null,
         expires: (map[_EXPIRES] != null) ? _ensureInt(map[_EXPIRES]) : -1);
   }
 
@@ -203,6 +234,7 @@ class Authorization {
       this.accessToken,
       this.refreshToken,
       this.refreshPayload,
+      this.refreshHeaders,
       this.refreshUrl,
       this.expires = -1});
 
@@ -213,6 +245,7 @@ class Authorization {
       _REFRESH_TOKEN: refreshToken,
       _REFRESH_URL: refreshUrl,
       _REFRESH_PAYLOAD: refreshPayload,
+      _REFRESH_HEADERS: refreshHeaders,
       _EXPIRES: expires
     };
   }

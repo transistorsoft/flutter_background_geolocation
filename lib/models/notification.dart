@@ -375,6 +375,13 @@ class Notification {
   ///
   String? channelName;
 
+  /// Customize the notification channel ID.
+  /// Defaults to `your.package.name.TSLocationManager`
+  ///
+  /// It is not typically required to change this.  Typical use-cases are for users who use an existing Android foreground-service who wish the SDK to share an existing notification and channel.
+  ///
+  String? channelId;
+
   ///
   /// Custom strings to render into `<TextView />` elements of a custom notification [layout].
   ///
@@ -461,6 +468,7 @@ class Notification {
         priority: (map['priority'] != null) ? map['priority'] : null,
         sticky: (map['sticky'] != null) ? map['sticky'] : null,
         channelName: (map['channelName'] != null) ? map['channelName'] : null,
+        channelId: (map['channelId'] != null) ? map['channelId'] : null,
         strings: (map['strings'] != null)
             ? map['strings'].cast<String, String>()
             : null,
@@ -474,6 +482,7 @@ class Notification {
       this.text,
       this.color,
       this.channelName,
+      this.channelId,
       this.smallIcon,
       this.largeIcon,
       this.priority,
@@ -489,6 +498,7 @@ class Notification {
       "text": text,
       "color": color,
       "channelName": channelName,
+      "channelId": channelId,
       "smallIcon": smallIcon,
       "largeIcon": largeIcon,
       "priority": priority,

@@ -326,7 +326,7 @@ class Test {
           longitude: item['longitude'],
           radius: item['radius'],
           loiteringDelay: 10000,
-          notifyOnDwell: false,
+          notifyOnDwell: true,
           notifyOnEntry: true,
           notifyOnExit: true,
           extras: item['extras']));
@@ -375,6 +375,7 @@ class Test {
     }
 
     state = await bg.BackgroundGeolocation.reset(bg.Config(
+        disableMotionActivityUpdates: false,
         debug: true,
         logLevel: bg.Config.LOG_LEVEL_VERBOSE,
         transistorAuthorizationToken: token,
@@ -397,8 +398,10 @@ class Test {
         notification: bg.Notification(
             sticky: false,
             layout: 'notification_layout',
+            channelId: 'my_channel_id',
             actions: ["notificationButtonFoo", "notificationButtonBar"]),
         schedule: schedule,
+
         scheduleUseAlarmManager: true,
         extras: {"foo": "bar"},
         autoSync: true,
