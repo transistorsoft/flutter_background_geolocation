@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 4.8.0 &mdash; 2022-09-29
+* [iOS] Build `TSLocationManager.xcframework` with *XCode 14*.
+* [Android] Add new Config Notification.channelId for custom customizing the NotificationChannel id.  Some use
+rs have an existing foreground-service and NotificationChannel so wish to have the plugin's foreground-service
+s share the same notification and channel.  This option should generally not be used.
+* [Android] Add permission `android.permission.POST_NOTIFICATIONS` for Android 13 (targetSdkVersion 33).  Requ
+ired to allow enabling notifications in Settings->Apps.
+* [Android] Add new Config option `Authorization.refreshHeaders` for full control over HTTP headers sent to `Authorization.refreshUrl` when refreshing auth token.
+* [Android] Add `null` check when executing `PowerManager.isPowerSaveMode()`
+* [Android] Add new `Config.disableProviderChangeRecord (default false)` to allow disabling the automatical HTTP POST of the `onProviderChange` location record.  Some users do not want this automatically uploaded locatio
+n whenever the state of location-services is changed (eg: Location-services disabled, Airplane mode, etc).
+* [Android] Fix bug with `disableMotionActivityUpdates: true` and calling `.start()` followed immediately by `.changePace(true)`.  The SDK would fail to enter the moving state, entering the stationary state instead.
+
 ## 4.7.2 &mdash; 2022-09-06
 * Add new iOS 15 `CLLocation` attribute `Location.ellipsoidal_altitude` *The altitude as a height above the World Geodetic System 1984 (WGS84) ellipsoid, measured in meters*.  Android `Location.altitude` has always returned *ellipsoidal altutude*, so both `Location.altitude` and `Location.ellipsoidal_altitude` will return the same value.
 
