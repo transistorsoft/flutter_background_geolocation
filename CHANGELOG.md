@@ -1,6 +1,7 @@
 # CHANGELOG
 
-## 4.7.3 &mdash; 2022-09-26
+## 4.8.0 &mdash; 2022-09-29
+* [iOS] Build `TSLocationManager.xcframework` with *XCode 14*.
 * [Android] Add new Config Notification.channelId for custom customizing the NotificationChannel id.  Some use
 rs have an existing foreground-service and NotificationChannel so wish to have the plugin's foreground-service
 s share the same notification and channel.  This option should generally not be used.
