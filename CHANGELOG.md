@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.8.1 &mdash; 2022-10-14
+* [iOS] Rebuild `TSLocationManager.xcframework` with *XCode 13*.
+* [Android] Remove obsolete steps from Android Setup instructions.
+
 ## 4.8.0 &mdash; 2022-09-29
 * [iOS] Build `TSLocationManager.xcframework` with *XCode 14*.
 * [Android] Add new Config Notification.channelId for custom customizing the NotificationChannel id.  Some use
