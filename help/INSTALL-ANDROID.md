@@ -30,19 +30,6 @@ Execution failed for task ':app:processDebugManifest'.
 ```
 
 
-## `android/gradle.properties`
-
-Ensure your app is [migrated to use AndroidX](https://flutter.dev/docs/development/packages-and-plugins/androidx-compatibility).
-
-:open_file_folder: `android/gradle.properties`:
-
-```diff
-org.gradle.jvmargs=-Xmx1536M
-+android.enableJetifier=true
-+android.useAndroidX=true
-
-```
-
 ## `android/build.gradle`
 
 As an app grows in complexity and imports a variety of 3rd-party modules, it helps to provide some key **"Global Gradle Configuration Properties"** which all modules can align their requested dependency versions to.  `flutter_background_geolocation` **is aware** of these variables and will align itself to them when detected.  One of the most common build errors comes from multiple 3rd-party modules importing different version of `play-services` or `support` libraries.
@@ -55,19 +42,9 @@ buildscript {
 +   ext {
 +       compileSdkVersion   = 31                // or higher
 +       targetSdkVersion    = 31                // or higher
-+       appCompatVersion    = "1.1.0"           // or higher
-+       playServicesLocationVersion = "19.0.1"  // or higher
++       appCompatVersion    = "1.4.2"           // or higher
++       playServicesLocationVersion = "20.0.0"  // or higher
 +   }
-
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-         // Of ALREADY HIGHER than 3.3.1, DO NOT CHANGE
-+        classpath 'com.android.tools.build:gradle:3.3.1' // Must use 3.3.1 or higher
-    }
 }
 
 allprojects {
@@ -124,36 +101,6 @@ android {
         }
     }
 }
-
-# Ensure AndroidX compatibility
-dependencies {
-     testImplementation 'junit:junit:4.12'
--    androidTestImplementation 'com.android.support.test:runner:1.0.2'
--    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-+    androidTestImplementation 'androidx.test:runner:1.1.1'                   // or higher
-+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'   // or higher
-}
-
-```
-
-## Android 10 and *When in Use* Location Authorization
-
-Android 10 introduces *When in Use* location authorization.  If you're building with `compileSdkVersion 29`, add the following elements to your **`AndroidManifest.xml`**.  This allows your app to continue location-tracking when location-services are initiated while your app is in the foreground.  For example:
-
-```javascript
-onClickStartTracking() {
-    // Initiate tracking while app is in foreground.
-    BackgroundGeolocation.changePace(true);
-}
-```
-
-```diff
-<manifest>
-    <application>
-+       <service android:name="com.transistorsoft.locationmanager.service.TrackingService" android:foregroundServiceType="location" />
-+       <service android:name="com.transistorsoft.locationmanager.service.LocationRequestService" android:foregroundServiceType="location" />
-    </application>
-</manifest>
 ```
 
 ## Configure your license

@@ -10,6 +10,7 @@ import android.util.Log;
 import androidx.core.content.ContextCompat;
 
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
+import com.transistorsoft.locationmanager.adapter.TSConfig;
 import com.transistorsoft.locationmanager.adapter.callback.TSBeforeInsertBlock;
 import com.transistorsoft.locationmanager.device.DeviceSettings;
 import com.transistorsoft.locationmanager.location.TSLocation;
@@ -42,10 +43,11 @@ public class Application  extends FlutterApplication {
 
         super.onCreate();
 
-
-        // Adding a custom beforeInsertBlock.  If your callback returns null, the insert into the plugin's SQLite db
-        // will be cancelled.  If there is no record inserted into SQLite, there will be no HTTP request.
-        /*
+        /**
+         * Adding a custom beforeInsertBlock.  If your callback returns null, the insert into the plugin's SQLite db
+         * will be cancelled.  If there is no record inserted into SQLite, there will be no HTTP request.
+         *
+        final TSConfig config = TSConfig.getInstance(this);
         BackgroundGeolocation.getInstance(this).setBeforeInsertBlock(new TSBeforeInsertBlock() {
             @Override
             public JSONObject onBeforeInsert(TSLocation tsLocation) {
@@ -60,10 +62,13 @@ public class Application  extends FlutterApplication {
                 //     doInsert = false;
                 // }
                 //
+                float odometer = config.getOdometer();
                 return (doInsert) ? tsLocation.toJson() : null;
             }
         });
-        */
+         *
+         *
+         */
     }
 }
 
