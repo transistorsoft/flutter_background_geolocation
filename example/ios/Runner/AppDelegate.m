@@ -1,6 +1,5 @@
 #include "AppDelegate.h"
 #include "GeneratedPluginRegistrant.h"
-#include <TSBackgroundFetch/TSBackgroundFetch.h>
 #include <TSLocationManager/TSLocationManager.h>
 
 #define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
@@ -30,6 +29,7 @@
         return (doInsert) ? [location toDictionary] : nil;
     };
      */
+    
     return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
