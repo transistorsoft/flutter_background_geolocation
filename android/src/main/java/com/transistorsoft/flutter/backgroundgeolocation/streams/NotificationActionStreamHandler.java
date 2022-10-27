@@ -5,7 +5,6 @@ import com.transistorsoft.locationmanager.adapter.callback.TSNotificationActionC
 
 import io.flutter.plugin.common.EventChannel;
 
-
 public class NotificationActionStreamHandler extends StreamHandler implements TSNotificationActionCallback, EventChannel.StreamHandler {
 
     public NotificationActionStreamHandler() {

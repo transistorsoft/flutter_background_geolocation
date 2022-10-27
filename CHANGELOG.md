@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.8.3 &mdash; 2022-10-27
+* [Android] add `@pragma('vm:entry-point') to lib's `_headlessCallbackDispatcher`, required for *release* builds on Flutter >= 3.3.0.
+
 ## 4.8.2  &mdash; 2022-10-26
 * [Android] Fix logic error with `getCurrentPosition` not respecting `timeout`.
 * [Android] `play-services:location` has [introduced a breaking change](https://developers.google.com/android/guides/releases#october_13_2022) in `v21`, breaking the plugin.  `googlePlayServicesLocationVersion` will be capped with a maximum of `v20`.  The next major release (`4.10.0`) will set a minimum required version of `v21`.

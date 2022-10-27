@@ -4,7 +4,6 @@ import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.callback.TSGeofencesChangeCallback;
 import com.transistorsoft.locationmanager.event.GeofencesChangeEvent;
 import com.transistorsoft.locationmanager.geofence.TSGeofenceManager;
-import com.transistorsoft.locationmanager.http.HttpService;
 
 import io.flutter.plugin.common.EventChannel;
 

@@ -1,6 +1,5 @@
 package com.transistorsoft.flutter.backgroundgeolocation.streams;
 
-
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.callback.TSHttpResponseCallback;
 import com.transistorsoft.locationmanager.http.HttpResponse;

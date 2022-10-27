@@ -1747,6 +1747,8 @@ class Config {
   /// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
   ///
   /// /// Receives all events from BackgroundGeolocation while app is terminated:
+  /// /// Be sure to annotate your callback function to avoid issues in release mode on Flutter >= 3.3.0
+  /// @pragma('vm:entry-point')
   /// void headlessTask(bg.HeadlessEvent headlessEvent) async {
   ///   print('[HeadlessTask]: ${headlessEvent}');
   ///

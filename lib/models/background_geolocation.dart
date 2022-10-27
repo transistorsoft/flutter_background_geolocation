@@ -1663,6 +1663,7 @@ class BackgroundGeolocation {
 
 /// Headless Callback Dispatcher
 ///
+@pragma('vm:entry-point')
 void _headlessCallbackDispatcher() {
   WidgetsFlutterBinding.ensureInitialized();
   const MethodChannel _headlessChannel =

@@ -1,13 +1,13 @@
 name: flutter_background_geolocation
 description: The most sophisticated background location tracking & geofencing module with battery-conscious motion-detection intelligence for iOS and Android.
-version: 4.8.2
+version: 4.8.3
 homepage: https://github.com/transistorsoft/flutter_background_geolocation
 
 dependencies:
   flutter:
     sdk: flutter
   collection: ^1.15.0
-  background_fetch: ^1.1.0
+  background_fetch: ^1.1.2
 
 flutter:
   plugin:
