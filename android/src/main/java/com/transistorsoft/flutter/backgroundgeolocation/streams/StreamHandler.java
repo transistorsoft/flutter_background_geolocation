@@ -3,13 +3,12 @@ package com.transistorsoft.flutter.backgroundgeolocation.streams;
 import android.content.Context;
 
 import com.transistorsoft.flutter.backgroundgeolocation.BackgroundGeolocationModule;
-import com.transistorsoft.flutter.backgroundgeolocation.FLTBackgroundGeolocationPlugin;
+
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.logger.TSLog;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
-import io.flutter.plugin.common.PluginRegistry;
 
 class StreamHandler implements EventChannel.StreamHandler{
     protected Context mContext;

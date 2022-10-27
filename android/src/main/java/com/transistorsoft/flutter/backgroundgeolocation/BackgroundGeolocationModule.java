@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -48,7 +47,6 @@ import com.transistorsoft.locationmanager.data.LocationModel;
 import com.transistorsoft.locationmanager.data.SQLQuery;
 import com.transistorsoft.locationmanager.device.DeviceInfo;
 import com.transistorsoft.locationmanager.device.DeviceSettingsRequest;
-import com.transistorsoft.locationmanager.event.LocationProviderChangeEvent;
 import com.transistorsoft.locationmanager.event.TerminateEvent;
 import com.transistorsoft.locationmanager.geofence.TSGeofence;
 import com.transistorsoft.locationmanager.location.TSCurrentPositionRequest;
@@ -110,7 +108,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     private boolean mIsInitialized  = false;
     private boolean mReady          = false;
-    private AtomicBoolean mIsAttachedToEngine = new AtomicBoolean(false);
+    private final AtomicBoolean mIsAttachedToEngine = new AtomicBoolean(false);
 
     private MethodChannel mMethodChannel;
     private final List<EventChannel.StreamHandler> mStreamHandlers = new ArrayList<>();
@@ -137,31 +135,33 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                 if (mActivity.hashCode() == activity.hashCode()) return;
                 mActivity.getApplication().unregisterActivityLifecycleCallbacks(this);
             }
+            activity.getApplication().registerActivityLifecycleCallbacks(this);
+
             mReady = false;
             mIsInitialized = false;
 
+            synchronized (mStreamHandlers) {
+                mStreamHandlers.add(new LocationStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new MotionChangeStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new ActivityChangeStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new GeofencesChangeStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new GeofenceStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new HeartbeatStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new HttpStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new ScheduleStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new ConnectivityChangeStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new EnabledChangeStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new ProviderChangeStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new PowerSaveChangeStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new NotificationActionStreamHandler().register(mContext, mMessenger));
+                mStreamHandlers.add(new AuthorizationStreamHandler().register(mContext, mMessenger));
+            }
+
             BackgroundGeolocation.getThreadPool().execute(new Runnable() {
                 @Override public void run() {
-                    // Init stream-handlers
                     BackgroundGeolocation adapter = BackgroundGeolocation.getInstance(activity);
                     adapter.setActivity(activity);
                     adapter.removeListeners();
-                    synchronized (mStreamHandlers) {
-                        mStreamHandlers.add(new LocationStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new MotionChangeStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new ActivityChangeStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new GeofencesChangeStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new GeofenceStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new HeartbeatStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new HttpStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new ScheduleStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new ConnectivityChangeStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new EnabledChangeStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new ProviderChangeStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new PowerSaveChangeStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new NotificationActionStreamHandler().register(mContext, mMessenger));
-                        mStreamHandlers.add(new AuthorizationStreamHandler().register(mContext, mMessenger));
-                    }
 
                     TSConfig config = TSConfig.getInstance(mContext.getApplicationContext());
                     config.useCLLocationAccuracy(true);
@@ -171,7 +171,6 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                             .commit();
                 }
             });
-            activity.getApplication().registerActivityLifecycleCallbacks(this);
         } else if (mActivity != null) {
             Application app = mActivity.getApplication();
             if (app != null) {

@@ -13,6 +13,7 @@ import 'config/transistor_auth.dart';
 import 'config/env.dart';
 
 /// Receive events from BackgroundGeolocation in Headless state.
+@pragma('vm:entry-point')
 void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
   print('📬 --> $headlessEvent');
 
@@ -104,6 +105,7 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
 }
 
 /// Receive events from BackgroundFetch in Headless state.
+@pragma('vm:entry-point')
 void backgroundFetchHeadlessTask(HeadlessTask task) async {
   String taskId = task.taskId;
 

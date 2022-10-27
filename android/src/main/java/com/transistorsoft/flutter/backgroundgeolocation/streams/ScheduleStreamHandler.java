@@ -1,6 +1,5 @@
 package com.transistorsoft.flutter.backgroundgeolocation.streams;
 
-
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.callback.TSScheduleCallback;
 import com.transistorsoft.locationmanager.scheduler.ScheduleEvent;
