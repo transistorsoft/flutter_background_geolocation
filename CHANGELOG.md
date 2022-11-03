@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.8.4 &mdash; 2022-11-03
+* [Fixed] Fixed bug in `onLocation` error-handler.  If multiple onLocation event-handlers are registered, only the first registered error callback would be executed (once for each listener) when a LocationError occurs.
+
 ## 4.8.3 &mdash; 2022-10-27
 * [Android] add `@pragma('vm:entry-point') to lib's `_headlessCallbackDispatcher`, required for *release* builds on Flutter >= 3.3.0.
 

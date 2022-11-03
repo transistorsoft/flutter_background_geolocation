@@ -27,7 +27,6 @@ const _EVENT_CHANNEL_AUTHORIZATION =
 class _Subscription {
   final StreamSubscription<dynamic> subscription;
   final Function callback;
-
   _Subscription(this.subscription, this.callback);
 }
 
@@ -1099,16 +1098,22 @@ class BackgroundGeolocation {
     if (_eventsLocation == null) {
       _eventsLocation = _eventChannelLocation
           .receiveBroadcastStream()
-          .handleError((dynamic error) {
-        if (failure != null) {
-          failure(new LocationError(error));
-        } else {
-          print(
-              '[BackgroundGeolocation onLocation] ‼️ Uncaught location error: $error.  You should provide a failure callback as 2nd argument.');
-        }
-      }).map((dynamic event) => new Location(event));
+          .map((dynamic event) => new Location(event));
     }
-    _registerSubscription(_eventsLocation!.listen(success), success);
+    _registerSubscription(
+        _eventsLocation!.listen(success, onError: (dynamic error) {
+          if (failure != null) {
+            failure(LocationError(error));
+          } else {
+            _onLocationError(LocationError(error));
+          }
+        }),
+        success);
+  }
+
+  static void _onLocationError(LocationError error) {
+    print(
+        '[BackgroundGeolocation onLocation] ‼️ Unhandled location error: $error.\nYou should provide a failure callback as 2nd argument to BackgroundGeolocation.onLocation.\nEg:  BackgroundGeolocation.onLocation(_onLocation, (LocationError error) {\n\t// Handle LocationError here.\n\tprint("[onLocation] ERROR: \$error");\n});');
   }
 
   /// Subscribe to changes in motion activity.
