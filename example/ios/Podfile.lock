@@ -1,11 +1,11 @@
 PODS:
-  - background_fetch (1.1.1):
+  - background_fetch (1.1.2):
     - Flutter
   - CocoaLumberjack (3.7.4):
     - CocoaLumberjack/Core (= 3.7.4)
   - CocoaLumberjack/Core (3.7.4)
   - Flutter (1.0.0)
-  - flutter_background_geolocation (4.8.2):
+  - flutter_background_geolocation (4.8.4):
     - CocoaLumberjack (~> 3.7.2)
     - Flutter
   - shared_preferences_ios (0.0.1):
@@ -37,10 +37,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  background_fetch: ef7bc433c96131e4f284d8616d2e0d4e18fa6af4
+  background_fetch: aaf8fc9d1da7f04e5373aabd4bb239704a5be6eb
   CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_background_geolocation: 7aa338e7294d96c615056d0ff87cc111c6873f3a
+  flutter_background_geolocation: 8f463888352134a07eac0b7d388bfa99419c3b01
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
   url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
 
