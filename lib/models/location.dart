@@ -150,6 +150,7 @@ class Activity {
   /// | `running`      |
   /// | `on_bicycle`   |
   /// | `in_vehicle`   |
+  /// | 'unknown`      |
   late String type;
 
   /// Confidence of the reported device motion activity in %.

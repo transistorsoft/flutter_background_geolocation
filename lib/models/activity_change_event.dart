@@ -20,7 +20,7 @@ class ActivityChangeEvent {
   /// | `running`      |
   /// | `on_bicycle`   |
   /// | `in_vehicle`   |
-  ///
+  /// | `unknown`      |
   final String activity;
 
   /// Confidence of the reported device motion activity in %.
