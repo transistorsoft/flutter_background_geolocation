@@ -317,12 +317,8 @@ class Location {
   }
 
   /// String representation of `Location` for `print` to logs.
-  String toString({compact: bool}) {
-    if (compact == true) {
-      return '[Location ${DateTime.parse(timestamp).toLocal()}, isMoving: $isMoving, sample: $sample, $coords]';
-    } else {
-      return '[Location ${map.toString()}]';
-    }
+  String toString() {
+    return '[Location ${map.toString()}]';
   }
 
   /// Return original `Map` recevied from native code.

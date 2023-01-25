@@ -237,9 +237,7 @@ class GeofenceEvent {
   }
 
   /// String representation of `GeofenceEvent` for `print` to logs.
-  String toString({compact: bool}) {
-    return (compact == true)
-        ? '$action: $identifier'
-        : '[GeofenceEvent identifier: $identifier, action: $action]';
+  String toString() {
+    return '[GeofenceEvent identifier: $identifier, action: $action]';
   }
 }

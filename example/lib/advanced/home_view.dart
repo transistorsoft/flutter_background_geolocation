@@ -303,7 +303,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     print('[${bg.Event.LOCATION}] - $location');
 
     setState(() {
-      events.insert(0, Event(bg.Event.LOCATION, location, location.toString(compact: true)));
+      events.insert(0, Event(bg.Event.LOCATION, location, location.toString()));
       _odometer = (location.odometer / 1000.0).toStringAsFixed(1);
     });
   }
@@ -319,7 +319,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     print('[${bg.Event.MOTIONCHANGE}] - $location');
 
     setState(() {
-      events.insert(0, Event(bg.Event.MOTIONCHANGE, location, location.toString(compact:true)));
+      events.insert(0, Event(bg.Event.MOTIONCHANGE, location, location.toString()));
       _isMoving = location.isMoving;
     });
   }
@@ -394,7 +394,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     });
 
     setState(() {
-      events.insert(0, Event(bg.Event.GEOFENCE, event, event.toString(compact: false)));
+      events.insert(0, Event(bg.Event.GEOFENCE, event, event.toString()));
     });
   }
 

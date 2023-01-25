@@ -2161,153 +2161,257 @@ class Config {
     if (distanceFilter != null) config['distanceFilter'] = distanceFilter;
     if (stationaryRadius != null) config['stationaryRadius'] = stationaryRadius;
     if (locationTimeout != null) config['locationTimeout'] = locationTimeout;
-    if (disableElasticity != null)
+    if (disableElasticity != null) {
       config['disableElasticity'] = disableElasticity;
-    if (elasticityMultiplier != null)
+    }
+    if (elasticityMultiplier != null) {
       config['elasticityMultiplier'] = elasticityMultiplier;
-    if (stopAfterElapsedMinutes != null)
+    }
+    if (stopAfterElapsedMinutes != null) {
       config['stopAfterElapsedMinutes'] = stopAfterElapsedMinutes;
-    if (geofenceProximityRadius != null)
+    }
+    if (geofenceProximityRadius != null) {
       config['geofenceProximityRadius'] = geofenceProximityRadius;
-    if (geofenceInitialTriggerEntry != null)
+    }
+    if (geofenceInitialTriggerEntry != null) {
       config['geofenceInitialTriggerEntry'] = geofenceInitialTriggerEntry;
-    if (desiredOdometerAccuracy != null)
+    }
+    if (desiredOdometerAccuracy != null) {
       config['desiredOdometerAccuracy'] = desiredOdometerAccuracy;
-    if (useSignificantChangesOnly != null)
+    }
+    if (useSignificantChangesOnly != null) {
       config['useSignificantChangesOnly'] = useSignificantChangesOnly;
+    }
     // ActivityRecognition
-    if (isMoving != null) config['isMoving'] = isMoving;
-    if (stopTimeout != null) config['stopTimeout'] = stopTimeout;
-    if (activityRecognitionInterval != null)
+    if (isMoving != null) {
+      config['isMoving'] = isMoving;
+    }
+    if (stopTimeout != null) {
+      config['stopTimeout'] = stopTimeout;
+    }
+    if (activityRecognitionInterval != null) {
       config['activityRecognitionInterval'] = activityRecognitionInterval;
-    if (minimumActivityRecognitionConfidence != null)
+    }
+    if (minimumActivityRecognitionConfidence != null) {
       config['minimumActivityRecognitionConfidence'] =
           minimumActivityRecognitionConfidence;
-    if (disableStopDetection != null)
+    }
+    if (disableStopDetection != null) {
       config['disableStopDetection'] = disableStopDetection;
-    if (stopOnStationary != null) config['stopOnStationary'] = stopOnStationary;
+    }
+    if (stopOnStationary != null) {
+      config['stopOnStationary'] = stopOnStationary;
+    }
     // HTTP & Persistence
-    if (url != null) config['url'] = url;
-    if (persistMode != null) config['persistMode'] = persistMode;
-    if (method != null) config['method'] = method;
-    if (httpRootProperty != null) config['httpRootProperty'] = httpRootProperty;
-    if (params != null) config['params'] = params;
-    if (headers != null) config['headers'] = headers;
-    if (extras != null) config['extras'] = extras;
-    if (autoSync != null) config['autoSync'] = autoSync;
-    if (disableAutoSyncOnCellular != null)
+    if (url != null) {
+      config['url'] = url;
+    }
+    if (persistMode != null) {
+      config['persistMode'] = persistMode;
+    }
+    if (method != null) {
+      config['method'] = method;
+    }
+    if (httpRootProperty != null) {
+      config['httpRootProperty'] = httpRootProperty;
+    }
+    if (params != null) {
+      config['params'] = params;
+    }
+    if (headers != null) {
+      config['headers'] = headers;
+    }
+    if (extras != null) {
+      config['extras'] = extras;
+    }
+    if (autoSync != null) {
+      config['autoSync'] = autoSync;
+    }
+    if (disableAutoSyncOnCellular != null) {
       config['disableAutoSyncOnCellular'] = disableAutoSyncOnCellular;
-    if (autoSyncThreshold != null)
+    }
+    if (autoSyncThreshold != null) {
       config['autoSyncThreshold'] = autoSyncThreshold;
-    if (batchSync != null) config['batchSync'] = batchSync;
-    if (maxBatchSize != null) config['maxBatchSize'] = maxBatchSize;
-    if (locationTemplate != null) config['locationTemplate'] = locationTemplate;
-    if (geofenceTemplate != null) config['geofenceTemplate'] = geofenceTemplate;
-    if (maxDaysToPersist != null) config['maxDaysToPersist'] = maxDaysToPersist;
-    if (maxRecordsToPersist != null)
+    }
+    if (batchSync != null) {
+      config['batchSync'] = batchSync;
+    }
+    if (maxBatchSize != null) {
+      config['maxBatchSize'] = maxBatchSize;
+    }
+    if (locationTemplate != null) {
+      config['locationTemplate'] = locationTemplate;
+    }
+    if (geofenceTemplate != null) {
+      config['geofenceTemplate'] = geofenceTemplate;
+    }
+    if (maxDaysToPersist != null) {
+      config['maxDaysToPersist'] = maxDaysToPersist;
+    }
+    if (maxRecordsToPersist != null) {
       config['maxRecordsToPersist'] = maxRecordsToPersist;
-    if (locationsOrderDirection != null)
+    }
+    if (locationsOrderDirection != null) {
       config['locationsOrderDirection'] = locationsOrderDirection;
-    if (httpTimeout != null) config['httpTimeout'] = httpTimeout;
-    if (authorization != null) config['authorization'] = authorization!.toMap();
+    }
+    if (httpTimeout != null) {
+      config['httpTimeout'] = httpTimeout;
+    }
+    if (authorization != null) {
+      config['authorization'] = authorization!.toMap();
+    }
     // Application
-    if (stopOnTerminate != null) config['stopOnTerminate'] = stopOnTerminate;
-    if (startOnBoot != null) config['startOnBoot'] = startOnBoot;
-    if (heartbeatInterval != null)
+    if (stopOnTerminate != null) {
+      config['stopOnTerminate'] = stopOnTerminate;
+    }
+    if (startOnBoot != null) {
+      config['startOnBoot'] = startOnBoot;
+    }
+    if (heartbeatInterval != null) {
       config['heartbeatInterval'] = heartbeatInterval;
-    if (schedule != null) config['schedule'] = schedule;
-    if (scheduleUseAlarmManager != null)
+    }
+    if (schedule != null) {
+      config['schedule'] = schedule;
+    }
+    if (scheduleUseAlarmManager != null) {
       config['scheduleUseAlarmManager'] = scheduleUseAlarmManager;
+    }
     // Logging & Debug
-    if (debug != null) config['debug'] = debug;
-    if (logLevel != null) config['logLevel'] = logLevel;
-    if (logMaxDays != null) config['logMaxDays'] = logMaxDays;
-    if (reset != null) config['reset'] = reset;
-
+    if (debug != null) {
+      config['debug'] = debug;
+    }
+    if (logLevel != null) {
+      config['logLevel'] = logLevel;
+    }
+    if (logMaxDays != null) {
+      config['logMaxDays'] = logMaxDays;
+    }
+    if (reset != null) {
+      config['reset'] = reset;
+    }
     ////
     // iOS Options
     //
 
     // Geolocation Options
-    if (pausesLocationUpdatesAutomatically != null)
+    if (pausesLocationUpdatesAutomatically != null) {
       config['pausesLocationUpdatesAutomatically'] =
           pausesLocationUpdatesAutomatically;
-    if (locationAuthorizationRequest != null)
+    }
+    if (locationAuthorizationRequest != null) {
       config['locationAuthorizationRequest'] = locationAuthorizationRequest;
-    if (locationAuthorizationAlert != null)
+    }
+    if (locationAuthorizationAlert != null) {
       config['locationAuthorizationAlert'] = locationAuthorizationAlert;
-    if (disableLocationAuthorizationAlert != null)
+    }
+    if (disableLocationAuthorizationAlert != null) {
       config['disableLocationAuthorizationAlert'] =
           disableLocationAuthorizationAlert;
-    if (showsBackgroundLocationIndicator != null)
+    }
+    if (showsBackgroundLocationIndicator != null) {
       config['showsBackgroundLocationIndicator'] =
           showsBackgroundLocationIndicator;
+    }
     // Activity Recognition Options
-    if (activityType != null) config['activityType'] = activityType;
-    if (stopDetectionDelay != null)
+    if (activityType != null) {
+      config['activityType'] = activityType;
+    }
+    if (stopDetectionDelay != null) {
       config['stopDetectionDelay'] = stopDetectionDelay;
-    if (disableMotionActivityUpdates != null)
+    }
+    if (disableMotionActivityUpdates != null) {
       config['disableMotionActivityUpdates'] = disableMotionActivityUpdates;
+    }
     // Application Options
-    if (preventSuspend != null) config['preventSuspend'] = preventSuspend;
-
+    if (preventSuspend != null) {
+      config['preventSuspend'] = preventSuspend;
+    }
     ////
     // Android Options
     //
 
     // Geolocation Options
-    if (locationUpdateInterval != null)
+    if (locationUpdateInterval != null) {
       config['locationUpdateInterval'] = locationUpdateInterval;
-    if (fastestLocationUpdateInterval != null)
+    }
+    if (fastestLocationUpdateInterval != null) {
       config['fastestLocationUpdateInterval'] = fastestLocationUpdateInterval;
-    if (deferTime != null) config['deferTime'] = deferTime;
-    if (allowIdenticalLocations != null)
+    }
+    if (deferTime != null) {
+      config['deferTime'] = deferTime;
+    }
+    if (allowIdenticalLocations != null) {
       config['allowIdenticalLocations'] = allowIdenticalLocations;
-    if (enableTimestampMeta != null)
+    }
+    if (enableTimestampMeta != null) {
       config['enableTimestampMeta'] = enableTimestampMeta;
-
-    if (speedJumpFilter != null) config['speedJumpFilter'] = speedJumpFilter;
+    }
+    if (speedJumpFilter != null) {
+      config['speedJumpFilter'] = speedJumpFilter;
+    }
     // Activity Recognition Options
-    if (triggerActivities != null)
+    if (triggerActivities != null) {
       config['triggerActivities'] = triggerActivities;
-    if (motionTriggerDelay != null)
+    }
+    if (motionTriggerDelay != null) {
       config['motionTriggerDelay'] = motionTriggerDelay;
-    if (geofenceModeHighAccuracy != null)
+    }
+    if (geofenceModeHighAccuracy != null) {
       config['geofenceModeHighAccuracy'] = geofenceModeHighAccuracy;
+    }
     // Application Options
-    if (enableHeadless != null) config['enableHeadless'] = enableHeadless;
-    if (foregroundService != null)
+    if (enableHeadless != null) {
+      config['enableHeadless'] = enableHeadless;
+    }
+    if (foregroundService != null) {
       config['foregroundService'] = foregroundService;
-    if (forceReloadOnLocationChange != null)
+    }
+    if (forceReloadOnLocationChange != null) {
       config['forceReloadOnLocationChange'] = forceReloadOnLocationChange;
-    if (forceReloadOnMotionChange != null)
+    }
+    if (forceReloadOnMotionChange != null) {
       config['forceReloadOnMotionChange'] = forceReloadOnMotionChange;
-    if (forceReloadOnGeofence != null)
+    }
+    if (forceReloadOnGeofence != null) {
       config['forceReloadOnGeofence'] = forceReloadOnGeofence;
-    if (forceReloadOnBoot != null)
+    }
+    if (forceReloadOnBoot != null) {
       config['forceReloadOnBoot'] = forceReloadOnBoot;
-    if (forceReloadOnHeartbeat != null)
+    }
+    if (forceReloadOnHeartbeat != null) {
       config['forceReloadOnHeartbeat'] = forceReloadOnHeartbeat;
-    if (forceReloadOnSchedule != null)
+    }
+    if (forceReloadOnSchedule != null) {
       config['forceReloadOnSchedule'] = forceReloadOnSchedule;
-    if (notificationPriority != null)
+    }
+    if (notificationPriority != null) {
       config['notificationPriority'] = notificationPriority;
-    if (notificationTitle != null)
+    }
+    if (notificationTitle != null) {
       config['notificationTitle'] = notificationTitle;
-    if (notificationText != null) config['notificationText'] = notificationText;
-    if (notificationColor != null)
+    }
+    if (notificationText != null) {
+      config['notificationText'] = notificationText;
+    }
+    if (notificationColor != null) {
       config['notificationColor'] = notificationColor;
-    if (notificationSmallIcon != null)
+    }
+    if (notificationSmallIcon != null) {
       config['notificationSmallIcon'] = notificationSmallIcon;
-    if (notificationLargeIcon != null)
+    }
+    if (notificationLargeIcon != null) {
       config['notificationLargeIcon'] = notificationLargeIcon;
-    if (notificationChannelName != null)
+    }
+    if (notificationChannelName != null) {
       config['notificationChannelName'] = notificationChannelName;
-    if (backgroundPermissionRationale != null)
+    }
+    if (backgroundPermissionRationale != null) {
       config['backgroundPermissionRationale'] =
           backgroundPermissionRationale!.toMap();
-    if (notification != null) config['notification'] = notification!.toMap();
-
+    }
+    if (notification != null) {
+      config['notification'] = notification!.toMap();
+    }
     // Detect obsolete notification* fields and re-map to Notification instance.
     if ((notificationPriority != null) ||
         (notificationText != null) ||
