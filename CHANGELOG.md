@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.8.7 &mdash; 2023-01-25
+* [Fixed] Resolve minor dart static analysis warnings (mostly to do with curly braces).
+
 ## 4.8.6 &mdash; 2023-01-19
 * [Changed] __Android__ Update `logback-android` version.
 

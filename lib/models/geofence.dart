@@ -58,14 +58,21 @@ class Geofence {
     params['radius'] = this.radius;
     params['latitude'] = this.latitude;
     params['longitude'] = this.longitude;
-    if (this.notifyOnEntry != null)
+    if (this.notifyOnEntry != null) {
       params['notifyOnEntry'] = this.notifyOnEntry;
-    if (this.notifyOnExit != null) params['notifyOnExit'] = this.notifyOnExit;
-    if (this.notifyOnDwell != null)
+    }
+    if (this.notifyOnExit != null) {
+      params['notifyOnExit'] = this.notifyOnExit;
+    }
+    if (this.notifyOnDwell != null) {
       params['notifyOnDwell'] = this.notifyOnDwell;
-    if (this.loiteringDelay != null)
+    }
+    if (this.loiteringDelay != null) {
       params['loiteringDelay'] = this.loiteringDelay;
-    if (this.extras != null) params['extras'] = this.extras;
+    }
+    if (this.extras != null) {
+      params['extras'] = this.extras;
+    }
     return params;
   }
 

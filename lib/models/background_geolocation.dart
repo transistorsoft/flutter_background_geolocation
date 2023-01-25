@@ -1663,7 +1663,6 @@ class BackgroundGeolocation {
 //  static Future<bool> stopWatchPosition() async {
 //    return await _methodChannel.invokeMethod('stopWatchPosition');
 //  }
-
 }
 
 /// Headless Callback Dispatcher
