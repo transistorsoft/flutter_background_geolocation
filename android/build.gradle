@@ -57,12 +57,10 @@ dependencies {
     def playServicesLocationVersion = safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
 
     def locationMajorVersion = playServicesLocationVersion.split('\\.')[0] as int
-    if (locationMajorVersion > 20) {
-        println("*****************************************************");
-        println("* [WARNING] background-geolocation requires a maximum googlePlayServicesLocationVersion of 20.0.0 due to breaking changes in v21");;
-        println("* googlePlayServicesLocationVersion has been overridden to $DEFAULT_PLAY_SERVICES_LOCATION_VERSION");
-        println("*****************************************************");
-        playServicesLocationVersion = DEFAULT_PLAY_SERVICES_LOCATION_VERSION
+    if (locationMajorVersion >= 21) {
+        api(group: 'com.transistorsoft', name:'tslocationmanager-v21', version: '+')
+    } else {
+        api(group: 'com.transistorsoft', name:'tslocationmanager', version: '+')
     }
 
     def appCompatVersion = safeExtGet('appCompatVersion', safeExtGet('supportLibVersion', DEFAULT_APP_COMPAT_VERSION))
@@ -72,14 +70,13 @@ dependencies {
     def lifeCycleRuntimeVersion = safeExtGet('lifeCycleRuntimeVersion', DEFAULT_LIFE_CYCLE_RUNTIME_VERSION)
     def lifeCycleExtensionsVersion = safeExtGet('lifeCycleExtensionsVersion', DEFAULT_LIFE_CYCLE_EXTENSIONS_VERSION)
 
-    api(group: 'com.transistorsoft', name:'tslocationmanager', version: '+')
-    implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
     implementation 'org.greenrobot:eventbus:3.3.1'
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation 'org.slf4j:slf4j-api:1.7.36'
     implementation 'com.github.tony19:logback-android:2.0.1'
     // android-permissions
     implementation "io.github.nishkarsh:android-permissions:$androidPermissionsVersion"
+    implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
     implementation "androidx.localbroadcastmanager:localbroadcastmanager:$localBroadcastManagerVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"
     // LifeCycleObserver

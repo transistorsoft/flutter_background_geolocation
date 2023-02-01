@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.9.0 &mdash; 2023-02-01
+* [Fixed][Android] Implement support for `play-services-location v21` (`ext.playServicesLocationVersion` in your `android/build.gradle`).  The plugin can now work with either `<= v20` or `>= v21`.
+
 ## 4.8.7 &mdash; 2023-01-25
 * [Fixed] Resolve minor dart static analysis warnings (mostly to do with curly braces).
 
