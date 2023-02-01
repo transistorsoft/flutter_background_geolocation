@@ -4,11 +4,11 @@ version: 4.8.2+44
 dependencies:
   flutter:
     sdk: flutter
-  flutter_map: ^0.13.1
-  flutter_speed_dial: ^6.0.0
-  http: ^0.13.0
+  flutter_map: ^3.1.0
+  flutter_speed_dial: ^6.2.0
+  http: ^0.13.5
 
-  shared_preferences: ^2.0.4
+  shared_preferences: ^2.0.17
   background_fetch: ^1.1.1
   url_launcher: ^6.0.2
 

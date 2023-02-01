@@ -248,7 +248,7 @@ class MapViewState extends State<MapView>
         radius: 20);
   }
 
-  void _onAddGeofence(LatLng latLng) {
+  void _onAddGeofence(pos, latLng) {
     bg.BackgroundGeolocation.playSound(
         util.Dialog.getSoundId("LONG_PRESS_ACTIVATE"));
 
@@ -269,11 +269,11 @@ class MapViewState extends State<MapView>
     return FlutterMap(
       mapController: _mapController,
       options: _mapOptions,
-      layers: [
-        new TileLayerOptions(
+      children: [
+        new TileLayer(
             urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             subdomains: ['a', 'b', 'c']),
-        new PolylineLayerOptions(
+        new PolylineLayer(
           polylines: [
             new Polyline(
               points: _polyline,
@@ -283,21 +283,21 @@ class MapViewState extends State<MapView>
           ],
         ),
         // Active geofence circles
-        new CircleLayerOptions(circles: _geofences),
+        new CircleLayer(circles: _geofences),
         // Big red stationary radius while in stationary state.
-        new CircleLayerOptions(circles: _stationaryMarker),
+        new CircleLayer(circles: _stationaryMarker),
         // Polyline joining last stationary location to motionchange:true location.
-        new PolylineLayerOptions(polylines: _motionChangePolylines),
+        new PolylineLayer(polylines: _motionChangePolylines),
         // Recorded locations.
-        new CircleLayerOptions(circles: _locations),
+        new CircleLayer(circles: _locations),
         // Small, red circles showing where motionchange:false events fired.
-        new CircleLayerOptions(circles: _stopLocations),
+        new CircleLayer(circles: _stopLocations),
         // Geofence events (edge marker, event location and polyline joining the two)
-        new CircleLayerOptions(circles: _geofenceEvents),
-        new PolylineLayerOptions(polylines: _geofenceEventPolylines),
-        new CircleLayerOptions(circles: _geofenceEventLocations),
-        new CircleLayerOptions(circles: _geofenceEventEdges),
-        new CircleLayerOptions(circles: _currentPosition),
+        new CircleLayer(circles: _geofenceEvents),
+        new PolylineLayer(polylines: _geofenceEventPolylines),
+        new CircleLayer(circles: _geofenceEventLocations),
+        new CircleLayer(circles: _geofenceEventEdges),
+        new CircleLayer(circles: _currentPosition),
       ],
     );
   }
