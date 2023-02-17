@@ -5,6 +5,7 @@ buildscript {
         targetSdkVersion    = 33
         appCompatVersion    = "1.4.2"
         playServicesLocationVersion = "21.0.1"
+        hmsLocationVersion  = "6.0.0.302"
         removeBackgroundGeolocationDebugSoundsInRelease = false
     }
     repositories {
