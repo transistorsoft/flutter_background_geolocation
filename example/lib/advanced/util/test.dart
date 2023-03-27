@@ -421,6 +421,8 @@ class Test {
     // If provided a schedule, start the schedule.
     if (state.schedule.isNotEmpty) {
       await bg.BackgroundGeolocation.startSchedule();
+    } else {
+      await bg.BackgroundGeolocation.stopSchedule();
     }
   }
 
