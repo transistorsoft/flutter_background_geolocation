@@ -805,7 +805,7 @@ const PLUGIN_SETTINGS = {
       'group': 'http',
       'dataType': 'integer',
       'inputType': 'select',
-      'values': [-1, 0, 1, 10, 100, 1000],
+      'values': [-1, 0, 1, 3, 10, 100],
       'defaultValue': -1
     },
     {

@@ -108,10 +108,8 @@ android {
 If you've not yet purchased a license to unlock Android, you can purchase one [here](https://www.transistorsoft.com/shop/products/flutter-background-geolocation).  Otherwise, ignore this step (Android is fully functional in **DEBUG** builds without a license key so you can evaluate the plugin).
 
 1. Login to Customer Dashboard to generate an application key:
-[www.transistorsoft.com/shop/customers](http://www.transistorsoft.com/shop/customers)
-![](https://gallery.mailchimp.com/e932ea68a1cb31b9ce2608656/images/b2696718-a77e-4f50-96a8-0b61d8019bac.png)
 
-2. Add your license-key to `android/app/src/main/AndroidManifest.xml`:
+2. Add your license-key to __`android/app/src/main/AndroidManifest.xml`__:
 
 ```diff
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -119,13 +117,34 @@ If you've not yet purchased a license to unlock Android, you can purchase one [h
 
   <application>
     <!-- flutter_background_geolocation licence -->
-+     <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="YOUR_LICENCE_KEY_HERE" />
++   <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="YOUR_LICENCE_KEY_HERE" />
     .
     .
     .
   </application>
 </manifest>
 ```
+
+### Huawei Mobile Services (HMS) Support
+
+If you've [purchased an *HMS Background Geolocation* License](https://shop.transistorsoft.com/collections/frontpage/products/huawei-background-geolocation) for installing the plugin on _Huawei_ devices without *Google Play Services* installed, add your *HMS Background Geolocation* license key:
+
+```diff
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.your.package.id">
+
+  <application>
+    <!-- flutter_background_geolocation licence -->
+    <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="YOUR_LICENCE_KEY_HERE" />
+    <!-- HMS Background Geolocation licence -->
++   <meta-data android:name="com.transistorsoft.locationmanager.hms.license" android:value="YOUR_HMS_LICENCE_KEY_HERE" />
+    .
+    .
+    .
+  </application>
+</manifest>
+```
+:warning: Huawei HMS support requires `flutter_background_geolocation >= 3.10.0`.
 
 ## Android Headless Mode with `enableHeadless: true`
 
