@@ -11,20 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.transistorsoft.xms.g.common.ExtensionApiAvailability;
 
-import com.transistorsoft.flutter.backgroundgeolocation.streams.ActivityChangeStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.AuthorizationStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.ConnectivityChangeStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.EnabledChangeStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.GeofenceStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.GeofencesChangeStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.HeartbeatStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.HttpStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.LocationStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.MotionChangeStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.NotificationActionStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.PowerSaveChangeStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.ProviderChangeStreamHandler;
-import com.transistorsoft.flutter.backgroundgeolocation.streams.ScheduleStreamHandler;
+import com.transistorsoft.flutter.backgroundgeolocation.streams.*;
+
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.TSConfig;
 import com.transistorsoft.locationmanager.adapter.callback.TSBackgroundTaskCallback;
@@ -462,7 +450,11 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
         builder.setCallback(new TSLocationCallback() {
             @Override public void onLocation(TSLocation tsLocation) {
-                result.success(tsLocation.toMap());
+                try {
+                    result.success(tsLocation.toMap());
+                } catch (JSONException e) {
+                    TSLog.logger.error(e.getMessage(), e);
+                }
             }
             @Override public void onError(Integer errorCode) {
                 result.error(errorCode.toString(), null, null);
@@ -496,7 +488,11 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
         builder.setCallback(new TSLocationCallback() {
             @Override public void onLocation(TSLocation tsLocation) {
-                result.success(tsLocation.toMap());
+                try {
+                    result.success(tsLocation.toMap());
+                } catch (JSONException e) {
+                    TSLog.logger.error(e.getMessage(), e);
+                }
             }
             @Override public void onError(Integer error) {
                 result.error(error.toString(), null, null);
@@ -617,7 +613,11 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     private void setOdometer(Double odometer, final MethodChannel.Result result) {
         BackgroundGeolocation.getInstance(mContext).setOdometer(odometer.floatValue(), new TSLocationCallback() {
             @Override public void onLocation(TSLocation location) {
-                result.success(location.toMap());
+                try {
+                    result.success(location.toMap());
+                } catch (JSONException e) {
+                    TSLog.logger.error(e.getMessage(), e);
+                }
             }
             @Override public void onError(Integer errorCode) {
                 result.error(errorCode.toString(), null, null);
