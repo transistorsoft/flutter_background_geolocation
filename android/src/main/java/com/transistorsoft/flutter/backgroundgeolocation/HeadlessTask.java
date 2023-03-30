@@ -124,7 +124,11 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
         if (name.equals(BackgroundGeolocation.EVENT_TERMINATE)) {
             result = event.getTerminateEvent();
         } else if (name.equals(BackgroundGeolocation.EVENT_LOCATION)) {
-            result = event.getLocationEvent().toJson();
+            try {
+                result = event.getLocationEvent().toJson();
+            } catch (JSONException e) {
+                TSLog.logger.error(e.getMessage(), e);
+            }
         } else if (name.equals(BackgroundGeolocation.EVENT_MOTIONCHANGE)) {
             result = event.getMotionChangeEvent().toJson();
         } else if (name.equals(BackgroundGeolocation.EVENT_HTTP)) {
