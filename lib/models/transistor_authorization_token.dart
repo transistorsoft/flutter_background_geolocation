@@ -33,7 +33,7 @@ part of flt_background_geolocation;
 class TransistorAuthorizationToken {
   static const String _DUMMY_TOKEN = "DUMMY_TOKEN";
   static const String _DEFAULT_TRANSISTOR_URL =
-      "http://tracker.transistorsoft.com";
+      "https://tracker.transistorsoft.com";
   static const String _LOCATIONS_PATH = "api/locations";
   static const String _REFRESH_TOKEN_PATH = "api/refresh_token";
   static const Map<String, String> _REFRESH_PAYLOAD = {
