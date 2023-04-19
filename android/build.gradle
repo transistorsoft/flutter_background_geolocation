@@ -20,6 +20,8 @@ def DEFAULT_ANDROID_PERMISSIONS_VERSION         = "2.1.6"
 def DEFAULT_LOCAL_BROADCAST_MANAGER_VERSION     = "1.1.0"
 def DEFAULT_LIFE_CYCLE_RUNTIME_VERSION          = "2.4.1"
 def DEFAULT_LIFE_CYCLE_EXTENSIONS_VERSION       = "2.2.0"
+def DEFAULT_LOGBACK_VERSION                     = "3.0.0"
+def DEFAULT_SLF4J_VERSION                       = "2.0.7"
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -53,6 +55,9 @@ dependencies {
     def lifeCycleRuntimeVersion = safeExtGet('lifeCycleRuntimeVersion', DEFAULT_LIFE_CYCLE_RUNTIME_VERSION)
     def lifeCycleExtensionsVersion = safeExtGet('lifeCycleExtensionsVersion', DEFAULT_LIFE_CYCLE_EXTENSIONS_VERSION)
 
+    def logbackVersion = safeExtGet('logbackVersion', DEFAULT_LOGBACK_VERSION);
+    def slf4jVersion = safeExtGet('slf4jVersion', DEFAULT_SLF4J_VERSION);
+
     // tslocationmanager requires a particular build based upon play-services-location version.
     def locationMajorVersion = playServicesLocationVersion.split('\\.')[0] as int
     if (locationMajorVersion >= 21) {
@@ -66,8 +71,9 @@ dependencies {
     // OKHttp
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     // logback-android
-    implementation 'org.slf4j:slf4j-api:1.7.36'
-    implementation 'com.github.tony19:logback-android:2.0.1'
+    implementation "com.github.tony19:logback-android:$logbackVersion"
+    implementation "org.slf4j:slf4j-api:$slf4jVersion"
+
     // android-permissions
     implementation "io.github.nishkarsh:android-permissions:$androidPermissionsVersion"
     // GMS location
