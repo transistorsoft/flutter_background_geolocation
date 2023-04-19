@@ -23,8 +23,12 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
       print("📬 didDeviceReboot: ${state.didDeviceReboot}");
       break;
     case bg.Event.TERMINATE:
+      bg.State state = await bg.BackgroundGeolocation.state;
+      if (state.stopOnTerminate) {
+        // Don't request getCurrentPosition when stopOnTerminate: true
+        return;
+      }
       try {
-
         bg.Location location =
             await bg.BackgroundGeolocation.getCurrentPosition(
                 samples: 1,
