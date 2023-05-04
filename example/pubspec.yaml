@@ -8,9 +8,9 @@ dependencies:
   flutter_speed_dial: ^6.2.0
   http: ^0.13.5
 
-  shared_preferences: ^2.0.17
+  shared_preferences: ^2.1.0
   background_fetch: ^1.1.1
-  url_launcher: ^6.0.2
+  url_launcher: ^6.1.10
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

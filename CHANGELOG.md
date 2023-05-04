@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.11.0 &mdash; 2023-05-04
+* [Android] Gradle v8 now requires `namespace` attribute in gradle files.
+* [iOS] iOS 16.4 made a major change to location-services, exposed only when `Config.showsBackgroundLocationIndicator` is `false` (the default).  As a result of this change, `Config.showsBackgroundLocationIndicator` will now default to `true`.
+
 ## 4.10.3 &mdash; 2023-04-19
 * [Android] Upgrade `logback-android` dependency to `3.0.0` (`org.slf4j-api` to `2.0.7).
 
