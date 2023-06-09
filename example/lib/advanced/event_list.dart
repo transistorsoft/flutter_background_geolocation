@@ -31,7 +31,7 @@ class EventListState extends State<EventList>
         color: Colors.white,
         padding: EdgeInsets.all(5.0),
         child: ListView.builder(
-            itemCount: events.events.length,
+            itemCount: events?.events.length,
             itemBuilder: (BuildContext context, int index) => InputDecorator(
                 decoration: InputDecoration(
                   //contentPadding: EdgeInsets.only(left: 5.0, top: 0.0, bottom: 5.0),
@@ -40,9 +40,9 @@ class EventListState extends State<EventList>
                       color: Colors.blue,
                       fontSize: 24.0,
                       fontWeight: FontWeight.bold),
-                  labelText: events.events[index].name,
+                  labelText: events?.events[index].name,
                 ),
-                child: Text(events.events[index].content,
+                child: Text(events!.events[index].content,
                     style: TextStyle(color: Colors.black, fontSize: 16.0)
                 )
             )

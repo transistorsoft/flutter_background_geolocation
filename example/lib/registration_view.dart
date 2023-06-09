@@ -17,10 +17,10 @@ class RegistrationView extends StatefulWidget {
 class _RegistrationViewState extends State<RegistrationView> {
   static const USERNAME_REGEXP = r"^[a-zA-Z0-9_-]*$";
 
-  bg.DeviceInfo _deviceInfo;
-  String _deviceId;
-  String _orgname;
-  String _username;
+  bg.DeviceInfo? _deviceInfo;
+  String? _deviceId;
+  String? _orgname;
+  String? _username;
 
   final _formKey = GlobalKey<FormState>();
   final _orgnameController = TextEditingController();
@@ -35,8 +35,8 @@ class _RegistrationViewState extends State<RegistrationView> {
   void _initPlatformState() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String orgname = prefs.getString('orgname');
-    String username = prefs.getString('username');
+    String? orgname = prefs.getString('orgname');
+    String? username = prefs.getString('username');
     setState(() {
       _orgname = (orgname != null) ? orgname : '';
       _username = (username != null) ? username : '';
@@ -58,23 +58,26 @@ class _RegistrationViewState extends State<RegistrationView> {
   void _onClickSave() async {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("CLOSE"));
     //Navigator.of(context).pop();
-    if (!_formKey.currentState.validate()) {
+    if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    _formKey.currentState.save();
+    _formKey.currentState?.save();
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("orgname", _orgname);
-    await prefs.setString("username", _username);
+    await prefs.setString("orgname", _orgname!);
+    await prefs.setString("username", _username!);
 
     await bg.TransistorAuthorizationToken.destroy(ENV.TRACKER_HOST);
+    /*
+
     bg.TransistorAuthorizationToken token =
         await bg.TransistorAuthorizationToken.findOrCreate(
-            _orgname, _username, ENV.TRACKER_HOST);
+            _orgname!, _username!, ENV.TRACKER_HOST);
 
     bg.BackgroundGeolocation.setConfig(
         bg.Config(transistorAuthorizationToken: token));
+    */
 
     Map result = {"orgname": _orgname, "username": _username};
     Navigator.pop(context, result);
@@ -93,11 +96,11 @@ class _RegistrationViewState extends State<RegistrationView> {
     }
 
     _orgnameController.value = TextEditingValue(
-        text: _orgname,
-        selection: TextSelection.collapsed(offset: _orgname.length));
+        text: _orgname!,
+        selection: TextSelection.collapsed(offset: _orgname!.length));
     _usernameController.value = TextEditingValue(
-        text: _username,
-        selection: TextSelection.collapsed(offset: _username.length));
+        text: _username!,
+        selection: TextSelection.collapsed(offset: _username!.length));
 
     return new Scaffold(
       appBar: new AppBar(
@@ -133,7 +136,7 @@ class _RegistrationViewState extends State<RegistrationView> {
               TextFormField(
                 controller: _orgnameController,
                 validator: (value) {
-                  if (!_usernameIsValid(value)) {
+                  if (!_usernameIsValid(value!)) {
                     return 'Invalid organization name.';
                   } else {
                     return null;
@@ -146,7 +149,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                 },
                 onSaved: (value) {
                   setState(() {
-                    _orgname = value;
+                    _orgname = value!;
                   });
                 },
                 //autofocus: true,
@@ -157,7 +160,7 @@ class _RegistrationViewState extends State<RegistrationView> {
               TextFormField(
                 controller: _usernameController,
                 validator: (value) {
-                  if (!_usernameIsValid(value)) {
+                  if (!_usernameIsValid(value!)) {
                     return 'Invalid username.';
                   } else {
                     return null;
@@ -170,7 +173,7 @@ class _RegistrationViewState extends State<RegistrationView> {
                 },
                 onSaved: (value) {
                   setState(() {
-                    _username = value;
+                    _username = value!;
                   });
                 },
                 autofocus: false,

@@ -24,7 +24,7 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
       break;
     case bg.Event.TERMINATE:
       bg.State state = await bg.BackgroundGeolocation.state;
-      if (state.stopOnTerminate) {
+      if (state.stopOnTerminate!) {
         // Don't request getCurrentPosition when stopOnTerminate: true
         return;
       }
@@ -138,7 +138,7 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   int count = 0;
   if (prefs.get("fetch-count") != null) {
-    count = prefs.getInt("fetch-count");
+    count = prefs.getInt("fetch-count")!;
   }
   prefs.setInt("fetch-count", ++count);
   print('[BackgroundFetch] count: $count');
@@ -155,12 +155,12 @@ void main() {
   /// - HomeApp
   ///
   SharedPreferences.getInstance().then((SharedPreferences prefs) {
-    String appName = prefs.getString("app");
+    String? appName = prefs.getString("app");
 
     // Sanitize old-style registration system that only required username.
     // If we find a valid username but null orgname, reverse them.
-    String orgname = prefs.getString("orgname");
-    String username = prefs.getString("username");
+    String? orgname = prefs.getString("orgname");
+    String? username = prefs.getString("username");
 
     if (orgname == null && username != null) {
       prefs.setString("orgname", username);

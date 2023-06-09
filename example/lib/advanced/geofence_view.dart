@@ -15,7 +15,7 @@ class GeofenceView extends StatefulWidget {
 
 class _GeofenceViewState extends State<GeofenceView> {
   LatLng center;
-  String _identifier;
+  String _identifier = "";
   double _radius = 200.0;
   bool _notifyOnEntry = true;
   bool _notifyOnExit = true;
@@ -92,9 +92,9 @@ class _GeofenceViewState extends State<GeofenceView> {
                       child: new DropdownButton(
                           value: _radius.toInt().toString(),
                           isDense: true,
-                          onChanged: (String value) {
+                          onChanged: (String? value) {
                             setState(() {
-                              _radius = double.parse(value);
+                              _radius = double.parse(value!);
                             });
                           },
                           items: [

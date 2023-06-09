@@ -37,7 +37,7 @@ class HelloWorldApp extends StatelessWidget {
 }
 
 class HelloWorldPage extends StatefulWidget {
-  HelloWorldPage({Key key}) : super(key: key);
+  HelloWorldPage({Key? key}) : super(key: key);
 
   @override
   _HelloWorldPageState createState() => new _HelloWorldPageState();
@@ -46,11 +46,11 @@ class HelloWorldPage extends StatefulWidget {
 class _HelloWorldPageState extends State<HelloWorldPage> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  bool _isMoving;
-  bool _enabled;
-  String _motionActivity;
-  String _odometer;
-  String _content;
+  late bool _isMoving;
+  late bool _enabled;
+  late String _motionActivity;
+  late String _odometer;
+  late String _content;
 
   @override
   void initState() {
@@ -64,10 +64,10 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
     _initPlatformState();
   }
 
-  Future<Null> _initPlatformState() async {
+  Future _initPlatformState() async {
     SharedPreferences prefs = await _prefs;
-    String orgname = prefs.getString("orgname");
-    String username = prefs.getString("username");
+    String? orgname = prefs.getString("orgname");
+    String? username = prefs.getString("username");
 
     // Sanity check orgname & username:  if invalid, go back to HomeApp to re-register device.
     if (orgname == null || username == null) {
@@ -117,7 +117,7 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
       print("[ready] ${state.toMap()}");
       setState(() {
         _enabled = state.enabled;
-        _isMoving = state.isMoving;
+        _isMoving = state.isMoving!;
       });
     }).catchError((error) {
       print('[ready] ERROR: $error');
@@ -131,7 +131,7 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
         print('[start] success $state');
         setState(() {
           _enabled = state.enabled;
-          _isMoving = state.isMoving;
+          _isMoving = state.isMoving!;
         });
       }).catchError((error) {
         print('[start] ERROR: $error');
@@ -142,7 +142,7 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
 
         setState(() {
           _enabled = state.enabled;
-          _isMoving = state.isMoving;
+          _isMoving = state.isMoving!;
         });
       });
     }

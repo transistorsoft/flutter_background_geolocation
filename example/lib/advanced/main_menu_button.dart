@@ -18,7 +18,7 @@ class MainMenuButton extends StatefulWidget {
 }
 
 class MainMenuButtonState extends State<MainMenuButton> {
-  BuildContext _context;
+  late BuildContext _context;
 
   void _onClickMenu() async {
 

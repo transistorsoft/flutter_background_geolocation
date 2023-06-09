@@ -111,9 +111,9 @@ class TransistorAuthorizationToken {
   /// ### ℹ️ See also:
   /// - [findOrCreate]
   ///
-  static Future<bool> destroy(String url) async {
+  static Future<bool?> destroy(String url) async {
     return await (_methodChannel.invokeMethod<bool>(
-        'destroyTransistorToken', url) as FutureOr<bool>);
+        'destroyTransistorToken', url) as FutureOr<bool?>);
   }
 
   /// Returns a *JSON Web Token* ([JWT](https://jwt.io/)) suitable for [Authorization] with the Transistor Software demo server at http://tracker.transistorsoft.com.

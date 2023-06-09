@@ -17,7 +17,7 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  bg.State _state;
+  bg.State? _state = null;
 
   // Categorized field-lists.
   List<Map> _geolocationSettings = [];
@@ -38,16 +38,16 @@ class _SettingsViewState extends State<SettingsView> {
 
     // Build list of available settings by plaform.
     List<Map> settings = [];
-    PLUGIN_SETTINGS['common'].forEach((Map item) {
+    PLUGIN_SETTINGS['common']?.forEach((Map item) {
       settings.add(item);
     });
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-      PLUGIN_SETTINGS['android'].forEach((Map item) {
+      PLUGIN_SETTINGS['android']?.forEach((Map item) {
         settings.add(item);
       });
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-      PLUGIN_SETTINGS['ios'].forEach((Map item) {
+      PLUGIN_SETTINGS['ios']?.forEach((Map item) {
         settings.add(item);
       });
     }
@@ -272,7 +272,7 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   SliverAppBar _buildListHeader(String title,
-      [List<PopupMenuItem<String>> menu]) {
+      [List<PopupMenuItem<String>>? menu]) {
     return new SliverAppBar(
       title: new Text(title),
       centerTitle: true,
@@ -301,9 +301,9 @@ class _SettingsViewState extends State<SettingsView> {
     );
   }
 
-  Widget _buildField(Map<String, Object> setting) {
-    String name = setting['name'];
-    String inputType = setting['inputType'];
+  Widget _buildField(Map<dynamic, dynamic> setting) {
+    Object? name = setting['name'];
+    Object? inputType = setting['inputType'];
     print('[buildField] - $name: $inputType');
     Widget field;
     switch (inputType) {
@@ -323,11 +323,12 @@ class _SettingsViewState extends State<SettingsView> {
     return field;
   }
 
-  Widget _buildSelectField(Map<String, Object> setting) {
+  Widget _buildSelectField(Map<dynamic, dynamic> setting) {
     List values = setting['values'];
-    List labels = setting['labels'];
+    List? labels = setting['labels'];
     String name = setting['name'];
-    dynamic value = _state.map[name];
+
+    dynamic value = _state?.map[name];
     if (value.runtimeType == double) {
       value = value.round();
     }
@@ -363,9 +364,9 @@ class _SettingsViewState extends State<SettingsView> {
                 onChanged: _createSelectChangeHandler(setting))));
   }
 
-  Widget _buildSwitchField(Map<String, Object> setting) {
+  Widget _buildSwitchField(Map setting) {
     String name = setting['name'];
-    bool value = _state.map[name];
+    bool value = _state?.map[name];
     return InputDecorator(
         decoration: InputDecoration(
           contentPadding: EdgeInsets.only(top: 0.0, left: 10.0, bottom: 0.0),
@@ -387,9 +388,9 @@ class _SettingsViewState extends State<SettingsView> {
         ]));
   }
 
-  Widget _buildTextField(Map<String, Object> setting) {
+  Widget _buildTextField(Map setting) {
     String name = setting['name'];
-    String value = _state.map[name];
+    String value = _state?.map[name];
 
     return GestureDetector(
         onTap: () async {
@@ -480,9 +481,9 @@ class _SettingsViewState extends State<SettingsView> {
                         isDense: true,
                         value: _radius.toInt().toString(),
                         items: radiusItems,
-                        onChanged: (String value) {
+                        onChanged: (String? value) {
                           setState(() {
-                            _radius = double.parse(value);
+                            _radius = double.parse(value!);
                           });
                         }))),
             InputDecorator(
@@ -569,9 +570,9 @@ class _SettingsViewState extends State<SettingsView> {
                         isDense: true,
                         value: _loiteringDelay.toString(),
                         items: loiteringDelayItems,
-                        onChanged: (String value) {
+                        onChanged: (String? value) {
                           setState(() {
-                            _loiteringDelay = int.parse(value);
+                            _loiteringDelay = int.parse(value!);
                           });
                         }))),
           ]));
@@ -579,7 +580,7 @@ class _SettingsViewState extends State<SettingsView> {
         itemExtent: 330.0);
   }
 
-  Function(String) _createSelectChangeHandler(Map<String, Object> setting) {
+  void Function(String?) _createSelectChangeHandler(Map setting) {
     String type = setting['dataType'];
     String name = setting['name'];
     switch (name) {
@@ -592,8 +593,8 @@ class _SettingsViewState extends State<SettingsView> {
         dynamic onFailure = (error) {
           print('[Error] failed to start the plugin: $error');
         };
-        return (String value) {
-          int trackingMode = int.parse(value);
+        return (String? value) {
+          int trackingMode = int.parse(value!);
           if (trackingMode == 1) {
             bg.BackgroundGeolocation.start()
                 .then(onSuccess)
@@ -606,12 +607,12 @@ class _SettingsViewState extends State<SettingsView> {
         };
         break;
       default:
-        return (String value) {
+        return (String? value) {
           bg.Config config = new bg.Config();
           print("select value: $name: $value");
           switch (type) {
             case 'integer':
-              config.set(name, int.parse(value));
+              config.set(name, int.parse(value!));
               break;
             default:
               config.set(name, value);

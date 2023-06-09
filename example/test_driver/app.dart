@@ -16,7 +16,7 @@ import 'dart:convert';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 
 // Global ref to TestApp.  It's ugly but we're just testing.  This is so the function #testHandler can reference the TestApp.
-TestApp app;
+TestApp? app;
 
 ///
 /// - Boot the TestApp.
@@ -38,14 +38,14 @@ void main() async {
 
   // Register #testHanlder Function (@see below) to receive test-actions from app_test.dart
   enableFlutterDriverExtension(handler: testHandler);
-  runApp(app);
+  runApp(app as Widget);
 }
 
 ///
 /// This is where the test requests from TestDriver in app_test.dart are received
 ///
-Future<String> testHandler(String command) async {
-    Action action = new Action(command: command);
+Future<String> testHandler(String? command) async {
+    Action action = new Action(command: command!);
 
     print("FlutterDriverExtension Rx: $command");
 
@@ -62,13 +62,13 @@ Future<String> testHandler(String command) async {
       case 'getState':
         bg.State state = await bg.BackgroundGeolocation.state;
         action.result = state;
-        app.addAction(action);
+        app?.addAction(action);
         return state.toString();
         break;
       case 'getCurrentPosition':
         bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
         action.result = location;
-        app.addAction(action);
+        app?.addAction(action);
         return location.toString();
         break;
       case 'getGeofences':
@@ -87,40 +87,40 @@ Future<String> testHandler(String command) async {
           rs.add(geofence.toMap());
         });
         action.result = rs;
-        app.addAction(action);
+        app?.addAction(action);
         return jsonEncode(rs);
         break;
       case 'start':
         bg.State state = await bg.BackgroundGeolocation.start();
         action.result = state;
-        app.addAction(action);
+        app?.addAction(action);
         return state.toString();
         break;
       case 'onLocation':
         Completer completer = new Completer<String>();
         bg.BackgroundGeolocation.onLocation((bg.Location location) {
           action.result = location;
-          app.addAction(action);
+          app?.addAction(action);
           completer.complete(location.toString());
         });
         bg.BackgroundGeolocation.start();
-        return completer.future;
+        return completer.future as String;
         break;
       case 'onMotionChange':
         Completer completer = new Completer<String>();
         bg.BackgroundGeolocation.onMotionChange((bg.Location location) {
           action.result = location;
-          app.addAction(action);
+          app?.addAction(action);
           completer.complete(location.toString());
         });
         bg.BackgroundGeolocation.start();
-        return completer.future;
+        return completer.future as String;
         break;
       case 'onGeofence':
         Completer completer = new Completer<String>();
         bg.BackgroundGeolocation.onGeofence((bg.GeofenceEvent event) {
           action.result = event;
-          app.addAction(action);
+          app?.addAction(action);
           completer.complete(event.toString());
         });
 
@@ -140,24 +140,24 @@ Future<String> testHandler(String command) async {
         Completer completer = new Completer<String>();
         bg.BackgroundGeolocation.onEnabledChange((bool enabled) {
           action.result = enabled;
-          app.addAction(action);
+          app?.addAction(action);
           completer.complete(enabled.toString());
         });
         await bg.BackgroundGeolocation.start();
-        return completer.future;
+        return completer.future as String;
         break;
       case 'onEnabledChange:false':
         Completer completer = new Completer<String>();
         bg.BackgroundGeolocation.onEnabledChange((bool enabled) {
           if (enabled == false) {
             action.result = enabled;
-            app.addAction(action);
+            app?.addAction(action);
             completer.complete(enabled.toString());
           }
         });
         await bg.BackgroundGeolocation.start();
         await bg.BackgroundGeolocation.stop();
-        return completer.future;
+        return completer.future as String;
         break;
       case 'onHttp':
         Completer completer = new Completer<String>();
@@ -175,11 +175,11 @@ Future<String> testHandler(String command) async {
 
         bg.BackgroundGeolocation.onHttp((bg.HttpEvent event) {
           action.result = event;
-          app.addAction(action);
+          app?.addAction(action);
           completer.complete(event.toString());
         });
         bg.BackgroundGeolocation.start();
-        return completer.future;
+        return completer.future as String;
         break;
       case 'onHttp:404':
         Completer completer = new Completer<String>();
@@ -197,18 +197,18 @@ Future<String> testHandler(String command) async {
 
         bg.BackgroundGeolocation.onHttp((bg.HttpEvent event) {
           action.result = event;
-          app.addAction(action);
+          app?.addAction(action);
           completer.complete(event.toString());
         });
         bg.BackgroundGeolocation.start();
-        return completer.future;
+        return completer.future as String;
         break;
       case 'getCount':
         await bg.BackgroundGeolocation.destroyLocations();
         await bg.BackgroundGeolocation.getCurrentPosition(samples: 1, persist: true);
         int count = await bg.BackgroundGeolocation.count;
         action.result = count;
-        app.addAction(action);
+        app?.addAction(action);
         return count.toString();
         break;
       case 'destroyLocations':
@@ -217,7 +217,7 @@ Future<String> testHandler(String command) async {
         print("destroyLocations: " + result.toString());
         int count = await bg.BackgroundGeolocation.count;
         action.result = count;
-        app.addAction(action);
+        app?.addAction(action);
         return count.toString();
         break;
       default:
@@ -234,7 +234,7 @@ Future<String> testHandler(String command) async {
 class Action {
   String command;
   dynamic result;
-  Action({this.command, this.result});
+  Action({required this.command, this.result});
 }
 
 ///
@@ -242,7 +242,7 @@ class Action {
 /// Layout a simple test-app to run the actions and render the results.
 ///
 class TestApp extends StatefulWidget {
-  _TestAppState _state;
+  late _TestAppState _state;
 
   @override
 
@@ -260,7 +260,7 @@ class TestApp extends StatefulWidget {
 /// class _TestAppState
 ///
 class _TestAppState extends State<TestApp> {
-  List<Action> _actions;
+  late List<Action> _actions;
 
   void addAction(Action action) {
     setState(() {
@@ -278,9 +278,9 @@ class _TestAppState extends State<TestApp> {
   Widget build(BuildContext context) {
     return new MaterialApp(
         theme: Theme.of(context).copyWith(
-            accentColor: Colors.black,
+            //accentColor: Colors.black,
             primaryColor: Colors.black,
-            cursorColor: Colors.white,
+            //cursorColor: Colors.white,
             backgroundColor: Colors.black,
             primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
                 bodyColor: Colors.white

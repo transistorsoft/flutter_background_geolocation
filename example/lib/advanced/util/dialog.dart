@@ -71,7 +71,7 @@ class Dialog {
   }
 
   static void alert(BuildContext context, String title, String message,
-      [Function callback]) {
+      [Function? callback]) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -95,8 +95,8 @@ class Dialog {
     );
   }
 
-  static Future<String> prompt(BuildContext context,
-      {String title, String labelText, String hintText, String value}) {
+  static Future prompt(BuildContext context,
+      {required String title, required String labelText, required String hintText, required String value}) {
     TextEditingController controller = new TextEditingController(text: value);
 
     Completer completer = new Completer<String>();
@@ -150,7 +150,7 @@ class Dialog {
     return completer.future;
   }
 
-  static Future<CircularProgressIndicator> showLoading(
+  static Future showLoading(
       BuildContext context, String message) {
     return showDialog(
         context: context,
@@ -164,7 +164,7 @@ class Dialog {
   static dynamic getSoundId(String key) {
     key = key.toUpperCase();
     dynamic soundId = -1;
-    Map<String, Object> soundMap;
+    Map<String, Object>? soundMap;
     if (defaultTargetPlatform == TargetPlatform.android) {
       soundMap = SOUND_MAP["android"];
     } else if (defaultTargetPlatform == TargetPlatform.iOS) {

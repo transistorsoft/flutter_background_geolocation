@@ -63,14 +63,14 @@ class Actions {
   static void emailLog(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    String email = prefs.getString("email");
+    String? email = prefs.getString("email");
     if (email == null) {
       email = "";
     }
     email = await util.Dialog.prompt(context,
-        title: "Email log", labelText: 'Email', value: email);
-    if (email.length > 0) {
-      prefs.setString("email", email);
+        title: "Email log", labelText: 'Email', value: email, hintText: '');
+    if (email!.length > 0) {
+      prefs.setString("email", email!);
       util.Dialog.alert(context, 'Email log',
           'The log will be processed in the background (it can take some time depending on the size of the log).  Your email client will launch when ready.');
 
