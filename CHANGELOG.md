@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 4.11.1 &mdash; 2023-06-09
+* Fix nullsafety issue in `TransistorAuthorizationToken.destroy`.
+* [Android] Log `ApiException.getStatusCode()` if native `addGeofence` method fails.
+* Update /example app for full nullsafety.
+
 ## 4.11.0 &mdash; 2023-05-04
 * [Android] Gradle v8 now requires `namespace` attribute in gradle files.
 * [iOS] iOS 16.4 made a major change to location-services, exposed only when `Config.showsBackgroundLocationIndicator` is `false` (the default).  As a result of this change, `Config.showsBackgroundLocationIndicator` will now default to `true`.

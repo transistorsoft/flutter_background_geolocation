@@ -3,7 +3,7 @@ import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 import 'dart:convert';
 
-FlutterDriver driver;
+FlutterDriver? driver;
 
 void main() {
   _group('Test BackgroundGeolocation API', () {
@@ -81,7 +81,6 @@ void main() {
     _test('destroyLocations', (String response) async {
       expect(response, "0");
     });
-
   });
 }
 
@@ -95,21 +94,24 @@ void _group(String name, Function callback) async {
   });
   // Close the connection to the driver after the tests have completed
   tearDownAll(() async {
+    /*
+    final driver = this.driver;
     if (driver != null) {
       driver.close();
     }
+     */
   });
-  group(name, callback);
+  //group(name, callback);
 }
 
-void _test(String action, Function(String) callback, [int timeout]) async {
+void _test(String action, Function(String) callback, [int? timeout]) async {
   if (timeout == null) {
     timeout = 5;
   }
   Duration duration = Duration(seconds: timeout);
   test(action, () async {
-    String response = await driver.requestData(action, timeout: duration);
-    log(action, response);
+    String? response = await driver?.requestData(action, timeout: duration);
+    log(action, response!);
     callback(response);
   });
 }

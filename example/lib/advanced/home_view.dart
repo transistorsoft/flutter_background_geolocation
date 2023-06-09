@@ -28,18 +28,18 @@ class HomeView extends StatefulWidget {
 
 class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeView>, WidgetsBindingObserver {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  TabController _tabController;
+  TabController? _tabController;
 
-  bool _isMoving;
-  bool _enabled;
-  String _motionActivity;
-  String _odometer;
+  bool? _isMoving;
+  bool? _enabled;
+  String? _motionActivity;
+  String? _odometer;
 
-  DateTime _lastRequestedTemporaryFullAccuracy;
+  DateTime? _lastRequestedTemporaryFullAccuracy;
 
   /// My private test mode.  IGNORE.
-  int _testModeClicks;
-  Timer _testModeTimer;
+  int _testModeClicks = 0;
+  Timer? _testModeTimer;
 
   List<Event> events = [];
 
@@ -60,7 +60,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         initialIndex: 0,
         vsync: this
     );
-    _tabController.addListener(_handleTabChange);
+    _tabController?.addListener(_handleTabChange);
 
     initPlatformState();
   }
@@ -79,9 +79,10 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       */
 
     } else if (state == AppLifecycleState.resumed) {
-      if (!_enabled) return;
+      if (!_enabled!) return;
 
       DateTime now = DateTime.now();
+      var _lastRequestedTemporaryFullAccuracy = this._lastRequestedTemporaryFullAccuracy;
       if (_lastRequestedTemporaryFullAccuracy != null) {
         Duration dt = _lastRequestedTemporaryFullAccuracy.difference(now);
         if (dt.inSeconds < 10) return;
@@ -94,8 +95,8 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
   void initPlatformState() async {
     SharedPreferences prefs = await _prefs;
-    String orgname = prefs.getString("orgname");
-    String username = prefs.getString("username");
+    String? orgname = prefs.getString("orgname");
+    String? username = prefs.getString("username");
 
     // Sanity check orgname & username:  if invalid, go back to HomeApp to re-register device.
     if (orgname == null || username == null) {
@@ -152,7 +153,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     )).then((bg.State state) async {
       print('[ready] ${state.toMap()}');
       print('[didDeviceReboot] ${state.didDeviceReboot}');
-      if (state.schedule.isNotEmpty) {
+      if (state.schedule!.isNotEmpty) {
         bg.BackgroundGeolocation.startSchedule();
       }
       setState(() {
@@ -165,12 +166,12 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     // Fetch currently selected tab.
     SharedPreferences prefs = await _prefs;
-    int tabIndex = prefs.getInt("tabIndex");
+    int? tabIndex = prefs.getInt("tabIndex");
 
     // Which tab to view?  MapView || EventList.   Must wait until after build before switching tab or bad things happen.
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (tabIndex != null) {
-        _tabController.animateTo(tabIndex);
+        _tabController?.animateTo(tabIndex);
       }
     });
   }
@@ -193,7 +194,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       SharedPreferences prefs = await SharedPreferences.getInstance();
       int count = 0;
       if (prefs.get("fetch-count") != null) {
-        count = prefs.getInt("fetch-count");
+        count = prefs.getInt("fetch-count")!;
       }
       prefs.setInt("fetch-count", ++count);
       print('[BackgroundFetch] count: $count');
@@ -258,11 +259,11 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   // Manually toggle the tracking state:  moving vs stationary
   void _onClickChangePace() {
     setState(() {
-      _isMoving = !_isMoving;
+      _isMoving = !_isMoving!;
     });
     print("[onClickChangePace] -> $_isMoving");
 
-    bg.BackgroundGeolocation.changePace(_isMoving).then((bool isMoving) {
+    bg.BackgroundGeolocation.changePace(_isMoving!).then((bool isMoving) {
       print('[changePace] success $isMoving');
     }).catchError((e) {
       print('[changePace] ERROR: ' + e.code.toString());
@@ -382,7 +383,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       String url = "${ENV.TRACKER_HOST}/api/devices";
       bg.State state = await bg.BackgroundGeolocation.state;
       http.read(Uri.parse(url), headers: {
-        "Authorization": "Bearer ${state.authorization.accessToken}"
+        "Authorization": "Bearer ${state.authorization?.accessToken}"
       }).then((String result) {
         print("[http test] success: $result");
         bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("TEST_MODE_CLICK"));
@@ -442,7 +443,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
           backgroundColor: Theme.of(context).bottomAppBarColor,
           foregroundColor: Colors.black,
           actions: <Widget>[
-            Switch(value: _enabled, onChanged: _onClickEnable
+            Switch(value: _enabled!, onChanged: _onClickEnable
             ),
           ],
           bottom: TabBar(
@@ -486,8 +487,8 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
                     ),
                     MaterialButton(
                         minWidth: 50.0,
-                        child: Icon((_isMoving) ? Icons.pause : Icons.play_arrow, color: Colors.white),
-                        color: (_isMoving) ? Colors.red : Colors.green,
+                        child: Icon((_isMoving!) ? Icons.pause : Icons.play_arrow, color: Colors.white),
+                        color: (_isMoving!) ? Colors.red : Colors.green,
                         onPressed: _onClickChangePace
                     )
                   ]
@@ -507,6 +508,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("TEST_MODE_SUCCESS"));
       Test.applyTestConfig();
     }
+    var _testModeTimer = this._testModeTimer;
     if (_testModeTimer != null) {
       _testModeTimer.cancel();
     }
@@ -517,8 +519,8 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
   @override
   void dispose() {
-    _tabController.removeListener(_handleTabChange);
-    _tabController.dispose();
+    _tabController?.removeListener(_handleTabChange);
+    _tabController?.dispose();
     super.dispose();
 
     bg.BackgroundGeolocation.setOdometer(0.0).catchError((error) {
@@ -528,8 +530,8 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   }
 
   void _handleTabChange() async {
-    if (!_tabController.indexIsChanging) { return; }
+    if (!_tabController!.indexIsChanging) { return; }
     final SharedPreferences prefs = await _prefs;
-    prefs.setInt("tabIndex", _tabController.index);
+    prefs.setInt("tabIndex", _tabController!.index);
   }
 }

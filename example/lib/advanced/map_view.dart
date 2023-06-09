@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
+
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
 import 'package:flutter_map/flutter_map.dart';
@@ -21,7 +23,7 @@ class MapViewState extends State<MapView>
     return true;
   }
 
-  bg.Location _stationaryLocation;
+  late bg.Location _stationaryLocation;
 
   List<CircleMarker> _currentPosition = [];
   List<LatLng> _polyline = [];
@@ -37,8 +39,8 @@ class MapViewState extends State<MapView>
   List<Polyline> _geofenceEventPolylines = [];
 
   LatLng _center = new LatLng(51.5, -0.09);
-  MapController _mapController;
-  MapOptions _mapOptions;
+  late MapController _mapController;
+  late MapOptions _mapOptions;
 
   @override
   void initState() {
@@ -102,18 +104,17 @@ class MapViewState extends State<MapView>
   void _onGeofence(bg.GeofenceEvent event) async {
     bg.Logger.info('[onGeofence] Flutter received onGeofence event $event');
 
-    GeofenceMarker marker = _geofences.firstWhere(
+    GeofenceMarker? marker = _geofences.firstWhereOrNull(
         (GeofenceMarker marker) =>
-            marker.geofence.identifier == event.identifier,
-        orElse: () => null);
+            marker.geofence?.identifier == event.identifier);
     if (marker == null) {
       bool exists =
           await bg.BackgroundGeolocation.geofenceExists(event.identifier);
       if (exists) {
         // Maybe this is a boot from a geofence event and geofencechange hasn't yet fired
-        bg.Geofence geofence =
+        bg.Geofence? geofence =
             await bg.BackgroundGeolocation.getGeofence(event.identifier);
-        marker = GeofenceMarker(geofence);
+        marker = GeofenceMarker(geofence!);
         _geofences.add(marker);
       } else {
         print(
@@ -122,23 +123,22 @@ class MapViewState extends State<MapView>
       }
     }
 
-    bg.Geofence geofence = marker.geofence;
+    bg.Geofence? geofence = marker.geofence;
 
     // Render a new greyed-out geofence CircleMarker to show it's been fired but only if it hasn't been drawn yet.
     // since we can have multiple hits on the same geofence.  No point re-drawing the same hit circle twice.
-    GeofenceMarker eventMarker = _geofenceEvents.firstWhere(
+    GeofenceMarker? eventMarker = _geofenceEvents.firstWhereOrNull(
         (GeofenceMarker marker) =>
-            marker.geofence.identifier == event.identifier,
-        orElse: () => null);
+            marker.geofence?.identifier == event.identifier);
     if (eventMarker == null)
-      _geofenceEvents.add(GeofenceMarker(geofence, true));
+      _geofenceEvents.add(GeofenceMarker(geofence!, true));
 
     // Build geofence hit statistic markers:
     // 1.  A computed CircleMarker upon the edge of the geofence circle (red=exit, green=enter)
     // 2.  A CircleMarker for the actual location of the geofence event.
     // 3.  A black PolyLine joining the two above.
     bg.Location location = event.location;
-    LatLng center = new LatLng(geofence.latitude, geofence.longitude);
+    LatLng center = new LatLng(geofence!.latitude, geofence!.longitude);
     LatLng hit =
         new LatLng(location.coords.latitude, location.coords.longitude);
 
@@ -178,7 +178,7 @@ class MapViewState extends State<MapView>
     print('[${bg.Event.GEOFENCESCHANGE}] - $event');
     event.off.forEach((String identifier) {
       _geofences.removeWhere((GeofenceMarker marker) {
-        return marker.geofence.identifier == identifier;
+        return marker.geofence?.identifier == identifier;
       });
     });
 
@@ -230,7 +230,7 @@ class MapViewState extends State<MapView>
         useRadiusInMeter: true,
         radius: (state.trackingMode == 1)
             ? 200
-            : (state.geofenceProximityRadius / 2));
+            : (state.geofenceProximityRadius! / 2));
   }
 
   Polyline _buildMotionChangePolyline(bg.Location from, bg.Location to) {
@@ -304,7 +304,7 @@ class MapViewState extends State<MapView>
 }
 
 class GeofenceMarker extends CircleMarker {
-  bg.Geofence geofence;
+  bg.Geofence? geofence;
   GeofenceMarker(bg.Geofence geofence, [bool triggered = false])
       : super(
             useRadiusInMeter: true,

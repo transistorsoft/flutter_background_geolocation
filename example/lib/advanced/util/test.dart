@@ -351,13 +351,13 @@ class Test {
     await bg.BackgroundGeolocation.addGeofences(geofences);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String username = prefs.getString("username");
-    String orgname = prefs.getString("orgname");
+    String? username = prefs.getString("username");
+    String? orgname = prefs.getString("orgname");
 
     // Request a JWT from tracker.transistorsoft.com
     bg.TransistorAuthorizationToken token =
         await bg.TransistorAuthorizationToken.findOrCreate(
-            orgname, username, ENV.TRACKER_HOST);
+            orgname!, username!, ENV.TRACKER_HOST);
 
     List<String> schedule = [];
     bg.State state = await bg.BackgroundGeolocation.state;
@@ -419,7 +419,7 @@ class Test {
     }
 
     // If provided a schedule, start the schedule.
-    if (state.schedule.isNotEmpty) {
+    if (state.schedule!.isNotEmpty) {
       await bg.BackgroundGeolocation.startSchedule();
     } else {
       await bg.BackgroundGeolocation.stopSchedule();

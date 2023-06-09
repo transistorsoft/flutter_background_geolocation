@@ -51,14 +51,11 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-+       maven {
-+           // [required] flutter_background_geolocation
-+           url "${project(':flutter_background_geolocation').projectDir}/libs"
-+       }
-+       maven {
-+           // [required] background_fetch
-+           url "${project(':background_fetch').projectDir}/libs"
-+       }
++       // [required] flutter_background_geolocation
++       maven { url "${project(':flutter_background_geolocation').projectDir}/libs" }
++       maven { url 'https://developer.huawei.com/repo/' }
++       // [required] background_fetch
++       maven { url "${project(':background_fetch').projectDir}/libs" }
     }
 }
 

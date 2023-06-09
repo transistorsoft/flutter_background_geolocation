@@ -52,10 +52,10 @@ class _HomeView extends StatefulWidget {
 class _HomeViewState extends State<_HomeView> {
   static const USERNAME_REGEXP = r"^[a-zA-Z0-9_-]*$";
 
-  bg.DeviceInfo _deviceInfo;
-  String _orgname;
-  String _username;
-  String _deviceId;
+  late bg.DeviceInfo _deviceInfo;
+  late String _orgname;
+  late String _username;
+  late String _deviceId;
 
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   @override
@@ -80,10 +80,10 @@ class _HomeViewState extends State<_HomeView> {
     prefs.setString("app", "");
 
     // Set username.
-    String username = prefs.getString("username");
-    String orgname = prefs.getString("orgname");
+    String? username = prefs.getString("username");
+    String? orgname = prefs.getString("orgname");
 
-    if (_usernameIsValid(username) && (orgname == null)) {
+    if (_usernameIsValid(username!) && (orgname == null)) {
       await prefs.remove('username');
       await prefs.setString('orgname', username);
       orgname = username;
@@ -98,7 +98,7 @@ class _HomeViewState extends State<_HomeView> {
           : _deviceInfo.model;
     });
 
-    if (!_usernameIsValid(username) || !_usernameIsValid(orgname)) {
+    if (!_usernameIsValid(username!) || !_usernameIsValid(orgname!)) {
       _showRegistration();
     }
   }

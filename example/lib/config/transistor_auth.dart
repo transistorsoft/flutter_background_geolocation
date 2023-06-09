@@ -39,8 +39,8 @@ class TransistorAuth {
     try {
       SharedPreferences prefs = await _prefs;
       // Request a JWT from tracker.transistorsoft.com
-      String orgname = prefs.getString("orgname");
-      String username = prefs.getString("username");
+      String? orgname = prefs.getString("orgname");
+      String? username = prefs.getString("username");
       if (orgname == null || username == null) {
         // TODO throw an Error instead.
         return false;
@@ -62,7 +62,7 @@ class TransistorAuth {
 
   static Future<void> registerErrorHandler() async {
     bg.State state = await bg.BackgroundGeolocation.state;
-    if ((state.params != null) && (state.params['device'] != null)) {
+    if ((state.params != null) && (state.params?['device'] != null)) {
       _migrateConfig();
     }
     bg.BackgroundGeolocation.removeListener(_onHttp);
