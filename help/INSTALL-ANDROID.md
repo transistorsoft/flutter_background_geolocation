@@ -42,6 +42,7 @@ buildscript {
 +   ext {
 +       compileSdkVersion   = 31                // or higher
 +       targetSdkVersion    = 31                // or higher
++       minSdkVersion       = 19
 +       appCompatVersion    = "1.4.2"           // or higher
 +       playServicesLocationVersion = "20.0.0"  // or higher
 +   }
@@ -84,6 +85,7 @@ android {
         .
         .
         .
++       minSdkVersion rootProject.ext.minSdkVersion
 +       targetSdkVersion rootProject.ext.targetSdkVersion
     }
     buildTypes {
