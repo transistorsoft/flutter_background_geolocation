@@ -6,7 +6,7 @@ import com.transistorsoft.locationmanager.event.HeartbeatEvent;
 
 import io.flutter.plugin.common.EventChannel;
 
-public class HeartbeatStreamHandler extends StreamHandler implements TSHeartbeatCallback, EventChannel.StreamHandler {
+public class HeartbeatStreamHandler extends StreamHandler implements TSHeartbeatCallback {
 
     public HeartbeatStreamHandler() {
         mEvent = BackgroundGeolocation.EVENT_HEARTBEAT;

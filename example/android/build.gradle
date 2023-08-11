@@ -1,8 +1,9 @@
 buildscript {
     ext {
         kotlin_version     = '1.7.10'
-        compileSdkVersion   = 33
-        targetSdkVersion    = 33
+        compileSdkVersion   = 34
+        targetSdkVersion    = 34
+	minSdkVersion       = 19
         appCompatVersion    = "1.4.2"
         playServicesLocationVersion = "21.0.1"
         hmsLocationVersion  = "6.9.0.300"

@@ -190,7 +190,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         requiredNetworkType: NetworkType.NONE
     ), (String taskId) async {
       print("[BackgroundFetch] received event $taskId");
-
+      bg.Logger.debug("🔔 [BackgroundFetch start] " + taskId);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       int count = 0;
       if (prefs.get("fetch-count") != null) {
@@ -203,7 +203,10 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         try {
           // Fetch current position
           var location = await bg.BackgroundGeolocation.getCurrentPosition(
-              samples: 1,
+              samples: 2,
+              maximumAge: 1000 * 10,  // 30 seconds ago
+              timeout: 30,
+              desiredAccuracy: 40,
               extras: {
                 "event": "background-fetch",
                 "headless": false
@@ -219,11 +222,12 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
             taskId: "com.transistorsoft.customtask",
             delay: 5000,
             periodic: false,
-            forceAlarmManager: true,
+            forceAlarmManager: false,
             stopOnTerminate: false,
             enableHeadless: true
         ));
       }
+      bg.Logger.debug("🔔 [BackgroundFetch finish] " + taskId);
       BackgroundFetch.finish(taskId);
     });
   }
@@ -275,11 +279,11 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
 
     bg.BackgroundGeolocation.getCurrentPosition(
-        persist: false,       // <-- do not persist this location
+        persist: true,       // <-- do not persist this location
         desiredAccuracy: 40, // <-- desire an accuracy of 40 meters or less
-        maximumAge: 10000,   // <-- Up to 10s old is fine.
+        maximumAge: 5000,       // <-- Up to 10s old is fine.
         timeout: 30,         // <-- wait 30s before giving up.
-        samples: 1,           // <-- sample just 1 location
+        samples: 2,           // <-- sample just 1 location
         extras: {"getCurrentPosition": true}
     ).then((bg.Location location) {
       print('[getCurrentPosition] - $location');

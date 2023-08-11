@@ -7,7 +7,7 @@ import com.transistorsoft.locationmanager.http.HttpService;
 
 import io.flutter.plugin.common.EventChannel;
 
-public class AuthorizationStreamHandler extends StreamHandler implements TSAuthorizationCallback, EventChannel.StreamHandler {
+public class AuthorizationStreamHandler extends StreamHandler implements TSAuthorizationCallback {
 
     public AuthorizationStreamHandler() {
         mEvent = TSAuthorization.NAME;

@@ -5,7 +5,7 @@ import com.transistorsoft.locationmanager.adapter.callback.TSPowerSaveChangeCall
 
 import io.flutter.plugin.common.EventChannel;
 
-public class PowerSaveChangeStreamHandler extends StreamHandler implements TSPowerSaveChangeCallback, EventChannel.StreamHandler {
+public class PowerSaveChangeStreamHandler extends StreamHandler implements TSPowerSaveChangeCallback {
 
     public PowerSaveChangeStreamHandler() {
         mEvent = BackgroundGeolocation.EVENT_POWERSAVECHANGE;

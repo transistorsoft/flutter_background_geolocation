@@ -9,7 +9,7 @@ import org.json.JSONException;
 
 import io.flutter.plugin.common.EventChannel;
 
-public class LocationStreamHandler extends StreamHandler implements TSLocationCallback, EventChannel.StreamHandler {
+public class LocationStreamHandler extends StreamHandler implements TSLocationCallback {
 
     public LocationStreamHandler() {
         mEvent = BackgroundGeolocation.EVENT_LOCATION;

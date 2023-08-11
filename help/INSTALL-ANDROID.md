@@ -42,7 +42,7 @@ buildscript {
 +   ext {
 +       compileSdkVersion   = 31                // or higher
 +       targetSdkVersion    = 31                // or higher
-+       minSdkVersion       = 19
++       minSdkVersion       = 19                // Required minimum
 +       appCompatVersion    = "1.4.2"           // or higher
 +       playServicesLocationVersion = "20.0.0"  // or higher
 +   }

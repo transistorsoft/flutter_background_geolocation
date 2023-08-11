@@ -221,6 +221,9 @@ class GeofenceEvent {
 
   /// The [Location] where this geofence triggered.
   late Location location;
+  
+  /// The device system time when the Geofence event was received by the OS.  __Note__: this can differ from the timestamp of the triggering location responsible for the geofence (the triggering location can be from the past).
+  late String timestamp;
 
   /// Optional [Geofence.extras]
   Map? extras;
@@ -232,12 +235,13 @@ class GeofenceEvent {
 
     this.identifier = params['identifier'];
     this.action = params['action'];
+    this.timestamp = params['timestamp'];
     this.location = new Location(locationData);
     this.extras = params['extras'];
   }
 
   /// String representation of `GeofenceEvent` for `print` to logs.
   String toString() {
-    return '[GeofenceEvent identifier: $identifier, action: $action]';
+    return '[GeofenceEvent identifier: $identifier, action: $action, timestamp: $timestamp]';
   }
 }

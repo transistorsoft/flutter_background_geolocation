@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -71,7 +72,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         return sInstance;
     }
 
-    private static synchronized BackgroundGeolocationModule getInstanceSynchronized() {
+    static synchronized BackgroundGeolocationModule getInstanceSynchronized() {
         if (sInstance == null) sInstance = new BackgroundGeolocationModule();
         return sInstance;
     }
@@ -298,7 +299,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_PROVIDER_STATE)) {
             getProviderState(result);
         } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_REQUEST_PERMISSION)) {
-            requestPermission(result);
+            requestPermission((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_REQUEST_TEMPORARY_FULL_ACCURACY)) {
             requestTemporaryFullAccuracy((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_REGISTER_PLUGIN)) {
@@ -764,6 +765,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     private void startBackgroundTask(final MethodChannel.Result result) {
         BackgroundGeolocation.getInstance(mContext).startBackgroundTask(new TSBackgroundTaskCallback() {
             @Override public void onStart(int taskId) { result.success(taskId); }
+            @Override public void onCancel(int taskId) { } // NO IMPLEMENTATION
         });
     }
 
@@ -878,6 +880,18 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     private void requestPermission(final MethodChannel.Result result) {
         BackgroundGeolocation.getInstance(mContext).requestPermission(new TSRequestPermissionCallback() {
+            @Override public void onSuccess(int status) { result.success(status); }
+            @Override public void onFailure(int status) { result.error("DENIED", null, status); }
+        });
+    }
+
+    private void requestPermission(final String permission, final MethodChannel.Result result) {
+        if (permission == null) {
+            requestPermission(result);
+            return;
+        }
+        // NOT YET IMPLEMENTED.  For future implementation of requesting individual permissions.
+        BackgroundGeolocation.getInstance(mContext).requestPermission(permission, new TSRequestPermissionCallback() {
             @Override public void onSuccess(int status) { result.success(status); }
             @Override public void onFailure(int status) { result.error("DENIED", null, status); }
         });

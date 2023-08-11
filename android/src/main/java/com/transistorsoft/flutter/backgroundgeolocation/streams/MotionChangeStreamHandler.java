@@ -9,7 +9,7 @@ import org.json.JSONException;
 
 import io.flutter.plugin.common.EventChannel;
 
-public class MotionChangeStreamHandler extends StreamHandler implements TSLocationCallback, EventChannel.StreamHandler {
+public class MotionChangeStreamHandler extends StreamHandler implements TSLocationCallback {
 
     public MotionChangeStreamHandler() {
         mEvent = BackgroundGeolocation.EVENT_MOTIONCHANGE;

@@ -6,7 +6,7 @@ import com.transistorsoft.locationmanager.event.LocationProviderChangeEvent;
 
 import io.flutter.plugin.common.EventChannel;
 
-public class ProviderChangeStreamHandler extends StreamHandler implements TSLocationProviderChangeCallback, EventChannel.StreamHandler {
+public class ProviderChangeStreamHandler extends StreamHandler implements TSLocationProviderChangeCallback {
 
     public ProviderChangeStreamHandler() {
         mEvent = BackgroundGeolocation.EVENT_PROVIDERCHANGE;

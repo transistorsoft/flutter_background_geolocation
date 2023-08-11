@@ -906,7 +906,12 @@ class BackgroundGeolocation {
   /// - [Config.backgroundPermissionRationale] (_Android 11+_)
   ///
   static Future<int> requestPermission() async {
-    return (await _methodChannel.invokeMethod<int>('requestPermission'))!;
+    // For future, we will accept an optional String of a specific permission to request (NOT YET IMPLEMENTED)
+    // eg: "LOCATION_WHEN_IN_USE", "LOCATION_ALWAYS", "ACTIVITY_RECOGNITION"
+    // @see BackgroundGeolocationModule:
+    //    private void requestPermission(final String permission, final MethodChannel.Result result)
+    const permission = null;
+    return (await _methodChannel.invokeMethod<int>('requestPermission', permission))!;
   }
 
   /// __`[iOS 14+]`__ iOS 14 has introduced a new __`[Precise: On]`__ switch on the location authorization dialog allowing users to disable high-accuracy location.

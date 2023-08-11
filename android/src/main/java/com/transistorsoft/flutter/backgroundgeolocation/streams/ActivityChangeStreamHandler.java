@@ -6,7 +6,7 @@ import com.transistorsoft.locationmanager.event.ActivityChangeEvent;
 
 import io.flutter.plugin.common.EventChannel;
 
-public class ActivityChangeStreamHandler extends StreamHandler implements TSActivityChangeCallback, EventChannel.StreamHandler {
+public class ActivityChangeStreamHandler extends StreamHandler implements TSActivityChangeCallback {
 
     public ActivityChangeStreamHandler() {
         mEvent = BackgroundGeolocation.EVENT_ACTIVITYCHANGE;
