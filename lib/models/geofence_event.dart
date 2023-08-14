@@ -221,7 +221,7 @@ class GeofenceEvent {
 
   /// The [Location] where this geofence triggered.
   late Location location;
-  
+
   /// The device system time when the Geofence event was received by the OS.  __Note__: this can differ from the timestamp of the triggering location responsible for the geofence (the triggering location can be from the past).
   late String timestamp;
 
