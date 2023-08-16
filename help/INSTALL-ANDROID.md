@@ -147,9 +147,9 @@ If you've [purchased an *HMS Background Geolocation* License](https://shop.trans
 
 ## `AlarmManager` "Exact Alarms" (optional)
 
-The plugin uses `AlarmManager` "exact alarms" for precise scheduling of events (eg: `Config.stopTimeout`, `Config.motionTriggerDelay`, `Config.schedule`).  Android 14 (SDK 34)*, has restricted usage of ["`AlarmManager` exact alarms"](https://developer.android.com/about/versions/14/changes/schedule-exact-alarms).  To continue using precise timing of events with *Android 14*, you can manually add this permission to your __`AndroidManifest`__.  Otherwise, the plugin will gracefully fall-back to "*in-exact* `AlarmManager` scheduling".  For more information about Android's __`AlarmManager`__, see the [Android API Docs](https://developer.android.com/training/scheduling/alarms).
+The plugin uses __`AlarmManager`__ "exact alarms" for precise scheduling of events (eg: __`Config.stopTimeout`__, __`Config.motionTriggerDelay`__, __`Config.schedule`__).  *Android 14 (SDK 34)*, has restricted usage of ["`AlarmManager` exact alarms"](https://developer.android.com/about/versions/14/changes/schedule-exact-alarms).  To continue using precise timing of events with *Android 14*, you can manually add this permission to your __`AndroidManifest`__.  Otherwise, the plugin will gracefully fall-back to "*in-exact* `AlarmManager` scheduling".  For more information about Android's __`AlarmManager`__, see the [Android API Docs](https://developer.android.com/training/scheduling/alarms).
 
-:open_file_folder: In your `AndroidManifest`, add the following permission (**exactly as-shown**):
+:open_file_folder: In your __`AndroidManifest`__, add the following permission (**exactly as-shown**):
 
 ```xml
   <manifest>
