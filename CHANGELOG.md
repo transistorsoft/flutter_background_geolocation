@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 4.12.0 &mdash; UNRELEASED
+## 4.12.0 &mdash; 2023-08-16
 * [Android] Re-factor getCurrentPosition to prefer more recent location vs more accuracy (within limits)
 * [Android] Android 14 (API 34) support:  Android 14 is more strict with scheduling `AlarmManager` "exact alarms" (which the plugin does take advantage of).  If you wish the plugin to use `AlarmManager` "exact alarms" in your app, you must now explicitly define that permission in your own `AndroidManifest`:
 ```xml
