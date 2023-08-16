@@ -1,6 +1,6 @@
 name: flutter_background_geolocation_example
 description: Demonstrates how to use the flutter_background_geolocation plugin.
-version: 4.10.1+46
+version: 4.12.0+49
 dependencies:
   flutter:
     sdk: flutter

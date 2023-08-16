@@ -10,7 +10,7 @@ import org.json.JSONException;
 
 import io.flutter.plugin.common.EventChannel;
 
-public class ScheduleStreamHandler extends StreamHandler implements TSScheduleCallback, EventChannel.StreamHandler {
+public class ScheduleStreamHandler extends StreamHandler implements TSScheduleCallback {
 
     public ScheduleStreamHandler() {
         mEvent = BackgroundGeolocation.EVENT_SCHEDULE;

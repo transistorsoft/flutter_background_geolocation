@@ -124,7 +124,7 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
 
   try {
     var location = await bg.BackgroundGeolocation.getCurrentPosition(
-        samples: 1,
+	samples: 1,
         extras: {
           "event": "background-fetch",
           "headless": true

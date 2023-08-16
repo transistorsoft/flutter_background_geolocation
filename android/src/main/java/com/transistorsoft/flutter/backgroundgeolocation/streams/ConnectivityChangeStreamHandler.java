@@ -6,7 +6,7 @@ import com.transistorsoft.locationmanager.event.ConnectivityChangeEvent;
 
 import io.flutter.plugin.common.EventChannel;
 
-public class ConnectivityChangeStreamHandler extends StreamHandler implements TSConnectivityChangeCallback, EventChannel.StreamHandler {
+public class ConnectivityChangeStreamHandler extends StreamHandler implements TSConnectivityChangeCallback {
 
     public ConnectivityChangeStreamHandler() {
         mEvent = BackgroundGeolocation.EVENT_CONNECTIVITYCHANGE;

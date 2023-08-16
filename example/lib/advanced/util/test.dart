@@ -347,7 +347,7 @@ class Test {
     }
     */
 
-    await bg.BackgroundGeolocation.removeGeofences();
+    //await bg.BackgroundGeolocation.removeGeofences();
     await bg.BackgroundGeolocation.addGeofences(geofences);
 
     SharedPreferences prefs = await SharedPreferences.getInstance();

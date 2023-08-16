@@ -5,7 +5,7 @@ import com.transistorsoft.locationmanager.adapter.callback.TSGeofenceCallback;
 import com.transistorsoft.locationmanager.event.GeofenceEvent;
 import io.flutter.plugin.common.EventChannel;
 
-public class GeofenceStreamHandler extends StreamHandler implements TSGeofenceCallback, EventChannel.StreamHandler {
+public class GeofenceStreamHandler extends StreamHandler implements TSGeofenceCallback {
 
     public GeofenceStreamHandler() {
         mEvent = BackgroundGeolocation.EVENT_GEOFENCE;

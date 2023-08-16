@@ -5,7 +5,7 @@ import com.transistorsoft.locationmanager.adapter.callback.TSEnabledChangeCallba
 
 import io.flutter.plugin.common.EventChannel;
 
-public class EnabledChangeStreamHandler extends StreamHandler implements TSEnabledChangeCallback, EventChannel.StreamHandler {
+public class EnabledChangeStreamHandler extends StreamHandler implements TSEnabledChangeCallback {
 
     public EnabledChangeStreamHandler() {
         mEvent = BackgroundGeolocation.EVENT_ENABLEDCHANGE;

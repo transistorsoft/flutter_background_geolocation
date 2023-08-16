@@ -9,7 +9,7 @@ import java.util.Map;
 
 import io.flutter.plugin.common.EventChannel;
 
-public class HttpStreamHandler extends StreamHandler implements TSHttpResponseCallback, EventChannel.StreamHandler {
+public class HttpStreamHandler extends StreamHandler implements TSHttpResponseCallback {
 
     public HttpStreamHandler() {
         mEvent = BackgroundGeolocation.EVENT_HTTP;

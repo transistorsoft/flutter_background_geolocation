@@ -198,7 +198,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     } else if ([self method:ACTION_GET_PROVIDER_STATE is:action]) {
         [self getProviderState:result];
     } else if ([self method:ACTION_REQUEST_PERMISSION is:action]) {
-        [self requestPermission:result];
+        [self requestPermission:call.arguments result:result];
     } else if ([self method:ACTION_REQUEST_TEMPORARY_FULL_ACCURACY is:action]) {
         [self requestTemporaryFullAccuracy:call.arguments result:result];
     } else if ([self method:ACTION_INITIALIZED is:action]) {
@@ -221,7 +221,8 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     result([event toDictionary]);
 }
 
-- (void) requestPermission:(FlutterResult)result {
+/// NOTE: For future implementation, this method accepts an unused NSString* permission for future implementation of requesting individual permissions.
+- (void) requestPermission:(NSString*)permission result:(FlutterResult)result {
     [_locationManager requestPermission:^(NSNumber *status) {
         result(status);
     } failure:^(NSNumber *status) {

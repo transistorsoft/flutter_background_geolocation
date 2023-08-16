@@ -201,6 +201,11 @@ class Location {
   ///
   late String timestamp;
 
+  /// The age of the location in milliseconds, relative to the Device system-time when the location was received.
+  /// For example, if the reported `age` is `10000`, that location was recorded 10s ago, relative to the system-time.
+  /// `location.timestamp` + `location.age` = Device system-time when location was recorded.
+  late int age;
+
   /// Event which caused this location to be recorded.
   ///
   /// `motionchange | heartbeat | providerchange | geofence`
@@ -299,6 +304,7 @@ class Location {
     this.activity = new Activity(params['activity']);
 
     this.timestamp = params['timestamp'];
+    this.age = params['age'];
     this.isMoving = params['is_moving'];
     this.uuid = params['uuid'];
     this.odometer = params['odometer'] * 1.0;

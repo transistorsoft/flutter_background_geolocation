@@ -82,6 +82,7 @@ class MainMenuButtonState extends State<MainMenuButton> {
 
   void _requestPermission(String request) async {
     Navigator.of(context).pop();
+
     await bg.BackgroundGeolocation.setConfig(bg.Config(locationAuthorizationRequest: request));
 
     int status = await bg.BackgroundGeolocation.requestPermission();
