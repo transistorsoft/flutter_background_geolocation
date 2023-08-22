@@ -86,6 +86,8 @@ class State extends Config {
             autoSyncThreshold: data['autoSyncThreshold'],
             disableAutoSyncOnCellular:
                 _ensureBool(data['disableAutoSyncOnCellular']),
+            disableProviderChangeRecord:
+                _ensureBool(data['disableProviderChangeRecord']),
             batchSync: _ensureBool(data['batchSync']),
             maxBatchSize: data['maxBatchSize'],
             locationTemplate: data['locationTemplate'],

@@ -1,6 +1,6 @@
 name: flutter_background_geolocation_example
 description: Demonstrates how to use the flutter_background_geolocation plugin.
-version: 4.12.0+49
+version: 4.12.1+51
 dependencies:
   flutter:
     sdk: flutter
@@ -9,7 +9,6 @@ dependencies:
   http: ^0.13.5
 
   shared_preferences: ^2.1.0
-  background_fetch: ^1.1.1
   url_launcher: ^6.1.10
 
   # The following adds the Cupertino Icons font to your application.
