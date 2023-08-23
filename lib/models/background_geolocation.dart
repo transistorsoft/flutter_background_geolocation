@@ -372,9 +372,10 @@ class BackgroundGeolocation {
     return new State(state);
   }
 
-  /// Sends a signal to iOS that you wish to perform a long-running task.
+  /// Sends a signal to OS that you wish to perform a long-running task.
   ///
-  /// iOS will not suspend your app until you signal completion with the [stopBackgroundTask] method.  Your callback will be provided with a single parameter `taskId` which you will send to the [stopBackgroundTask] method.
+  /// The OS will keep your running in the background and not suspend it until you signal completion with the [stopBackgroundTask] method.  Your callback will be provided with a single parameter `taskId`
+  /// which you will send to the [stopBackgroundTask] method.
   ///
   /// ## Example
   ///
@@ -388,7 +389,38 @@ class BackgroundGeolocation {
   /// });
   /// ```
   ///
-  ///  **WARNING:** iOS provides **exactly** 180s of background-running time.  If your long-running task exceeds this time, the plugin has a fail-safe which will automatically [stopBackgroundTask] your **`taskId`** to prevent the OS from force-killing your application.
+  /// ### iOS
+  /// The iOS implementation uses [beginBackgroundTaskWithExpirationHandler](https://developer.apple.com/documentation/uikit/uiapplication/1623031-beginbackgroundtaskwithexpiratio)
+  ///
+  /// ⚠️ iOS provides **exactly** 180s of background-running time.  If your long-running task exceeds this time, the plugin has a fail-safe which will
+  /// automatically [[stopBackgroundTask]] your **`taskId`** to prevent the OS from force-killing your application.
+  ///
+  /// Logging of iOS background tasks looks like this:
+  /// ```
+  /// ✅-[BackgroundTaskManager createBackgroundTask] 1
+  /// .
+  /// .
+  /// .
+  ///
+  /// ✅-[BackgroundTaskManager stopBackgroundTask:]_block_invoke 1 OF (
+  ///     1
+  /// )
+  /// ```
+  /// ### Android
+  ///
+  /// The Android implementation launches a [`WorkManager`](https://developer.android.com/topic/libraries/architecture/workmanager) task.
+  ///
+  /// ⚠️ The Android plugin imposes a limit of **3 minutes** for your background-task before it automatically `FORCE KILL`s it.
+  ///
+  ///
+  /// Logging for Android background-tasks looks like this (when you see an hourglass ⏳ icon, a foreground-service is active)
+  /// ```
+  ///  I TSLocationManager: [c.t.l.u.BackgroundTaskManager onStartJob] ⏳ startBackgroundTask: 6
+  ///  .
+  ///  .
+  ///  .
+  ///  I TSLocationManager: [c.t.l.u.BackgroundTaskManager$Task stop] ⏳ stopBackgroundTask: 6
+  /// ```
   ///
   static Future<int> startBackgroundTask() async {
     return (await _methodChannel.invokeMethod<int>('startBackgroundTask'))
