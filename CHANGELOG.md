@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 4.12.1 &mdash; 2023-08-23
+* [iOS] Fix build failure "Use of '@import' when C++ modules are disabled"
 * [Android] Modify Foreground-service management to use `stopSelfResult(startId)` instead of `stopSelf()`.  This could improve reports of Android ANR
 `Context.startForeground`.
 * [Android] Add sanity-check for invalid `Geofence` arguments (eg: invalid latitude/longitude).
