@@ -283,7 +283,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         desiredAccuracy: 40, // <-- desire an accuracy of 40 meters or less
         maximumAge: 5000,       // <-- Up to 10s old is fine.
         timeout: 30,         // <-- wait 30s before giving up.
-        samples: 2,           // <-- sample just 1 location
+        samples: 3,           // <-- sample just 1 location
         extras: {"getCurrentPosition": true}
     ).then((bg.Location location) {
       print('[getCurrentPosition] - $location');
@@ -372,11 +372,30 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     });
   }
 
-  void _onHeartbeat(bg.HeartbeatEvent event) {
+  void _onHeartbeat(bg.HeartbeatEvent event) async {
     print('[${bg.Event.HEARTBEAT}] - $event');
+    // In onHeartbeat, if you intend to any kind of async task, first start a background-task:
+    var taskId = await bg.BackgroundGeolocation.startBackgroundTask();
+
+    // Now that we've initiated a background-task, call .getCurrentPosition()
+    try {
+      bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(
+        samples: 2,
+        timeout: 10,
+        extras: {
+          "event":"heartbeat"
+        }
+      );
+      print("[heartbeat] getCurrentPosition: $location");
+    } catch(e) {
+      print("[heartbeat] getCurrentPosition ERROR: $e");
+    }
     setState(() {
       events.insert(0, Event(bg.Event.HEARTBEAT, event, event.toString()));
     });
+
+    // Be sure to signal completion of your task.
+    bg.BackgroundGeolocation.stopBackgroundTask(taskId);
   }
 
   void _onGeofence(bg.GeofenceEvent event) async {

@@ -53,7 +53,6 @@ class MainMenuButtonState extends State<MainMenuButton> {
 
   void _onClickRequestPermission() async {
     bg.ProviderChangeEvent providerState = await bg.BackgroundGeolocation.providerState;
-
     showDialog(
       context: context,
       barrierDismissible: false,

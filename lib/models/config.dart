@@ -448,6 +448,25 @@ class Config {
   ///
   bool? disableAutoSyncOnCellular;
 
+  /// __`[Android-only]`__ Disables the automatic insert of a location record into the SDK's SQLite database and subsequent HTTP upload if configured with [Config.url].
+  /// When a [onProviderChange] event fires, the Android SDK has traditionally recorded a location to show exactly *when* and *where* the state of location-services was changed (eg: Location-services disabled).
+  ///
+  /// Some developers' servers have strict HTTP JSON payloads and possibly using [locationTemplate], where it's impossible to template the automatically appended `provider` key in the payload.
+  ///
+  /// ![](https://www.dropbox.com/s/ljacoquuuv5sd5r/disableProviderChangeRecord.png?dl=1)
+  ///
+  ///  Set `true` to disable this default behaviour.
+  ///
+  /// ## Example
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.ready(Config(
+  ///   disableProviderChangeRecord: true
+  /// ))
+  /// ```
+  ///
+  bool? disableProviderChangeRecord;
+
   /// The HTTP method to use when creating an HTTP request to your configured [url].
   ///
   /// Defaults to `POST`.  Valid values are `POST`, `PUT` and `OPTIONS`.
@@ -2073,6 +2092,7 @@ class Config {
       this.extras,
       this.autoSync,
       this.disableAutoSyncOnCellular,
+      this.disableProviderChangeRecord,
       this.autoSyncThreshold,
       this.batchSync,
       this.maxBatchSize,
@@ -2240,6 +2260,9 @@ class Config {
     }
     if (disableAutoSyncOnCellular != null) {
       config['disableAutoSyncOnCellular'] = disableAutoSyncOnCellular;
+    }
+    if (disableProviderChangeRecord != null) {
+      config['disableProviderChangeRecord'] = disableProviderChangeRecord;
     }
     if (autoSyncThreshold != null) {
       config['autoSyncThreshold'] = autoSyncThreshold;
