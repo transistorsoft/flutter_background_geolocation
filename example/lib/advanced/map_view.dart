@@ -23,7 +23,8 @@ class MapViewState extends State<MapView>
     return true;
   }
 
-  late bg.Location _stationaryLocation;
+  bg.Location? _stationaryLocation;
+  bg.Location? _lastLocation;
 
   List<CircleMarker> _currentPosition = [];
   List<LatLng> _polyline = [];
@@ -61,15 +62,17 @@ class MapViewState extends State<MapView>
 
   void _onEnabledChange(bool enabled) {
     if (!enabled) {
-      _locations.clear();
-      _polyline.clear();
-      _stopLocations.clear();
-      _motionChangePolylines.clear();
-      _stationaryMarker.clear();
-      _geofenceEvents.clear();
-      _geofenceEventPolylines.clear();
-      _geofenceEventLocations.clear();
-      _geofenceEventEdges.clear();
+      setState(() {
+        _locations.clear();
+        _polyline.clear();
+        _stopLocations.clear();
+        _motionChangePolylines.clear();
+        _stationaryMarker.clear();
+        _geofenceEvents.clear();
+        _geofenceEventPolylines.clear();
+        _geofenceEventLocations.clear();
+        _geofenceEventEdges.clear();
+      });
     }
   }
 
@@ -88,10 +91,10 @@ class MapViewState extends State<MapView>
         _stationaryLocation = location;
       }
       // Add previous stationaryLocation as a small red stop-circle.
-      _stopLocations.add(_buildStopCircleMarker(_stationaryLocation));
+      _stopLocations.add(_buildStopCircleMarker(_stationaryLocation!));
       // Create the green motionchange polyline to show where tracking engaged from.
       _motionChangePolylines
-          .add(_buildMotionChangePolyline(_stationaryLocation, location));
+          .add(_buildMotionChangePolyline(_stationaryLocation!, location));
     } else {
       // Save a reference to the location where we became stationary.
       _stationaryLocation = location;
@@ -176,22 +179,25 @@ class MapViewState extends State<MapView>
 
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {
     print('[${bg.Event.GEOFENCESCHANGE}] - $event');
-    event.off.forEach((String identifier) {
-      _geofences.removeWhere((GeofenceMarker marker) {
-        return marker.geofence?.identifier == identifier;
+    setState(() {
+      event.off.forEach((String identifier) {
+        _geofences.removeWhere((GeofenceMarker marker) {
+          return marker.geofence?.identifier == identifier;
+        });
       });
-    });
 
-    event.on.forEach((bg.Geofence geofence) {
-      _geofences.add(GeofenceMarker(geofence));
-    });
+      event.on.forEach((bg.Geofence geofence) {
+        _geofences.add(GeofenceMarker(geofence));
+      });
 
-    if (event.off.isEmpty && event.on.isEmpty) {
-      _geofences.clear();
-    }
+      if (event.off.isEmpty && event.on.isEmpty) {
+        _geofences.clear();
+      }
+    });
   }
 
   void _onLocation(bg.Location location) {
+    _lastLocation = location;
     LatLng ll = new LatLng(location.coords.latitude, location.coords.longitude);
     _mapController.move(ll, _mapController.zoom);
 
