@@ -163,7 +163,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     }).catchError((error) {
       print('[ready] ERROR: $error');
     });
-
+    
     // Fetch currently selected tab.
     SharedPreferences prefs = await _prefs;
     int? tabIndex = prefs.getInt("tabIndex");

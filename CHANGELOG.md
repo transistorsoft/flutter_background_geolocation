@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 4.12.2 &mdash; 2023-08-24
+
+* [Android] Fix memory-leak in `.startBackgroundTask`:  If a `Task` timed-out and is "FORCE KILLED", it was never removed from a `List<Task>`.
+* [Android] Fix `Exception NullPointerException:at com.transistorsoft.locationmanager.util.BackgroundTaskWorker.onStopped`
+
 ## 4.12.1 &mdash; 2023-08-23
 * [iOS] Fix build failure "Use of '@import' when C++ modules are disabled"
 * [Android] Modify Foreground-service management to use `stopSelfResult(startId)` instead of `stopSelf()`.  This could improve reports of Android ANR
