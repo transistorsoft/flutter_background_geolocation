@@ -44,20 +44,19 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
 
       break;
     case bg.Event.HEARTBEAT:
-      /* DISABLED getCurrentPosition on heartbeat
       try {
         bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(
-          samples: 1,
+          samples: 2,
           extras: {
             "event": "heartbeat",
             "headless": true
           }
         );
+
         print('[getCurrentPosition] Headless: $location');
       } catch (error) {
         print('[getCurrentPosition] Headless ERROR: $error');
       }
-      */
       break;
     case bg.Event.LOCATION:
       bg.Location location = headlessEvent.event;
@@ -124,11 +123,11 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
 
   try {
     var location = await bg.BackgroundGeolocation.getCurrentPosition(
-	samples: 1,
-        extras: {
-          "event": "background-fetch",
-          "headless": true
-        }
+	    samples: 1,
+      extras: {
+        "event": "background-fetch",
+        "headless": true
+      }
     );
     print("[location] $location");
   } catch(error) {
