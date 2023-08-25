@@ -100,7 +100,9 @@ class MapViewState extends State<MapView>
       _stationaryLocation = location;
       // Add the big red stationaryRadius circle.
       bg.State state = await bg.BackgroundGeolocation.state;
-      _stationaryMarker.add(_buildStationaryCircleMarker(location, state));
+      setState(() {
+        _stationaryMarker.add(_buildStationaryCircleMarker(location, state));
+      });
     }
   }
 
