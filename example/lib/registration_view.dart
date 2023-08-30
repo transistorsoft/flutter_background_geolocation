@@ -69,7 +69,6 @@ class _RegistrationViewState extends State<RegistrationView> {
     await prefs.setString("username", _username!);
 
     await bg.TransistorAuthorizationToken.destroy(ENV.TRACKER_HOST);
-    /*
 
     bg.TransistorAuthorizationToken token =
         await bg.TransistorAuthorizationToken.findOrCreate(
@@ -77,7 +76,7 @@ class _RegistrationViewState extends State<RegistrationView> {
 
     bg.BackgroundGeolocation.setConfig(
         bg.Config(transistorAuthorizationToken: token));
-    */
+
 
     Map result = {"orgname": _orgname, "username": _username};
     Navigator.pop(context, result);

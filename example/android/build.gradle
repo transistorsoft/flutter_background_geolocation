@@ -6,7 +6,7 @@ buildscript {
 	    minSdkVersion       = 19
         appCompatVersion    = "1.4.2"
         playServicesLocationVersion = "21.0.1"
-        hmsLocationVersion  = "6.11.0.301"
+        hmsLocationVersion  = "6.9.0.300" //"6.11.0.301" <-- this version invokes StrictMode crash "Explicit termination method 'end' not called" from its own okhttp requests!!
         removeBackgroundGeolocationDebugSoundsInRelease = false
     }
     repositories {
