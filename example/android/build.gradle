@@ -3,7 +3,7 @@ buildscript {
         kotlin_version     = '1.7.10'
         compileSdkVersion   = 34
         targetSdkVersion    = 34
-	    minSdkVersion       = 19
+	minSdkVersion       = 19
         appCompatVersion    = "1.4.2"
         playServicesLocationVersion = "21.0.1"
         hmsLocationVersion  = "6.11.0.301"

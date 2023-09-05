@@ -8,7 +8,7 @@
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <!-- Added for background-geolocation for SDK >= 34:  Allows scheduling of exact alarms with AlarmManager -->
+    <!-- [OPTIONAL] for background-geolocation for SDK >= 34:  Allows scheduling of exact alarms with AlarmManager -->
     <!-- <uses-permission android:name="android.permission.USE_EXACT_ALARM" android:minSdkVersion="34"/> -->
 
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
@@ -41,7 +41,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="025736af0c3b480ecc1a6fc8aea17e73cc012049ed117472072b76e5e170953d" />
 	<meta-data android:name="com.transistorsoft.locationmanager.hms.license" android:value="bd0bf2738a5b3d3335225ee43ec3a806c58f40999065a065b8504911ebc122a8" />
         <meta-data

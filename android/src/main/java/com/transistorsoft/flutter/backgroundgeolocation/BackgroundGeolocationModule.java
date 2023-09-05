@@ -329,6 +329,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     @SuppressWarnings("unchecked")
     private void ready(Map<String, Object> params, final MethodChannel.Result result) {
+
         boolean reset = (!params.containsKey("reset")) || (boolean) params.get("reset");
         TSConfig config = TSConfig.getInstance(mContext);
 
@@ -1055,6 +1056,9 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     @Override
     public void onActivityResumed(Activity activity) {
+        if (!activity.equals(mActivity)) {
+            return;
+        }
         TSScheduleManager.getInstance(activity).cancelOneShot(TerminateEvent.ACTION);
     }
     @Override
@@ -1065,9 +1069,12 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
     @Override
     public void onActivityStopped(Activity activity) {
+        if (!activity.equals(mActivity)) {
+            return;
+        }
         TSConfig config = TSConfig.getInstance(activity);
         if (config.getEnabled()) {
-            TSScheduleManager.getInstance(activity).oneShot(TerminateEvent.ACTION, 10000, true);
+            TSScheduleManager.getInstance(activity).oneShot(TerminateEvent.ACTION, 10000, true, false);
         }
     }
 

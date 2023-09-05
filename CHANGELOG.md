@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.12.3 &mdash; 2023-09-05
+* [Android] Performance enhancements and error-checking.
+
 ## 4.12.2 &mdash; 2023-08-24
 
 * [Android] Fix memory-leak in `.startBackgroundTask`:  If a `Task` timed-out and is "FORCE KILLED", it was never removed from a `List<Task>`.
