@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.12.3 &mdash; 2023-09-05
+* [Android] Performance enhancements and error-checking.
+
 ## 4.12.2 &mdash; 2023-08-24
 
 * [Android] Fix memory-leak in `.startBackgroundTask`:  If a `Task` timed-out and is "FORCE KILLED", it was never removed from a `List<Task>`.
@@ -40,6 +43,11 @@ BacckgroundGeolocation.onHeartbeat((event) async {
 * [Android] If a `SingleLocationRequest` error occurs and at least one sample exits, prefer to resolve the request successfully rather than firing the error (eg: `getCurrentPosition`, `motionchange`, `providerchange` requests).
 
 ## 4.12.0 &mdash; 2023-08-16
+* [Android] :warning: If you have the following elements defined in your __`AndroidManifest.xml`__, __DELETE__ them:
+```diff
+-       <service android:name="com.transistorsoft.locationmanager.service.TrackingService" android:foregroundServiceType="location" />
+-       <service android:name="com.transistorsoft.locationmanager.service.LocationRequestService" android:foregroundServiceType="location" />
+```
 * [Android] Re-factor getCurrentPosition to prefer more recent location vs more accuracy (within limits)
 * [Android] Android 14 (API 34) support:  Android 14 is more strict with scheduling `AlarmManager` "exact alarms" (which the plugin does take advantage of).  If you wish the plugin to use `AlarmManager` "exact alarms" in your app, you must now explicitly define that permission in your own `AndroidManifest`:
 ```xml

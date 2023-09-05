@@ -32,7 +32,7 @@ public class Application  extends FlutterApplication {
                 .detectLeakedSqlLiteObjects()
                 .detectLeakedClosableObjects()
                 .penaltyLog()
-                .penaltyDeath()
+                //.penaltyDeath()
                 .build());
 
         super.onCreate();

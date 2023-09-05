@@ -47,6 +47,7 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
       try {
         bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(
           samples: 2,
+          timeout: 10,
           extras: {
             "event": "heartbeat",
             "headless": true
@@ -123,7 +124,7 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
 
   try {
     var location = await bg.BackgroundGeolocation.getCurrentPosition(
-	    samples: 1,
+	    samples: 2,
       extras: {
         "event": "background-fetch",
         "headless": true
