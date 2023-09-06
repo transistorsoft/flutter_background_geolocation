@@ -255,6 +255,19 @@ class Config {
   ///
   int? geofenceProximityRadius;
 
+  /// The maximum number of geofences to monitor at-a-time, overriding the platform default (iOS: 20; Android 100).
+  /// **NOTE:** This option is for specialized use-cases where you wish to monitor _LESS THAN_ the platform maximum.  __This option should generally not be used__.
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.ready(Config(
+  ///   maxMonitoredGeofences: 50 // override the Platform maximum (Android: 100)
+  /// )).then((State state) {
+  ///   BackgroundGeolocation.start();  // <-- plugin will automatically #stop in 30 minutes
+  /// });
+  /// ```
+  ///
+  int? maxMonitoredGeofences;
+
   /// When a device is already within a just-created geofence, fire the **enter** transition immediately.
   ///
   /// Defaults to `true`.  Set `false` to disable triggering a geofence immediately if device is already inside it.
@@ -2071,6 +2084,7 @@ class Config {
       this.elasticityMultiplier,
       this.stopAfterElapsedMinutes,
       this.geofenceProximityRadius,
+      this.maxMonitoredGeofences,
       this.geofenceInitialTriggerEntry,
       this.desiredOdometerAccuracy,
       this.useSignificantChangesOnly,
@@ -2203,6 +2217,9 @@ class Config {
     }
     if (geofenceProximityRadius != null) {
       config['geofenceProximityRadius'] = geofenceProximityRadius;
+    }
+    if (maxMonitoredGeofences != null) {
+      config['maxMonitoredGeofences'] = maxMonitoredGeofences;
     }
     if (geofenceInitialTriggerEntry != null) {
       config['geofenceInitialTriggerEntry'] = geofenceInitialTriggerEntry;
