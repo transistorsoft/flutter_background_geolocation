@@ -7,13 +7,13 @@ class Geofence {
   late String identifier;
 
   /// Circular geofence radius.
-  late double radius;
+  double? radius;
 
   /// Latitude of the Geofence center.
-  late double latitude;
+  double? latitude;
 
   /// Longitude of the Geofence center.
-  late double longitude;
+  double? longitude;
 
   /// Set `true` to fire on entering the geofence.
   bool? notifyOnEntry;
@@ -27,23 +27,39 @@ class Geofence {
   /// The number of milliseconds the device must remain within geofence before firing [notifyOnDwell] event.
   int? loiteringDelay;
 
+  /// __:warning: NOT YET IMPLEMENTED__
+  /// Optional: a list of vertices composing the Polygon geofence.  By default, geofences are circular.
+  List<List<double>>? vertices;
+
   /// Arbitrary key/values to append to the recorded geofence record.
   Map<String, dynamic>? extras;
 
   Geofence(
       {required String identifier,
-      required double radius,
-      required double latitude,
-      required double longitude,
+      double? radius,
+      double? latitude,
+      double? longitude,
       bool? notifyOnEntry,
       bool? notifyOnExit,
       bool? notifyOnDwell,
       int? loiteringDelay,
-      Map<String, dynamic>? extras}) {
+      Map<String, dynamic>? extras,
+      List<List<double>>? vertices}) {
+    
+    if (vertices == null) {
+      // Circular Geofence
+      if (radius == null || latitude == null || longitude == null) {
+        throw ArgumentError("Geofence requires radius, latitude and longitude");
+      }
+    } else {
+      // Polygon Geofence
+      this.vertices = vertices;
+    }
+    if (radius != null) this.radius = radius! * 1.0;
+    if (latitude != null) this.latitude = latitude! * 1.0;
+    if (longitude != null) this.longitude = longitude! * 1.0;
+    
     this.identifier = identifier;
-    this.radius = radius * 1.0;
-    this.latitude = latitude * 1.0;
-    this.longitude = longitude * 1.0;
     this.notifyOnEntry = notifyOnEntry;
     this.notifyOnExit = notifyOnExit;
     this.notifyOnDwell = notifyOnDwell;
@@ -73,11 +89,14 @@ class Geofence {
     if (this.extras != null) {
       params['extras'] = this.extras;
     }
+    if (this.vertices != null) {
+      params['vertices'] = this.vertices;
+    }
     return params;
   }
 
   /// String representation of `Geofence` for `print` to log.
   String toString() {
-    return '[Geofence identifier: $identifier, radius: $radius, $latitude / $longitude, notifyOnEntry:$notifyOnEntry, notifyOnExit:$notifyOnExit, notifyOnDwell: $notifyOnDwell]';
+    return '[Geofence identifier: $identifier, radius: $radius, $latitude / $longitude, notifyOnEntry:$notifyOnEntry, notifyOnExit:$notifyOnExit, notifyOnDwell: $notifyOnDwell, vertices: $vertices"]';
   }
 }

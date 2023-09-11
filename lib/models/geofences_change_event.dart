@@ -26,11 +26,21 @@ class GeofencesChangeEvent {
       if (loiteringDelay.runtimeType == double) {
         loiteringDelay = loiteringDelay.toInt();
       }
+      // check for polygon geofence.
+      List<List<double>> vertices = [];
+      if (data['vertices'] != null) {
+        (data['vertices'] as List<Object?>).forEach((vertex) {
+          List<double> v = List.from(vertex as List);
+          vertices.add(v);
+        });
+      }
+
       this.on.add(new Geofence(
           identifier: data['identifier'],
           radius: data['radius'] * 1.0,
           latitude: data['latitude'] * 1.0,
           longitude: data['longitude'] * 1.0,
+          vertices: vertices,
           extras: (data['extras'] != null)
               ? data['extras'].cast<String, dynamic>()
               : {},

@@ -792,6 +792,13 @@ class BackgroundGeolocation {
     List<Geofence> rs = [];
     geofences.forEach((dynamic data) {
       dynamic loiteringDelay = data['loiteringDelay'];
+      List<List<double>> vertices = [];
+      List<Object?> tmp = data['vertices'];
+      tmp.forEach((vertex) {
+        List<double> v = List.from(vertex as List);
+        vertices.add(v);
+      });
+
       rs.add(new Geofence(
           identifier: data['identifier'],
           radius: data['radius'],
@@ -803,6 +810,7 @@ class BackgroundGeolocation {
           loiteringDelay: (loiteringDelay.runtimeType == double)
               ? loiteringDelay.round()
               : loiteringDelay,
+          vertices: vertices,
           extras: (data['extras'] != null)
               ? data['extras'].cast<String, dynamic>()
               : {}));
@@ -824,6 +832,12 @@ class BackgroundGeolocation {
       Map data =
           (await _methodChannel.invokeMapMethod('getGeofence', identifier))!;
       dynamic loiteringDelay = data['loiteringDelay'];
+      List<List<double>> vertices = [];
+      List<Object?> tmp = data['vertices'];
+      tmp.forEach((vertex) {
+        List<double> v = List.from(vertex as List);
+        vertices.add(v);
+      });
       return new Geofence(
           identifier: data['identifier'],
           radius: data['radius'],
@@ -835,6 +849,7 @@ class BackgroundGeolocation {
           loiteringDelay: (loiteringDelay.runtimeType == double)
               ? loiteringDelay.round()
               : loiteringDelay,
+          vertices: vertices,
           extras: (data['extras'] != null)
               ? data['extras'].cast<String, dynamic>()
               : {});

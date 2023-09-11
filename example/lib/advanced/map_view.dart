@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
 import 'package:flutter_map/flutter_map.dart';
+import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart'
     as util;
@@ -34,10 +36,16 @@ class MapViewState extends State<MapView>
   List<CircleMarker> _stationaryMarker = [];
 
   List<GeofenceMarker> _geofences = [];
+  List<Polygon> _geofencePolygons = [];
   List<GeofenceMarker> _geofenceEvents = [];
   List<CircleMarker> _geofenceEventEdges = [];
   List<CircleMarker> _geofenceEventLocations = [];
   List<Polyline> _geofenceEventPolylines = [];
+  List<Marker> _polygonGeofenceCursorMarkers = [];
+  List<LatLng> _polygonGeofenceCursorPoints = [];
+
+  bool _isCreatingPolygonGeofence = false;
+  OverlayEntry? _polygonGeofenceMenuOverlay = null;
 
   LatLng _center = new LatLng(51.5, -0.09);
   late MapController _mapController;
@@ -50,6 +58,7 @@ class MapViewState extends State<MapView>
         onPositionChanged: _onPositionChanged,
         center: _center,
         zoom: 16.0,
+        onTap: _onTap,
         onLongPress: _onAddGeofence);
     _mapController = new MapController();
 
@@ -64,6 +73,7 @@ class MapViewState extends State<MapView>
     if (!enabled) {
       setState(() {
         _locations.clear();
+        _geofencePolygons.clear();
         _polyline.clear();
         _stopLocations.clear();
         _motionChangePolylines.clear();
@@ -143,7 +153,7 @@ class MapViewState extends State<MapView>
     // 2.  A CircleMarker for the actual location of the geofence event.
     // 3.  A black PolyLine joining the two above.
     bg.Location location = event.location;
-    LatLng center = new LatLng(geofence!.latitude, geofence!.longitude);
+    LatLng center = new LatLng(geofence!.latitude!, geofence!.longitude!);
     LatLng hit =
         new LatLng(location.coords.latitude, location.coords.longitude);
 
@@ -153,7 +163,7 @@ class MapViewState extends State<MapView>
     double bearing = Geospatial.getBearing(center, hit);
     // Compute a coordinate at the intersection of the line joining center point -> event location and the circle.
     LatLng edge =
-        Geospatial.computeOffsetCoordinate(center, geofence.radius, bearing);
+        Geospatial.computeOffsetCoordinate(center, geofence.radius!, bearing);
     // Green for ENTER, Red for EXIT.
     Color color = Colors.green;
     if (event.action == "EXIT") {
@@ -179,6 +189,12 @@ class MapViewState extends State<MapView>
         Polyline(points: [edge, hit], strokeWidth: 1.0, color: Colors.black));
   }
 
+  bool hasGeofenceMarker(String identifier) {
+    return _geofences.firstWhereOrNull(
+      (GeofenceMarker marker) => marker.geofence?.identifier == identifier
+    ) != null;
+  }
+
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {
     print('[${bg.Event.GEOFENCESCHANGE}] - $event');
     setState(() {
@@ -189,11 +205,28 @@ class MapViewState extends State<MapView>
       });
 
       event.on.forEach((bg.Geofence geofence) {
+        // Don't re-render markers for existing geofences.
+        if (hasGeofenceMarker(geofence.identifier)) return;
         _geofences.add(GeofenceMarker(geofence));
+        if (geofence.vertices!.isNotEmpty) {
+          _geofencePolygons.add(Polygon(
+              borderColor: Colors.blue,
+              borderStrokeWidth: 5.0,
+              isDotted: true,
+              label: geofence.identifier,
+              labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              color: Colors.green.withOpacity(0.2),
+              isFilled: true,
+              points: geofence.vertices!.map((vertex) {
+                return LatLng(vertex[0], vertex[1]);
+              }).toList()
+          ));
+        }
       });
 
       if (event.off.isEmpty && event.on.isEmpty) {
         _geofences.clear();
+        _geofencePolygons.clear();
       }
     });
   }
@@ -256,17 +289,154 @@ class MapViewState extends State<MapView>
         radius: 20);
   }
 
+  void _onTap(pos, latLng) {
+    if (!_isCreatingPolygonGeofence) return;
+    bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("TEST_MODE_CLICK"));
+    HapticFeedback.heavyImpact();
+    int index = _polygonGeofenceCursorMarkers.length + 1;
+    setState(() {
+      _polygonGeofenceCursorPoints.add(latLng);
+      _polygonGeofenceCursorMarkers.add(
+          Marker(point: latLng, width: 20, height: 20, builder: (context) {
+            return Container(
+              child: Text("$index", style: TextStyle(color: Colors.white)),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                //border: Border.all(width: 2, color: Colors.white),
+                shape: BoxShape.circle,
+                color: Colors.black
+              )
+            );
+          })
+      );
+    });
+  }
   void _onAddGeofence(pos, latLng) {
     bg.BackgroundGeolocation.playSound(
         util.Dialog.getSoundId("LONG_PRESS_ACTIVATE"));
 
+    print("[_onAddGgeofence] latLng: $latLng");
+
+
+
+    showAdaptiveActionSheet(
+      context: context,
+      title: const Text('Add Geofence'),
+      androidBorderRadius: 30,
+      actions: <BottomSheetAction>[
+        BottomSheetAction(title: const Text('Circular'), onPressed: (context) {
+          Navigator.of(context).pop();
+          Navigator.of(context).push(MaterialPageRoute<Null>(
+            fullscreenDialog: true,
+            builder: (BuildContext context) {
+              return GeofenceView(center: latLng);
+            })
+          );
+        }),
+        BottomSheetAction(title: const Text('Polygon'), onPressed: (context) {
+          setState(() {
+            _isCreatingPolygonGeofence = true;
+          });
+          _showPolygonGeofenceMenu();
+          Navigator.of(context).pop();
+        })
+      ],
+      cancelAction: CancelAction(title: const Text('Cancel'), onPressed: (context) {
+        Navigator.of(context).pop();
+        _cancelAddGeofence();
+      }),// onPressed parameter is optional by default will dismiss the ActionSheet
+    );
+    /*
     Navigator.of(context).push(MaterialPageRoute<Null>(
         fullscreenDialog: true,
         builder: (BuildContext context) {
           return GeofenceView(latLng);
         }));
-  }
 
+     */
+  }
+  void _showPolygonGeofenceMenu() {
+    OverlayState overlayState = Overlay.of(context);
+    if (_polygonGeofenceMenuOverlay == null) {
+      _polygonGeofenceMenuOverlay = OverlayEntry(builder: (context) {
+        return Positioned(
+            top: 150,
+            left: 0,
+            right: 0,
+            child: Container(
+                padding: EdgeInsets.only(left: 10, right: 10, top: 5),
+                decoration: BoxDecoration(
+                  color: Colors.blue.withOpacity(0.2),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.blue
+                    )
+                  )
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MaterialButton(child: Text(
+                              "CANCEL", style: TextStyle(color: Colors.white)),
+                              color: Colors.red,
+                              onPressed: _cancelAddGeofence
+                          ),
+                          Text("Click map to add polygon points", style: TextStyle(
+                              fontFamily: "sans-serif",
+                              color: Colors.black,
+                              decoration: TextDecoration.none,
+                              fontSize: 12
+                          )),
+                          //Text("Tap map to add points", style: TextStyle(fontWeight: FontWeight.bold)),
+                          MaterialButton(child: Text(
+                              "Next", style: TextStyle(color: Colors.white)),
+                              color: Colors.blue,
+                              onPressed: () {
+                                var vertices = _polygonGeofenceCursorMarkers.map((
+                                    Marker marker) {
+                                  return marker.point;
+                                }).toList();
+                                _cancelAddGeofence();
+                                Navigator.of(context).push(MaterialPageRoute<Null>(
+                                    fullscreenDialog: true,
+                                    builder: (BuildContext context) {
+                                      return GeofenceView(vertices: vertices);
+                                    })
+                                );
+                              })
+                        ]
+                    ),
+                    Row(
+                      children: [
+                        MaterialButton(child: Icon(Icons.undo), onPressed: () {
+                          if (_polygonGeofenceCursorPoints.isEmpty) return;
+                          setState(() {
+                            _polygonGeofenceCursorPoints.removeLast();
+                            _polygonGeofenceCursorMarkers.removeLast();
+                          });
+                        })
+                      ]
+                    )
+                  ]
+                )
+            )
+        );
+      });
+    }
+    overlayState.insert(_polygonGeofenceMenuOverlay!);
+  }
+  void _cancelAddGeofence() {
+    if (_polygonGeofenceMenuOverlay != null) {
+      _polygonGeofenceMenuOverlay?.remove();
+    }
+    setState(() {
+      _polygonGeofenceCursorMarkers.clear();
+      _polygonGeofenceCursorPoints.clear();
+      _isCreatingPolygonGeofence = false;
+    });
+  }
   void _onPositionChanged(MapPosition pos, bool hasGesture) {
     _mapOptions.crs.scale(_mapController.zoom);
   }
@@ -275,38 +445,53 @@ class MapViewState extends State<MapView>
   Widget build(BuildContext context) {
     super.build(context);
     return FlutterMap(
-      mapController: _mapController,
-      options: _mapOptions,
-      children: [
-        new TileLayer(
-            urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-            subdomains: ['a', 'b', 'c']),
-        new PolylineLayer(
-          polylines: [
-            new Polyline(
-              points: _polyline,
-              strokeWidth: 10.0,
-              color: Color.fromRGBO(0, 179, 253, 0.8),
-            ),
-          ],
-        ),
-        // Active geofence circles
-        new CircleLayer(circles: _geofences),
-        // Big red stationary radius while in stationary state.
-        new CircleLayer(circles: _stationaryMarker),
-        // Polyline joining last stationary location to motionchange:true location.
-        new PolylineLayer(polylines: _motionChangePolylines),
-        // Recorded locations.
-        new CircleLayer(circles: _locations),
-        // Small, red circles showing where motionchange:false events fired.
-        new CircleLayer(circles: _stopLocations),
-        // Geofence events (edge marker, event location and polyline joining the two)
-        new CircleLayer(circles: _geofenceEvents),
-        new PolylineLayer(polylines: _geofenceEventPolylines),
-        new CircleLayer(circles: _geofenceEventLocations),
-        new CircleLayer(circles: _geofenceEventEdges),
-        new CircleLayer(circles: _currentPosition),
-      ],
+        mapController: _mapController,
+        options: _mapOptions,
+        children: [
+          TileLayer(
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              subdomains: ['a', 'b', 'c']),
+          PolylineLayer(
+            polylines: [
+              Polyline(
+                points: _polyline,
+                strokeWidth: 10.0,
+                color: Color.fromRGBO(0, 179, 253, 0.8),
+              ),
+            ],
+          ),
+          // Active geofence circles
+          CircleLayer(circles: _geofences),
+          PolygonLayer(polygons: _geofencePolygons),
+          // Big red stationary radius while in stationary state.
+          CircleLayer(circles: _stationaryMarker),
+          // Polyline joining last stationary location to motionchange:true location.
+          PolylineLayer(polylines: _motionChangePolylines),
+          // Recorded locations.
+          CircleLayer(circles: _locations),
+          // Small, red circles showing where motionchange:false events fired.
+          CircleLayer(circles: _stopLocations),
+          // Geofence events (edge marker, event location and polyline joining the two)
+          CircleLayer(circles: _geofenceEvents),
+          PolylineLayer(polylines: _geofenceEventPolylines),
+          CircleLayer(circles: _geofenceEventLocations),
+          CircleLayer(circles: _geofenceEventEdges),
+          CircleLayer(circles: _currentPosition),
+          PolygonLayer(polygons: [
+            Polygon(
+                borderColor: Colors.blue,
+                borderStrokeWidth: 5.0,
+                isDotted: true,
+                label: "Click next to continue",
+                labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                color: Colors.green.withOpacity(0.2),
+                isFilled: true,
+                points: _polygonGeofenceCursorPoints
+            )
+          ]),
+          MarkerLayer(markers: _polygonGeofenceCursorMarkers),
+
+        ]
     );
   }
 }
@@ -316,11 +501,11 @@ class GeofenceMarker extends CircleMarker {
   GeofenceMarker(bg.Geofence geofence, [bool triggered = false])
       : super(
             useRadiusInMeter: true,
-            radius: geofence.radius,
+            radius: geofence.radius!,
             color: (triggered)
                 ? Colors.black26.withOpacity(0.2)
                 : Colors.green.withOpacity(0.3),
-            point: LatLng(geofence.latitude, geofence.longitude)) {
+            point: LatLng(geofence.latitude!, geofence.longitude!)) {
     this.geofence = geofence;
   }
 }

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+adb shell "run-as com.transistorsoft.flutterbackgroundgeolocationexample cat /data/user/0/com.transistorsoft.flutterbackgroundgeolocationexample/databases/transistor_location_manager" > transistor_location_manager.db
+
