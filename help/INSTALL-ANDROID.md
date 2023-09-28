@@ -145,6 +145,27 @@ If you've [purchased an *HMS Background Geolocation* License](https://shop.trans
 ```
 :warning: Huawei HMS support requires `flutter_background_geolocation >= 3.10.0`.
 
+
+### Polygon Geofencing Add-on
+
+If you've purchased a license for the [Polygon Geofencing add-on](https://shop.transistorsoft.com/products/polygon-geofencing), add the following license key to your __`AndroidManifest`__ (Polygon Geofencing is fully functional in DEBUG builds so you can try before you buy):
+
+```diff
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.your.package.id">
+
+  <application>
+    <!-- flutter_background_geolocation licence -->
+    <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="YOUR_LICENCE_KEY_HERE" />
+    <!-- Background Geolocation Polygon Geofencing Licence -->
++   <meta-data android:name="com.transistorsoft.locationmanager.polygon.license" android:value="YOUR_POLYGON_LICENCE_KEY_HERE" />
+    .
+    .
+    .
+  </application>
+</manifest>
+```
+
 ## `AlarmManager` "Exact Alarms" (optional)
 
 The plugin uses __`AlarmManager`__ "exact alarms" for precise scheduling of events (eg: __`Config.stopTimeout`__, __`Config.motionTriggerDelay`__, __`Config.schedule`__).  *Android 14 (SDK 34)*, has restricted usage of ["`AlarmManager` exact alarms"](https://developer.android.com/about/versions/14/changes/schedule-exact-alarms).  To continue using precise timing of events with *Android 14*, you can manually add this permission to your __`AndroidManifest`__.  Otherwise, the plugin will gracefully fall-back to "*in-exact* `AlarmManager` scheduling".  For more information about Android's __`AlarmManager`__, see the [Android API Docs](https://developer.android.com/training/scheduling/alarms).
