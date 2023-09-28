@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.dependency 'Flutter'
   s.dependency 'CocoaLumberjack', '~> 3.7.2'
 
-  s.libraries           = 'sqlite3', 'z'
+  s.libraries           = 'sqlite3', 'z', 'stdc++'
   s.vendored_frameworks = ['TSLocationManager.xcframework']
 
   s.static_framework = true

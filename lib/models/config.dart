@@ -1463,7 +1463,7 @@ class Config {
   ///
   /// Android can detect when the user has configured the device's *Settings->Location* in a manner that does not match your location request (eg: [Config.desiredAccuracy].  For example, if the user configures *Settings->Location->Mode* with *Battery Saving* (ie: Wifi only) but you've specifically requested [DESIRED_ACCURACY_HIGH] (ie: GPS), Android will show a dialog asking the user to confirm the desired changes.  If the user clicks `[OK]`, the OS will automcatically modify the Device settings.
   ///
-  /// ![](https://www.dropbox.com/s/3kuw1gzzbnajhgf/android-location-resolution-dialog.png?dl=1)
+  /// ![](https://dl.dropbox.com/scl/fi/t7bwdrmogr26rcmrbemkt/android-location-resolution-dialog.png?rlkey=won88t8xo5zcei7ktmurebb5t&dl=1)
   ///
   /// This automated Android dialog will be shown in the following cases:
   /// - [BackgroundGeolocation.onProviderChange]
@@ -1647,7 +1647,7 @@ class Config {
   ///
   /// In the logs, you will see a location being ignored:
   /// ```
-  /// TSLocationManager:   ℹ️  IGNORED: same as last location
+  /// TSLocationManager:   ℹ️ IGNORED: same as last location
   /// ```
   ///
   /// An identical location is often generated when changing state from *stationary* -> *moving*, where a single location is first requested (the [BackgroundGeolocation.onMotionChange] location) before turning on regular location updates.  Changing geolocation config params can also generate a duplicate location (eg: changing [distanceFilter]).

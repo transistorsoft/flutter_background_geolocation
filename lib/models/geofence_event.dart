@@ -83,7 +83,16 @@ part of flt_background_geolocation;
 /// });
 /// ```
 ///
-/// ## Infinite Geofencing
+/// # Polygon Geofencing
+///
+/// The Background Geolocation SDK supports *Polygon Geofences* (Geofences of any shape).  See API docs [Geofence.vertices].
+/// ℹ️ __*Polygon Geofencing*__ is [sold as a separate add-on](https://shop.transistorsoft.com/products/polygon-geofencing) (fully functional in *DEBUG* builds).
+///
+///
+/// ![](https://dl.dropbox.com/scl/fi/sboshfvar0h41azmb4tyv/polygon-geofencing-parc-outremont-400.png?rlkey=d2s0n3zbzu72e7s2gch9kxd4a&dl=1)
+/// ![](https://dl.dropbox.com/scl/fi/xz48myvjnpp8ko0l2tufg/polygon-geofencing-parc-lafontaine-400.png?rlkey=sf20ns959uj0a0fq0atmj55bz&dl=1)
+///
+/// # Infinite Geofencing
 ///
 /// The Background Geolocation SDK contains unique and powerful Geofencing features that allow you to monitor any number of circular geofences you wish (thousands even), in spite of limits imposed by the native platform APIs (**20 for iOS; 100 for Android**).
 ///
@@ -141,17 +150,23 @@ part of flt_background_geolocation;
 /// });
 /// ```
 ///
-/// ## Querying Geofences
+/// # Querying Geofences
 ///
 /// Use the method [BackgroundGeolocation.geofences] property to retrieve the entire Array of [Geofence] stored in the SDK's database:
 ///
 /// ```dart
 /// List<Geofence> geofences = await BackgroundGeolocation.geofences;
 /// print('[getGeofences: $geofences');
-///
 /// ```
 ///
-/// ## Monitoring *only* geofences
+/// Or fetch a single geofence by [Geofence.identifier] with [BackgroundGeolocation.getGeofence] :
+///
+/// ```dart
+/// Geofence geofence = await BackgroundGeolocation.getGeofence("home");
+/// print('[getGeofence] $geofence');
+/// ```
+///
+/// # Monitoring *only* geofences
 ///
 /// The BackgroundGeolocation SDK allows you to optionally monitor *only* geofences without constant location-tracking.  To engage *geofences-only* mode, use the method [BackgroundGeolocation.startGeofences] instead of [BackgroundGeolocation.start].
 ///
@@ -172,7 +187,7 @@ part of flt_background_geolocation;
 /// });
 /// ```
 ///
-/// ## Toggling between tracking-modes [BackgroundGeolocation.start] and [BackgroundGeolocation.startGeofences]:
+/// #  Toggling between tracking-modes [BackgroundGeolocation.start] and [BackgroundGeolocation.startGeofences]:
 ///
 /// The SDK can easily be toggled between [State.trackingMode] simply by executing the corresponding [BackgroundGeolocation.start] or [BackgroundGeolocation.startGeofences] methods.
 ///

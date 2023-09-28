@@ -36,7 +36,7 @@ class _GeofenceViewState extends State<GeofenceView> {
   }
 
   void _onClickAdd() {
-    if (this.center != null) {
+    if (center != null) {
       // Circular Geofence.
       bg.BackgroundGeolocation.addGeofence(bg.Geofence(
           identifier: _identifier,
@@ -124,9 +124,9 @@ class _GeofenceViewState extends State<GeofenceView> {
                       labelText: "identifier",
                       labelStyle: labelStyle)),
               Visibility(
-                visible: (this.center != null),
+                visible: (center != null),
                 child: FormField(
-                  enabled: (this.center != null),
+                  enabled: (center != null),
                   builder: (FormFieldState state) {
                     return InputDecorator(
                       decoration: InputDecoration(
