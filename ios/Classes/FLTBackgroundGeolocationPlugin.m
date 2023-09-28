@@ -496,20 +496,40 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 }
 
 -(TSGeofence*) buildGeofence:(NSDictionary*)params {
-    if (!params[@"identifier"] || !params[@"radius"] || !params[@"latitude"] || !params[@"longitude"]) {
-        return nil;
+    // Sanity check.
+    double radius;
+    double latitude;
+    double longitude;
+    NSArray *vertices;
+    BOOL isPolygon = ((params[@"vertices"] != nil) && (params[@"vertices"] != [NSNull null]));
+    if (!isPolygon) {
+        if ((params[@"radius"] == [NSNull null]) || (params[@"latitude"] == [NSNull null]) || (params[@"longitude"] == [NSNull null])) {
+            return nil;
+        }
+        vertices = @[];
+        radius = [params[@"radius"] doubleValue];
+        latitude = [params[@"latitude"] doubleValue];
+        longitude = [params[@"longitude"] doubleValue];
+    } else {
+        if (params[@"identifier"] == [NSNull null]) {
+            return nil;
+        }
+        vertices = params[@"vertices"];
+        radius = 0;
+        latitude = 0;
+        longitude = 0;
     }
-
-
+        
     return [[TSGeofence alloc] initWithIdentifier: params[@"identifier"]
-                                           radius: [params[@"radius"] doubleValue]
-                                         latitude: [params[@"latitude"] doubleValue]
-                                        longitude: [params[@"longitude"] doubleValue]
+                                           radius: radius
+                                         latitude: latitude
+                                        longitude: longitude
                                     notifyOnEntry: (params[@"notifyOnEntry"]) ? [params[@"notifyOnEntry"] boolValue]  : NO
                                      notifyOnExit: (params[@"notifyOnExit"])  ? [params[@"notifyOnExit"] boolValue] : NO
                                     notifyOnDwell: (params[@"notifyOnDwell"]) ? [params[@"notifyOnDwell"] boolValue] : NO
                                    loiteringDelay: (params[@"loiteringDelay"]) ? [params[@"loiteringDelay"] doubleValue] : 0
-                                           extras: params[@"extras"]];
+                                           extras: params[@"extras"]
+                                         vertices: vertices];
 }
 
 - (void) removeGeofence:(NSString*)identifier result:(FlutterResult)result {

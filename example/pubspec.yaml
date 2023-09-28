@@ -6,6 +6,7 @@ dependencies:
     sdk: flutter
   flutter_map: ^5.0.0
   flutter_speed_dial: ^7.0.0
+  adaptive_action_sheet: ^2.0.2
   http: ^1.1.0
 
   shared_preferences: ^2.2.0
@@ -35,6 +36,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/images/markers/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

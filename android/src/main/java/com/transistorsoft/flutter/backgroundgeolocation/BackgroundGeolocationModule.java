@@ -50,6 +50,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -742,12 +743,16 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     @SuppressWarnings("unchecked")
     private static TSGeofence buildGeofence(Map<String, Object> config) throws TSGeofence.Exception {
         TSGeofence.Builder builder = new TSGeofence.Builder();
+
         if (config.containsKey("identifier"))       { builder.setIdentifier((String) config.get("identifier")); }
-        if (config.containsKey("latitude"))         { builder.setLatitude((Double) config.get("latitude")); }
-        if (config.containsKey("longitude"))        { builder.setLongitude((Double) config.get("longitude")); }
-        if (config.containsKey("radius")) {
+        if (config.get("latitude") != null)         { builder.setLatitude((Double) config.get("latitude")); }
+        if (config.get("longitude") != null)        { builder.setLongitude((Double) config.get("longitude")); }
+        if (config.get("radius") != null) {
             Double radius = (Double) config.get("radius");
             builder.setRadius(radius.floatValue());
+        }
+        if (config.get("vertices") != null) {
+            builder.setVertices((List<List<Double>>) config.get("vertices"));
         }
         if (config.containsKey("notifyOnEntry"))    { builder.setNotifyOnEntry((boolean) config.get("notifyOnEntry")); }
         if (config.containsKey("notifyOnExit"))     { builder.setNotifyOnExit((boolean) config.get("notifyOnExit")); }

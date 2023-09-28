@@ -52,6 +52,7 @@ class State extends Config {
                 _ensureInt(data['stopAfterElapsedMinutes']),
             geofenceProximityRadius:
                 _ensureInt(data['geofenceProximityRadius']),
+            maxMonitoredGeofences: _ensureInt(data['maxMonitoredGeofences']),
             geofenceInitialTriggerEntry:
                 _ensureBool(data['geofenceInitialTriggerEntry']),
             desiredOdometerAccuracy:

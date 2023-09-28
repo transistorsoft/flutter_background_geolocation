@@ -13,7 +13,7 @@ static NSString *const EVENT_NAME    = @"geofenceschange";
     self.callback = ^void(TSGeofencesChangeEvent *event) {
         events([event toDictionary]);
     };
-
+    
     [[TSLocationManager sharedInstance] onGeofencesChange:self.callback];
     return nil;
 }
