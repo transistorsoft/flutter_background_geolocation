@@ -1,6 +1,6 @@
 part of flt_background_geolocation;
 
-/// Circular Geofence class provided to [BackgroundGeolocation.addGeofence] and [BackgroundGeolocation.addGeofences].
+/// Circular Geofence class provided to [BackgroundGeolocation.addGeofence], [BackgroundGeolocation.addGeofences]
 ///
 class Geofence {
   /// Unique identifier.
@@ -38,10 +38,10 @@ class Geofence {
   ///
   /// ![](https://dl.dropbox.com/scl/fi/xzf6yau5wcg1az8fy0lbm/geofencing-polygons-on-map.PNG?rlkey=e82h494msbgt8ngu4s2pjwemb&dl=1)
   ///
-  /// The *blue polygons* represents the polygon geofence and the containing *green circle* is a traditional circular geofence provided by native iOS/Android Geofencing API.  The background-geolocation SDK automatically calculates the containing, native cirular geofence.
+  /// The *blue polygons* represent the *actual* polygon geofences and the containing *green circles* are traditional circular geofences provided by the native *iOS/Android* Geofencing APIs.  The background-geolocation SDK automatically calculates the containing, native cirular geofence by solving the [*minimum enclosing circle*](https://en.wikipedia.org/wiki/Smallest-circle_problem) for the given [vertices].
   /// This is why you do not provide [latitude], [longitude] and [radius].
   ///
-  /// - When the device *enters* the containing circular geofence, the SDK uses that as a signal that the device is approaching a polygon.  At this time, the SDK begins aggressively monitoring location to perform "hit-testing" upon the polygon (using a fast algorithm implemented with C++ code).
+  /// - When the device *enters* the containing circular geofence, the SDK uses that as a signal that the device is approaching a polygon.  At this moment, the SDK begins aggressively monitoring the location to perform "hit-testing" upon the polygon using a fast algorithm implemented with C++ code.
   /// - When the device *exits* the containing circular geofence, that's the SDK's signal for it to *cease* monitoring that polygon.
   ///
   /// ## Example
@@ -61,20 +61,24 @@ class Geofence {
   /// ![](https://dl.dropbox.com/scl/fi/ee85vo9ams6y3pmo2dw54/geofencing-add-polygon.PNG?rlkey=wordjd5hbiyiyc0y03qagou3b&dl=1)
   ///
   /// #### Entering / exiting a *cross-shaped* polygon geofence.:
+  ///
   /// ![](https://dl.dropbox.com/scl/fi/iorrnrm0zno91jtg0ctse/polygon-geofencing-cross.PNG?rlkey=p4kufqhxgw9jrmuz4vkqisprw&dl=1)
   ///
   /// #### Entering / exiting a park:
+  ///
   /// ![](https://dl.dropbox.com/scl/fi/qvg9n3s5iacje5szgcqfv/polygon-geofencing-parc-outremont.PNG?rlkey=c6iax7a19db2v6xdxf18k2a7k&dl=1)
   ///
   /// #### Entering / exiting a diamond-shaped polygon:
+  ///
   /// ![](https://dl.dropbox.com/scl/fi/29m3xwb7tm0532mthgjfy/polygon-geofencing-diamond.PNG?rlkey=9ucc5hs7460ig7226iutas4cw&dl=1)
   ///
   /// #### Designing a polygon geofence around a park using the demo app:
+  ///
   /// ![](https://dl.dropbox.com/scl/fi/806mxnz9cdfd4ely8uwfe/polygon-geofencing-parc-lafontaine.PNG?rlkey=yrlbfisx8o5itfz6h0d0inel1&dl=1)
   ///
   List<List<double>>? vertices;
 
-  /// Arbitrary key/values to append to the recorded geofence record.
+  /// Arbitrary key/values appended to the recorded geofence record.
   Map<String, dynamic>? extras;
 
   Geofence(

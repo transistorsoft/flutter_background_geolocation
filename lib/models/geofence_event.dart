@@ -16,9 +16,9 @@ part of flt_background_geolocation;
 /// The Background Geolocation SDK implements the native iOS and Android Geofencing APIs.
 ///
 /// __ℹ️ Note:__
-/// - Native iOS & Android API support only *circular* geofences.
+/// - Native iOS & Android API support only *circular* geofences, however the plugin does implement a custom mechanism for handling *Polygon Geofences*; see [Geofence.vertices].
 /// - The minimum reliable [Geofence.radius] is `200` meters.
-/// - iOS Geofence monitoring *requires* the user authorize [Config.locationAuthorizationRequest] **`Always`** &mdash; **`When in Use`** will **not** work.
+/// - The native geofencing API for both iOS and Android *require* the user authorize [Config.locationAuthorizationRequest] **`Always`** &mdash; **`When in Use`** will **not** work.
 ///
 /// ## Adding Geofences
 /// ---------------------------------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ part of flt_background_geolocation;
 ///
 /// ### Example
 /// ```dart
-/// BackgroundGeolocation.addGeofences([Geofence(
+/// await BackgroundGeolocation.addGeofences([Geofence(
 ///   identifier: "Home",
 ///   radius: 200,
 ///   latitude: 45.51921926,
@@ -61,11 +61,8 @@ part of flt_background_geolocation;
 ///   latitude: 45.61921927,
 ///   longitude: -73.71678582,
 ///   notifyOnEntry: true
-/// )]).then((bool success) {
-///   print('[addGeofences] success');
-/// }).catchError((dynamic error) => {
-///   print('[addGeofences] FAILURE: $error');
-/// });
+/// )]);
+/// print('[addGeofences] success');
 /// ```
 ///
 /// __ℹ️ Note:__ Adding a geofence having an [Geofence.identifier] which already exists within the SDK's geofence database will cause the previous record to be destroyed and the new one inserted.
@@ -122,7 +119,7 @@ part of flt_background_geolocation;
 ///   // Remove map circles
 ///   event.off.forEach((String identifier) {
 ///     removeGeofenceMarker(identifier);
-///   }
+///   });
 /// });
 /// ```
 ///
@@ -131,8 +128,8 @@ part of flt_background_geolocation;
 ///
 /// ## Removing Geofences
 ///
-/// Once a geofence has been inserted into the SDK's database using [BackgroundGeolocation.addGeofence] or [BackgroundGeolocation.addGeofences], they will be monitored *forever*.  If you've configured [Config.stopOnTerminate] __`false`__ and [Config.startOnBoot] __`true`__, geofences will continue to be monitored even if the application is terminated or device rebooted.
-/// To cease monitoring a geofence or *geofences*, you must *remove* them from the SDK's database.
+/// Once a geofence has been inserted into the SDK's database using [BackgroundGeolocation.addGeofence] or [BackgroundGeolocation.addGeofences], they will be monitored *forever* (as long as the plugin remains `State.enabled == true`).  If you've configured [Config.stopOnTerminate] __`false`__ and [Config.startOnBoot] __`true`__, geofences will continue to be monitored even if the application is terminated or device rebooted.
+/// To cease monitoring a geofence or *geofences*, you must *remove* them from the SDK's database (or call [BackgroundGeolocation.stop]).
 ///
 /// ### Removing a single geofence by [Geofence.identifier]:
 ///
