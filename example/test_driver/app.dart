@@ -64,13 +64,11 @@ Future<String> testHandler(String? command) async {
         action.result = state;
         app?.addAction(action);
         return state.toString();
-        break;
       case 'getCurrentPosition':
         bg.Location location = await bg.BackgroundGeolocation.getCurrentPosition(samples: 1);
         action.result = location;
         app?.addAction(action);
         return location.toString();
-        break;
       case 'getGeofences':
         bg.Geofence geofence = bg.Geofence(
             identifier: 'test',
@@ -89,13 +87,11 @@ Future<String> testHandler(String? command) async {
         action.result = rs;
         app?.addAction(action);
         return jsonEncode(rs);
-        break;
       case 'start':
         bg.State state = await bg.BackgroundGeolocation.start();
         action.result = state;
         app?.addAction(action);
         return state.toString();
-        break;
       case 'onLocation':
         Completer completer = new Completer<String>();
         bg.BackgroundGeolocation.onLocation((bg.Location location) {
@@ -105,7 +101,6 @@ Future<String> testHandler(String? command) async {
         });
         bg.BackgroundGeolocation.start();
         return completer.future as String;
-        break;
       case 'onMotionChange':
         Completer completer = new Completer<String>();
         bg.BackgroundGeolocation.onMotionChange((bg.Location location) {
@@ -115,7 +110,6 @@ Future<String> testHandler(String? command) async {
         });
         bg.BackgroundGeolocation.start();
         return completer.future as String;
-        break;
       case 'onGeofence':
         Completer completer = new Completer<String>();
         bg.BackgroundGeolocation.onGeofence((bg.GeofenceEvent event) {
@@ -135,7 +129,6 @@ Future<String> testHandler(String? command) async {
         bg.BackgroundGeolocation.addGeofence(geofence);
         bg.BackgroundGeolocation.start();
         return await completer.future;
-        break;
       case 'onEnabledChange:true':
         Completer completer = new Completer<String>();
         bg.BackgroundGeolocation.onEnabledChange((bool enabled) {
@@ -145,7 +138,6 @@ Future<String> testHandler(String? command) async {
         });
         await bg.BackgroundGeolocation.start();
         return completer.future as String;
-        break;
       case 'onEnabledChange:false':
         Completer completer = new Completer<String>();
         bg.BackgroundGeolocation.onEnabledChange((bool enabled) {
@@ -158,7 +150,6 @@ Future<String> testHandler(String? command) async {
         await bg.BackgroundGeolocation.start();
         await bg.BackgroundGeolocation.stop();
         return completer.future as String;
-        break;
       case 'onHttp':
         Completer completer = new Completer<String>();
 
@@ -180,7 +171,6 @@ Future<String> testHandler(String? command) async {
         });
         bg.BackgroundGeolocation.start();
         return completer.future as String;
-        break;
       case 'onHttp:404':
         Completer completer = new Completer<String>();
 
@@ -202,7 +192,6 @@ Future<String> testHandler(String? command) async {
         });
         bg.BackgroundGeolocation.start();
         return completer.future as String;
-        break;
       case 'getCount':
         await bg.BackgroundGeolocation.destroyLocations();
         await bg.BackgroundGeolocation.getCurrentPosition(samples: 1, persist: true);
@@ -210,7 +199,6 @@ Future<String> testHandler(String? command) async {
         action.result = count;
         app?.addAction(action);
         return count.toString();
-        break;
       case 'destroyLocations':
         await bg.BackgroundGeolocation.getCurrentPosition(samples: 1, persist: true);
         bool result = await bg.BackgroundGeolocation.destroyLocations();
@@ -219,7 +207,6 @@ Future<String> testHandler(String? command) async {
         action.result = count;
         app?.addAction(action);
         return count.toString();
-        break;
       default:
         return "404";
     }
@@ -240,12 +227,10 @@ class Action {
 ///
 /// class TestApp
 /// Layout a simple test-app to run the actions and render the results.
-///
 class TestApp extends StatefulWidget {
-  late _TestAppState _state;
+  late final _TestAppState _state;
 
   @override
-
   _TestAppState createState() {
     _state = new _TestAppState();
     return _state;

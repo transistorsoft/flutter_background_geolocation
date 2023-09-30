@@ -173,22 +173,20 @@ class _HomeViewState extends State<_HomeView> {
         break;
       default:
         return;
-        break;
     }
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("OPEN"));
     runApp(app);
   }
 
   bool _usernameIsValid(String username) {
-    return (username != null) &&
-        new RegExp(USERNAME_REGEXP).hasMatch(username) &&
+    return RegExp(USERNAME_REGEXP).hasMatch(username) &&
         (username.length > 0);
   }
 
   void _launchUrl() async {
     String url = '${ENV.TRACKER_HOST}/$_orgname';
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
     } else {
       throw 'Could not launch $url';
     }
