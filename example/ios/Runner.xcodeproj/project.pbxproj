@@ -241,7 +241,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
 		};
 		9740EEB61CF901F6004384FC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -424,6 +424,22 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"CocoaLumberjack\"",
+					"-l\"background_fetch\"",
+					"-l\"flutter_background_geolocation\"",
+					"-l\"shared_preferences_foundation\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"url_launcher_ios\"",
+					"-l\"z\"",
+					"-framework",
+					"\"TSBackgroundFetch\"",
+					"-framework",
+					"\"TSLocationManager\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.transistorsoft.flutterBackgroundGeolocationExample;
 				PRODUCT_NAME = "BG Geo";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -455,6 +471,22 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
+				);
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-ObjC",
+					"-l\"CocoaLumberjack\"",
+					"-l\"background_fetch\"",
+					"-l\"flutter_background_geolocation\"",
+					"-l\"shared_preferences_foundation\"",
+					"-l\"sqlite3\"",
+					"-l\"stdc++\"",
+					"-l\"url_launcher_ios\"",
+					"-l\"z\"",
+					"-framework",
+					"\"TSBackgroundFetch\"",
+					"-framework",
+					"\"TSLocationManager\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.transistorsoft.flutterBackgroundGeolocationExample;
 				PRODUCT_NAME = "BG Geo";
