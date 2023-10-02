@@ -41,7 +41,7 @@ SPEC CHECKSUMS:
   background_fetch: 896944864b038d2837fc750d470e9841e1e6a363
   CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_background_geolocation: f52e44b24c4efc868c59e69740e392ea87c2e962
+  flutter_background_geolocation: 0760bea2b87d8619982292a1935d74ae7aa0eb46
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
 

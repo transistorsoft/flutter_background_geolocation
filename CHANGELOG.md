@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.13.1 &mdash; 2023-10-02
+* [iOS] Fix "*Duplicate symbol error DummyPods_TSLocationManager*".
+
 ## 4.13.0 &mdash; 2023-09-28
 * **Polygon Geofencing**:  The Background Geolocation SDK now supports *Polygon Geofences* (Geofences of any shape).  For more information, see API docs [`Geofence.vertices`](https://pub.dev/documentation/flutter_background_geolocation/latest/flt_background_geolocation/Geofence/vertices.html).  ℹ️ __*Polygon Geofencing*__ is [sold as a separate add-on](https://shop.transistorsoft.com/products/polygon-geofencing) (fully functional in *DEBUG* builds).
 
