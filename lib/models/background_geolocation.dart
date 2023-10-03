@@ -106,33 +106,33 @@ class _Subscription {
 class BackgroundGeolocation {
   // EventChannels
   static const EventChannel _eventChannelMotionChange =
-      const EventChannel(_EVENT_CHANNEL_MOTIONCHANGE);
+  const EventChannel(_EVENT_CHANNEL_MOTIONCHANGE);
   static const EventChannel _eventChannelLocation =
-      const EventChannel(_EVENT_CHANNEL_LOCATION);
+  const EventChannel(_EVENT_CHANNEL_LOCATION);
   static const EventChannel _eventChannelActivityChange =
-      const EventChannel(_EVENT_CHANNEL_ACTIVITYCHANGE);
+  const EventChannel(_EVENT_CHANNEL_ACTIVITYCHANGE);
   static const EventChannel _eventChannelProviderChange =
-      const EventChannel(_EVENT_CHANNEL_PROVIDERCHANGE);
+  const EventChannel(_EVENT_CHANNEL_PROVIDERCHANGE);
   static const EventChannel _eventChannelGeofencesChange =
-      const EventChannel(_EVENT_CHANNEL_GEOFENCESCHANGE);
+  const EventChannel(_EVENT_CHANNEL_GEOFENCESCHANGE);
   static const EventChannel _eventChannelGeofence =
-      const EventChannel(_EVENT_CHANNEL_GEOFENCE);
+  const EventChannel(_EVENT_CHANNEL_GEOFENCE);
   static const EventChannel _eventChannelHeartbeat =
-      const EventChannel(_EVENT_CHANNEL_HEARTBEAT);
+  const EventChannel(_EVENT_CHANNEL_HEARTBEAT);
   static const EventChannel _eventChannelHttp =
-      const EventChannel(_EVENT_CHANNEL_HTTP);
+  const EventChannel(_EVENT_CHANNEL_HTTP);
   static const EventChannel _eventChannelSchedule =
-      const EventChannel(_EVENT_CHANNEL_SCHEDULE);
+  const EventChannel(_EVENT_CHANNEL_SCHEDULE);
   static const EventChannel _eventChannelPowerSaveChange =
-      const EventChannel(_EVENT_CHANNEL_POWERSAVECHANGE);
+  const EventChannel(_EVENT_CHANNEL_POWERSAVECHANGE);
   static const EventChannel _eventChannelConnectivityChange =
-      const EventChannel(_EVENT_CHANNEL_CONNECTIVITYCHANGE);
+  const EventChannel(_EVENT_CHANNEL_CONNECTIVITYCHANGE);
   static const EventChannel _eventChannelEnabledChange =
-      const EventChannel(_EVENT_CHANNEL_ENABLEDCHANGE);
+  const EventChannel(_EVENT_CHANNEL_ENABLEDCHANGE);
   static const EventChannel _eventChannelNotificationAction =
-      const EventChannel(_EVENT_CHANNEL_NOTIFICATIONACTION);
+  const EventChannel(_EVENT_CHANNEL_NOTIFICATIONACTION);
   static const EventChannel _eventChannelAuthorization =
-      const EventChannel(_EVENT_CHANNEL_AUTHORIZATION);
+  const EventChannel(_EVENT_CHANNEL_AUTHORIZATION);
 
   // Event Subscriptions
   static List<_Subscription> _subscriptions = [];
@@ -159,7 +159,7 @@ class BackgroundGeolocation {
   ///
   static Future<State> get state async {
     Map state = (await _methodChannel.invokeMapMethod('getState'))!;
-    return  State(state);
+    return new State(state);
   }
 
   ///
@@ -216,8 +216,8 @@ class BackgroundGeolocation {
   /// ```
   static Future<State> ready(Config config) async {
     Map state =
-        (await _methodChannel.invokeMapMethod('ready', config.toMap()))!;
-    return  State(state);
+    (await _methodChannel.invokeMapMethod('ready', config.toMap()))!;
+    return new State(state);
   }
 
   ///
@@ -240,8 +240,8 @@ class BackgroundGeolocation {
   ///
   static Future<State> setConfig(Config config) async {
     Map state =
-        (await _methodChannel.invokeMapMethod('setConfig', config.toMap()))!;
-    return  State(state);
+    (await _methodChannel.invokeMapMethod('setConfig', config.toMap()))!;
+    return new State(state);
   }
 
   /// Resets the plugin configuration to documented default-values.
@@ -251,7 +251,7 @@ class BackgroundGeolocation {
   static Future<State> reset([Config? config]) async {
     Map state = (await _methodChannel.invokeMapMethod(
         'reset', (config != null) ? config.toMap() : null))!;
-    return  State(state);
+    return new State(state);
   }
 
   /// Enable location tracking.
@@ -271,7 +271,7 @@ class BackgroundGeolocation {
   ///
   static Future<State> start() async {
     Map state = (await _methodChannel.invokeMapMethod('start'))!;
-    return  State(state);
+    return new State(state);
   }
 
   /// Disable location tracking.
@@ -291,7 +291,7 @@ class BackgroundGeolocation {
   ///
   static Future<State> stop() async {
     Map state = (await _methodChannel.invokeMapMethod('stop'))!;
-    return  State(state);
+    return new State(state);
   }
 
   /// Initiate the configure [Config.schedule].
@@ -308,7 +308,7 @@ class BackgroundGeolocation {
   ///
   static Future<State> startSchedule() async {
     Map state = (await _methodChannel.invokeMapMethod('startSchedule'))!;
-    return  State(state);
+    return new State(state);
   }
 
   /// Halt scheduled tracking.
@@ -334,7 +334,7 @@ class BackgroundGeolocation {
   ///
   static Future<State> stopSchedule() async {
     Map state = (await _methodChannel.invokeMapMethod('stopSchedule'))!;
-    return  State(state);
+    return new State(state);
   }
 
   ///
@@ -369,7 +369,7 @@ class BackgroundGeolocation {
   ///
   static Future<State> startGeofences() async {
     Map state = (await _methodChannel.invokeMapMethod('startGeofences'))!;
-    return  State(state);
+    return new State(state);
   }
 
   /// Sends a signal to OS that you wish to perform a long-running task.
@@ -424,7 +424,7 @@ class BackgroundGeolocation {
   ///
   static Future<int> startBackgroundTask() async {
     return (await _methodChannel.invokeMethod<int>('startBackgroundTask'))
-        as FutureOr<int>;
+    as FutureOr<int>;
   }
 
   /// Signal completion of [startBackgroundTask]
@@ -433,7 +433,7 @@ class BackgroundGeolocation {
   ///
   static Future<int> stopBackgroundTask(int taskId) async {
     return (await _methodChannel.invokeMethod<int>('finish', taskId))
-        as FutureOr<int>;
+    as FutureOr<int>;
   }
 
   /// __@deprecated__.  Renamed to [stopBackgroundTask]
@@ -459,7 +459,7 @@ class BackgroundGeolocation {
   static Future<bool> changePace(bool isMoving) async {
     try {
       return (await _methodChannel.invokeMethod<bool>('changePace', isMoving))
-          as FutureOr<bool>;
+      as FutureOr<bool>;
     } on PlatformException catch (e) {
       throw Error(e);
     }
@@ -514,11 +514,11 @@ class BackgroundGeolocation {
   ///
   static Future<Location> getCurrentPosition(
       {int? samples,
-      int? timeout,
-      int? maximumAge,
-      bool? persist,
-      int? desiredAccuracy,
-      Map<String, dynamic>? extras}) async {
+        int? timeout,
+        int? maximumAge,
+        bool? persist,
+        int? desiredAccuracy,
+        Map<String, dynamic>? extras}) async {
     Map<String, dynamic> options = {};
     if (samples != null) options['samples'] = samples;
     if (timeout != null) options['timeout'] = timeout;
@@ -527,14 +527,14 @@ class BackgroundGeolocation {
     if (desiredAccuracy != null) options['desiredAccuracy'] = desiredAccuracy;
     if (extras != null) options['extras'] = extras;
 
-    Completer completer =  Completer<Location>();
+    Completer completer = new Completer<Location>();
 
     _methodChannel
         .invokeMapMethod('getCurrentPosition', options)
         .then((Map? data) {
-      completer.complete( Location(data!));
+      completer.complete(new Location(data!));
     }).catchError((error) {
-      completer.completeError( LocationError(error));
+      completer.completeError(new LocationError(error));
     });
     return completer.future as FutureOr<Location>;
   }
@@ -555,7 +555,7 @@ class BackgroundGeolocation {
   ///
   static Future<double> get odometer async {
     return (await _methodChannel.invokeMethod<double>('getOdometer'))
-        as FutureOr<double>;
+    as FutureOr<double>;
   }
 
   /// Initialize the `odometer` to *any* arbitrary value.
@@ -573,7 +573,7 @@ class BackgroundGeolocation {
   ///
   static Future<Location> setOdometer(double value) async {
     Map data = (await _methodChannel.invokeMapMethod('setOdometer', value))!;
-    return  Location(data);
+    return new Location(data);
   }
 
   /// Retrive a List of [Location] currently stored in the plugin's SQLite database.
@@ -598,7 +598,7 @@ class BackgroundGeolocation {
   ///
   static Future<int> get count async {
     return (await _methodChannel.invokeMethod<int>('getCount'))
-        as FutureOr<int>;
+    as FutureOr<int>;
   }
 
   /// Remove all records in plugin's SQLite database.
@@ -611,7 +611,7 @@ class BackgroundGeolocation {
   ///
   static Future<bool> destroyLocations() async {
     return (await _methodChannel.invokeMethod<bool>('destroyLocations'))
-        as FutureOr<bool>;
+    as FutureOr<bool>;
   }
 
   /// Destory a single location by [Location.uuid].
@@ -626,13 +626,13 @@ class BackgroundGeolocation {
   /// ```
   static Future<bool> destroyLocation(String uuid) async {
     return (await _methodChannel.invokeMethod<bool>('destroyLocation', uuid))
-        as FutureOr<bool>;
+    as FutureOr<bool>;
   }
 
   /// TODO
   static Future<String> insertLocation(Map<dynamic, dynamic> params) async {
     return (await _methodChannel.invokeMethod<String>('insertLocation', params))
-        as FutureOr<String>;
+    as FutureOr<String>;
   }
 
   /// Manually execute upload configured [Config.url]
@@ -662,7 +662,7 @@ class BackgroundGeolocation {
 
   /// Adds a [Geofence] to be monitored by the native Geofencing API.
   ///
-  /// If a [Geofence] *already exists* with the configured [Geofence.identifier], the previous one will be **deleted** before the  one is inserted.
+  /// If a [Geofence] *already exists* with the configured [Geofence.identifier], the previous one will be **deleted** before the new one is inserted.
   ///
   /// See also [addGeofences] for adding multiple geofences.
   ///
@@ -699,7 +699,7 @@ class BackgroundGeolocation {
 
   /// Adds a list of [Geofence] to be monitored by the native Geofencing API.
   ///
-  /// If a geofence(s) *already* exists with the configured [Geofence.identifier], the previous one(s) will be **deleted** before the  one is inserted.
+  /// If a geofence(s) *already* exists with the configured [Geofence.identifier], the previous one(s) will be **deleted** before the new one is inserted.
   ///
   /// ## Example
   ///
@@ -726,9 +726,9 @@ class BackgroundGeolocation {
   ///
   static Future<bool> addGeofences(List<Geofence> geofences) async {
     List<Map<String, dynamic>> rs =
-        geofences.map((Geofence geofence) => geofence.toMap()).toList();
+    geofences.map((Geofence geofence) => geofence.toMap()).toList();
     return (await _methodChannel.invokeMethod<bool>('addGeofences', rs))
-        as FutureOr<bool>;
+    as FutureOr<bool>;
   }
 
   /// Returns `true` if the SDK already contains the [Geofence] in its database.
@@ -772,7 +772,7 @@ class BackgroundGeolocation {
   ///
   static Future<bool> removeGeofences() async {
     return (await _methodChannel.invokeMethod<bool>('removeGeofences'))
-        as FutureOr<bool>;
+    as FutureOr<bool>;
   }
 
   /// Retrieve all [Geofence].
@@ -799,7 +799,7 @@ class BackgroundGeolocation {
         vertices.add(v);
       });
 
-      rs.add( Geofence(
+      rs.add(new Geofence(
           identifier: data['identifier'],
           radius: data['radius'],
           latitude: data['latitude'],
@@ -830,7 +830,7 @@ class BackgroundGeolocation {
   static Future<Geofence?> getGeofence(String identifier) async {
     try {
       Map data =
-          (await _methodChannel.invokeMapMethod('getGeofence', identifier))!;
+      (await _methodChannel.invokeMapMethod('getGeofence', identifier))!;
       dynamic loiteringDelay = data['loiteringDelay'];
       List<List<double>> vertices = [];
       List<Object?> tmp = data['vertices'];
@@ -838,7 +838,7 @@ class BackgroundGeolocation {
         List<double> v = List.from(vertex as List);
         vertices.add(v);
       });
-      return  Geofence(
+      return new Geofence(
           identifier: data['identifier'],
           radius: data['radius'],
           latitude: data['latitude'],
@@ -902,7 +902,7 @@ class BackgroundGeolocation {
   ///
   static Future<Sensors> get sensors async {
     Map data = (await _methodChannel.invokeMapMethod('getSensors'))!;
-    return  Sensors(data);
+    return new Sensors(data);
   }
 
   /// Manually request location permission from the user with the configured [Config.locationAuthorizationRequest].
@@ -962,7 +962,7 @@ class BackgroundGeolocation {
         'requestPermission', permission))!;
   }
 
-  /// __`[iOS 14+]`__ iOS 14 has introduced a  __`[Precise: On]`__ switch on the location authorization dialog allowing users to disable high-accuracy location.
+  /// __`[iOS 14+]`__ iOS 14 has introduced a new __`[Precise: On]`__ switch on the location authorization dialog allowing users to disable high-accuracy location.
   ///
   /// The method [`requestTemporaryFullAccuracy` (Apple docs)](https://developer.apple.com/documentation/corelocation/cllocationmanager/3600217-requesttemporaryfullaccuracyauth?language=objc) will allow you to present a dialog to the user requesting temporary *full accuracy* for the lifetime of this application run (until terminate).
   ///
@@ -1005,7 +1005,7 @@ class BackgroundGeolocation {
   ///
   /// __See also:__
   /// - [ProviderChangeEvent.accuracyAuthorization].
-  /// - [What's  in iOS 14 `CoreLocation`](https://levelup.gitconnected.com/whats--with-corelocation-in-ios-14-bd28421c95c4)
+  /// - [What's new in iOS 14 `CoreLocation`](https://levelup.gitconnected.com/whats-new-with-corelocation-in-ios-14-bd28421c95c4)
   ///
   static Future<int> requestTemporaryFullAccuracy(String purpose) async {
     return (await _methodChannel.invokeMethod<int>(
@@ -1017,10 +1017,10 @@ class BackgroundGeolocation {
   /// See [ProviderChangeEvent]
   ///
   static Future<ProviderChangeEvent> get providerState async {
-    Completer completer =  Completer<ProviderChangeEvent>();
+    Completer completer = new Completer<ProviderChangeEvent>();
 
     _methodChannel.invokeMapMethod('getProviderState').then((Map? data) {
-      completer.complete( ProviderChangeEvent(data!));
+      completer.complete(new ProviderChangeEvent(data!));
     }).catchError((e) {
       completer.completeError(Error(e));
     });
@@ -1034,7 +1034,7 @@ class BackgroundGeolocation {
   /// Do not use.
   static Future<bool> playSound(dynamic soundId) async {
     return (await _methodChannel.invokeMethod<bool>('playSound', soundId))
-        as FutureOr<bool>;
+    as FutureOr<bool>;
   }
 
   /// Remove all event-listeners registered with the plugin:
@@ -1116,7 +1116,7 @@ class BackgroundGeolocation {
     if (_eventsMotionChange == null) {
       _eventsMotionChange = _eventChannelMotionChange
           .receiveBroadcastStream()
-          .map((dynamic event) =>  Location(event));
+          .map((dynamic event) => new Location(event));
     }
     _registerSubscription(_eventsMotionChange!.listen(callback), callback);
   }
@@ -1151,7 +1151,7 @@ class BackgroundGeolocation {
     if (_eventsLocation == null) {
       _eventsLocation = _eventChannelLocation
           .receiveBroadcastStream()
-          .map((dynamic event) => Location(event));
+          .map((dynamic event) => new Location(event));
     }
     _registerSubscription(
         _eventsLocation!.listen(success, onError: (dynamic error) {
@@ -1186,7 +1186,7 @@ class BackgroundGeolocation {
       _eventsActivityChange = _eventChannelActivityChange
           .receiveBroadcastStream()
           .map((dynamic event) {
-        return  ActivityChangeEvent(event['activity'], event['confidence']);
+        return new ActivityChangeEvent(event['activity'], event['confidence']);
       });
     }
     _registerSubscription(_eventsActivityChange!.listen(callback), callback);
@@ -1206,7 +1206,7 @@ class BackgroundGeolocation {
     if (_eventsGeofence == null) {
       _eventsGeofence = _eventChannelGeofence
           .receiveBroadcastStream()
-          .map((dynamic event) =>  GeofenceEvent(event));
+          .map((dynamic event) => new GeofenceEvent(event));
     }
     _registerSubscription(_eventsGeofence!.listen(callback), callback);
   }
@@ -1227,7 +1227,7 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// BackgroundGeolocation.onGeofencesChange((GeofencesChangeEvent event) {
-  ///   List<String> on = event.on;     //<--  geofences activated.
+  ///   List<String> on = event.on;     //<-- new geofences activated.
   ///   List<Geofence> off = event.off; //<-- geofences that were just de-activated.
   ///
   ///   // Create map circles
@@ -1251,7 +1251,7 @@ class BackgroundGeolocation {
       _eventsGeofencesChange = _eventChannelGeofencesChange
           .receiveBroadcastStream()
           .map((dynamic event) =>
-               GeofencesChangeEvent(event['on'], event['off']));
+      new GeofencesChangeEvent(event['on'], event['off']));
     }
     _registerSubscription(_eventsGeofencesChange!.listen(callback), callback);
   }
@@ -1273,7 +1273,7 @@ class BackgroundGeolocation {
   /// BackgroundGeolocation.onHeartbeat((HeartbeatEvent event) {
   ///   print('[onHeartbeat] ${event}');
   ///
-  ///   // You could request a  location if you wish.
+  ///   // You could request a new location if you wish.
   ///   BackgroundGeolocation.getCurrentPosition(
   ///     samples: 1,
   ///     persist: true
@@ -1287,7 +1287,7 @@ class BackgroundGeolocation {
     if (_eventsHeartbeat == null) {
       _eventsHeartbeat = _eventChannelHeartbeat
           .receiveBroadcastStream()
-          .map((dynamic event) => HeartbeatEvent(event));
+          .map((dynamic event) => new HeartbeatEvent(event));
     }
     _registerSubscription(_eventsHeartbeat!.listen(callback), callback);
   }
@@ -1309,7 +1309,7 @@ class BackgroundGeolocation {
     if (_eventsHttp == null) {
       _eventsHttp = _eventChannelHttp
           .receiveBroadcastStream()
-          .map((dynamic event) =>  HttpEvent(event));
+          .map((dynamic event) => new HttpEvent(event));
     }
     _registerSubscription(_eventsHttp!.listen(callback), callback);
   }
@@ -1334,7 +1334,7 @@ class BackgroundGeolocation {
     if (_eventsSchedule == null) {
       _eventsSchedule = _eventChannelSchedule
           .receiveBroadcastStream()
-          .map((dynamic event) =>  State(event));
+          .map((dynamic event) => new State(event));
     }
     _registerSubscription(_eventsSchedule!.listen(callback), callback);
   }
@@ -1390,7 +1390,7 @@ class BackgroundGeolocation {
       _eventsProviderChange = _eventChannelProviderChange
           .receiveBroadcastStream()
           .map((dynamic event) {
-        return  ProviderChangeEvent(event);
+        return new ProviderChangeEvent(event);
       });
     }
     _registerSubscription(_eventsProviderChange!.listen(callback), callback);
@@ -1412,7 +1412,7 @@ class BackgroundGeolocation {
       _eventsConnectivityChange = _eventChannelConnectivityChange
           .receiveBroadcastStream()
           .map((dynamic event) {
-        return  ConnectivityChangeEvent(event['connected']);
+        return new ConnectivityChangeEvent(event['connected']);
       });
     }
     _registerSubscription(
@@ -1496,7 +1496,7 @@ class BackgroundGeolocation {
     if (_eventsAuthorization == null) {
       _eventsAuthorization = _eventChannelAuthorization
           .receiveBroadcastStream()
-          .map((dynamic event) =>  AuthorizationEvent(event));
+          .map((dynamic event) => new AuthorizationEvent(event));
     }
     _registerSubscription(_eventsAuthorization!.listen(callback), callback);
   }
@@ -1661,7 +1661,7 @@ class BackgroundGeolocation {
   ///
   static Future<bool> registerHeadlessTask(
       void Function(HeadlessEvent) callback) async {
-    Completer completer =  Completer<bool>();
+    Completer completer = new Completer<bool>();
 
     // Two callbacks:  the provided headless-task + _headlessRegistrationCallback
     List<int> args = [
@@ -1682,7 +1682,7 @@ class BackgroundGeolocation {
 
   static void _registerSubscription(
       StreamSubscription<dynamic> sub, Function callback) {
-    _subscriptions.add( _Subscription(sub, callback));
+    _subscriptions.add(new _Subscription(sub, callback));
   }
 
 // Initiate a constant stream of location-updates
@@ -1700,14 +1700,14 @@ class BackgroundGeolocation {
 //    if (desiredAccuracy != null) options['desiredAccuracy'] = desiredAccuracy;
 //    if (extras != null) options['extras'] = extras;
 //
-//    Completer completer =  Completer<Location>();
+//    Completer completer = new Completer<Location>();
 //
 //    _methodChannel
 //        .invokeMethod('watchPosition', options)
 //        .then((dynamic data) {
-//      completer.complete( Location(data));
+//      completer.complete(new Location(data));
 //    }).catchError((error) {
-//      completer.completeError( LocationError(error));
+//      completer.completeError(new LocationError(error));
 //    });
 //    return completer.future;
 //  }
@@ -1724,7 +1724,7 @@ class BackgroundGeolocation {
 void _headlessCallbackDispatcher() {
   WidgetsFlutterBinding.ensureInitialized();
   const MethodChannel _headlessChannel =
-      MethodChannel("$_PLUGIN_PATH/headless", JSONMethodCodec());
+  MethodChannel("$_PLUGIN_PATH/headless", JSONMethodCodec());
 
   _headlessChannel.setMethodCallHandler((MethodCall call) async {
     final args = call.arguments;
@@ -1738,7 +1738,7 @@ void _headlessCallbackDispatcher() {
             '[BackgroundGeolocation _headlessCallbackDispatcher] ERROR: Failed to get callback from handle: $args');
         return;
       }
-      callback( HeadlessEvent(args['event'], args['params']));
+      callback(new HeadlessEvent(args['event'], args['params']));
     } catch (e, stacktrace) {
       print(
           '[BackgroundGeolocation _headlessCallbackDispather] ‼️ Callback error: ' +
