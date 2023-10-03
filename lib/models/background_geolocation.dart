@@ -1707,9 +1707,9 @@ class BackgroundGeolocation {
 //    _methodChannel
 //        .invokeMethod('watchPosition', options)
 //        .then((dynamic data) {
-//      completer.complete( Location(data));
+//      completer.complete(Location(data));
 //    }).catchError((error) {
-//      completer.completeError( LocationError(error));
+//      completer.completeError(LocationError(error));
 //    });
 //    return completer.future;
 //  }
