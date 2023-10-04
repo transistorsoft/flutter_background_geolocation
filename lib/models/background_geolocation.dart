@@ -793,11 +793,13 @@ class BackgroundGeolocation {
     geofences.forEach((dynamic data) {
       dynamic loiteringDelay = data['loiteringDelay'];
       List<List<double>> vertices = [];
-      List<Object?> tmp = data['vertices'];
-      tmp.forEach((vertex) {
-        List<double> v = List.from(vertex as List);
-        vertices.add(v);
-      });
+      if (data['vertices'] != null) {
+        List<Object?> tmp = data['vertices'];
+        tmp.forEach((vertex) {
+          List<double> v = List.from(vertex as List);
+          vertices.add(v);
+        });
+      }
 
       rs.add(new Geofence(
           identifier: data['identifier'],
@@ -833,11 +835,13 @@ class BackgroundGeolocation {
           (await _methodChannel.invokeMapMethod('getGeofence', identifier))!;
       dynamic loiteringDelay = data['loiteringDelay'];
       List<List<double>> vertices = [];
-      List<Object?> tmp = data['vertices'];
-      tmp.forEach((vertex) {
-        List<double> v = List.from(vertex as List);
-        vertices.add(v);
-      });
+      if (data['vertices'] != null) {
+        List<Object?> tmp = data['vertices'];
+        tmp.forEach((vertex) {
+          List<double> v = List.from(vertex as List);
+          vertices.add(v);
+        });
+      }
       return new Geofence(
           identifier: data['identifier'],
           radius: data['radius'],

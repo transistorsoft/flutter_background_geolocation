@@ -737,6 +737,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         if (geofence.getExtras() != null) {
             data.put("extras", jsonToMap(geofence.getExtras()));
         }
+        data.put("vertices", geofence.getVertices());
         return data;
     }
 
