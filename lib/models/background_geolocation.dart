@@ -107,33 +107,33 @@ class _Subscription {
 class BackgroundGeolocation {
   // EventChannels
   static const EventChannel _eventChannelMotionChange =
-  const EventChannel(_EVENT_CHANNEL_MOTIONCHANGE);
+      const EventChannel(_EVENT_CHANNEL_MOTIONCHANGE);
   static const EventChannel _eventChannelLocation =
-  const EventChannel(_EVENT_CHANNEL_LOCATION);
+      const EventChannel(_EVENT_CHANNEL_LOCATION);
   static const EventChannel _eventChannelActivityChange =
-  const EventChannel(_EVENT_CHANNEL_ACTIVITYCHANGE);
+      const EventChannel(_EVENT_CHANNEL_ACTIVITYCHANGE);
   static const EventChannel _eventChannelProviderChange =
-  const EventChannel(_EVENT_CHANNEL_PROVIDERCHANGE);
+      const EventChannel(_EVENT_CHANNEL_PROVIDERCHANGE);
   static const EventChannel _eventChannelGeofencesChange =
-  const EventChannel(_EVENT_CHANNEL_GEOFENCESCHANGE);
+      const EventChannel(_EVENT_CHANNEL_GEOFENCESCHANGE);
   static const EventChannel _eventChannelGeofence =
-  const EventChannel(_EVENT_CHANNEL_GEOFENCE);
+      const EventChannel(_EVENT_CHANNEL_GEOFENCE);
   static const EventChannel _eventChannelHeartbeat =
-  const EventChannel(_EVENT_CHANNEL_HEARTBEAT);
+      const EventChannel(_EVENT_CHANNEL_HEARTBEAT);
   static const EventChannel _eventChannelHttp =
-  const EventChannel(_EVENT_CHANNEL_HTTP);
+      const EventChannel(_EVENT_CHANNEL_HTTP);
   static const EventChannel _eventChannelSchedule =
-  const EventChannel(_EVENT_CHANNEL_SCHEDULE);
+      const EventChannel(_EVENT_CHANNEL_SCHEDULE);
   static const EventChannel _eventChannelPowerSaveChange =
-  const EventChannel(_EVENT_CHANNEL_POWERSAVECHANGE);
+      const EventChannel(_EVENT_CHANNEL_POWERSAVECHANGE);
   static const EventChannel _eventChannelConnectivityChange =
-  const EventChannel(_EVENT_CHANNEL_CONNECTIVITYCHANGE);
+      const EventChannel(_EVENT_CHANNEL_CONNECTIVITYCHANGE);
   static const EventChannel _eventChannelEnabledChange =
-  const EventChannel(_EVENT_CHANNEL_ENABLEDCHANGE);
+      const EventChannel(_EVENT_CHANNEL_ENABLEDCHANGE);
   static const EventChannel _eventChannelNotificationAction =
-  const EventChannel(_EVENT_CHANNEL_NOTIFICATIONACTION);
+      const EventChannel(_EVENT_CHANNEL_NOTIFICATIONACTION);
   static const EventChannel _eventChannelAuthorization =
-  const EventChannel(_EVENT_CHANNEL_AUTHORIZATION);
+      const EventChannel(_EVENT_CHANNEL_AUTHORIZATION);
 
   // Event Subscriptions
   static List<_Subscription> _subscriptions = [];
@@ -218,7 +218,7 @@ class BackgroundGeolocation {
   /// ```
   static Future<State> ready(Config config) async {
     Map state =
-    (await _methodChannel.invokeMapMethod('ready', config.toMap()))!;
+        (await _methodChannel.invokeMapMethod('ready', config.toMap()))!;
     return State(state);
   }
 
@@ -242,7 +242,7 @@ class BackgroundGeolocation {
   ///
   static Future<State> setConfig(Config config) async {
     Map state =
-    (await _methodChannel.invokeMapMethod('setConfig', config.toMap()))!;
+        (await _methodChannel.invokeMapMethod('setConfig', config.toMap()))!;
     return State(state);
   }
 
@@ -426,7 +426,7 @@ class BackgroundGeolocation {
   ///
   static Future<int> startBackgroundTask() async {
     return (await _methodChannel.invokeMethod<int>('startBackgroundTask'))
-    as FutureOr<int>;
+        as FutureOr<int>;
   }
 
   /// Signal completion of [startBackgroundTask]
@@ -435,7 +435,7 @@ class BackgroundGeolocation {
   ///
   static Future<int> stopBackgroundTask(int taskId) async {
     return (await _methodChannel.invokeMethod<int>('finish', taskId))
-    as FutureOr<int>;
+        as FutureOr<int>;
   }
 
   /// __@deprecated__.  Renamed to [stopBackgroundTask]
@@ -461,7 +461,7 @@ class BackgroundGeolocation {
   static Future<bool> changePace(bool isMoving) async {
     try {
       return (await _methodChannel.invokeMethod<bool>('changePace', isMoving))
-      as FutureOr<bool>;
+          as FutureOr<bool>;
     } on PlatformException catch (e) {
       throw Error(e);
     }
@@ -516,11 +516,11 @@ class BackgroundGeolocation {
   ///
   static Future<Location> getCurrentPosition(
       {int? samples,
-        int? timeout,
-        int? maximumAge,
-        bool? persist,
-        int? desiredAccuracy,
-        Map<String, dynamic>? extras}) async {
+      int? timeout,
+      int? maximumAge,
+      bool? persist,
+      int? desiredAccuracy,
+      Map<String, dynamic>? extras}) async {
     Map<String, dynamic> options = {};
     if (samples != null) options['samples'] = samples;
     if (timeout != null) options['timeout'] = timeout;
@@ -557,7 +557,7 @@ class BackgroundGeolocation {
   ///
   static Future<double> get odometer async {
     return (await _methodChannel.invokeMethod<double>('getOdometer'))
-    as FutureOr<double>;
+        as FutureOr<double>;
   }
 
   /// Initialize the `odometer` to *any* arbitrary value.
@@ -600,7 +600,7 @@ class BackgroundGeolocation {
   ///
   static Future<int> get count async {
     return (await _methodChannel.invokeMethod<int>('getCount'))
-    as FutureOr<int>;
+        as FutureOr<int>;
   }
 
   /// Remove all records in plugin's SQLite database.
@@ -613,7 +613,7 @@ class BackgroundGeolocation {
   ///
   static Future<bool> destroyLocations() async {
     return (await _methodChannel.invokeMethod<bool>('destroyLocations'))
-    as FutureOr<bool>;
+        as FutureOr<bool>;
   }
 
   /// Destory a single location by [Location.uuid].
@@ -628,13 +628,13 @@ class BackgroundGeolocation {
   /// ```
   static Future<bool> destroyLocation(String uuid) async {
     return (await _methodChannel.invokeMethod<bool>('destroyLocation', uuid))
-    as FutureOr<bool>;
+        as FutureOr<bool>;
   }
 
   /// TODO
   static Future<String> insertLocation(Map<dynamic, dynamic> params) async {
     return (await _methodChannel.invokeMethod<String>('insertLocation', params))
-    as FutureOr<String>;
+        as FutureOr<String>;
   }
 
   /// Manually execute upload configured [Config.url]
@@ -728,9 +728,9 @@ class BackgroundGeolocation {
   ///
   static Future<bool> addGeofences(List<Geofence> geofences) async {
     List<Map<String, dynamic>> rs =
-    geofences.map((Geofence geofence) => geofence.toMap()).toList();
+        geofences.map((Geofence geofence) => geofence.toMap()).toList();
     return (await _methodChannel.invokeMethod<bool>('addGeofences', rs))
-    as FutureOr<bool>;
+        as FutureOr<bool>;
   }
 
   /// Returns `true` if the SDK already contains the [Geofence] in its database.
@@ -774,7 +774,7 @@ class BackgroundGeolocation {
   ///
   static Future<bool> removeGeofences() async {
     return (await _methodChannel.invokeMethod<bool>('removeGeofences'))
-    as FutureOr<bool>;
+        as FutureOr<bool>;
   }
 
   /// Retrieve all [Geofence].
@@ -832,7 +832,7 @@ class BackgroundGeolocation {
   static Future<Geofence?> getGeofence(String identifier) async {
     try {
       Map data =
-      (await _methodChannel.invokeMapMethod('getGeofence', identifier))!;
+          (await _methodChannel.invokeMapMethod('getGeofence', identifier))!;
       dynamic loiteringDelay = data['loiteringDelay'];
       List<List<double>> vertices = [];
       List<Object?> tmp = data['vertices'];
@@ -1036,7 +1036,7 @@ class BackgroundGeolocation {
   /// Do not use.
   static Future<bool> playSound(dynamic soundId) async {
     return (await _methodChannel.invokeMethod<bool>('playSound', soundId))
-    as FutureOr<bool>;
+        as FutureOr<bool>;
   }
 
   /// Remove all event-listeners registered with the plugin:
@@ -1253,7 +1253,7 @@ class BackgroundGeolocation {
       _eventsGeofencesChange = _eventChannelGeofencesChange
           .receiveBroadcastStream()
           .map((dynamic event) =>
-          GeofencesChangeEvent(event['on'], event['off']));
+              GeofencesChangeEvent(event['on'], event['off']));
     }
     _registerSubscription(_eventsGeofencesChange!.listen(callback), callback);
   }
@@ -1726,7 +1726,7 @@ class BackgroundGeolocation {
 void _headlessCallbackDispatcher() {
   WidgetsFlutterBinding.ensureInitialized();
   const MethodChannel _headlessChannel =
-  MethodChannel("$_PLUGIN_PATH/headless", JSONMethodCodec());
+      MethodChannel("$_PLUGIN_PATH/headless", JSONMethodCodec());
 
   _headlessChannel.setMethodCallHandler((MethodCall call) async {
     final args = call.arguments;
