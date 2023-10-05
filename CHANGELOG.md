@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## 4.13.2 &mdash; 2023-10-04
+## 4.13.2 &mdash; 2023-10-05
 * [Android] Fix error *Unhandled Exception: type 'Null' is not a subtype of type 'List<Object?>'* in `BackgroundGeolocation.geofences` / `getGeofence(uuid)`.
+* [iOS] Rename iOS Obj-c classes, prefixing with `TS`.
 
 ## 4.13.1 &mdash; 2023-10-02
 * [iOS] Fix "*Duplicate symbol error DummyPods_TSLocationManager*".
