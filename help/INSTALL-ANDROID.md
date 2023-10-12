@@ -40,15 +40,15 @@ As an app grows in complexity and imports a variety of 3rd-party modules, it hel
 buildscript {
     ext.kotlin_version = '1.3.0' // Must use 1.3.0 OR HIGHER
 +   ext {
-+       compileSdkVersion   = 31                // or higher
-+       targetSdkVersion    = 31                // or higher
++       compileSdkVersion   = 33                // or higher
++       targetSdkVersion    = 33                // or higher
 +       minSdkVersion       = 19                // Required minimum
 +       appCompatVersion    = "1.4.2"           // or higher
-+       playServicesLocationVersion = "20.0.0"  // or higher
++       playServicesLocationVersion = "21.0.1"  // or higher
 +   }
 }
 
-allprojects {
+allprojects {  // <-- IMPORTANT:  allprojects
     repositories {
         google()
         mavenCentral()

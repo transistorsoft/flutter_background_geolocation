@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.13.3 &mdash; 2023-10-12
+* [Android] Fix `IllegalStateException` calling addGeofences when number of geofences exceeds platform maximum (100).
+
 ## 4.13.2 &mdash; 2023-10-05
 * [Android] Fix error *Unhandled Exception: type 'Null' is not a subtype of type 'List<Object?>'* in `BackgroundGeolocation.geofences` / `getGeofence(uuid)`.
 * [iOS] Rename iOS Obj-c classes, prefixing with `TS`.
