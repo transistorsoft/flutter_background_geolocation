@@ -177,10 +177,6 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         mActivity = activity;
     }
 
-    public static void setPluginRegistrant(PluginRegistry.PluginRegistrantCallback callback) {
-        HeadlessTask.setPluginRegistrant(callback);
-    }
-
     private void initializeLocationManager(Activity activity) {
         mIsInitialized = true;
 
