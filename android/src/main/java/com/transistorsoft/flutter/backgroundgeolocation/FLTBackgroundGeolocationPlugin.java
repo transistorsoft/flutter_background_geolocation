@@ -11,21 +11,6 @@ import io.flutter.plugin.common.PluginRegistry;
  * FlutterBackgroundGeolocationPlugin
  */
 public class FLTBackgroundGeolocationPlugin implements FlutterPlugin, ActivityAware {
-
-    /** Plugin registration. */
-    public static void registerWith(PluginRegistry.Registrar registrar) {
-        BackgroundGeolocationModule module = BackgroundGeolocationModule.getInstance();
-        module.onAttachedToEngine(registrar.context(), registrar.messenger());
-        if (registrar.activity() != null) {
-            module.setActivity(registrar.activity());
-        }
-    }
-
-    // @deprecated Called by Application#onCreate
-    public static void setPluginRegistrant(PluginRegistry.PluginRegistrantCallback callback) {
-        HeadlessTask.setPluginRegistrant(callback);
-    }
-
     public FLTBackgroundGeolocationPlugin() { }
 
     @Override
