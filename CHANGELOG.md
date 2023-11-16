@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.13.5 &mdash; 2012-11-16
+* [Android] Fix problem with polygon-geofencing license-validation not working in DEBUG builds when configured with product flavors.
+
 ## 4.13.4 &mdash; 2023-11-06
 * [Android] HMS geolocation event does not provide a timestamp for the triggering location!!  Use System current time.
 * [Android] Remove deprecated flutter V1 plugin architecture code (`registerWith`).
