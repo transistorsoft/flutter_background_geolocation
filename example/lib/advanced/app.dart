@@ -39,6 +39,6 @@ class _AdvancedAppState extends State<AdvancedApp> {
               bodyColor: Colors.black,
             )),
         home:
-            Scaffold(body: HomeView(), floatingActionButtonLocation: FloatingActionButtonLocation.endDocked, floatingActionButton: MainMenuButton()));
+            Scaffold(body: HomeView(), floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, floatingActionButton: MainMenuButton()));
   }
 }
