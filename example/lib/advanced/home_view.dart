@@ -463,7 +463,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
           title: const Text('BG Geo'),
           centerTitle: true,
           leading: IconButton(onPressed: _onClickHome, icon: Icon(Icons.home, color: Colors.black)),
-          backgroundColor: Theme.of(context).bottomAppBarColor,
+          backgroundColor: Colors.amberAccent,
           foregroundColor: Colors.black,
           actions: <Widget>[
             Switch(value: _enabled!, onChanged: _onClickEnable
@@ -491,6 +491,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
           )
       ),
       bottomNavigationBar: BottomAppBar(
+          color: Colors.amberAccent,
           child: Container(
               padding: const EdgeInsets.only(left: 5.0, right: 5.0),
               child: Row(

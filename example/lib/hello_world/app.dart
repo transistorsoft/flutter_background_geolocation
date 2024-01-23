@@ -26,7 +26,6 @@ class HelloWorldApp extends StatelessWidget {
     return new MaterialApp(
       title: 'BackgroundGeolocation Demo',
       theme: theme.copyWith(
-          bottomAppBarColor: Colors.amberAccent,
           colorScheme: theme.colorScheme.copyWith(secondary:Colors.black),
           primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
                 bodyColor: Colors.black,
@@ -247,10 +246,11 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
         actions: <Widget>[
           Switch(value: _enabled, onChanged: _onClickEnable),
         ],
-        backgroundColor: Theme.of(context).bottomAppBarColor,
+        backgroundColor: Colors.amberAccent
       ),
       body: SingleChildScrollView(child: Text('$_content')),
       bottomNavigationBar: BottomAppBar(
+          color: Colors.amberAccent,
           child: Container(
               padding: const EdgeInsets.only(left: 5.0, right: 5.0),
               child: Row(

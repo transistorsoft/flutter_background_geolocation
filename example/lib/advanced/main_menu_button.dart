@@ -115,12 +115,13 @@ class MainMenuButtonState extends State<MainMenuButton> {
           renderOverlay: false,
           spacing: 10.0,
           backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
           children: _buildMenuItems(context)),
     );
   }
 
   List<SpeedDialChild> _buildMenuItems(BuildContext context) {
-    Color bgColor = Theme.of(context).bottomAppBarColor;
+    Color? bgColor = Colors.amberAccent;
 
     return <SpeedDialChild>[
       SpeedDialChild(
