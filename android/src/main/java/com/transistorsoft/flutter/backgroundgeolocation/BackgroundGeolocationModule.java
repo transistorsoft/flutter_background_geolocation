@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,18 +49,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
-import io.flutter.plugin.common.PluginRegistry;
 
 public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHandler, Application.ActivityLifecycleCallbacks {
     private static BackgroundGeolocationModule sInstance;
@@ -98,25 +95,40 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     private boolean mIsInitialized  = false;
     private boolean mReady          = false;
-    private final AtomicBoolean mIsAttachedToEngine = new AtomicBoolean(false);
 
-    private MethodChannel mMethodChannel;
-    private final List<EventChannel.StreamHandler> mStreamHandlers = new ArrayList<>();
+    private final AtomicInteger mAttachedEngineCount = new AtomicInteger(0);
+
+    private final Map<BinaryMessenger, MethodChannel> mMethodChannels = new HashMap<>();
+    private final Map<BinaryMessenger, List<EventChannel.StreamHandler>> mStreamHandlers = new HashMap<>();
 
     private Context mContext;
     private Activity mActivity;
-    private BinaryMessenger mMessenger;
+    private final List<BinaryMessenger> mMessengers = new ArrayList<>();
 
     void onAttachedToEngine(Context context, final BinaryMessenger messenger) {
-        mMessenger = messenger;
         mContext = context;
-        mIsAttachedToEngine.set(true);
-        mMethodChannel = new MethodChannel(messenger, METHOD_CHANNEL_NAME);
-        mMethodChannel.setMethodCallHandler(this);
+        mMessengers.add(messenger);
+        mAttachedEngineCount.incrementAndGet();
+
+        MethodChannel methodChannel = new MethodChannel(messenger, METHOD_CHANNEL_NAME);
+        methodChannel.setMethodCallHandler(this);
+        mMethodChannels.put(messenger, methodChannel);
+
+        if (mActivity != null) {
+            registerHandlersForMessenger(messenger);
+        }
     }
 
-    void onDetachedFromEngine() {
-        mIsAttachedToEngine.set(false);
+    void onDetachedFromEngine(final BinaryMessenger messenger) {
+        mAttachedEngineCount.decrementAndGet();
+        mMessengers.remove(messenger);
+
+        @Nullable MethodChannel methodChannel = mMethodChannels.remove(messenger);
+        if (methodChannel != null) {
+            methodChannel.setMethodCallHandler(null);
+        }
+
+        cancelStreamHandlersForMessenger(messenger);
     }
 
     void setActivity(@Nullable final Activity activity) {
@@ -130,22 +142,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             mReady = false;
             mIsInitialized = false;
 
-            synchronized (mStreamHandlers) {
-                mStreamHandlers.add(new LocationStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new MotionChangeStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new ActivityChangeStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new GeofencesChangeStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new GeofenceStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new HeartbeatStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new HttpStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new ScheduleStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new ConnectivityChangeStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new EnabledChangeStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new ProviderChangeStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new PowerSaveChangeStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new NotificationActionStreamHandler().register(mContext, mMessenger));
-                mStreamHandlers.add(new AuthorizationStreamHandler().register(mContext, mMessenger));
-            }
+            registerHandlersForAllMessengers();
 
             BackgroundGeolocation.getThreadPool().execute(new Runnable() {
                 @Override public void run() {
@@ -166,15 +163,62 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             if (app != null) {
                 app.unregisterActivityLifecycleCallbacks(this);
             }
-            synchronized (mStreamHandlers) {
-                for (EventChannel.StreamHandler handler : mStreamHandlers) {
-                    handler.onCancel(null);
-                }
-                mStreamHandlers.clear();
-            }
+            cancelStreamHandlersForAllMessengers();
             BackgroundGeolocation.getInstance(mContext).onActivityDestroy();
         }
         mActivity = activity;
+    }
+
+    private void registerHandlersForAllMessengers() {
+        synchronized (mMessengers) {
+            for (BinaryMessenger messenger : mMessengers) {
+                registerHandlersForMessenger(messenger);
+            }
+        }
+    }
+
+    private void registerHandlersForMessenger(BinaryMessenger messenger) {
+        synchronized (mStreamHandlers) {
+            if (mStreamHandlers.containsKey(messenger)) return;
+
+            List<EventChannel.StreamHandler> streamHandlers = new ArrayList<>();
+
+            streamHandlers.add(new LocationStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new MotionChangeStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new ActivityChangeStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new GeofencesChangeStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new GeofenceStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new HeartbeatStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new HttpStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new ScheduleStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new ConnectivityChangeStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new EnabledChangeStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new ProviderChangeStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new PowerSaveChangeStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new NotificationActionStreamHandler().register(mContext, messenger));
+            streamHandlers.add(new AuthorizationStreamHandler().register(mContext, messenger));
+
+            mStreamHandlers.put(messenger, streamHandlers);
+        }
+    }
+
+    private void cancelStreamHandlersForAllMessengers() {
+        synchronized (mMessengers) {
+            for (BinaryMessenger messenger : mMessengers) {
+                cancelStreamHandlersForMessenger(messenger);
+            }
+        }
+    }
+
+    private void cancelStreamHandlersForMessenger(BinaryMessenger messenger) {
+        synchronized (mStreamHandlers) {
+            @Nullable List<EventChannel.StreamHandler> streamHandlers = mStreamHandlers.remove(messenger);
+            if (streamHandlers == null) return;
+
+            for (EventChannel.StreamHandler handler : streamHandlers) {
+                handler.onCancel(null);
+            }
+        }
     }
 
     private void initializeLocationManager(Activity activity) {
