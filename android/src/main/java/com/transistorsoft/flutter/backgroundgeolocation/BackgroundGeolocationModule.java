@@ -53,7 +53,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
@@ -77,10 +76,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     public static final String PLUGIN_ID                  = "com.transistorsoft/flutter_background_geolocation";
     private static final String METHOD_CHANNEL_NAME         = PLUGIN_ID + "/methods";
-
     private static final String ACTION_RESET             = "reset";
     private static final String ACTION_READY             = "ready";
-
     private static final String ACTION_REGISTER_HEADLESS_TASK = "registerHeadlessTask";
     private static final String ACTION_GET_STATE         = "getState";
     private static final String ACTION_START_SCHEDULE    = "startSchedule";
@@ -90,26 +87,19 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     private static final String ACTION_SHOW_SETTINGS     = "showSettings";
     private static final String ACTION_REGISTER_PLUGIN   = "registerPlugin";
     private static final String ACTION_REQUEST_TEMPORARY_FULL_ACCURACY = "requestTemporaryFullAccuracy";
-
     private static final String JOB_SERVICE_CLASS         = "com.transistorsoft.flutter.backgroundgeolocation.HeadlessTask";
-
     private boolean mIsInitialized  = false;
     private boolean mReady          = false;
-
-    private final AtomicInteger mAttachedEngineCount = new AtomicInteger(0);
-
     private final Map<BinaryMessenger, MethodChannel> mMethodChannels = new HashMap<>();
     private final Map<BinaryMessenger, List<EventChannel.StreamHandler>> mStreamHandlers = new HashMap<>();
-
+    private final List<BinaryMessenger> mMessengers = new ArrayList<>();
     private Context mContext;
     private Activity mActivity;
-    private final List<BinaryMessenger> mMessengers = new ArrayList<>();
 
     void onAttachedToEngine(Context context, final BinaryMessenger messenger) {
         mContext = context;
-        mMessengers.add(messenger);
-        mAttachedEngineCount.incrementAndGet();
 
+        mMessengers.add(messenger);
         MethodChannel methodChannel = new MethodChannel(messenger, METHOD_CHANNEL_NAME);
         methodChannel.setMethodCallHandler(this);
         mMethodChannels.put(messenger, methodChannel);
@@ -120,7 +110,6 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
 
     void onDetachedFromEngine(final BinaryMessenger messenger) {
-        mAttachedEngineCount.decrementAndGet();
         mMessengers.remove(messenger);
 
         @Nullable MethodChannel methodChannel = mMethodChannels.remove(messenger);
@@ -180,24 +169,26 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     private void registerHandlersForMessenger(BinaryMessenger messenger) {
         synchronized (mStreamHandlers) {
             if (mStreamHandlers.containsKey(messenger)) return;
+        }
 
-            List<EventChannel.StreamHandler> streamHandlers = new ArrayList<>();
+        List<EventChannel.StreamHandler> streamHandlers = new ArrayList<>();
 
-            streamHandlers.add(new LocationStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new MotionChangeStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new ActivityChangeStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new GeofencesChangeStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new GeofenceStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new HeartbeatStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new HttpStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new ScheduleStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new ConnectivityChangeStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new EnabledChangeStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new ProviderChangeStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new PowerSaveChangeStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new NotificationActionStreamHandler().register(mContext, messenger));
-            streamHandlers.add(new AuthorizationStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new LocationStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new MotionChangeStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new ActivityChangeStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new GeofencesChangeStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new GeofenceStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new HeartbeatStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new HttpStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new ScheduleStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new ConnectivityChangeStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new EnabledChangeStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new ProviderChangeStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new PowerSaveChangeStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new NotificationActionStreamHandler().register(mContext, messenger));
+        streamHandlers.add(new AuthorizationStreamHandler().register(mContext, messenger));
 
+        synchronized (mStreamHandlers) {
             mStreamHandlers.put(messenger, streamHandlers);
         }
     }
@@ -211,13 +202,14 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
 
     private void cancelStreamHandlersForMessenger(BinaryMessenger messenger) {
+        @Nullable List<EventChannel.StreamHandler> streamHandlers;
         synchronized (mStreamHandlers) {
-            @Nullable List<EventChannel.StreamHandler> streamHandlers = mStreamHandlers.remove(messenger);
-            if (streamHandlers == null) return;
+            streamHandlers = mStreamHandlers.remove(messenger);
+        }
+        if (streamHandlers == null) return;
 
-            for (EventChannel.StreamHandler handler : streamHandlers) {
-                handler.onCancel(null);
-            }
+        for (EventChannel.StreamHandler handler : streamHandlers) {
+            handler.onCancel(null);
         }
     }
 
