@@ -20,7 +20,7 @@ public class FLTBackgroundGeolocationPlugin implements FlutterPlugin, ActivityAw
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPlugin.FlutterPluginBinding binding) {
-        BackgroundGeolocationModule.getInstance().onDetachedFromEngine();
+        BackgroundGeolocationModule.getInstance().onDetachedFromEngine(binding.getBinaryMessenger());
     }
 
     @Override
