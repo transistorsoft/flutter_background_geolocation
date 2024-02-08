@@ -35,7 +35,7 @@ class ProviderChangeEvent {
   /// `true` if GPS location provider is enabled.
   late bool gps;
 
-  /// __`[iOS 14+]`__ iOS 14 has introduced a new __`[Precise: On]`__ switch on the location authorization dialog allowing users to disable high-accuracy location.
+  /// __`[Precise: On]`__ switch on the location authorization dialog allowing users to disable high-accuracy location.
   ///
   /// This attribute shows the state of that switch:
   /// - Enabled:  [ProviderChangeEvent.ACCURACY_AUTHORIZATION_FULL].
