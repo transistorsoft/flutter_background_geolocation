@@ -1,6 +1,9 @@
 # CHANGELOG
 
-## 4.13.5 &mdash; 2012-11-16
+## 4.13.6 &mdash; 2024-02-08
+* [Android] Add multi FlutterEngine support to Android
+
+## 4.13.5 &mdash; 2023-11-16
 * [Android] Fix problem with polygon-geofencing license-validation not working in DEBUG builds when configured with product flavors.
 
 ## 4.13.4 &mdash; 2023-11-06
