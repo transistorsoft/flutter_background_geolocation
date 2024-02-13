@@ -1,4 +1,4 @@
-part of flt_background_geolocation;
+part of '../flutter_background_geolocation.dart';
 
 /// Configures the SDK for authorization wtih your server's [accessToken] token (eg: [JSON Web Token](https://jwt.io/)) and automatically requests new tokens when server returns HTTP status `"401 Unauthorized"`.
 ///

@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.13.7 &mdash; 2024-02-13
+* Fix minor static analysis issues reported in `dart` code referencing `part-of` directive.
+
 ## 4.13.6 &mdash; 2024-02-08
 * [Android] Add multi FlutterEngine support to Android
 

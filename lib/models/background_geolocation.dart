@@ -1,4 +1,4 @@
-part of flt_background_geolocation;
+part of '../flutter_background_geolocation.dart';
 
 const _EVENT_CHANNEL_LOCATION = "$_PLUGIN_PATH/events/" + Event.LOCATION;
 const _EVENT_CHANNEL_MOTIONCHANGE =

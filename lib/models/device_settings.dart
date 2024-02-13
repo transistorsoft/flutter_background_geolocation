@@ -1,4 +1,4 @@
-part of flt_background_geolocation;
+part of '../flutter_background_geolocation.dart';
 
 /// An object for redirecting a User to an Android device's settings screen from a [DeviceSettings] request.
 ///

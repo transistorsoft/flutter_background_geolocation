@@ -1,4 +1,4 @@
-part of flt_background_geolocation;
+part of '../flutter_background_geolocation.dart';
 
 /// __(Android only)__ The Android operating system requires a persistent notification when running a foreground service.
 ///

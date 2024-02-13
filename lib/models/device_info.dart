@@ -1,4 +1,4 @@
-part of flt_background_geolocation;
+part of '../flutter_background_geolocation.dart';
 
 /// Returns basic device information, including [model], [manufacturer], [version] & [platform]`.
 ///

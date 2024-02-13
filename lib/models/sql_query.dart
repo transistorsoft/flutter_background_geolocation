@@ -1,4 +1,4 @@
-part of flt_background_geolocation;
+part of '../flutter_background_geolocation.dart';
 
 /// Used for selecting a range of records from the SDK's database.  Used with the methods [Logger.getLog], [Logger.emailLog] and [Logger.uploadLog].
 ///

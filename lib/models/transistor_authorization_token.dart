@@ -1,4 +1,4 @@
-part of flt_background_geolocation;
+part of '../flutter_background_geolocation.dart';
 
 /// Use [TransistorAuthorizationToken.findOrCreate] to generate an Authorization token suitable for configuring the SDK's [Authorization] with Transistor Software's Demo Server at [http://tracker.transistorsoft.com](http://tracker.transistorsoft.com).
 ///
