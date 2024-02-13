@@ -1,4 +1,4 @@
-part of flt_background_geolocation;
+part of '../flutter_background_geolocation.dart';
 
 /// Expresses the current state of the plugin, including all [Config] options.
 ///

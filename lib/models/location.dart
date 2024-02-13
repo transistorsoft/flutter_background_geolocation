@@ -1,4 +1,4 @@
-part of flt_background_geolocation;
+part of '../flutter_background_geolocation.dart';
 
 /// Location coordinates (eg: `latitude`, `longitude`, `accuracy`, `speed`, `heading`, etc.
 ///
