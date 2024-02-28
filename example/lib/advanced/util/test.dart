@@ -367,10 +367,10 @@ class Test {
       // Create a test schedule to start in 1 minute for duration 1 minute (with 1 min offset between each)
       DateTime now = DateTime.now();
       for (int n = 0; n < 120; n++) {
-        DateTime start = now.add(Duration(minutes: (2 * n + 1)));
-        DateTime end = start.add(Duration(minutes: 1));
+        DateTime start = now.add(Duration(minutes: (4 * n + 1)));
+        DateTime end = start.add(Duration(minutes: 2));
         schedule
-            .add("1-7 ${start.hour}:${start.minute}-${end.hour}:${end.minute} geofence");
+            .add("1-7 ${start.hour}:${start.minute}-${end.hour}:${end.minute}");
       }
     }
 
@@ -401,7 +401,6 @@ class Test {
             channelId: 'my_channel_id',
             actions: ["notificationButtonFoo", "notificationButtonBar"]),
         schedule: schedule,
-
         scheduleUseAlarmManager: true,
         extras: {"foo": "bar"},
         autoSync: true,
