@@ -2,7 +2,7 @@ ext {
     kotlin_version     = '1.7.10'
     compileSdkVersion   = 34
     targetSdkVersion    = 34
-    minSdkVersion       = 19
+    minSdkVersion       = 21
     appCompatVersion    = "1.4.2"
     playServicesLocationVersion = "21.1.0"
     hmsLocationVersion  = "6.12.0.300" //<-- this version invokes StrictMode crash "Explicit termination method 'end' not called" from its own okhttp requests!!

@@ -53,7 +53,7 @@ allprojects {  // <-- IMPORTANT:  allprojects
 +ext {
 +    compileSdkVersion   = 33                // or higher / as desired
 +    targetSdkVersion    = 33                // or higher / as desired
-+    minSdkVersion       = 19                // Required minimum
++    minSdkVersion       = 21                // Required minimum
 +    appCompatVersion    = "1.4.2"           // or higher / as desired
 +    playServicesLocationVersion = "21.0.1"  // or higher / as desired
 +}
@@ -68,7 +68,7 @@ buildscript {
 +   ext {
 +       compileSdkVersion   = 33                // or higher / as desired
 +       targetSdkVersion    = 33                // or higher / as desired
-+       minSdkVersion       = 19                // Required minimum
++       minSdkVersion       = 21                // Required minimum
 +       appCompatVersion    = "1.4.2"           // or higher / as desired
 +       playServicesLocationVersion = "21.0.1"  // or higher / as desired
 +   }
