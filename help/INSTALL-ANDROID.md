@@ -30,24 +30,10 @@ Execution failed for task ':app:processDebugManifest'.
 ```
 
 
-## `android/build.gradle`
-
-As an app grows in complexity and imports a variety of 3rd-party modules, it helps to provide some key **"Global Gradle Configuration Properties"** which all modules can align their requested dependency versions to.  `flutter_background_geolocation` **is aware** of these variables and will align itself to them when detected.  One of the most common build errors comes from multiple 3rd-party modules importing different version of `play-services` or `support` libraries.
-
-:open_file_folder: `android/build.gradle`:
+## :open_file_folder: `android/build.gradle`
+- Add the following **required** `maven` repo urls:
 
 ```diff
-buildscript {
-    ext.kotlin_version = '1.3.0' // Must use 1.3.0 OR HIGHER
-+   ext {
-+       compileSdkVersion   = 33                // or higher
-+       targetSdkVersion    = 33                // or higher
-+       minSdkVersion       = 19                // Required minimum
-+       appCompatVersion    = "1.4.2"           // or higher
-+       playServicesLocationVersion = "21.0.1"  // or higher
-+   }
-}
-
 allprojects {  // <-- IMPORTANT:  allprojects
     repositories {
         google()
@@ -59,20 +45,42 @@ allprojects {  // <-- IMPORTANT:  allprojects
 +       maven { url "${project(':background_fetch').projectDir}/libs" }
     }
 }
-
 ```
 
-## `android/app/build.gradle`
-
-In addition, you should take advantage of the *Global Configuration Properties* **yourself**, replacing hard-coded values in your `android/app/build.gradle` with references to these variables:
-
-:open_file_folder: `android/app/build.gradle`:
+- #### If you're using `flutter >= 3.19.0` ([New Android Architecture](https://docs.flutter.dev/release/breaking-changes/flutter-gradle-plugin-apply)):
 
 ```diff
-apply plugin: 'com.android.application'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
++ext {
++    compileSdkVersion   = 33                // or higher / as desired
++    targetSdkVersion    = 33                // or higher / as desired
++    minSdkVersion       = 19                // Required minimum
++    appCompatVersion    = "1.4.2"           // or higher / as desired
++    playServicesLocationVersion = "21.0.1"  // or higher / as desired
++}
+```
 
-// flutter_background_geolocation (must be placed after the lines above)
+- #### Otherwise for `flutter < 3.19.0` (Old Android Architecture):
+
+```diff
+
+buildscript {
+    ext.kotlin_version = '1.3.0' // Must use 1.3.0 OR HIGHER
++   ext {
++       compileSdkVersion   = 33                // or higher / as desired
++       targetSdkVersion    = 33                // or higher / as desired
++       minSdkVersion       = 19                // Required minimum
++       appCompatVersion    = "1.4.2"           // or higher / as desired
++       playServicesLocationVersion = "21.0.1"  // or higher / as desired
++   }
+}
+```
+
+## :open_file_folder: `android/app/build.gradle`
+
+:exclamation: __DO NOT OMIT ANY OF THE FOLLOWING CHANGES__ :exclamation:
+
+```diff
+// flutter_background_geolocation
 +Project background_geolocation = project(':flutter_background_geolocation')
 +apply from: "${background_geolocation.projectDir}/background_geolocation.gradle"
 

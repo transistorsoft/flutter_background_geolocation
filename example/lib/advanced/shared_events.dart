@@ -12,7 +12,7 @@ class Event {
 class SharedEvents extends InheritedWidget {
   final List<Event> events;
 
-  SharedEvents({required this.events, child: Widget}) : super(child: child);
+  SharedEvents({required this.events, child = Widget}) : super(child: child);
 
   static SharedEvents? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType();

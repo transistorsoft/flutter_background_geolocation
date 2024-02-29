@@ -291,7 +291,7 @@ class _HomeViewState extends State<_HomeView> {
                 ])));
   }
 
-  MaterialButton _buildApplicationButton(String text, {onPressed: Function}) {
+  MaterialButton _buildApplicationButton(String text, {onPressed=Function}) {
     return MaterialButton(
         onPressed: onPressed,
         child: Text(text, style: TextStyle(fontSize: 18.0)),
