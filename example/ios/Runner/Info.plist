@@ -41,18 +41,11 @@
 		<true/>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Always and WhenInUse Description</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Location always</string>
-	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
-	<dict>
-		<key>DemoPurpose</key>
-		<string>CHANGEME: provide high accuracy location-tracking</string>
-	</dict>
+	<string>[CHANGEME] Always and WhenInUse Description</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>When in use</string>
+	<string>[CHANGEME] When in use</string>
 	<key>NSMotionUsageDescription</key>
-	<string>Motion always</string>
+	<string>[CHANGEME] Motion always</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>audio</string>
