@@ -15,11 +15,11 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
 
 - Add the following permissions to `Info.plist`:
 
-| Key                                                                        |
-|----------------------------------------------------------------------------|
-| Privacy - Location Always and When In Use Description                      |
-| Privacy - Location When In Use Usage Description                           |
-| Privacy - Motion Usage Description                                         |
+| Key | Type | Value |
+|-----|-------|-------------|
+| *Privacy - Location Always and When in Use Usage Description* | `String` | *CHANGEME: Location required in background* |
+| *Privacy - Location When in Use Usage Description* | `String` | *CHANGEME: Location required when app is in use* |
+| *Privacy - Motion Usage Description* | `String` | *CHANGEME: Motion permission helps detect when device in in-motion* |
 
 ![](https://dl.dropboxusercontent.com/s/wyoejgko6xq4pi4/iOS-permissions.png?dl=1)
 
