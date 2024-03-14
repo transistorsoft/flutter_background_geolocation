@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.14.2 &mdash; 2024-03-14
+* [iOS] Fix bug in polygon-geofencing:  monitoredIdentifiers not being cleared when `.removeGeofences()` is called, can result in null-pointer exception.
+
 ## 4.14.1 &mdash; 2024-03-12
 * [Android] Change `foregroundServiceType` of the SDK's `GeofencingService` definition in its `AndroidManifest` from `shortService` -> `location`.
 
