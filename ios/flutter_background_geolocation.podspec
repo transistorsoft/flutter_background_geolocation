@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.libraries           = 'sqlite3', 'z', 'stdc++'
   s.vendored_frameworks = ['TSLocationManager.xcframework']
   s.static_framework = true
-
+  s.resource_bundles = {'TSLocationManager' => ['Resources/PrivacyInfo.xcprivacy']}
   s.ios.deployment_target = '11.0'
 end
 
