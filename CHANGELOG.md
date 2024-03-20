@@ -1,6 +1,10 @@
 # CHANGELOG
 
-## 4.14.3 &mdash; 2024-03-19
+## 4.15.0 &mdash; 2024-03-19
+* [iOS] Implement new [iOS Privacy Manifest](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files?language=objc)
+* Add property `AuthorizationEvent.status`, provding the HTTP status code from the `refreshUrl`.
+
+## 4.14.3 &mdash; 2024-03-18
 * [iOS] Fix bug in iOS scheduler, triggering ON incorrectly.  For example, given a `schedule: ['1 00:00-23:59'], the plugin was trigging on for `DAY 2`.
 
 ## 4.14.2 &mdash; 2024-03-14
