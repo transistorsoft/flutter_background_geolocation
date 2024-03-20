@@ -18,12 +18,11 @@ Pod::Spec.new do |s|
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'CocoaLumberjack', '~> 3.7.2'
+  s.dependency 'CocoaLumberjack', '~> 3.8.5'
 
   s.libraries           = 'sqlite3', 'z', 'stdc++'
   s.vendored_frameworks = ['TSLocationManager.xcframework']
   s.static_framework = true
-  s.resource_bundles = {'TSLocationManager' => ['Resources/PrivacyInfo.xcprivacy']}
   s.ios.deployment_target = '11.0'
 end
 
