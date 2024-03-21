@@ -47,4 +47,4 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
 
 ## [Configure `background_fetch`](https://github.com/transistorsoft/flutter_background_fetch/blob/master/help/INSTALL-IOS.md)
 
-The BackgroundGeolocation SDK makes use internally on __`background_fetch`__ (also created by [Transistor Software](https://www.transistorsoft.com)).  Regardless of whether you instend to implement the BackgroundFetch Dart API in your app, you **must** perform the [Background Fetch iOS Setup](https://github.com/transistorsoft/flutter_background_fetch/blob/master/help/INSTALL-IOS.md) at the __`background_fetch`__ repo.
+The BackgroundGeolocation SDK makes use internally on __`background_fetch`__ (also created by [Transistor Software](https://www.transistorsoft.com)).  Regardless of whether you intend to implement the BackgroundFetch Dart API in your app, you **must** perform the [Background Fetch iOS Setup](https://github.com/transistorsoft/flutter_background_fetch/blob/master/help/INSTALL-IOS.md) at the __`background_fetch`__ repo.
