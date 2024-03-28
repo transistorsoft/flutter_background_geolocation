@@ -122,6 +122,10 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     bg.BackgroundGeolocation.onEnabledChange(_onEnabledChange);
     bg.BackgroundGeolocation.onNotificationAction(_onNotificationAction);
 
+    bg.BackgroundGeolocation.onAuthorization((bg.AuthorizationEvent event) {
+      print("********************** Authorization: $event");
+    });
+
     bg.TransistorAuthorizationToken token = await bg.TransistorAuthorizationToken.findOrCreate(orgname, username, ENV.TRACKER_HOST);
 
     // 2.  Configure the plugin

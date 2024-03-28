@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## 4.15.1 &mdash; 2024-03-20
-* [iOS] Move PrivacyInfo -> TSLocationManager.framework
+## 4.15.1 &mdash; 2024-03-27
+* [iOS] Add PrivacyInfo -> TSLocationManager.xcframework
+* [iOS] codesign TSLocationManager.xcframework
 * [iOS] Update `CocoaLumberjack` version -> `3.8.5` (version which includes its own `PrivacyInfo`)
 .
 ## 4.15.0 &mdash; 2024-03-19
