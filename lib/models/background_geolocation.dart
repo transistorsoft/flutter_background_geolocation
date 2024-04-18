@@ -187,8 +187,9 @@ class BackgroundGeolocation {
   /// });
   /// ```
   ///
-  ///  **WARNING:** The **`#ready`** method only applies the supplied [Config] for the **first launch of the app** &mdash;
-  /// Forever after, the plugin is going to remember **every configuration change** you apply at runtime (eg: [setConfig]) and reload that *same config* every time your app boots.
+  /// ### ⚠️ Warning: You must call `.ready(config)` **once** and **only** once, each time your app is launched.
+  /// - Do not hide the call to `.ready(config)` within a view which is loaded only by clicking a UI action.  This is particularly important
+  /// for iOS in the case where the OS relaunches your app in the background when the device is detected to be moving.  If you don't ensure that `.ready(config)` is called in this case, tracking will not resume.
   ///
   /// ## The [reset] method.
   ///
@@ -203,9 +204,15 @@ class BackgroundGeolocation {
   /// ));
   /// ```
   ///
-  /// ## [Config.reset]: true
+  /// ## [Config.reset]: false
   ///
-  /// Optionally, you can set [Config.reset] to `true`  This is helpful during development.  This will essentially *force* the supplied [Config] to be applied with *each launch* of your application.
+  /// Configuring the plugin with __`reset: false`__ should generally be avoided unless you know *exactly* what it does.  People often find this from the `/example` app.  If you do configure `reset: false`, you'll find that your `Config` provided to `.ready` is consumed **only at first launch after install**.  Thereafter, the plugin will ignore any changes you've provided there.  The only way to change the config then is to use [setConfig].
+  ///
+  /// You will especially not want to use `reset: false` during development, while you're fine-tuning your `Config` options.
+  ///
+  /// The reason the `/example` app uses `reset: false` is because it hosts an advanced "*Settings*" screen to tune the `Config` at runtime and we don't want those runtime changes to be overwritten by `.ready(config)` each time the app launches.
+  ///
+  /// :warning: If you *don't* undestand what __`reset: false`__ does, **NO NOT USE IT**.  If you blindly copy/pasted it from the `/example` app, **REMOVE IT** from you `Config`.
   ///
   /// ## Example
   ///
