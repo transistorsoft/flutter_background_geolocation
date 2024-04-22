@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.transistorsoft.flutterbackgroundgeolocationexample">
+    
+    <uses-permission
+        android:name="android.permission.FOREGROUND_SERVICE_HEALTH"
+        tools:node="remove" />
 
     <!-- The INTERNET permission is required for development. Specifically,
          flutter needs it to communicate with the running application
