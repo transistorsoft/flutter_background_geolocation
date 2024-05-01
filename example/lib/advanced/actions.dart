@@ -70,7 +70,7 @@ class Actions {
     email = await util.Dialog.prompt(context,
         title: "Email log", labelText: 'Email', value: email, hintText: '');
     if (email!.length > 0) {
-      prefs.setString("email", email!);
+      prefs.setString("email", email);
       util.Dialog.alert(context, 'Email log',
           'The log will be processed in the background (it can take some time depending on the size of the log).  Your email client will launch when ready.');
 

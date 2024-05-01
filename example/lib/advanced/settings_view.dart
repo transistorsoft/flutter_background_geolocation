@@ -195,7 +195,7 @@ class _SettingsViewState extends State<SettingsView> {
                 icon: Icon(Icons.close),
                 color: Colors.black),
             title: const Text('Settings'),
-            backgroundColor: Theme.of(context).bottomAppBarColor,
+            backgroundColor: Theme.of(context).bottomAppBarTheme.color,
             iconTheme: IconThemeData(color: Colors.black),
             actions: [
               new PopupMenuButton(
@@ -605,7 +605,6 @@ class _SettingsViewState extends State<SettingsView> {
                 .catchError(onFailure);
           }
         };
-        break;
       default:
         return (String? value) {
           bg.Config config = new bg.Config();

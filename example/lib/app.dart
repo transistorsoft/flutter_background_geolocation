@@ -39,7 +39,7 @@ class _HomeAppState extends State<HomeApp> {
     final ThemeData theme = ThemeData();
     return new MaterialApp(
         theme: theme.copyWith(
-            colorScheme: theme.colorScheme.copyWith(secondary:Colors.black)),
+            colorScheme: theme.colorScheme.copyWith(secondary: Colors.black)),
         home: new _HomeView());
   }
 }
@@ -173,22 +173,21 @@ class _HomeViewState extends State<_HomeView> {
         break;
       default:
         return;
-        break;
     }
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("OPEN"));
     runApp(app);
   }
 
   bool _usernameIsValid(String username) {
-    return (username != null) &&
-        new RegExp(USERNAME_REGEXP).hasMatch(username) &&
+    return new RegExp(USERNAME_REGEXP).hasMatch(username) &&
         (username.length > 0);
   }
 
   void _launchUrl() async {
     String url = '${ENV.TRACKER_HOST}/$_orgname';
-    if (await canLaunch(url)) {
-      await launch(url);
+    Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
     } else {
       throw 'Could not launch $url';
     }
@@ -198,10 +197,9 @@ class _HomeViewState extends State<_HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Background Geolocation'),
-          foregroundColor: Colors.black,
-          backgroundColor: Colors.amberAccent
-        ),
+            title: const Text('Background Geolocation'),
+            foregroundColor: Colors.black,
+            backgroundColor: Colors.amberAccent),
         body: Container(
             color: Colors.black87,
             padding: EdgeInsets.only(top: 20.0),
@@ -262,36 +260,35 @@ class _HomeViewState extends State<_HomeView> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
                   SizedBox(
-                    width: 140,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _showRegistration();
-                      },
-                      child: Text('Edit'),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
-                      )
-                  )),
-                      //color: Colors.redAccent,
-                      //textColor: Colors.white),
+                      width: 140,
+                      child: ElevatedButton(
+                          onPressed: () {
+                            _showRegistration();
+                          },
+                          child: Text('Edit'),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Colors.redAccent),
+                          ))),
+                  //color: Colors.redAccent,
+                  //textColor: Colors.white),
                   SizedBox(
                       width: 140,
                       child: ElevatedButton(
-                        onPressed: () {
-                          _launchUrl();
-                        },
-                        child: Text('View Tracking'),
-                        style: ButtonStyle(
-                            //foregroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue))
-                        )
-                  )
-                      //color: Colors.blue,
-                      //textColor: Colors.white),
+                          onPressed: () {
+                            _launchUrl();
+                          },
+                          child: Text('View Tracking'),
+                          style: ButtonStyle(
+                              //foregroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.blue))))
+                  //color: Colors.blue,
+                  //textColor: Colors.white),
                 ])));
   }
 
-  MaterialButton _buildApplicationButton(String text, {onPressed=Function}) {
+  MaterialButton _buildApplicationButton(String text, {onPressed = Function}) {
     return MaterialButton(
         onPressed: onPressed,
         child: Text(text, style: TextStyle(fontSize: 18.0)),
