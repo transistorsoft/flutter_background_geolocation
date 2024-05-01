@@ -229,11 +229,10 @@ class Action {
 /// Layout a simple test-app to run the actions and render the results.
 ///
 class TestApp extends StatefulWidget {
-  late _TestAppState _state;
+  final _TestAppState _state = new _TestAppState();
 
   @override
   _TestAppState createState() {
-    _state = new _TestAppState();
     return _state;
   }
 
