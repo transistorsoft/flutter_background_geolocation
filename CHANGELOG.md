@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.15.3 &mdash; 2024-05-14
+* [Android] Fix bug in .getCurrentPosition not returning or throwing an error in a condition where Network OFF and GPS ON.
+* Fix bug in .changePace exception-handling, throwing a `FormatException` instead of `PlatformException`.
+
 ## 4.15.2 &mdash; 2024-04-22
 * [iOS] Code-sign `TSLocationManager.xcframework` with new Apple Organization (*9224-2932 Quebec Inc*) certificate.
 
