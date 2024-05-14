@@ -466,12 +466,8 @@ class BackgroundGeolocation {
   /// ```
   ///
   static Future<bool> changePace(bool isMoving) async {
-    try {
-      return (await _methodChannel.invokeMethod<bool>('changePace', isMoving))
-          as FutureOr<bool>;
-    } on PlatformException catch (e) {
-      throw Error(e);
-    }
+    return (await _methodChannel.invokeMethod<bool>('changePace', isMoving))
+        as FutureOr<bool>;
   }
 
   /// Retrieves the current [Location].

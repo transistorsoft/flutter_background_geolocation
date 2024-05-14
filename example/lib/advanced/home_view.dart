@@ -270,7 +270,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       _isMoving = !_isMoving!;
     });
     print("[onClickChangePace] -> $_isMoving");
-
+    
     bg.BackgroundGeolocation.changePace(_isMoving!).then((bool isMoving) {
       print('[changePace] success $isMoving');
     }).catchError((e) {
