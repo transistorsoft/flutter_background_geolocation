@@ -7,12 +7,13 @@ import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart
     as util;
 
 class GeofenceView extends StatefulWidget {
-  LatLng? center;
-  List<LatLng>? vertices;
+  final LatLng? center;
+  final List<LatLng>? vertices;
 
   GeofenceView({this.center, this.vertices});
   @override
-  State createState() => _GeofenceViewState(center: this.center, vertices: this.vertices);
+  State createState() =>
+      _GeofenceViewState(center: this.center, vertices: this.vertices);
 }
 
 class _GeofenceViewState extends State<GeofenceView> {
@@ -55,7 +56,7 @@ class _GeofenceViewState extends State<GeofenceView> {
               'longitude': center?.longitude
             }
           } // meta-data for tracker.transistorsoft.com
-      )).then((bool success) {
+          )).then((bool success) {
         bg.BackgroundGeolocation.playSound(
             util.Dialog.getSoundId('ADD_GEOFENCE'));
       }).catchError((error) {
@@ -84,8 +85,7 @@ class _GeofenceViewState extends State<GeofenceView> {
             },
             'vertices': vertices
           } // meta-data for tracker.transistorsoft.com
-      )).then((bool success) {
-
+          )).then((bool success) {
         bg.BackgroundGeolocation.playSound(
             util.Dialog.getSoundId('ADD_GEOFENCE'));
       }).catchError((error) {
@@ -106,7 +106,7 @@ class _GeofenceViewState extends State<GeofenceView> {
                 color: Colors.black),
             title: const Text('Add Geofence'),
             foregroundColor: Colors.black,
-            backgroundColor: Theme.of(context).bottomAppBarColor,
+            backgroundColor: Theme.of(context).bottomAppBarTheme.color,
             iconTheme: IconThemeData(color: Colors.black),
             actions: [
               MaterialButton(child: Text('Add'), onPressed: _onClickAdd)

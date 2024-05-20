@@ -31,14 +31,18 @@ class _AdvancedAppState extends State<AdvancedApp> {
     final ThemeData theme = ThemeData();
     return new MaterialApp(
         theme: theme.copyWith(
-            colorScheme: theme.colorScheme.copyWith(secondary:Colors.black),
+            colorScheme: theme.colorScheme.copyWith(secondary: Colors.black),
             brightness: Brightness.light,
-            bottomAppBarColor: Colors.amberAccent,
+            bottomAppBarTheme: Theme.of(context)
+                .bottomAppBarTheme
+                .copyWith(color: Colors.amberAccent),
             hintColor: Colors.black12,
             primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
-              bodyColor: Colors.black,
-            )),
-        home:
-            Scaffold(body: HomeView(), floatingActionButtonLocation: FloatingActionButtonLocation.endFloat, floatingActionButton: MainMenuButton()));
+                  bodyColor: Colors.black,
+                )),
+        home: Scaffold(
+            body: HomeView(),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            floatingActionButton: MainMenuButton()));
   }
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
@@ -20,10 +19,6 @@ class MainMenuButton extends StatefulWidget {
 class MainMenuButtonState extends State<MainMenuButton> {
   late BuildContext _context;
 
-  void _onClickMenu() async {
-
-  }
-
   void _onClickSettings() {
 
 
@@ -38,6 +33,7 @@ class MainMenuButtonState extends State<MainMenuButton> {
   void _onClickResetOdometer() {
     bg.BackgroundGeolocation.setOdometer(0.0).catchError((error) {
       print('********** [resetOdometer] ERROR: $error');
+      throw error;
     });
   }
 
@@ -54,14 +50,16 @@ class MainMenuButtonState extends State<MainMenuButton> {
   }
 
   void _onClickRequestPermission() async {
-    bg.ProviderChangeEvent providerState = await bg.BackgroundGeolocation.providerState;
+    bg.ProviderChangeEvent providerState =
+        await bg.BackgroundGeolocation.providerState;
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Request Permission"),
-          content: Text("Current Authorization status: ${providerState.status}"),
+          content:
+              Text("Current Authorization status: ${providerState.status}"),
           actions: <Widget>[
             TextButton(
               child: Text('WhenInUse'),
@@ -84,14 +82,20 @@ class MainMenuButtonState extends State<MainMenuButton> {
   void _requestPermission(String request) async {
     Navigator.of(context).pop();
 
-    await bg.BackgroundGeolocation.setConfig(bg.Config(locationAuthorizationRequest: request));
+    await bg.BackgroundGeolocation.setConfig(
+        bg.Config(locationAuthorizationRequest: request));
 
     int status = await bg.BackgroundGeolocation.requestPermission();
     print("[requestPermission] status: $status");
-    util.Dialog.alert(context, "Request Permission", "Authorization status: $status");
+    util.Dialog.alert(
+        context, "Request Permission", "Authorization status: $status");
 
-    bg.ProviderChangeEvent providerState = await bg.BackgroundGeolocation.providerState;
-    if ((providerState.status == bg.ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS) && (providerState.accuracyAuthorization == bg.ProviderChangeEvent.ACCURACY_AUTHORIZATION_REDUCED)) {
+    bg.ProviderChangeEvent providerState =
+        await bg.BackgroundGeolocation.providerState;
+    if ((providerState.status ==
+            bg.ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS) &&
+        (providerState.accuracyAuthorization ==
+            bg.ProviderChangeEvent.ACCURACY_AUTHORIZATION_REDUCED)) {
       // Request full accuracy.
       //int status = await bg.BackgroundGeolocation.requestTemporaryFullAccuracy("Demo Purpose");
       //util.Dialog.alert(context, "Request Full Accuracy", "Accuracy Authorization: ${status}");
@@ -133,11 +137,11 @@ class MainMenuButtonState extends State<MainMenuButton> {
           child: Icon(Icons.settings),
           onTap: _onClickSettings),
       SpeedDialChild(
-        label: "Email log",
-        backgroundColor: bgColor,
-        foregroundColor: Colors.black,
-        child: Icon(Icons.email),
-        onTap: _onClickEmailLog),
+          label: "Email log",
+          backgroundColor: bgColor,
+          foregroundColor: Colors.black,
+          child: Icon(Icons.email),
+          onTap: _onClickEmailLog),
       SpeedDialChild(
           label: "Upload locations",
           backgroundColor: bgColor,
@@ -157,13 +161,12 @@ class MainMenuButtonState extends State<MainMenuButton> {
           child: Icon(Icons.lock_open),
           onTap: _onClickRequestPermission),
       SpeedDialChild(
-        //hasLabel: true,
+          //hasLabel: true,
           label: "Destroy locations",
           backgroundColor: bgColor,
           foregroundColor: Colors.black,
           child: Icon(Icons.delete),
           onTap: _onClickDestroyLocations)
-
     ];
   }
 
