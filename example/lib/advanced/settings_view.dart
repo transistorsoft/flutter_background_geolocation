@@ -195,7 +195,7 @@ class _SettingsViewState extends State<SettingsView> {
                 icon: Icon(Icons.close),
                 color: Colors.black),
             title: const Text('Settings'),
-            backgroundColor: Theme.of(context).bottomAppBarColor,
+            backgroundColor: Colors.amberAccent,
             iconTheme: IconThemeData(color: Colors.black),
             actions: [
               new PopupMenuButton(

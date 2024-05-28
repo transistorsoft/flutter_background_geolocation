@@ -106,7 +106,7 @@ class _GeofenceViewState extends State<GeofenceView> {
                 color: Colors.black),
             title: const Text('Add Geofence'),
             foregroundColor: Colors.black,
-            backgroundColor: Theme.of(context).bottomAppBarColor,
+            backgroundColor: Colors.amberAccent,
             iconTheme: IconThemeData(color: Colors.black),
             actions: [
               MaterialButton(child: Text('Add'), onPressed: _onClickAdd)
