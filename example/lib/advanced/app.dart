@@ -33,7 +33,6 @@ class _AdvancedAppState extends State<AdvancedApp> {
         theme: theme.copyWith(
             colorScheme: theme.colorScheme.copyWith(secondary:Colors.black),
             brightness: Brightness.light,
-            bottomAppBarColor: Colors.amberAccent,
             hintColor: Colors.black12,
             primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
               bodyColor: Colors.black,
