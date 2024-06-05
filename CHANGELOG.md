@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.15.4 &mdash; 2024-06-05
+* [Android] Fix issues #1298 "Multiple geofence events triggered for a single geofence registration when registered individually".
+
 ## 4.15.3 &mdash; 2024-05-14
 * [Android] Fix bug in .getCurrentPosition not returning or throwing an error in a condition where Network OFF and GPS ON.
 * Fix bug in .changePace exception-handling, throwing a `FormatException` instead of `PlatformException`.
