@@ -349,7 +349,7 @@ class Test {
 
     //await bg.BackgroundGeolocation.removeGeofences();
     await bg.BackgroundGeolocation.addGeofences(geofences);
-
+    
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? username = prefs.getString("username");
     String? orgname = prefs.getString("orgname");
