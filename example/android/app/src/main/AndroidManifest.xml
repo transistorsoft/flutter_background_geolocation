@@ -2,17 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.transistorsoft.flutterbackgroundgeolocationexample">
     
-    <uses-permission
-        android:name="android.permission.FOREGROUND_SERVICE_HEALTH"
-        tools:node="remove" />
-
     <!-- The INTERNET permission is required for development. Specifically,
          flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET"/>
-
+    
     <!-- [OPTIONAL] for background-geolocation for SDK >= 34:  Allows scheduling of exact alarms with AlarmManager -->
     <!-- <uses-permission android:name="android.permission.USE_EXACT_ALARM" android:minSdkVersion="34"/> -->
 

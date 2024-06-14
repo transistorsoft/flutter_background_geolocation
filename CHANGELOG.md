@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.15.5 &mdash; 2024-06-12
+* [Android] Remove permission `FOREGROUND_SERVICE_HEALTH`.  It turns out that this permission is no longer required when the `ActivityRecognitionServivce` is defined with a `foregroundServiceType="shortservice"`, which allows a background-launched foreground-service to stay active for up to 3 minutes, which is sufficient for the `ActivityRecognitionService`, which typically stays activated only for a few milliseconds.
+
 ## 4.15.4 &mdash; 2024-06-05
 * [Android] Fix issues #1298 "Multiple geofence events triggered for a single geofence registration when registered individually".
 
