@@ -343,8 +343,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
   void _onProviderChange(bg.ProviderChangeEvent event) async {
     print('[${bg.Event.PROVIDERCHANGE}] - $event');
-
-
+    
     if ((event.status == bg.ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS) && (event.accuracyAuthorization == bg.ProviderChangeEvent.ACCURACY_AUTHORIZATION_REDUCED)) {
       // Supply "Purpose" key from Info.plist as 1st argument.
       bg.BackgroundGeolocation.requestTemporaryFullAccuracy("DemoPurpose").then((int accuracyAuthorization) {
