@@ -81,6 +81,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.transistorsoft.flutterbackgroundgeolocationexample"
+        multiDexEnabled true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
@@ -113,10 +114,6 @@ flutter {
 }
 
 dependencies {
-    /**
-     * ENABLE FOR multidexEnabled
-     *
     def multidex_version = "2.0.1"
     implementation "androidx.multidex:multidex:$multidex_version"
-    */
 }
