@@ -211,6 +211,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
               maximumAge: 1000 * 10,  // 30 seconds ago
               timeout: 30,
               desiredAccuracy: 40,
+              persist: true,
               extras: {
                 "event": "background-fetch",
                 "headless": false

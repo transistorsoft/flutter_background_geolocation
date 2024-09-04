@@ -14,7 +14,7 @@ public class FLTBackgroundGeolocationPlugin implements FlutterPlugin, ActivityAw
     public FLTBackgroundGeolocationPlugin() { }
 
     @Override
-    public void onAttachedToEngine(FlutterPlugin.FlutterPluginBinding binding) {
+    public void onAttachedToEngine(@NonNull FlutterPlugin.FlutterPluginBinding binding) {
         BackgroundGeolocationModule.getInstance().onAttachedToEngine(binding.getApplicationContext(), binding.getBinaryMessenger());
     }
 
@@ -24,7 +24,7 @@ public class FLTBackgroundGeolocationPlugin implements FlutterPlugin, ActivityAw
     }
 
     @Override
-    public void onAttachedToActivity(ActivityPluginBinding activityPluginBinding) {
+    public void onAttachedToActivity(@NonNull ActivityPluginBinding activityPluginBinding) {
         BackgroundGeolocationModule.getInstance().setActivity(activityPluginBinding.getActivity());
     }
 
