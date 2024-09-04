@@ -238,7 +238,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     @SuppressWarnings("unchecked")
     @Override
-    public void onMethodCall(MethodCall call, @NonNull MethodChannel.Result result) {
+    public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         if (call.method.equalsIgnoreCase(ACTION_READY)) {
             Map<String, Object> params = (Map<String, Object>) call.arguments;
             ready(params, result);
@@ -361,7 +361,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
 
     @SuppressWarnings("unchecked")
-    private void ready(Map<String, Object> params, final MethodChannel.Result result) {
+    private void ready(@NonNull Map<String, Object> params, final MethodChannel.Result result) {
 
         boolean reset = (!params.containsKey("reset")) || (boolean) params.get("reset");
         TSConfig config = TSConfig.getInstance(mContext);
@@ -467,7 +467,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         });
     }
 
-    private void changePace(MethodCall call, final MethodChannel.Result result) {
+    private void changePace(@NonNull MethodCall call, final MethodChannel.Result result) {
         final boolean isMoving = (boolean) call.arguments;
         BackgroundGeolocation.getInstance(mContext).changePace(isMoving, new TSCallback() {
             @Override public void onSuccess() {
@@ -480,7 +480,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
 
     @SuppressWarnings("unchecked")
-    private void getCurrentPosition(Map<String, Object> options, final MethodChannel.Result result) {
+    private void getCurrentPosition(@NonNull Map<String, Object> options, final MethodChannel.Result result) {
         TSCurrentPositionRequest.Builder builder = new TSCurrentPositionRequest.Builder(mContext);
 
         builder.setCallback(new TSLocationCallback() {
@@ -518,7 +518,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
 
     @SuppressWarnings("unchecked")
-    private void watchPosition(Map<String, Object> options, final MethodChannel.Result result) {
+    private void watchPosition(@NonNull Map<String, Object> options, final MethodChannel.Result result) {
         TSWatchPositionRequest.Builder builder = new TSWatchPositionRequest.Builder(mContext);
 
         builder.setCallback(new TSLocationCallback() {
@@ -641,11 +641,11 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         });
     }
 
-    private void getOdometer(MethodChannel.Result result) {
+    private void getOdometer(@NonNull MethodChannel.Result result) {
         result.success(BackgroundGeolocation.getInstance(mContext).getOdometer().doubleValue());
     }
 
-    private void setOdometer(Double odometer, final MethodChannel.Result result) {
+    private void setOdometer(@NonNull Double odometer, final MethodChannel.Result result) {
         BackgroundGeolocation.getInstance(mContext).setOdometer(odometer.floatValue(), new TSLocationCallback() {
             @Override public void onLocation(TSLocation location) {
                 try {
@@ -671,7 +671,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         }
     }
 
-    private void addGeofences(List<Map<String, Object>> data, final MethodChannel.Result result) {
+    private void addGeofences(@NonNull List<Map<String, Object>> data, final MethodChannel.Result result) {
         List<TSGeofence> geofences = new ArrayList<>();
         for (int n=0;n<data.size();n++) {
             try {
@@ -808,12 +808,12 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         });
     }
 
-    private void stopBackgroundTask(int taskId, MethodChannel.Result result) {
+    private void stopBackgroundTask(int taskId, @NonNull MethodChannel.Result result) {
         BackgroundGeolocation.getInstance(mContext).stopBackgroundTask(taskId);
         result.success(taskId);
     }
 
-    private void log(List<String> args, MethodChannel.Result result) {
+    private void log(@NonNull List<String> args, @NonNull MethodChannel.Result result) {
         String level = args.get(0);
         String message = args.get(1);
         TSLog.log(level, message);
@@ -845,7 +845,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         });
     }
 
-    private void uploadLog(List<Object> args, final MethodChannel.Result result) {
+    private void uploadLog(@NonNull List<Object> args, final MethodChannel.Result result) {
         String url = (String) args.get(0);
         Map params = (Map) args.get(1);
 
@@ -864,12 +864,12 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         });
     }
 
-    private void log(String level, String message, MethodChannel.Result result) {
+    private void log(String level, String message, @NonNull MethodChannel.Result result) {
         TSLog.log(level, message);
         result.success(true);
     }
 
-    private void getSensors(MethodChannel.Result result) {
+    private void getSensors(@NonNull MethodChannel.Result result) {
         Sensors sensors = Sensors.getInstance(mContext);
         Map<String, Object> params = new HashMap<>();
         params.put("platform", "android");
@@ -880,15 +880,15 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         result.success(params);
     }
 
-    private void isPowerSaveMode(MethodChannel.Result result) {
+    private void isPowerSaveMode(@NonNull MethodChannel.Result result) {
         result.success(BackgroundGeolocation.getInstance(mContext).isPowerSaveMode());
     }
 
-    private void isIgnoringBatteryOptimizations(MethodChannel.Result result) {
+    private void isIgnoringBatteryOptimizations(@NonNull MethodChannel.Result result) {
         result.success(BackgroundGeolocation.getInstance(mContext).isIgnoringBatteryOptimizations());
     }
 
-    private void requestSettings(List<Object> args, MethodChannel.Result result) {
+    private void requestSettings(@NonNull List<Object> args, MethodChannel.Result result) {
         String action = (String) args.get(0);
 
         DeviceSettingsRequest request = BackgroundGeolocation.getInstance(mContext).requestSettings(action);
@@ -899,7 +899,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         }
     }
 
-    private void showSettings(List<Object> args, MethodChannel.Result result) {
+    private void showSettings(@NonNull List<Object> args, MethodChannel.Result result) {
         String action = (String) args.get(0);
         boolean didShow = BackgroundGeolocation.getInstance(mContext).showSettings(action);
         if (didShow) {
@@ -909,11 +909,11 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         }
     }
 
-    private void getDeviceInfo(MethodChannel.Result result) {
+    private void getDeviceInfo(@NonNull MethodChannel.Result result) {
         result.success(DeviceInfo.getInstance(mContext).toMap());
     }
 
-    private void getProviderState(MethodChannel.Result result) {
+    private void getProviderState(@NonNull MethodChannel.Result result) {
         result.success(BackgroundGeolocation.getInstance(mContext).getProviderState().toMap());
     }
 
@@ -947,7 +947,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         });
     }
 
-    private void getTransistorToken(List<String>args, final MethodChannel.Result result) {
+    private void getTransistorToken(@NonNull List<String>args, final MethodChannel.Result result) {
         String orgname = args.get(0);
         String username = args.get(1);
         String url = args.get(2);
@@ -976,7 +976,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         });
     }
 
-    private void playSound(String name, MethodChannel.Result result) {
+    private void playSound(String name, @NonNull MethodChannel.Result result) {
         BackgroundGeolocation.getInstance(mContext).startTone(name);
         result.success(true);
     }
@@ -984,8 +984,9 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     ////
     // Utility Methods
     //
+    @NonNull
     @SuppressWarnings("unchecked")
-    private static JSONObject mapToJson(Map<String, Object> map) throws JSONException {
+    private static JSONObject mapToJson(@NonNull Map<String, Object> map) throws JSONException {
         JSONObject jsonData = new JSONObject();
         for (String key : map.keySet()) {
             Object value = map.get(key);
@@ -999,6 +1000,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         return jsonData;
     }
 
+    @NonNull
     @SuppressWarnings("unchecked")
     private static JSONArray listToJson(List<Object> list) throws JSONException {
         JSONArray jsonData = new JSONArray();
@@ -1022,7 +1024,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         return retMap;
     }
 
-    private static Map<String, Object> toMap(JSONObject object) throws JSONException {
+    @NonNull
+    private static Map<String, Object> toMap(@NonNull JSONObject object) throws JSONException {
         Map<String, Object> map = new HashMap<>();
 
         Iterator<String> keysItr = object.keys();
@@ -1042,7 +1045,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         return map;
     }
 
-    private static List<Object> toList(JSONArray array) throws JSONException {
+    @NonNull
+    private static List<Object> toList(@NonNull JSONArray array) throws JSONException {
         List<Object> list = new ArrayList<>();
         for(int i = 0; i < array.length(); i++) {
             Object value = array.get(i);
@@ -1058,7 +1062,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         return list;
     }
 
-    private Map<String, Object> setHeadlessJobService(Map<String, Object> config) {
+    private Map<String, Object> setHeadlessJobService(@NonNull Map<String, Object> config) {
         config.put("headlessJobService", JOB_SERVICE_CLASS);
         return config;
     }
@@ -1076,7 +1080,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         return true;
     }
 
-    private void resultWithState(MethodChannel.Result result) {
+    private void resultWithState(@NonNull MethodChannel.Result result) {
         try {
             result.success(jsonToMap(TSConfig.getInstance(mContext).toJson()));
         } catch (JSONException e) {
@@ -1093,7 +1097,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
 
     @Override
-    public void onActivityResumed(Activity activity) {
+    public void onActivityResumed(@NonNull Activity activity) {
         if (!activity.equals(mActivity)) {
             return;
         }
@@ -1106,7 +1110,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         }
     }
     @Override
-    public void onActivityStopped(Activity activity) {
+    public void onActivityStopped(@NonNull Activity activity) {
         if (!activity.equals(mActivity)) {
             return;
         }

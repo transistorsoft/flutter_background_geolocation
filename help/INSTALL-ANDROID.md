@@ -77,7 +77,8 @@ buildscript {
 
 ## :open_file_folder: `android/app/build.gradle`
 
-:exclamation: __DO NOT OMIT ANY OF THE FOLLOWING CHANGES__ :exclamation:
+- :exclamation: __DO NOT OMIT ANY OF THE FOLLOWING CHANGES__ :exclamation:
+- If you ignore any of the following lines, your license key will __fail to validate__.
 
 ```diff
 // flutter_background_geolocation

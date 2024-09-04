@@ -32,6 +32,7 @@ void backgroundGeolocationHeadlessTask(bg.HeadlessEvent headlessEvent) async {
         bg.Location location =
             await bg.BackgroundGeolocation.getCurrentPosition(
                 samples: 1,
+                persist: true,
                 extras: {
                   "event": "terminate",
                   "headless": true
