@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## Unreleased
+* [Android] Remove unused `import`s related to Flutter V1 Embedding.
+ 
 ## 4.16.0 &mdash; 2024-09-04
 * [iOS] Fix bug in iOS *Polygon Geofencing* when running in geofences-only mode (`.startGeofences`).  iOS would mistakenly turn off location updates exactly 3 samples into the containing circular geofence of a polygon.
 * Implement `notifyOnDwell` for polygon-geofences.
