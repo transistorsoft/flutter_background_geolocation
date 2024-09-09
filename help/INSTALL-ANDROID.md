@@ -50,13 +50,18 @@ allprojects {  // <-- IMPORTANT:  allprojects
 - #### If you're using `flutter >= 3.19.0` ([New Android Architecture](https://docs.flutter.dev/release/breaking-changes/flutter-gradle-plugin-apply)):
 
 ```diff
-+ext {
-+    compileSdkVersion   = 33                // or higher / as desired
-+    targetSdkVersion    = 33                // or higher / as desired
-+    minSdkVersion       = 21                // Required minimum
-+    appCompatVersion    = "1.4.2"           // or higher / as desired
-+    playServicesLocationVersion = "21.0.1"  // or higher / as desired
+allprojects {
+.
+.
+.
++   ext {
++       compileSdkVersion   = 33                // or higher / as desired
++       targetSdkVersion    = 33                // or higher / as desired
++       minSdkVersion       = 21                // Required minimum
++       appCompatVersion    = "1.4.2"           // or higher / as desired
++       playServicesLocationVersion = "21.0.1"  // or higher / as desired
 +}
+}
 ```
 
 - #### Otherwise for `flutter < 3.19.0` (Old Android Architecture):
