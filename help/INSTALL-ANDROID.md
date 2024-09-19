@@ -51,8 +51,8 @@ allprojects {  // <-- IMPORTANT:  allprojects
 
 ```diff
 +ext {
-+    compileSdkVersion   = 33                // or higher / as desired
-+    targetSdkVersion    = 33                // or higher / as desired
++    compileSdkVersion   = 34                // or higher / as desired
++    targetSdkVersion    = 34                // or higher / as desired
 +    minSdkVersion       = 21                // Required minimum
 +    appCompatVersion    = "1.4.2"           // or higher / as desired
 +    playServicesLocationVersion = "21.0.1"  // or higher / as desired
@@ -77,8 +77,9 @@ buildscript {
 
 ## :open_file_folder: `android/app/build.gradle`
 
-- :exclamation: __DO NOT OMIT ANY OF THE FOLLOWING CHANGES__ :exclamation:
-- If you ignore any of the following lines, your license key will __fail to validate__.
+> [!CAUTION]  
+>- __DO NOT OMIT ANY OF THE FOLLOWING CHANGES__ in __green__.
+>- If you ignore any of the following lines, your license key will __fail to validate__.
 
 ```diff
 // flutter_background_geolocation
