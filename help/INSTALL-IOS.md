@@ -126,3 +126,21 @@ It's best to edit this file's XML manually.
 
 The BackgroundGeolocation SDK makes use internally on __`background_fetch`__ (also created by [Transistor Software](https://www.transistorsoft.com)).  Regardless of whether you instend to implement the BackgroundFetch Dart API in your app, you **must** perform the [Background Fetch iOS Setup](https://github.com/transistorsoft/flutter_background_fetch/blob/master/help/INSTALL-IOS.md) at the __`background_fetch`__ repo.
 
+> [!TIP]
+> `background_fetch` is helpful for executing a periodic task (eg: every 15 minutes).  You could use `background_fetch` to periodically request the current location:
+
+```dart
+// Execute a task about every 15 minutes:
+BackgroundFetch.configure(BackgroundFetchConfig(
+  minimumFetchInterval: 15
+), (String taskId) async { // <-- This is your periodic-task callback  
+  var location = await BackgroundGeolocation.getCurrentPosition(
+    samples: 3,
+    extras: {   // <-- your own arbitrary meta-data
+      "event": "getCurrentPosition"
+    }
+  );
+  print('[getCurrentPosition] $location');
+  BackgroundFetch.finish(taskId);   // <-- signal that your task is complete
+})
+```

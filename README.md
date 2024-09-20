@@ -14,11 +14,9 @@ The plugin's [Philosophy of Operation](https://github.com/transistorsoft/flutter
 
 Also available for [Cordova](https://github.com/transistorsoft/cordova-background-geolocation-lt), [React Native](https://github.com/transistorsoft/react-native-background-geolocation), [NativeScript](https://github.com/transistorsoft/nativescript-background-geolocation-lt) and [pure native](https://github.com/transistorsoft/background-geolocation-lt) apps.
 
-----------------------------------------------------------------------------
 
-The **[Android module](https://www.transistorsoft.com/shop/products/flutter-background-geolocation)** requires [purchasing a license](https://www.transistorsoft.com/shop/products/flutter-background-geolocation).  However, it *will* work for **DEBUG** builds.  It will **not** work with **RELEASE** builds [without purchasing a license](https://www.transistorsoft.com/shop/products/flutter-background-geolocation).
-
-(2018) This plugin is supported **full-time** and field-tested **daily** since 2013.
+> [!NOTE]  
+>The **[Android module](https://www.transistorsoft.com/shop/products/flutter-background-geolocation)** requires [purchasing a license](https://www.transistorsoft.com/shop/products/flutter-background-geolocation).  However, it *will* work for **DEBUG** builds.  It will **not** work with **RELEASE** builds [without purchasing a license](https://www.transistorsoft.com/shop/products/flutter-background-geolocation).  This plugin is supported **full-time** and field-tested **daily** since 2013.
 
 ----------------------------------------------------------------------------
 
@@ -70,7 +68,8 @@ dependencies:
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 ```
 
-⚠️ Note `as bg` in the `import`.  This is important to namespace the plugin's classes, which often use common class-names such as `Location`, `Config`, `State`.  You will access every `flutter_background_geolocation` class with the prefix `bg` (ie: "**b**ackground **g**eolocation").
+> [!WARNING]
+> Note `as bg` in the `import`.  This is important to namespace the plugin's classes, which often use common class-names such as `Location`, `Config`, `State`.  You will access every `flutter_background_geolocation` class with the prefix `bg` (ie: "**b**ackground **g**eolocation").
 
 ## 🔷 Example
 [Full Example](https://gist.github.com/christocracy/a0464846de8a9c27c7e9de5616082878)
@@ -80,6 +79,12 @@ There are three main steps to using `BackgroundGeolocation`:
 1. Wire up event-listeners.
 2. Configure the plugin with `#ready`.
 3. `#start` the plugin.
+
+> [!WARNING]
+> Do not execute *any* API method which will require accessing location-services until the **[`.ready(config)`](https://pub.dev/documentation/flutter_background_geolocation/latest/flt_background_geolocation/BackgroundGeolocation/ready.html)** method resolves ([Read its API docs](https://pub.dev/documentation/flutter_background_geolocation/latest/flt_background_geolocation/BackgroundGeolocation/ready.html)), For example: 
+>- `.getCurrentPosition` 
+>- `.start`
+
 
 ```dart
 
@@ -132,9 +137,6 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 ```
-
-⚠️ Do not execute *any* API method which will require accessing location-services until the callback to **`#ready*` executes (eg: `#getCurrentPosition`, `#watchPosition`, `#start`).
-
 
 ## 🔷 Demo Application
 
