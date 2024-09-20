@@ -20,14 +20,8 @@ Flutter seems to have a problem with 3rd-party Android libraries which merge the
 
 ```
 
-##### :warning: Failure to perform the step above will result in a **build error**
-
-```
-Execution failed for task ':app:processDebugManifest'.
-> Manifest merger failed : Attribute application@label value=(hello_world) from AndroidManifest.xml:17:9-36
-    is also present at [tslocationmanager-2.13.3.aar] AndroidManifest.xml:24:18-50 value=(@string/app_name).
-    Suggestion: add 'tools:replace="android:label"' to <application> element at AndroidManifest.xml:15:5-38:19 to override.
-```
+> [!WARNING]
+> Failure to perform the step above will result in a **build error**: __`Manifest merger failed`__
 
 
 ## :open_file_folder: `android/build.gradle`
@@ -78,8 +72,7 @@ buildscript {
 ## :open_file_folder: `android/app/build.gradle`
 
 > [!CAUTION]  
->- __DO NOT OMIT ANY OF THE FOLLOWING CHANGES__ in __green__.
->- If you ignore any of the following lines, your license key will __fail to validate__.
+> __DO NOT OMIT ANY OF THE FOLLOWING CHANGES__ in __green__ or your license key will __fail to validate__.
 
 ```diff
 // flutter_background_geolocation
@@ -153,7 +146,9 @@ If you've [purchased an *HMS Background Geolocation* License](https://shop.trans
   </application>
 </manifest>
 ```
-:warning: Huawei HMS support requires `flutter_background_geolocation >= 3.10.0`.
+
+> [!WARNING]
+> Huawei HMS support requires __`flutter_background_geolocation >= 3.10.0`__.
 
 
 ### Polygon Geofencing Add-on
@@ -190,7 +185,8 @@ The plugin uses __`AlarmManager`__ "exact alarms" for precise scheduling of even
       .
   </manifest>
 ```
-:warning: It has been announced that *Google Play Store* [has plans to impose greater scrutiny](https://support.google.com/googleplay/android-developer/answer/13161072?sjid=3640341614632608469-NA) over usage of this permission (which is why the plugin does not automatically add it).
+> [!WARNING]
+> It has been announced that *Google Play Store* [has plans to impose greater scrutiny](https://support.google.com/googleplay/android-developer/answer/13161072?sjid=3640341614632608469-NA) over usage of this permission (which is why the plugin does not automatically add it).
 
 ## Android Headless Mode with `enableHeadless: true`
 
@@ -205,4 +201,24 @@ BackgroundGeolocation.ready(Config(
 ## `background_fetch`
 
 `flutter_background_geolocation` installs a dependency `background_fetch` (also created by [Transistor Software](https://www.transistorsoft.com)).  You can optionally perform the [Android Setup](https://github.com/transistorsoft/flutter_background_fetch/blob/master/help/INSTALL-ANDROID.md) for it as well.
+
+> [!TIP]
+> `background_fetch` is helpful for executing a periodic task (eg: every 15 minutes).  You could use `background_fetch` to periodically request the current location:
+
+```dart
+// Execute a task about every 15 minutes:
+BackgroundFetch.configure(BackgroundFetchConfig(
+  minimumFetchInterval: 15
+), (String taskId) async { // <-- This is your periodic-task callback  
+  var location = await BackgroundGeolocation.getCurrentPosition(
+    samples: 3,
+    extras: {   // <-- your own arbitrary meta-data
+      "event": "getCurrentPosition"
+    }
+  );
+  print('[getCurrentPosition] $location');
+  BackgroundFetch.finish(taskId);   // <-- signal that your task is complete
+})
+```
+
 
