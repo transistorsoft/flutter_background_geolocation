@@ -69,6 +69,7 @@ class Config {
   static const int ACTIVITY_TYPE_AUTOMOTIVE_NAVIGATION = 2;
   static const int ACTIVITY_TYPE_FITNESS = 3;
   static const int ACTIVITY_TYPE_OTHER_NAVIGATION = 4;
+  static const int ACTIVITY_TYPE_AIRBORNE = 5;
 
   // #persistMode
   static const int PERSIST_MODE_ALL = 2;
@@ -1510,6 +1511,7 @@ class Config {
   /// | [Config.ACTIVITY_TYPE_AUTOMOTIVE_NAVIGATION]  |
   /// | [Config.ACTIVITY_TYPE_FITNESS]                |
   /// | [Config.ACTIVITY_TYPE_OTHER_NAVIGATION]       |
+  /// | [Config.ACTIVITY_TYPE_AIRBORNE]               | 
   ///
   /// ## Example
   ///
@@ -1697,8 +1699,8 @@ class Config {
 
   // Activity Recognition Options
 
-  /// __`[Android-only]`__ Configures a comma-separated list of motion-activities which are allow to trigger location-tracking.
-  ///
+  /// Configures a comma-separated list of motion-activities which are allow to trigger location-tracking.
+  /// __⚠️ Warning:__ Requires that the user grant your app the "*Motion/Health*" permission.
   /// These are the comma-delimited list of [activity-names](https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity) returned by the `ActivityRecognition` API which will trigger a state-change from **stationary** to **moving**.  By default, the plugin will trigger on **any** of the **moving-states**:
   ///
   /// | Activity Name  |

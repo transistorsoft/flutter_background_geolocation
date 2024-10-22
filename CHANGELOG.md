@@ -1,8 +1,16 @@
 # CHANGELOG
 
-## Unreleased
+## 4.16.1 &mdash; 2024-10-21
+* [Android] Implement `Service.onTimeout` to handle `foregroundServiceType="shortService"` timeouts.
+* [iOS] Add new `Config.activityType` `ACTIVITY_TYPE_AIRBORNE`.
+* [iOS] Implement `Config.triggerActivities` for iOS.
+* [Android] Guard against `NullPointerException` receiving a null location in `PolygonGeofenceService` event.
 * [Android] Remove unused `import`s related to Flutter V1 Embedding.
- 
+* [Android] Address possible leak of `Activity` reference when terminating the app.  Ensure internal reference to `Activity` is nullified when app is terminated.
+* [Android] Add improvements to Android geofencing-only mode with `goefenceModeHighAccuracy: true` where motion-activity updates disabled.
+* [Android] Add error-checking in polygon-geofencing to handle a possible `NullPointerException`.
+* [iOS] Fix broken linking to Settings screen in `locationAuthorizationAlert` on iOS 18.
+
 ## 4.16.0 &mdash; 2024-09-04
 * [iOS] Fix bug in iOS *Polygon Geofencing* when running in geofences-only mode (`.startGeofences`).  iOS would mistakenly turn off location updates exactly 3 samples into the containing circular geofence of a polygon.
 * Implement `notifyOnDwell` for polygon-geofences.

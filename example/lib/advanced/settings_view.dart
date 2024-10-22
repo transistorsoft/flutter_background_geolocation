@@ -87,6 +87,11 @@ class _SettingsViewState extends State<SettingsView> {
         _state = state;
       });
     });
+
+    bg.BackgroundGeolocation.geofences.then((geofences) {
+      print("Geofences: $geofences");
+    });
+
   }
 
   _onClickClose() {
