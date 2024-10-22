@@ -123,7 +123,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     bg.BackgroundGeolocation.onNotificationAction(_onNotificationAction);
 
     bg.BackgroundGeolocation.onAuthorization((bg.AuthorizationEvent event) {
-      print("********************** Authorization: $event");
+      print("[onAuthorization] $event");
     });
 
     bg.TransistorAuthorizationToken token = await bg.TransistorAuthorizationToken.findOrCreate(orgname, username, ENV.TRACKER_HOST);
@@ -157,6 +157,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     )).then((bg.State state) async {
       print('[ready] ${state.toMap()}');
       print('[didDeviceReboot] ${state.didDeviceReboot}');
+
       if (state.schedule!.isNotEmpty) {
         bg.BackgroundGeolocation.startSchedule();
       }
@@ -344,7 +345,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
   void _onProviderChange(bg.ProviderChangeEvent event) async {
     print('[${bg.Event.PROVIDERCHANGE}] - $event');
-    
+
     if ((event.status == bg.ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS) && (event.accuracyAuthorization == bg.ProviderChangeEvent.ACCURACY_AUTHORIZATION_REDUCED)) {
       // Supply "Purpose" key from Info.plist as 1st argument.
       bg.BackgroundGeolocation.requestTemporaryFullAccuracy("DemoPurpose").then((int accuracyAuthorization) {
