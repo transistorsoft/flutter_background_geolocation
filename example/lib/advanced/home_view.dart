@@ -291,7 +291,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         timeout: 30,         // <-- wait 30s before giving up.
         samples: 3,           // <-- sample just 1 location
         extras: {"getCurrentPosition": true}
-    ).then((bg.Location location) {
+    ).then((bg.Location location) async {
       print('[getCurrentPosition] - $location');
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');

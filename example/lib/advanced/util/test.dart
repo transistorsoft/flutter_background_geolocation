@@ -19,7 +19,7 @@ class Test {
         "notifyOnEntry": true,
         "notifyOnExit": true,
         "notifyOnDwell": true,
-        "loiteringDelay": 60000,
+        "loiteringDelay": 5000,
         "extras": {
           "radius": 200,
           "center": {

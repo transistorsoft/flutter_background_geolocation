@@ -1511,7 +1511,7 @@ class Config {
   /// | [Config.ACTIVITY_TYPE_AUTOMOTIVE_NAVIGATION]  |
   /// | [Config.ACTIVITY_TYPE_FITNESS]                |
   /// | [Config.ACTIVITY_TYPE_OTHER_NAVIGATION]       |
-  /// | [Config.ACTIVITY_TYPE_AIRBORNE]               | 
+  /// | [Config.ACTIVITY_TYPE_AIRBORNE]               |
   ///
   /// ## Example
   ///
