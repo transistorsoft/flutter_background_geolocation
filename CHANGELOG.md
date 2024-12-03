@@ -1,6 +1,9 @@
 # CHANGELOG
 
-## 4.16.3 &mdash; 2024-11=12
+## 4.16.5 &mdash; 2024-12-03
+* [Android] Remove Android Setup Step for `proguard-rules.pro` in your `android/app/build.gradle`.  The SDK is now able to automatically apply its required `proguard-rules.pro`.
+
+## 4.16.4 &mdash; 2024-11-12
 * [Android] Remove enforcement of minimum Geofence radius `150`
 * [Android] Fix issue with `TSLocationManagerActivity` (responsible for showing location permission / authorization dialogs).  Minimizing the app with an active permission dialog would cause the app's `MainActivity` to terminate on some devices.
 

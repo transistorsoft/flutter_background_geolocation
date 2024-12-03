@@ -69,27 +69,10 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print("[home_view didChangeAppLifecycleState] : $state");
     if (state == AppLifecycleState.paused) {
-
-      // Do nothing.
-      /* For testing location access in background on Android 12.
-      new Timer(Duration(seconds: 21), () async {
-        var location = await bg.BackgroundGeolocation.getCurrentPosition();
-        print("************ [location] $location");
-      });
-      */
-
+      // paused.  do nothing.
     } else if (state == AppLifecycleState.resumed) {
+      // resumed.  do nothing.
       if (!_enabled!) return;
-
-      DateTime now = DateTime.now();
-      var _lastRequestedTemporaryFullAccuracy = this._lastRequestedTemporaryFullAccuracy;
-      if (_lastRequestedTemporaryFullAccuracy != null) {
-        Duration dt = _lastRequestedTemporaryFullAccuracy.difference(now);
-        if (dt.inSeconds < 10) return;
-      }
-      _lastRequestedTemporaryFullAccuracy = now;
-      bg.BackgroundGeolocation.requestTemporaryFullAccuracy("DemoPurpose");
-
     }
   }
 
@@ -157,7 +140,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     )).then((bg.State state) async {
       print('[ready] ${state.toMap()}');
       print('[didDeviceReboot] ${state.didDeviceReboot}');
-
       if (state.schedule!.isNotEmpty) {
         bg.BackgroundGeolocation.startSchedule();
       }

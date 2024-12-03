@@ -104,7 +104,6 @@ android {
             minifyEnabled true
             shrinkResources false
             proguardFiles "proguard-rules.pro"
-            proguardFiles "${background_geolocation.projectDir}/proguard-rules.pro"
         }
     }
 }

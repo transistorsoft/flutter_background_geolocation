@@ -10,6 +10,7 @@ class Test {
   static void applyTestConfig() async {
 
     // Circular Test Geofences
+    /*
     List<dynamic> data = [
       {
         "identifier": "[Flutter] Home",
@@ -318,8 +319,8 @@ class Test {
         }
       }
     ];
+    */
 
-    /*
     // Polygon Test Geofences
     List<dynamic> data = [{
       "identifier": "home",
@@ -477,7 +478,7 @@ class Test {
         }
       }
     }];
-    */
+
     List<bg.Geofence> geofences = [];
 
     data.forEach((dynamic item) {
