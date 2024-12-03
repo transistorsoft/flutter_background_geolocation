@@ -98,8 +98,6 @@ android {
             .
             minifyEnabled true
 +           shrinkResources false
-            // background_geolocation requires custom Proguard Rules with minifyEnabled
-+           proguardFiles "${background_geolocation.projectDir}/proguard-rules.pro"
         }
     }
 }
