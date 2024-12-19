@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.16.6 &mdash; 2024-12-19
+* [Android] Address phenonenon of "UI Freezing".
+
 ## 4.16.5 &mdash; 2024-12-03
 * [Android] Remove Android Setup Step for `proguard-rules.pro` in your `android/app/build.gradle`.  The SDK is now able to automatically apply its required `proguard-rules.pro`.
 
