@@ -27,8 +27,8 @@ body:
     id: doctor
     attributes:
       label: Flutter Doctor
-      description: "Execute `$flutter doctor` and provide the output here."
-      placeholder: "`$ flutter doctor`"
+      description: "Execute `$ flutter doctor` and provide the output here."
+      placeholder: "$ flutter doctor"
       render: shell
     validations:
       required: true
