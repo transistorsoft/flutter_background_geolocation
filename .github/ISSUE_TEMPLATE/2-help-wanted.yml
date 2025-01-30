@@ -10,8 +10,8 @@ body:
   - type: checkboxes
     id: terms
     attributes:
-      label: Required Reading
-      description: "- I have read the Wikis [Philosophy of Operation](../wiki/Philosophy-of-Operation) and [Debugging](../wiki/Debugging)\n- I am aware of the [API Documentation](https://pub.dev/documentation/flutter_background_geolocation/latest/)\n- I am aware of the [CHANGELOG](../blob/master/CHANGELOG.md)"
+      label: "Required Reading\n- I have read the Wikis [Philosophy of Operation](../wiki/Philosophy-of-Operation) and [Debugging](../wiki/Debugging)\n- I am aware of the [API Documentation](https://pub.dev/documentation/flutter_background_geolocation/latest/)\n- I am aware of the [CHANGELOG](../blob/master/CHANGELOG.md)"
+
       options:
         - label: Confirmed
           required: true
