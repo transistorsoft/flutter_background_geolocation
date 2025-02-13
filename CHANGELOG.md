@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.16.8 &mdash; 2025-02-13
+* [Android] Re-compile library with jdk 17 instead of 22
+
 ## 4.16.7 &mdash; 2025-02-13
 * [Android] Fix `ConcurrentModificationException` in `StopTimeoutEvaluator`.
 
