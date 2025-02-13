@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.16.7 &mdash; 2025-02-13
+* [Android] Fix `ConcurrentModificationException` in `StopTimeoutEvaluator`.
+
 ## 4.16.6 &mdash; 2024-12-19
 * [Android] Address phenonenon of "UI Freezing".
 
