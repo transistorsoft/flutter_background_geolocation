@@ -18,7 +18,6 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <application tools:replace="android:label"
-        android:name=".Application"
         android:allowBackup="true"
         android:label="Flutter Background Geolocation"
         android:usesCleartextTraffic="true"

@@ -24,10 +24,25 @@ Flutter seems to have a problem with 3rd-party Android libraries which merge the
 > Failure to perform the step above will result in a **build error**: __`Manifest merger failed`__
 
 
-## :open_file_folder: `android/build.gradle`
-- Add the following **required** `maven` repo urls:
+## :open_file_folder: `android/build.gradle` (or `build.gradle.kts`)
+
+> [!NOTE]
+> At the root of your `/android` folder, your Flutter app will contain __one__ of the following files:
+> - __`build.gradle`__
+> - __`build.gradle.kts`__ (new Kotlin-based version)
+>
+> Add the following **required** `maven` repo url to **whichever file** your app has:
+
+#### `build.gradle`
+
+If your app contains an `android/app/build.gradle`:
 
 ```diff
++ext {
++    appCompatVersion    = "1.4.2"           // or higher / as desired
++    playServicesLocationVersion = "21.3.0"  // or higher / as desired
++}
+
 allprojects {  // <-- IMPORTANT:  allprojects
     repositories {
         google()
@@ -41,38 +56,33 @@ allprojects {  // <-- IMPORTANT:  allprojects
 }
 ```
 
-- #### If you're using `flutter >= 3.19.0` ([New Android Architecture](https://docs.flutter.dev/release/breaking-changes/flutter-gradle-plugin-apply)):
+#### `build.gradle.kts`
+
+OR if your app contains an `android/app/build.gradle.kts`:
 
 ```diff
-+ext {
-+    compileSdkVersion   = 34                // or higher / as desired
-+    targetSdkVersion    = 34                // or higher / as desired
-+    minSdkVersion       = 21                // Required minimum
-+    appCompatVersion    = "1.4.2"           // or higher / as desired
-+    playServicesLocationVersion = "21.0.1"  // or higher / as desired
-+}
-```
-
-- #### Otherwise for `flutter < 3.19.0` (Old Android Architecture):
-
-```diff
-
-buildscript {
-    ext.kotlin_version = '1.3.0' // Must use 1.3.0 OR HIGHER
+allprojects {
 +   ext {
-+       compileSdkVersion   = 33                // or higher / as desired
-+       targetSdkVersion    = 33                // or higher / as desired
-+       minSdkVersion       = 21                // Required minimum
-+       appCompatVersion    = "1.4.2"           // or higher / as desired
-+       playServicesLocationVersion = "21.0.1"  // or higher / as desired
++       set("appCompatVersion", "1.4.2")             // or higher / as desired
++       set("playServicesLocationVersion", "21.3.0") // or higher / as desired
 +   }
+    repositories {
+        google()
+        mavenCentral()
++       // [required] background_geolocation
++       maven(url = "${project(":flutter_background_geolocation").projectDir}/libs")
++       maven(url = "https://developer.huawei.com/repo/")
++       // [required] background_fetch
++       maven(url = "${project(":background_fetch").projectDir}/libs")
+    }
 }
 ```
 
-## :open_file_folder: `android/app/build.gradle`
+## :open_file_folder: `android/app/build.gradle` (or `build.gradle.kts`)
 
-> [!CAUTION]  
-> __DO NOT OMIT ANY OF THE FOLLOWING CHANGES__ in __green__ or your license key will __fail to validate__.
+#### `build.gradle`
+
+If your app contains an `android/app/build.gradle`:
 
 ```diff
 // flutter_background_geolocation
@@ -80,24 +90,40 @@ buildscript {
 +apply from: "${background_geolocation.projectDir}/background_geolocation.gradle"
 
 android {
-+   compileSdkVersion rootProject.ext.compileSdkVersion
     .
     .
     .
-    defaultConfig {
-        .
-        .
-        .
-+       minSdkVersion rootProject.ext.minSdkVersion
-+       targetSdkVersion rootProject.ext.targetSdkVersion
-    }
     buildTypes {
         release {
             .
             .
             .
             minifyEnabled true
-+           shrinkResources false
++           shrinkResources false   // <-- REQUIRED !!!
+        }
+    }
+}
+```
+
+#### `build.gradle.kts`
+
+OR if your app contains an `android/app/build.gradle.kts`:
+
+```diff
++val backgroundGeolocation = project(":flutter_background_geolocation")
++apply { from("${backgroundGeolocation.projectDir}/background_geolocation.gradle") }
+
+android {
+    .
+    .
+    .
+    buildTypes {
+        release {
+            .
+            .
+            .
+            isMinifyEnabled = true
++           isShrinkResources = false   // <-- REQUIRED !!!
         }
     }
 }
