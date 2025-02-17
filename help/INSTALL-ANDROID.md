@@ -4,7 +4,7 @@
 
 Flutter seems to have a problem with 3rd-party Android libraries which merge their own `AndroidManifest.xml` into the application, particularly the `android:label` attribute.
 
-##### :open_file_folder: `android/app/src/main/AndroidManifest.xml`:
+### :open_file_folder: `android/app/src/main/AndroidManifest.xml`:
 
 ```diff
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,7 +33,7 @@ Flutter seems to have a problem with 3rd-party Android libraries which merge the
 >
 > Add the following **required** `maven` repo url to **whichever file** your app has:
 
-#### `build.gradle`
+### `build.gradle`
 
 If your app contains an `android/app/build.gradle`:
 
@@ -56,7 +56,7 @@ allprojects {  // <-- IMPORTANT:  allprojects
 }
 ```
 
-#### `build.gradle.kts`
+### `build.gradle.kts`
 
 OR if your app contains an `android/app/build.gradle.kts`:
 
@@ -80,7 +80,7 @@ allprojects {
 
 ## :open_file_folder: `android/app/build.gradle` (or `build.gradle.kts`)
 
-#### `build.gradle`
+### `build.gradle`
 
 If your app contains an `android/app/build.gradle`:
 
@@ -105,7 +105,7 @@ android {
 }
 ```
 
-#### `build.gradle.kts`
+### `build.gradle.kts`
 
 OR if your app contains an `android/app/build.gradle.kts`:
 
