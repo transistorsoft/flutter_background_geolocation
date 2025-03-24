@@ -58,7 +58,7 @@ allprojects {  // <-- IMPORTANT:  allprojects
 
 ### `build.gradle.kts`
 
-OR if your app contains an `android/app/build.gradle.kts`:
+OR if your app contains an `android/build.gradle.kts`:
 
 ```diff
 allprojects {
