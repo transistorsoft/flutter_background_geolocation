@@ -35,7 +35,7 @@ Flutter seems to have a problem with 3rd-party Android libraries which merge the
 
 ### `build.gradle`
 
-If your app contains an `android/app/build.gradle`:
+If your app contains an `android/build.gradle`:
 
 ```diff
 +ext {
