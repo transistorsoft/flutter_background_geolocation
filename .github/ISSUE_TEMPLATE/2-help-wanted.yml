@@ -33,6 +33,22 @@ body:
         - label: Android
     validations:
       required: true
+  - type: input
+    id: device-info
+    attributes:
+      label: Device Manufacturer(s) and Model(s)
+      description: What is the device model(s) and manufacturer(s)
+      placeholder: eg Google Pixel 6, iPhone 13 Pro
+    validations:
+      required: true
+  - type: input
+    id: device-os
+    attributes:
+      label: Device operating-systems(s)
+      description: Affected device operating system
+      placeholder: eg iOS 18.1, Android 13
+    validations:
+      required: true
   - type: textarea
     id: what-happened
     attributes:
