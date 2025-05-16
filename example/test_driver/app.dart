@@ -281,7 +281,7 @@ class _TestAppState extends State<TestApp> {
             //accentColor: Colors.black,
             primaryColor: Colors.black,
             //cursorColor: Colors.white,
-            backgroundColor: Colors.black,
+            
             primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
                 bodyColor: Colors.white
             )
