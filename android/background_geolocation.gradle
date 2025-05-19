@@ -1,23 +1,34 @@
 
-android {
-	purgeBackgroundGeolocationDebugResources(applicationVariants)
-}
-
-/**
-* Background Geolocation's aar includes about 1.5M of mp3 sound-files for its debugging sound FX.
-* This method strips those mp3s out in RELEASE builds.
-*/
 def purgeBackgroundGeolocationDebugResources(applicationVariants) {
     if ((rootProject.ext.has("removeBackgroundGeolocationDebugSoundsInRelease")) && (rootProject.ext.removeBackgroundGeolocationDebugSoundsInRelease == false)) return
+
     applicationVariants.all { variant ->
-        if (!variant.hasProperty('mergeResourcesProvider')) return
         if (variant.buildType.name == "release") {
             println("[flutter_background_geolocation] Purging debug resources in release build")
+
             variant.mergeResourcesProvider.configure {
                 doLast {
-                    delete(fileTree(dir: outputDir, includes: ["raw_tslocationmanager*"]))
+                    // Get the output directory of the mergeResources task
+                    def outputDir = outputDir.get()
+
+                    // Use FileTree to safely delete matching files
+                    //def filesToDelete = fileTree(dir: outputDir, includes: ["raw_tslocationmanager*"]).files
+                    def filesToDelete = fileTree(dir: outputDir, includes: ["raw_tslocationmanager*"]).files
+                    println("********* files to delete: ${filesToDelete}")
+
+                    filesToDelete.each { file ->
+                        if (file.exists()) {
+                            file.delete()
+                            println("[flutter_background_geolocation] Deleted: ${file.absolutePath}")
+                        }
+                    }
                 }
             }
         }
     }
 }
+
+android.applicationVariants.all { variant ->
+    purgeBackgroundGeolocationDebugResources(android.applicationVariants)
+}
+

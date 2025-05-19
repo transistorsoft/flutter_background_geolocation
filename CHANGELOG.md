@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 4,16.10 &mdash; 2025-05-16
+* [Android] Support *16KB pages sizes*.
+* [iOS] Fix `ProviderChangeEvent.enabled` not showing the result of global *Privacy -> Location Services -> Enabled* switch
+* [Android] Fix `java.util.ConcurrentModificationException at com.transistorsoft.locationmanager.location.SingleLocationRequest.getBestLocation`.
+
 ## 4.16.9 &mdash; 2025-02-13
 * [Android] Re-compile library with jdk 17
 
