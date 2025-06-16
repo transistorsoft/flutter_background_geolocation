@@ -25,7 +25,6 @@ dev_dependencies:
     sdk: flutter
   flutter_background_geolocation:
     path: ../
-
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
 

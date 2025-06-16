@@ -1,8 +1,8 @@
 
 ext {
     kotlin_version     = '1.8.10'
-    compileSdkVersion   = 34
-    targetSdkVersion    = 34
+    compileSdkVersion   = 36
+    targetSdkVersion    = 36
     minSdkVersion       = 21
     appCompatVersion    = "1.6.1"
     playServicesLocationVersion = "21.3.0"
