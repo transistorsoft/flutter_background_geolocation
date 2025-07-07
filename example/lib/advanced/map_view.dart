@@ -6,8 +6,9 @@ import 'dart:math' as math;
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
 import 'package:flutter_map/flutter_map.dart';
+
 import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
-import 'package:flutter_map/plugin_api.dart';
+
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart'
     as util;
 import 'geofence_view.dart';
@@ -59,8 +60,8 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     super.initState();
     _mapOptions = MapOptions(
         onPositionChanged: _onPositionChanged,
-        center: _center,
-        zoom: 12.0,
+        initialCenter: _center,
+        initialZoom: 12.0,
         onTap: _onTap,
         onLongPress: _onAddGeofence);
     _mapController = MapController();
@@ -174,15 +175,11 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
       colorName = 'amber';
     }
     // Colored circular image marker (red/amber/green) on geofence edge.
-    _geofenceEventEdges.add(Marker(point: edge, width: 16, height: 16, rotate: false, builder: (context) {
-      return Image.asset("assets/images/markers/geofence-event-edge-circle-${event.action.toLowerCase()}.png");
-    }));
+    _geofenceEventEdges.add(Marker(point: edge, width: 16, height: 16, rotate: false, child: Image.asset("assets/images/markers/geofence-event-edge-circle-${event.action.toLowerCase()}.png")));
 
     // Colored event location-arrow Marker (red/amber/green)
     double heading = location.coords.heading.round().toDouble();
-    _geofenceEventLocations.add(Marker(point: hit, width: 24, height: 24, rotate: false, builder: (context) {
-      return Transform.rotate(angle: (heading * (math.pi / 180)), child: Image.asset("assets/images/markers/location-arrow-${colorName}.png"));
-    }));
+    _geofenceEventLocations.add(Marker(point: hit, width: 24, height: 24, rotate: false, child: Transform.rotate(angle: (heading * (math.pi / 180)), child: Image.asset("assets/images/markers/location-arrow-${colorName}.png"))));
     // Polyline joining the two above.
     _geofenceEventPolylines.add(Polyline(points: [edge, hit], strokeWidth: 2.0, color: Colors.black));
   }
@@ -211,11 +208,10 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
           _geofencePolygons.add(Polygon(
               borderColor: Colors.blue,
               borderStrokeWidth: 5.0,
-              isDotted: true,
+              pattern: StrokePattern.dotted(),
               label: geofence.identifier,
               labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               color: Colors.blue.withOpacity(0.2),
-              isFilled: true,
               points: geofence.vertices!.map((vertex) {
                 return LatLng(vertex[0], vertex[1]);
               }).toList()
@@ -233,7 +229,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   void _onLocation(bg.Location location) {
     _lastLocation = location;
     LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
-    _mapController.move(ll, _mapController.zoom);
+    _mapController.move(ll, _mapController.camera.zoom);
 
     _updateCurrentPositionMarker(ll);
 
@@ -244,14 +240,8 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     // Add a point to the tracking polyline.
     _polyline.add(ll);
     // Add a marker for the recorded location.
-    //_locations.add(_buildLocationMarker(location));
-    //_locations.add(CircleMarker(point: ll, color: Colors.black, radius: 5.0));
-    //_locations.add(CircleMarker(point: ll, color: Colors.blue, radius: 4.0));
-
     double heading = (location.coords.heading >= 0) ? location.coords.heading.round().toDouble() : 0;
-    _locations.add(Marker(point: ll, width: 16, height: 16, rotate: false, builder: (context) {
-      return Transform.rotate(angle: (heading * (math.pi / 180)), child: Image.asset(LOCATION_ARROW_IMAGE_PATH));
-    }));
+    _locations.add(Marker(point: ll, width: 16, height: 16, rotate: false, child: Transform.rotate(angle: (heading * (math.pi / 180)), child: Image.asset(LOCATION_ARROW_IMAGE_PATH))));
   }
 
   /// Update Big Blue current position dot.
@@ -259,15 +249,6 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     setState(() {
       _currentPosition = ll;
     });
-  /*
-    // White background
-    _currentPosition
-        .add(CircleMarker(point: ll, color: Colors.white, radius: 10));
-    // Blue foreground
-    _currentPosition
-        .add(CircleMarker(point: ll, color: Colors.blue, radius: 7));
-
-   */
   }
 
   CircleMarker _buildStationaryCircleMarker(
@@ -304,17 +285,14 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     setState(() {
       _polygonGeofenceCursorPoints.add(latLng);
       _polygonGeofenceCursorMarkers.add(
-          Marker(point: latLng, width: 20, height: 20, rotate:false, builder: (context) {
-            return Container(
+          Marker(point: latLng, width: 20, height: 20, rotate:false, child: Container(
               child: Text("$index", style: TextStyle(color: Colors.white)),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                //border: Border.all(width: 2, color: Colors.white),
-                shape: BoxShape.circle,
-                color: Colors.black
+                  shape: BoxShape.circle,
+                  color: Colors.black
               )
-            );
-          })
+          ))
       );
     });
   }
@@ -351,14 +329,6 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
         _cancelAddGeofence();
       }),// onPressed parameter is optional by default will dismiss the ActionSheet
     );
-    /*
-    Navigator.of(context).push(MaterialPageRoute<Null>(
-        fullscreenDialog: true,
-        builder: (BuildContext context) {
-          return GeofenceView(latLng);
-        }));
-
-     */
   }
   void _showPolygonGeofenceMenu() {
 
@@ -390,7 +360,6 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
                               onPressed: _cancelAddGeofence
                           ),
 
-                          //Text("Tap map to add points", style: TextStyle(fontWeight: FontWeight.bold)),
                           MaterialButton(child: Text(
                               "Next", style: TextStyle(color: Colors.white)),
                               color: Colors.blue,
@@ -446,13 +415,77 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
       _isCreatingPolygonGeofence = false;
     });
   }
-  void _onPositionChanged(MapPosition pos, bool hasGesture) {
-    _mapOptions.crs.scale(_mapController.zoom);
+  void _onPositionChanged(MapCamera camera, bool hasGesture) {
+    _mapOptions.crs.scale(camera.zoom);
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+
+    List<Widget> layers = [
+      TileLayer(
+        urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+        userAgentPackageName: 'com.transistorsoft.backgroundgeolocation.flutter.example',
+      ),
+      // Active geofence circles
+      CircleLayer(circles: _geofences),
+      // Small, red circles showing where motionchange:false events fired.
+      CircleLayer(circles: _stopLocations),
+      // Big red stationary radius while in stationary state.
+      CircleLayer(circles: _stationaryMarker),
+    ];
+    if (_geofencePolygons.isNotEmpty) {
+      layers.add(PolygonLayer(polygons: _geofencePolygons));
+    }
+    if (_polygonGeofenceCursorPoints.isNotEmpty) {
+      layers.add(PolygonLayer(polygons: [
+        Polygon(
+            borderColor: Colors.blue,
+            borderStrokeWidth: 5.0,
+            pattern: StrokePattern.dotted(),
+            label: "Click next to continue",
+            labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            color: Colors.blue.withOpacity(0.2),
+            points: _polygonGeofenceCursorPoints
+        )
+      ]));
+      // Polygon geofence cursor vertex markers.
+      layers.add(MarkerLayer(markers: _polygonGeofenceCursorMarkers));
+    }
+
+
+    // Blue tracking Polyline.
+    if (_polyline.isNotEmpty) {
+      layers.add(PolylineLayer(polylines: [
+        Polyline(points: _polyline, strokeWidth: 10.0, color: Color.fromRGBO(0, 179, 253, 0.6))
+      ]));
+    }
+
+    // Polyline joining last stationary location to motionchange:true location.
+    if (_motionChangePolylines.isNotEmpty) {
+      layers.add(PolylineLayer(polylines: _motionChangePolylines));
+    }
+
+    // Recorded locations.
+    layers.add(MarkerLayer(markers: _locations));
+
+    // Geofence events (edge marker, event location and polyline joining the two)
+    if (_geofenceEvents.isNotEmpty) {
+      layers.add(CircleLayer(circles: _geofenceEvents));
+      layers.add(PolylineLayer(polylines: _geofenceEventPolylines));
+      layers.add(MarkerLayer(markers: _geofenceEventLocations));
+      layers.add(MarkerLayer(markers: _geofenceEventEdges));
+    }
+
+    // Blue-dot current location marker.
+    layers.add(CircleLayer(circles: [
+      // White background
+      CircleMarker(point: _currentPosition, color: Colors.white, radius: 10),
+      // Blue foreground
+      CircleMarker(point: _currentPosition, color: Colors.blue, radius: 7)
+    ]));
+
     return Column(
       children: [
         Container(
@@ -468,55 +501,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
           child: FlutterMap(
               mapController: _mapController,
               options: _mapOptions,
-              children: [
-                TileLayer(
-                    urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                    subdomains: ['a', 'b', 'c']),
-                // Active geofence circles
-                CircleLayer(circles: _geofences),
-                PolygonLayer(polygons: _geofencePolygons),
-                // Small, red circles showing where motionchange:false events fired.
-                CircleLayer(circles: _stopLocations),
-                // Big red stationary radius while in stationary state.
-                CircleLayer(circles: _stationaryMarker),
-                PolygonLayer(polygons: [
-                  Polygon(
-                      borderColor: Colors.blue,
-                      borderStrokeWidth: 5.0,
-                      isDotted: true,
-                      label: "Click next to continue",
-                      labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                      color: Colors.blue.withOpacity(0.2),
-                      isFilled: true,
-                      points: _polygonGeofenceCursorPoints
-                  )
-                ]),
-                MarkerLayer(markers: _polygonGeofenceCursorMarkers),
-                // Recorded locations.
-                PolylineLayer(
-                  polylines: [
-                    Polyline(
-                      points: _polyline,
-                      strokeWidth: 10.0,
-                      color: Color.fromRGBO(0, 179, 253, 0.6),
-                    ),
-                  ],
-                ),
-                // Polyline joining last stationary location to motionchange:true location.
-                PolylineLayer(polylines: _motionChangePolylines),
-                MarkerLayer(markers: _locations),
-                CircleLayer(circles: _geofenceEvents),
-                PolylineLayer(polylines: _geofenceEventPolylines),
-                MarkerLayer(markers: _geofenceEventLocations),
-                MarkerLayer(markers: _geofenceEventEdges),
-                // Geofence events (edge marker, event location and polyline joining the two)
-                CircleLayer(circles: [
-                  // White background
-                  CircleMarker(point: _currentPosition, color: Colors.white, radius: 10),
-                  // Blue foreground
-                  CircleMarker(point: _currentPosition, color: Colors.blue, radius: 7)
-                ]),
-              ]
+              children: layers
           )
         )
       ]
