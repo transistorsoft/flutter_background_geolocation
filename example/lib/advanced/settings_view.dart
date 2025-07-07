@@ -664,8 +664,8 @@ const PLUGIN_SETTINGS = {
       'group': 'geolocation',
       'dataType': 'string',
       'inputType': 'select',
-      'labels': ['Always', 'WhenInUse'],
-      'values': ['Always', 'WhenInUse'],
+      'labels': ['Always', 'WhenInUse', 'Any'],
+      'values': ['Always', 'WhenInUse', 'Any'],
       'defaultValue': 'Always'
     },
     {

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 4.16.12 &mdash; 2025-07-07
+* [Android] Rebuild `tslocationmanager` with AGP >= 8.5.1
+* [example] Update example's `flutter_map` to latest `8.1.1`
+* [Android] Implement behaviour for `locationAuthorizationRequest: "Any"` to not continue showing `backgroundPermissionRationale` after user clicks `[CANCEL]` button.
+
 ## 4.16.11 &mdash; 2025-06-16
 * [Android] Fix issue with polygon geofencing where `identifier` consists of long strings, such as `aaaa-bbbb-cccccccc-dddd-eeeee
 eeeeeee`.
