@@ -81,7 +81,6 @@ class Coords {
   late double altitudeAccuracy;
 
   Coords(dynamic coords) {
-
     /// Should we replace all below with this format?
     //this.latitude = (coords['latitude'] as num).toDouble();
     //this.longitude = (coords['longitude'] as num).toDouble();
