@@ -91,6 +91,13 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   }
 
   void _configureBackgroundGeolocation(orgname, username) async {
+    bg.State state = await bg.BackgroundGeolocation.state;
+    if (state.didLaunchInBackground) {
+      // Hack:  let engine settle before calling BackgroundGeolocation.ready(config).
+      // Fixes broken marker images when launched in background
+      await Future.delayed(Duration(milliseconds: 1000));
+    }
+
     // 1.  Listen to events (See docs for all 13 available events).
     bg.BackgroundGeolocation.onLocation(_onLocation, _onLocationError);
     bg.BackgroundGeolocation.onMotionChange(_onMotionChange);

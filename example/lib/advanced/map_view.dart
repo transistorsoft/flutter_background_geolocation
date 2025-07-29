@@ -1,7 +1,8 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/services.dart';
-import 'dart:math' as math;
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
@@ -12,10 +13,12 @@ import 'package:adaptive_action_sheet/adaptive_action_sheet.dart';
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart'
     as util;
 import 'geofence_view.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:latlong2/latlong.dart' as ll;
 import 'util/geospatial.dart';
 
 class MapView extends StatefulWidget {
+  const MapView({super.key});
+
   @override
   State createState() => MapViewState();
 }
@@ -31,8 +34,8 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   bg.Location? _stationaryLocation;
   bg.Location? _lastLocation;
 
-  LatLng _currentPosition = LatLng(45.508888, -73.561668);
-  List<LatLng> _polyline = [];
+  ll.LatLng _currentPosition = ll.LatLng(45.508888, -73.561668);
+  List<ll.LatLng> _polyline = [];
   List<Marker> _locations = [];
   List<CircleMarker> _stopLocations = [];
   List<Polyline> _motionChangePolylines = [];
@@ -45,12 +48,12 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   List<Marker> _geofenceEventLocations = [];
   List<Polyline> _geofenceEventPolylines = [];
   List<Marker> _polygonGeofenceCursorMarkers = [];
-  List<LatLng> _polygonGeofenceCursorPoints = [];
+  List<ll.LatLng> _polygonGeofenceCursorPoints = [];
 
   bool _isCreatingPolygonGeofence = false;
   OverlayEntry? _polygonGeofenceMenuOverlay = null;
 
-  LatLng _center = LatLng(45.508888, -73.561668);
+  ll.LatLng _center = ll.LatLng(45.508888, -73.561668);
 
   late MapController _mapController;
   late MapOptions _mapOptions;
@@ -58,6 +61,10 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   @override
   void initState() {
     super.initState();
+    initPlatformState();
+  }
+
+  void initPlatformState() async {
     _mapOptions = MapOptions(
         onPositionChanged: _onPositionChanged,
         initialCenter: _center,
@@ -72,7 +79,6 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     bg.BackgroundGeolocation.onGeofencesChange(_onGeofencesChange);
     bg.BackgroundGeolocation.onEnabledChange(_onEnabledChange);
   }
-
   void _onEnabledChange(bool enabled) {
     if (!enabled) {
       setState(() {
@@ -91,19 +97,17 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   }
 
   void _onMotionChange(bg.Location location) async {
-    LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
+    ll.LatLng latLng = ll.LatLng(location.coords.latitude, location.coords.longitude);
 
-    _updateCurrentPositionMarker(ll);
+    _updateCurrentPositionMarker(latLng);
 
-    _mapController.move(ll, 16);
+    _mapController.move(latLng, 16);
 
     // clear the big red stationaryRadius circle.
     _stationaryMarker.clear();
 
     if (location.isMoving) {
-      if (_stationaryLocation == null) {
-        _stationaryLocation = location;
-      }
+      _stationaryLocation ??= location;
       // Add previous stationaryLocation as a small red stop-circle.
       _stopLocations.add(_buildStopCircleMarker(_stationaryLocation!));
       // Create the green motionchange polyline to show where tracking engaged from.
@@ -123,7 +127,12 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   void _onGeofence(bg.GeofenceEvent event) async {
     bg.Logger.info('[onGeofence] Flutter received onGeofence event $event');
     // Provide the location of this event to the Polyline.  BGGeo does not fire an onLocation for geofence events.
-    _polyline.add(LatLng(event.location.coords.latitude, event.location.coords.longitude));
+    _polyline.add(ll.LatLng(
+        event.location.coords.latitude,
+        event.location.coords.longitude)
+    );
+
+    // Locate the GeofenceMarker corresponding to this geofence event.
     GeofenceMarker? marker = _geofences.firstWhereOrNull(
         (GeofenceMarker marker) => marker.geofence?.identifier == event.identifier);
     if (marker == null) {
@@ -147,41 +156,66 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     GeofenceMarker? eventMarker = _geofenceEvents.firstWhereOrNull(
         (GeofenceMarker marker) =>
             marker.geofence?.identifier == event.identifier);
-    if (eventMarker == null)
+    if (eventMarker == null) {
       _geofenceEvents.add(GeofenceMarker(geofence!, true));
+    }
 
     // Build geofence hit statistic markers:
     // 1.  A computed CircleMarker upon the edge of the geofence circle (red=exit, green=enter)
     // 2.  A CircleMarker for the actual location of the geofence event.
     // 3.  A black PolyLine joining the two above.
     bg.Location location = event.location;
-    LatLng center = LatLng(geofence!.latitude!, geofence!.longitude!);
-    LatLng hit = LatLng(location.coords.latitude, location.coords.longitude);
+    ll.LatLng center = ll.LatLng(geofence!.latitude!, geofence!.longitude!);
+    ll.LatLng hit = ll.LatLng(location.coords.latitude, location.coords.longitude);
 
     // Update current position marker.
     _updateCurrentPositionMarker(hit);
     // Determine bearing from center -> event location
     double bearing = Geospatial.getBearing(center, hit);
-    // Compute a coordinate at the intersection of the line joining center point -> event location and the circle.
-    LatLng edge = Geospatial.computeOffsetCoordinate(center, geofence.radius!, bearing);
-    // Green for ENTER, Red for EXIT.
-    Color color = Colors.green;
-    var colorName = 'green';
-    if (event.action == "EXIT") {
-      color = Colors.red;
-      colorName = 'red';
-    } else if (event.action == "DWELL") {
-      color = Colors.yellow;
-      colorName = 'amber';
-    }
-    // Colored circular image marker (red/amber/green) on geofence edge.
-    _geofenceEventEdges.add(Marker(point: edge, width: 16, height: 16, rotate: false, child: Image.asset("assets/images/markers/geofence-event-edge-circle-${event.action.toLowerCase()}.png")));
-
     // Colored event location-arrow Marker (red/amber/green)
     double heading = location.coords.heading.round().toDouble();
-    _geofenceEventLocations.add(Marker(point: hit, width: 24, height: 24, rotate: false, child: Transform.rotate(angle: (heading * (math.pi / 180)), child: Image.asset("assets/images/markers/location-arrow-${colorName}.png"))));
-    // Polyline joining the two above.
-    _geofenceEventPolylines.add(Polyline(points: [edge, hit], strokeWidth: 2.0, color: Colors.black));
+    // Compute a coordinate at the intersection of the line joining center point -> event location and the circle.
+    ll.LatLng edge = Geospatial.computeOffsetCoordinate(center, geofence.radius!, bearing);
+
+    // Green for ENTER, Red for EXIT, Yellow for DWELL.
+    var colorName = "green";
+    if (event.action == "EXIT") {
+      colorName = "red";
+    } else if (event.action == "DWELL") {
+      colorName = "amber";
+    }
+
+    // Colored circular image marker (red/amber/green) on geofence edge.
+    _geofenceEventEdges.add(Marker(
+      point: edge,
+      width: 16,
+      height: 16,
+      rotate: false,
+      child: Builder(builder: (BuildContext context) {
+        return Image.asset("assets/images/markers/geofence-event-edge-circle-${event.action.toLowerCase()}.png");
+      })
+    ));
+
+    // The colored location-arrow marker where geofence event occurred.
+    _geofenceEventLocations.add(Marker(
+        point: hit,
+        width: 24,
+        height: 24,
+        rotate: false,
+        child: Builder(builder: (BuildContext context) {
+          return Transform.rotate(
+              angle: (heading * (math.pi / 180)),
+              child: Image.asset("assets/images/markers/location-arrow-$colorName.png")
+          );
+        })
+    ));
+
+    // Black polyline joining the two above.
+    _geofenceEventPolylines.add(Polyline(
+        points: [edge, hit],
+        strokeWidth: 2.0,
+        color: Colors.black
+    ));
   }
 
   bool hasGeofenceMarker(String identifier) {
@@ -213,7 +247,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
               labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               color: Colors.blue.withOpacity(0.2),
               points: geofence.vertices!.map((vertex) {
-                return LatLng(vertex[0], vertex[1]);
+                return ll.LatLng(vertex[0], vertex[1]);
               }).toList()
           ));
         }
@@ -228,33 +262,47 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
 
   void _onLocation(bg.Location location) {
     _lastLocation = location;
-    LatLng ll = LatLng(location.coords.latitude, location.coords.longitude);
-    _mapController.move(ll, _mapController.camera.zoom);
+    ll.LatLng latLng = ll.LatLng(location.coords.latitude, location.coords.longitude);
+    _mapController.move(latLng, _mapController.camera.zoom);
 
-    _updateCurrentPositionMarker(ll);
+    _updateCurrentPositionMarker(latLng);
 
     if (location.sample) {
       return;
     }
 
     // Add a point to the tracking polyline.
-    _polyline.add(ll);
+    _polyline.add(latLng);
     // Add a marker for the recorded location.
     double heading = (location.coords.heading >= 0) ? location.coords.heading.round().toDouble() : 0;
-    _locations.add(Marker(point: ll, width: 16, height: 16, rotate: false, child: Transform.rotate(angle: (heading * (math.pi / 180)), child: Image.asset(LOCATION_ARROW_IMAGE_PATH))));
+
+    _locations.add(
+        Marker(
+            point: latLng,
+            width: 16,
+            height: 16,
+            rotate: false,
+            child: Builder(builder: (BuildContext context) {
+              return Transform.rotate(
+                  angle: (heading * (math.pi / 180)),
+                  child: Image.asset(LOCATION_ARROW_IMAGE_PATH)
+              );
+            })
+        )
+    );
   }
 
   /// Update Big Blue current position dot.
-  void _updateCurrentPositionMarker(LatLng ll) {
+  void _updateCurrentPositionMarker(ll.LatLng latLng) {
     setState(() {
-      _currentPosition = ll;
+      _currentPosition = latLng;
     });
   }
 
   CircleMarker _buildStationaryCircleMarker(
       bg.Location location, bg.State state) {
     return CircleMarker(
-        point: LatLng(location.coords.latitude, location.coords.longitude),
+        point: ll.LatLng(location.coords.latitude, location.coords.longitude),
         color: Color.fromRGBO(255, 0, 0, 0.5),
         useRadiusInMeter: true,
         radius: (state.trackingMode == 1)
@@ -264,14 +312,14 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
 
   Polyline _buildMotionChangePolyline(bg.Location from, bg.Location to) {
     return Polyline(points: [
-      LatLng(from.coords.latitude, from.coords.longitude),
-      LatLng(to.coords.latitude, to.coords.longitude)
+      ll.LatLng(from.coords.latitude, from.coords.longitude),
+      ll.LatLng(to.coords.latitude, to.coords.longitude)
     ], strokeWidth: 10.0, color: Color.fromRGBO(22, 190, 66, 0.7));
   }
 
   CircleMarker _buildStopCircleMarker(bg.Location location) {
     return CircleMarker(
-        point: LatLng(location.coords.latitude, location.coords.longitude),
+        point: ll.LatLng(location.coords.latitude, location.coords.longitude),
         color: Color.fromRGBO(200, 0, 0, 0.3),
         useRadiusInMeter: false,
         radius: 20);
@@ -286,12 +334,12 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
       _polygonGeofenceCursorPoints.add(latLng);
       _polygonGeofenceCursorMarkers.add(
           Marker(point: latLng, width: 20, height: 20, rotate:false, child: Container(
-              child: Text("$index", style: TextStyle(color: Colors.white)),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.black
-              )
+              ),
+              child: Text("$index", style: TextStyle(color: Colors.white))
           ))
       );
     });
@@ -333,8 +381,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   void _showPolygonGeofenceMenu() {
 
     OverlayState overlayState = Overlay.of(context);
-    if (_polygonGeofenceMenuOverlay == null) {
-      _polygonGeofenceMenuOverlay = OverlayEntry(builder: (context) {
+    _polygonGeofenceMenuOverlay ??= OverlayEntry(builder: (context) {
         return Positioned(
             top: 55,
             left: 0,
@@ -354,15 +401,12 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          MaterialButton(child: Text(
-                              "Cancel", style: TextStyle(color: Colors.white)),
-                              color: Colors.red,
-                              onPressed: _cancelAddGeofence
+                          MaterialButton(color: Colors.red,
+                              onPressed: _cancelAddGeofence, child: Text(
+                              "Cancel", style: TextStyle(color: Colors.white))
                           ),
 
-                          MaterialButton(child: Text(
-                              "Next", style: TextStyle(color: Colors.white)),
-                              color: Colors.blue,
+                          MaterialButton(color: Colors.blue,
                               onPressed: () {
 
                                 var vertices = _polygonGeofenceCursorMarkers.map((Marker marker) {
@@ -375,7 +419,8 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
                                       return GeofenceView(vertices: vertices);
                                     })
                                 );
-                              })
+                              }, child: Text(
+                              "Next", style: TextStyle(color: Colors.white)))
                         ]
                     ),
                     Row(
@@ -401,7 +446,6 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
             )
         );
       });
-    }
     overlayState.insert(_polygonGeofenceMenuOverlay!);
   }
   void _cancelAddGeofence() {
@@ -453,8 +497,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
       // Polygon geofence cursor vertex markers.
       layers.add(MarkerLayer(markers: _polygonGeofenceCursorMarkers));
     }
-
-
+    
     // Blue tracking Polyline.
     if (_polyline.isNotEmpty) {
       layers.add(PolylineLayer(polylines: [
@@ -518,7 +561,7 @@ class GeofenceMarker extends CircleMarker {
             color: (triggered) ? Colors.transparent : Colors.green.withOpacity(0.3),
             borderColor: Colors.green,
             borderStrokeWidth: 1,
-            point: LatLng(geofence.latitude!, geofence.longitude!)) {
+            point: ll.LatLng(geofence.latitude!, geofence.longitude!)) {
     this.geofence = geofence;
   }
 }

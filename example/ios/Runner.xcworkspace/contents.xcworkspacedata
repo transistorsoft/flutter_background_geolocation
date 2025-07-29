@@ -2,15 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:toronto.gpx">
-   </FileRef>
-   <FileRef
-      location = "group:../../../../CityDrive.gpx">
-   </FileRef>
-   <FileRef
       location = "group:Runner.xcodeproj">
-   </FileRef>
-   <FileRef
-      location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>

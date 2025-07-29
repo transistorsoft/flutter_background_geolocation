@@ -15,15 +15,15 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Transistor Software' => 'info@transistorsoft.com' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
-  s.public_header_files = 'Classes/**/*.h'
+  s.source_files = 'flutter_background_geolocation/Sources/flutter_background_geolocation/**/*.{h,m}'
+  s.public_header_files = 'flutter_background_geolocation/Sources/flutter_background_geolocation/include/**/*.h'
   s.dependency 'Flutter'
   s.dependency 'CocoaLumberjack', '~> 3.8.5'
 
   s.libraries           = 'sqlite3', 'z', 'stdc++'
-  s.vendored_frameworks = ['TSLocationManager.xcframework']
+  s.vendored_frameworks = ['flutter_background_geolocation/Frameworks/TSLocationManager.xcframework']
   s.static_framework = true
-  s.resource_bundles = {'TSLocationManagerPrivacy' => ['Resources/PrivacyInfo.xcprivacy']}  
+  s.resource_bundles = {'TSLocationManagerPrivacy' => ['flutter_background_geolocation/Sources/flutter_background_geolocation/PrivacyInfo.xcprivacy']}
   s.ios.deployment_target = '11.0'
 end
 

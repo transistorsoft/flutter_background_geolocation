@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 4.17.0 &mdash; 2025-07-28
+* [iOS] Implement Swift Package Manager support
+* [example] Re-factor /example app's location marker images.
+
 ## 4.16.12 &mdash; 2025-07-07
 * [Android] Rebuild `tslocationmanager` with AGP >= 8.5.1
 * [example] Update example's `flutter_map` to latest `8.1.1`
