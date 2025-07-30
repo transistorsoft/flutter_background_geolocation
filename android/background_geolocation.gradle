@@ -14,7 +14,7 @@ def purgeBackgroundGeolocationDebugResources(applicationVariants) {
                     // Use FileTree to safely delete matching files
                     //def filesToDelete = fileTree(dir: outputDir, includes: ["raw_tslocationmanager*"]).files
                     def filesToDelete = fileTree(dir: outputDir, includes: ["raw_tslocationmanager*"]).files
-                    println("********* files to delete: ${filesToDelete}")
+                    //println("********* files to delete: ${filesToDelete}")
 
                     filesToDelete.each { file ->
                         if (file.exists()) {
