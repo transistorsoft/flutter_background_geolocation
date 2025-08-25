@@ -339,12 +339,13 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 }
 
 - (void) getCurrentPosition:(NSDictionary*)options result:(FlutterResult)result {
-
-    TSCurrentPositionRequest *request = [[TSCurrentPositionRequest alloc] initWithSuccess:^(TSLocation *location) {
-        result([location toDictionary]);
-    } failure:^(NSError *error) {
-        result([FlutterError errorWithCode: [NSString stringWithFormat:@"%lu", (long) error.code] message:nil details:nil]);
-    }];
+    TSCurrentPositionRequest *request = [TSCurrentPositionRequest requestWithType:TSLocationTypeCurrent
+        success:^(TSLocationEvent *event) {
+            result(event.data);
+        } failure:^(NSError *error) {
+            result([FlutterError errorWithCode: [NSString stringWithFormat:@"%lu", (long) error.code] message:nil details:nil]);
+        }
+    ];
 
     if (options[@"timeout"]) {
         request.timeout = [options[@"timeout"] doubleValue];
@@ -391,11 +392,13 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 }
 
 - (void) setOdometer:(double)value result:(FlutterResult)result {
-    TSCurrentPositionRequest *request = [[TSCurrentPositionRequest alloc] initWithSuccess:^(TSLocation *location) {
-        result([location toDictionary]);
-    } failure:^(NSError *error) {
-        result([FlutterError errorWithCode: [NSString stringWithFormat:@"%lu", (long) error.code] message:nil details:nil]);
-    }];
+    TSCurrentPositionRequest *request = [TSCurrentPositionRequest requestWithType:TSLocationTypeOdometer
+        success:^(TSLocationEvent *event) {
+            result(event.data);
+        } failure:^(NSError *error) {
+            result([FlutterError errorWithCode: [NSString stringWithFormat:@"%lu", (long) error.code] message:nil details:nil]);
+        }
+    ];
     [_locationManager setOdometer:value request:request];
 }
 
@@ -515,9 +518,9 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
             return nil;
         }
         vertices = params[@"vertices"];
-        radius = 0;
-        latitude = 0;
-        longitude = 0;
+        radius = NAN;
+        latitude = NAN;
+        longitude = NAN;
     }
         
     return [[TSGeofence alloc] initWithIdentifier: params[@"identifier"]

@@ -10,8 +10,8 @@ static NSString *const EVENT_NAME       = @"motionchange";
 
 - (FlutterError*)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)events {
     
-    self.callback = ^void(TSLocation *tsLocation) {
-        events([tsLocation toDictionary]);
+    self.callback = ^void(TSLocationEvent *event) {
+        events(event.data);
     };
     [[TSLocationManager sharedInstance] onMotionChange: self.callback];
     return nil;

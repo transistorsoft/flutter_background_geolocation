@@ -11,9 +11,7 @@ static NSString *const EVENT_NAME    = @"geofence";
 
 - (FlutterError*)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)events {
     self.callback = ^void(TSGeofenceEvent *event) {
-        NSMutableDictionary *params = [[event toDictionary] mutableCopy];
-        [params setObject:[event.location toDictionary] forKey:@"location"];
-        events(params);
+        events([event toDictionary]);
     };
     [[TSLocationManager sharedInstance] onGeofence:self.callback];
     return nil;

@@ -86,14 +86,21 @@ class Coords {
     //this.longitude = (coords['longitude'] as num).toDouble();
     /// /////////////////////////////////////////////////////////
 
-    this.latitude = coords['latitude'] * 1.0;
-    this.longitude = coords['longitude'] * 1.0;
-    this.accuracy = coords['accuracy'] * 1.0;
-    this.altitude = coords['altitude'] * 1.0;
-    this.ellipsoidalAltitude = coords['ellipsoidal_altitude'] * 1.0;
-    this.heading = coords['heading'] * 1.0;
+    latitude  = (coords['latitude']  as num).toDouble();
+    longitude = (coords['longitude'] as num).toDouble();
+    accuracy  = (coords['accuracy']  as num).toDouble();
+    altitude  = (coords['altitude']  as num).toDouble();
+    ellipsoidalAltitude = (coords['ellipsoidal_altitude'] as num).toDouble();
+    heading   = (coords['heading']   as num).toDouble();
     if (coords['heading_accuracy'] != null) {
-      this.headingAccuracy = coords['heading_accuracy'] * 1.0;
+      headingAccuracy = (coords['heading_accuracy'] as num).toDouble();
+    }
+    speed     = (coords['speed']     as num).toDouble();
+    if (coords['speed_accuracy'] != null) {
+      speedAccuracy = (coords['speed_accuracy'] as num).toDouble();
+    }
+    if (coords['altitude_accuracy'] != null) {
+      altitudeAccuracy = (coords['altitude_accuracy'] as num).toDouble();
     }
     this.speed = coords['speed'] * 1.0;
     if (coords['speed_accuracy'] != null) {
@@ -209,7 +216,7 @@ class Location {
   /// The age of the location in milliseconds, relative to the Device system-time when the location was received.
   /// For example, if the reported `age` is `10000`, that location was recorded 10s ago, relative to the system-time.
   /// `location.timestamp` + `location.age` = Device system-time when location was recorded.
-  late int age;
+  late double age;
 
   /// Event which caused this location to be recorded.
   ///
@@ -309,11 +316,11 @@ class Location {
     this.activity = new Activity(params['activity']);
 
     this.timestamp = params['timestamp'];
-    this.age = params['age'];
+    this.age = (params['age'] as num).toDouble();
     this.isMoving = params['is_moving'];
     this.uuid = params['uuid'];
-    this.odometer = params['odometer'] * 1.0;
-
+    this.odometer = (params['odometer'] as num).toDouble();
+    
     this.sample = (params['sample'] != null) ? params['sample'] : false;
     this.event = (params['event'] != null) ? params['event'] : '';
 
