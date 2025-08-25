@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.17.1 &mdash; 2025-08-25
+* Fix example/pubspec.yaml `enable-swift-package-manager: true`
+
 ## 4.17.0 &mdash; 2025-07-28
 * [iOS] Implement Swift Package Manager support
 * [example] Re-factor /example app's location marker images.
