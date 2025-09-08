@@ -9,8 +9,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.transistorsoft.xms.g.common.ExtensionApiAvailability;
 
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.*;
 
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
@@ -233,7 +233,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         if (mActivity == null) {
             return;
         }
-        ExtensionApiAvailability.getInstance().getErrorDialog(mActivity, errorCode, 1001).show();
+        GoogleApiAvailability.getInstance().getErrorDialog(mActivity, errorCode, 1001).show();
     }
 
     @SuppressWarnings("unchecked")

@@ -5,7 +5,6 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 
@@ -84,10 +83,6 @@ dependencies {
     implementation "io.github.nishkarsh:android-permissions:$androidPermissionsVersion"
     // GMS location
     implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
-    // HMS location
-    implementation("com.huawei.hms:location:$hmsLocationVersion") {
-        exclude(group: "com.huawei.hms", module: 'hianalytics')
-    }
 
     implementation "androidx.localbroadcastmanager:localbroadcastmanager:$localBroadcastManagerVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"

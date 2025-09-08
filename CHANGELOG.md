@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 4.18.0 &mdash; 2025-09-08
+* [Android] Remove Huawei HMS support for failure to provide their SDKs with *Android 16KB Page Size* compatibility.
+
 ## 4.17.1 &mdash; 2025-08-25
 * Fix example/pubspec.yaml `enable-swift-package-manager: true`
 
