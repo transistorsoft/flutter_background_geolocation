@@ -1,0 +1,11 @@
+framework module TSLocationManager {
+  umbrella header "TSLocationManager.h"
+  export *
+
+  module * { export * }
+}
+
+module TSLocationManager.Swift {
+  header "TSLocationManager-Swift.h"
+  requires objc
+}

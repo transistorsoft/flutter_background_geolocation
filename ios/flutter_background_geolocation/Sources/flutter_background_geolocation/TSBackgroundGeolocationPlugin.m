@@ -19,6 +19,7 @@ static NSString *const ACTION_SET_CONFIG = @"setConfig";
 static NSString *const ACTION_CHANGE_PACE = @"changePace";
 static NSString *const ACTION_GET_CURRENT_POSITION = @"getCurrentPosition";
 static NSString *const ACTION_WATCH_POSITION = @"watchPosition";
+static NSString *const ACTION_STOP_WATCH_POSITION = @"stopWatchPosition";
 static NSString *const ACTION_GET_LOCATIONS = @"getLocations";
 static NSString *const ACTION_INSERT_LOCATION = @"insertLocation";
 static NSString *const ACTION_GET_COUNT = @"getCount";
@@ -84,6 +85,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     [TSEnabledChangeStreamHandler register:registrar];
     [TSNotificationActionStreamHandler register:registrar];
     [TSAuthorizationStreamHandler register:registrar];
+    [TSWatchPositionStreamHandler register:registrar];
 }
 
 - (instancetype) init {
@@ -130,6 +132,8 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
         [self getCurrentPosition:call.arguments result:result];
     } else if ([self method:ACTION_WATCH_POSITION is:action]) {
         [self watchPosition:call.arguments result:result];
+    } else if ([self method:ACTION_STOP_WATCH_POSITION is:action]) {
+        [self stopWatchPosition:[call.arguments longValue] result:result];        
     } else if ([self method:ACTION_GET_LOCATIONS is:action]) {
         [self getLocations:result];
     } else if ([self method:ACTION_INSERT_LOCATION is:action]) {
@@ -369,11 +373,11 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 }
 
 - (void) watchPosition:(NSDictionary*)options result:(FlutterResult)result {
-    /*
-    TSWatchPositionRequest *request = [[TSWatchPositionRequest alloc] initWithSuccess:^(TSLocation *location) {
-        [self sendEvent:EVENT_WATCHPOSITION body:[location toDictionary]];
+           
+    TSWatchPositionRequest *request = [TSWatchPositionRequest requestWithSuccess:^(TSLocationStreamEvent *event) {
+        [[TSWatchPositionStreamHandler sharedInstance] emit:event];
     } failure:^(NSError *error) {
-
+        // TODO
     }];
 
     if (options[@"interval"])           { request.interval = [options[@"interval"] doubleValue]; }
@@ -382,9 +386,17 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     if (options[@"extras"])             { request.extras = options[@"extras"]; }
     if (options[@"timeout"])            { request.timeout = [options[@"timeout"] doubleValue]; }
 
-    [locationManager watchPosition:request];
-    success(@[]);
-     */
+    long watchId = [[TSLocationManager sharedInstance] watchPosition:request];
+    
+    NSLog(@"******* watchId: %ld", watchId);
+    
+    result(@(watchId));
+
+}
+
+- (void) stopWatchPosition:(long)watchId result:(FlutterResult)result {
+    [TSLocationManager.sharedInstance stopWatchPosition:watchId];
+    result(@(YES));
 }
 
 - (void) getOdometer:(FlutterResult)result {

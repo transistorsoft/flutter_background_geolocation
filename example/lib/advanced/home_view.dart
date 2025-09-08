@@ -34,6 +34,8 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   bool? _enabled;
   String? _motionActivity;
   String? _odometer;
+  int? _watchPositionId;
+  int? _watchPositionId2;
 
   DateTime? _lastRequestedTemporaryFullAccuracy;
 
@@ -273,6 +275,24 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   void _onClickGetCurrentPosition() async {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
 
+    if (_watchPositionId != null) {
+      print("**** stopWatchPosition: $_watchPositionId");
+      await bg.BackgroundGeolocation.stopWatchPosition(_watchPositionId!);
+      await bg.BackgroundGeolocation.stopWatchPosition(_watchPositionId2!);
+      _watchPositionId = null;
+    } else {
+      _watchPositionId = await bg.BackgroundGeolocation.watchPosition(interval: 1000, extras: {"***ID***": 1}, onLocation: (location) {
+        print("*** [watchPosition] ONE: $location");
+      });
+
+      _watchPositionId2 = await bg.BackgroundGeolocation.watchPosition(interval: 1000, extras: {"***ID***": 2}, onLocation: (location) {
+        print("*** [watchPosition] TWO: $location");
+      });
+
+    }
+
+
+    /*
     bg.BackgroundGeolocation.getCurrentPosition(
         persist: true,       // <-- do not persist this location
         desiredAccuracy: 10, // <-- desire an accuracy of 40 meters or less
@@ -285,6 +305,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');
     });
+    */
   }
 
   // Go back to HomeApp

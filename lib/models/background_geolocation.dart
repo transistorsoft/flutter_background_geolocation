@@ -23,7 +23,7 @@ const _EVENT_CHANNEL_NOTIFICATIONACTION =
     "$_PLUGIN_PATH/events/" + Event.NOTIFICATIONACTION;
 const _EVENT_CHANNEL_AUTHORIZATION =
     "$_PLUGIN_PATH/events/" + Event.AUTHORIZATION;
-
+const _EVENT_CHANNEL_WATCH_POSITION = "$_PLUGIN_PATH/events/watchPosition";
 class _Subscription {
   final StreamSubscription<dynamic> subscription;
   final Function callback;
@@ -134,6 +134,8 @@ class BackgroundGeolocation {
       const EventChannel(_EVENT_CHANNEL_NOTIFICATIONACTION);
   static const EventChannel _eventChannelAuthorization =
       const EventChannel(_EVENT_CHANNEL_AUTHORIZATION);
+  static const EventChannel _eventChannelWatchPosition =
+      const EventChannel(_EVENT_CHANNEL_WATCH_POSITION);
 
   // Event Subscriptions
   static List<_Subscription> _subscriptions = [];
@@ -153,6 +155,7 @@ class BackgroundGeolocation {
   static Stream<bool>? _eventsEnabledChange;
   static Stream<String>? _eventsNotificationAction;
   static Stream<AuthorizationEvent>? _eventsAuthorization;
+  static Stream<Location>? _eventsWatchPosition;
 
   /// Return the current [State] of the plugin, including all [Config] parameters.
   ///
@@ -1694,8 +1697,60 @@ class BackgroundGeolocation {
     _subscriptions.add(_Subscription(sub, callback));
   }
 
+  static final Map<int, void Function(Location)?> _watchPositionCallbacks = {};
+  static bool _isWatchPositionStreamInitialized = false;
+
+
+  static Future<int> watchPosition({
+    int? timeout,
+    int? interval,
+    bool? persist,
+    int? desiredAccuracy,
+    Map<String, dynamic>? extras,
+    void Function(Location)? onLocation,
+  }) async {
+    final options = <String, dynamic>{};
+    if (timeout != null) options['timeout'] = timeout;
+    if (interval != null) options['interval'] = interval;
+    if (persist != null) options['persist'] = persist;
+    if (desiredAccuracy != null) options['desiredAccuracy'] = desiredAccuracy;
+    if (extras != null) options['extras'] = extras;
+
+    // Call native iOS method and await the watchId
+    final int watchId = await _methodChannel.invokeMethod('watchPosition', options);
+
+    _watchPositionCallbacks[watchId] = onLocation;
+
+    print("*** watchPositionCallbacks: $_watchPositionCallbacks");
+
+    // Ensure we start the stream only once
+    if (!_isWatchPositionStreamInitialized) {
+      _eventChannelWatchPosition.receiveBroadcastStream().listen((event) {
+        final int id = event['streamId'];
+        final location = Location(event['location']);
+        final callback = _watchPositionCallbacks[id];
+        if (callback != null) {
+          callback(location);
+        }
+      });
+      _isWatchPositionStreamInitialized = true;
+    }
+
+    return watchId;
+}
+
+static Future<bool> stopWatchPosition(int watchId) async {
+  _watchPositionCallbacks.remove(watchId);
+  print("*** watchPositionCallbacks: $_watchPositionCallbacks");
+  return (await _methodChannel.invokeMethod<bool>('stopWatchPosition', watchId))
+    as FutureOr<bool>;
+  }
+}
+
+
 // Initiate a constant stream of location-updates
 // DISABLED:  can't execute callback more than once with Flutter.  Will have to use an EventChannel.
+
 //  static Future<Location> watchPosition(
 //      {int timeout,
 //        int interval,
@@ -1725,7 +1780,6 @@ class BackgroundGeolocation {
 //  static Future<bool> stopWatchPosition() async {
 //    return await _methodChannel.invokeMethod('stopWatchPosition');
 //  }
-}
 
 /// Headless Callback Dispatcher
 ///

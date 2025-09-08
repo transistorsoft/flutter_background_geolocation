@@ -207,11 +207,14 @@ class Location {
   /// Original `Map` data received from native code.
   late dynamic map;
 
-  /// Timestamp in __`ISO 8601` (UTC) format.
+  /// Timestamp in __`ISO 8601`__ (UTC) format.
   ///
   /// Eg: `2018-01-01T12:00:01.123Z'.
   ///
   late String timestamp;
+
+  /// Device Timestamp when this location was received in __`ISO 8601`__ (UTC) format.
+  late String recordedAt;
 
   /// The age of the location in milliseconds, relative to the Device system-time when the location was received.
   /// For example, if the reported `age` is `10000`, that location was recorded 10s ago, relative to the system-time.
@@ -316,6 +319,7 @@ class Location {
     this.activity = new Activity(params['activity']);
 
     this.timestamp = params['timestamp'];
+    this.recordedAt = params['recorded_at'];
     this.age = (params['age'] as num).toDouble();
     this.isMoving = params['is_moving'];
     this.uuid = params['uuid'];
