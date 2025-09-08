@@ -174,7 +174,7 @@
 		</data>
 		<key>ios-arm64/TSLocationManager.framework/_CodeSignature/CodeSignature</key>
 		<data>
-		rRhb+kVQyeXU4Jv0+0tT2uuXRA4=
+		qKMENeUvBWOTuolZDO5oJTnqykw=
 		</data>
 		<key>ios-arm64_x86_64-maccatalyst/TSLocationManager.framework/Headers/AtomicBoolean.h</key>
 		<data>
@@ -346,7 +346,7 @@
 		</data>
 		<key>ios-arm64_x86_64-maccatalyst/TSLocationManager.framework/_CodeSignature/CodeSignature</key>
 		<data>
-		aWLT55R252WlxY/1S8LEjQ8NLuo=
+		Tn+BzaruFWLK6fw/nTQuIpRgUeU=
 		</data>
 		<key>ios-arm64_x86_64-simulator/TSLocationManager.framework/Headers/AtomicBoolean.h</key>
 		<data>
@@ -989,11 +989,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			rRhb+kVQyeXU4Jv0+0tT2uuXRA4=
+			qKMENeUvBWOTuolZDO5oJTnqykw=
 			</data>
 			<key>hash2</key>
 			<data>
-			+oKJNu8dGCXdi61LdFFYN0RwfvlBbFV9rqahVFI3X98=
+			b4iyqNMzF31D4+3YjMvW+yKybpI1eY0d3A1SNNkx1lg=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-maccatalyst/TSLocationManager.framework/Headers/AtomicBoolean.h</key>
@@ -1462,11 +1462,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			aWLT55R252WlxY/1S8LEjQ8NLuo=
+			Tn+BzaruFWLK6fw/nTQuIpRgUeU=
 			</data>
 			<key>hash2</key>
 			<data>
-			K9ToyMWOn+pZ7tJt/strvNUMKLjPOqceekD8CNasM9A=
+			Ma99L7uh3FRZhBMm4aL0dGMIve5IlF2mzjVcqng3dTc=
 			</data>
 		</dict>
 		<key>ios-arm64_x86_64-simulator/TSLocationManager.framework/Headers/AtomicBoolean.h</key>
