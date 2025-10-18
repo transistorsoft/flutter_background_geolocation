@@ -7,8 +7,10 @@ import 'main_menu_button.dart';
 class AdvancedApp extends StatefulWidget {
   static const String NAME = 'advanced';
 
+  const AdvancedApp({super.key});
+
   @override
-  _AdvancedAppState createState() => new _AdvancedAppState();
+  _AdvancedAppState createState() => _AdvancedAppState();
 }
 
 class _AdvancedAppState extends State<AdvancedApp> {
@@ -29,7 +31,7 @@ class _AdvancedAppState extends State<AdvancedApp> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData();
-    return new MaterialApp(
+    return MaterialApp(
         theme: theme.copyWith(
             colorScheme: theme.colorScheme.copyWith(secondary:Colors.black),
             brightness: Brightness.light,

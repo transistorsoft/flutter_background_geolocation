@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart'
     as util;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +9,8 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
 import './config/env.dart';
 
 class RegistrationView extends StatefulWidget {
+  const RegistrationView({super.key});
+
   @override
   State createState() => _RegistrationViewState();
 }
@@ -26,6 +27,7 @@ class _RegistrationViewState extends State<RegistrationView> {
   final _orgnameController = TextEditingController();
   final _usernameController = TextEditingController();
 
+  @override
   void initState() {
     super.initState();
 
@@ -84,14 +86,14 @@ class _RegistrationViewState extends State<RegistrationView> {
 
   bool _usernameIsValid(String username) {
     return (username != null) &&
-        new RegExp(USERNAME_REGEXP).hasMatch(username) &&
-        (username.length > 0);
+        RegExp(USERNAME_REGEXP).hasMatch(username) &&
+        (username.isNotEmpty);
   }
 
   @override
   Widget build(BuildContext context) {
     if (_orgname == null || _deviceInfo == null) {
-      return new Scaffold(body: new Text('Loading...'));
+      return Scaffold(body: Text('Loading...'));
     }
 
     _orgnameController.value = TextEditingValue(
@@ -101,8 +103,8 @@ class _RegistrationViewState extends State<RegistrationView> {
         text: _username!,
         selection: TextSelection.collapsed(offset: _username!.length));
 
-    return new Scaffold(
-      appBar: new AppBar(
+    return Scaffold(
+      appBar: AppBar(
           leading: IconButton(
               onPressed: _onClickClose,
               icon: Icon(Icons.close),

@@ -264,11 +264,11 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
             [config updateWithDictionary:params];
         } else {
             if (reset) {
-                [config reset:YES];
+                [config reset];
                 [config updateWithDictionary:params];
             } else if ([params objectForKey:@"authorization"]) {
-                [config updateWithBlock:^(TSConfigBuilder *builder) {
-                    builder.authorization = [TSAuthorization createWithDictionary:[params objectForKey:@"authorization"]];
+                [config batchUpdate:^(TSConfig *config) {
+                    [config.authorization updateWithDictionary:[params objectForKey:@"authorization"]];
                 }];
             }
         }
@@ -318,7 +318,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 - (void) reset:(NSDictionary*)params result:(FlutterResult)result {
     TSConfig *config = [TSConfig sharedInstance];
     if (params) {
-        [config reset:YES];
+        [config reset];
         [config updateWithDictionary:params];
     } else {
         [config reset];

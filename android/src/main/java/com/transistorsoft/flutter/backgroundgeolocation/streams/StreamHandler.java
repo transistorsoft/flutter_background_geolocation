@@ -14,6 +14,7 @@ class StreamHandler implements EventChannel.StreamHandler{
     protected EventChannel.EventSink mEventSink;
     private EventChannel mChannel;
     String mEvent;
+    protected AutoCloseable mSubscription;
 
     public StreamHandler register(Context context, BinaryMessenger messenger) {
         mContext = context;
@@ -32,7 +33,13 @@ class StreamHandler implements EventChannel.StreamHandler{
     }
     @Override
     public void onCancel(Object args) {
-        BackgroundGeolocation.getInstance(mContext).removeListener(mEvent, this);
+        try {
+            if (mSubscription != null) {
+                mSubscription.close();   // unregister listener cleanly
+                mSubscription = null;
+            }
+        } catch (Exception e) {
+            TSLog.logger.warn(TSLog.warn("Failed to close listener for " + mEvent + ": " + e));
+        }
     }
-
 }

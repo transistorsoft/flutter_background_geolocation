@@ -170,14 +170,14 @@ void main() {
 
     switch (appName) {
       case AdvancedApp.NAME:
-        runApp(new AdvancedApp());
+        runApp(AdvancedApp());
         break;
       case HelloWorldApp.NAME:
-        runApp(new HelloWorldApp());
+        runApp(HelloWorldApp());
         break;
       default:
         // Default app.  Renders the application selector home page.
-        runApp(new HomeApp());
+        runApp(HomeApp());
     }
   });
   TransistorAuth.registerErrorHandler();

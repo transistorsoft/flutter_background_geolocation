@@ -2,316 +2,416 @@
 //  TSConfig.h
 //  TSLocationManager
 //
-//  Created by Christopher Scott on 2018-02-05.
-//  Copyright © 2018 Transistor Software. All rights reserved.
+//  Created by Christopher Scott on 2025-09-05.
+//  Copyright © 2025 Christopher Scott. All rights reserved.
 //
+
 #import <CoreLocation/CoreLocation.h>
-#import <objc/runtime.h>
-#import "TSAuthorization.h"
+//#import "TSAuthorization.h"
+
+
 #import "TSLocationTypes.h"
+#import "TSConfigModule.h"
+#import "TSHttpConfig.h"
+#import "TSAuthorizationConfig.h"
+#import "TSGeolocationConfig.h"
+#import "TSPersistenceConfig.h"
+#import "TSActivityConfig.h"
+#import "TSAppConfig.h"
+#import "TSLoggerConfig.h"
+#import "TSTrackingMode.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- * Create TSSettingType
- */
-typedef enum TSSettingType : NSInteger {
-    tsSettingTypeString = 0,
-    tsSettingTypeInteger,
-    tsSettingTypeUInteger,
-    tsSettingTypeBoolean,
-    tsSettingTypeDouble,
-    tsSettingTypeFloat,
-    tsSettingTypeLong,
-    tsSettingTypeDictionary,
-    tsSettingTypeArray,
-    tsSettingTypeModule
-} TSSettingType;
+The SDK's Configuration API with modular architecture.
 
-typedef enum TSTrackingMode : NSInteger {
-    tsTrackingModeGeofence = 0,
-    tsTrackingModeLocation
-} TSTrackingMode;
+This class provides a clean, organized approach to configuration management while maintaining
+complete backward compatibility for cross-platform frameworks (React Native, Flutter, Cordova, Capacitor).
 
-typedef enum TSLogLevel : NSInteger {
-    tsLogLevelOff = 0,
-    tsLogLevelError,
-    tsLogLevelWarning,
-    tsLogLevelInfo,
-    tsLogLevelDebug,
-    tsLogLevelVerbose
-} TSLogLevel;
+## Modular Organization
+Configuration is organized into focused modules:
+- http: Network requests and sync behavior
+- geolocation: Location tracking and GPS settings
+- persistence: Data storage and sync policies
+- activity: Motion detection and activity recognition
+- application: App lifecycle and debug settings
+- authorization: HTTP authentication credentials
 
-typedef enum TSPersistMode : NSInteger {
-    tsPersistModeNone = 0,
-    tsPersistModeAll = 2,
-    tsPersistModeLocation = 1,
-    tsPersistModeGeofence = -1
-} TSPersistMode;
+## Usage Patterns
+```objc
+// Modular approach (preferred)
+config.http.url = @"https://api.example.com";
+config.geolocation.desiredAccuracy = kCLLocationAccuracyBest;
 
-/**
- * TSConfigBuilder
- */
-@interface TSConfigBuilder : NSObject
+// Cross-platform dictionaries (backward compatible)
+[config updateWithDictionary:@{
+    @"url": @"https://api.example.com",           // Routed to http module
+    @"desiredAccuracy": @(-1)                     // Routed to geolocation module
+}];
 
-# pragma mark -  Geolocation Properties
-/**
- * desired accuracy in meterssss
- */
-@property (nonatomic) CLLocationAccuracy desiredAccuracy;
-/**
- * distance filter in meters
- */
-@property (nonatomic) CLLocationDistance distanceFilter;
-@property (nonatomic) CLLocationDistance stationaryRadius;
-@property (nonatomic) NSTimeInterval locationTimeout;
-@property (nonatomic) BOOL useSignificantChangesOnly;
-@property (nonatomic) BOOL pausesLocationUpdatesAutomatically;
-@property (nonatomic) BOOL disableElasticity;
-@property (nonatomic) double elasticityMultiplier;
-@property (nonatomic) NSTimeInterval stopAfterElapsedMinutes;
-@property (nonatomic, copy) NSString* locationAuthorizationRequest;
-@property (nonatomic, copy) NSDictionary* locationAuthorizationAlert;
-@property (nonatomic) BOOL disableLocationAuthorizationAlert;
-@property (nonatomic) CLLocationDistance geofenceProximityRadius;
-@property (nonatomic) BOOL geofenceInitialTriggerEntry;
-@property (nonatomic) CLLocationAccuracy desiredOdometerAccuracy;
-@property (nonatomic) BOOL enableTimestampMeta;
-@property (nonatomic) BOOL showsBackgroundLocationIndicator;
+// Nested modules (preferred for cross-platform)
+[config updateWithDictionary:@{
+    @"http": @{@"url": @"https://api.example.com"},
+    @"geolocation": @{@"desiredAccuracy": @(-1)}
+}];
+```
 
-# pragma mark -  ActivityRecognition
-@property (nonatomic) BOOL isMoving;
-@property (nonatomic) CLActivityType activityType;
-@property (nonatomic) NSTimeInterval stopDetectionDelay;
-@property (nonatomic) NSTimeInterval stopTimeout;
-@property (nonatomic) NSTimeInterval activityRecognitionInterval;
-@property (nonatomic) NSInteger minimumActivityRecognitionConfidence;
-@property (nonatomic) BOOL disableMotionActivityUpdates;
-@property (nonatomic) BOOL disableStopDetection;
-@property (nonatomic) BOOL stopOnStationary;
-
-# pragma mark -  HTTP & Persistence
-@property (nonatomic, copy) NSString* url;
-@property (nonatomic, copy) NSString* method;
-@property (nonatomic, copy) NSString* httpRootProperty;
-@property (nonatomic, copy) NSDictionary* params;
-@property (nonatomic, copy) NSDictionary* headers;
-@property (nonatomic, copy) NSDictionary* extras;
-@property (nonatomic) BOOL autoSync;
-@property (nonatomic) NSInteger autoSyncThreshold;
-@property (nonatomic) BOOL batchSync;
-@property (nonatomic) NSInteger maxBatchSize;
-@property (nonatomic, copy) NSString *locationTemplate;
-@property (nonatomic, copy) NSString *geofenceTemplate;
-@property (nonatomic) NSInteger maxDaysToPersist;
-@property (nonatomic) NSInteger maxRecordsToPersist;
-@property (nonatomic, copy) NSString* locationsOrderDirection;
-@property (nonatomic) NSInteger httpTimeout;
-@property (nonatomic) TSPersistMode persistMode;
-@property (nonatomic) BOOL disableAutoSyncOnCellular;
-@property (nonatomic, strong) TSAuthorization* authorization;
-
-# pragma mark -  Application
-@property (nonatomic) BOOL stopOnTerminate;
-@property (nonatomic) BOOL startOnBoot;
-@property (nonatomic) BOOL preventSuspend;
-@property (nonatomic) NSTimeInterval heartbeatInterval;
-@property (nonatomic, copy) NSArray *schedule;
-@property (nonatomic, copy) NSString *triggerActivities;
-# pragma mark -  Logging & Debug
-@property (nonatomic) BOOL debug;
-@property (nonatomic) TSLogLevel logLevel;
-@property (nonatomic) NSInteger logMaxDays;
-
-/// :nodoc:
-+ (void)eachProperty:(Class)mClass callback:(void(^)(NSString*, TSSettingType))block;
-/// :nodoc:
-+ (TSSettingType) getPropertyType:(objc_property_t)property;
-/// :nodoc:
-+ (CLLocationAccuracy) decodeDesiredAccuracy:(NSNumber*)accuracy;
-
-- (NSDictionary*) toDictionary;
-
-@end
-
-# pragma mark TSConfig
-
-/**
-The SDK's Configuration API.
+## Event System
+Supports both flat and hierarchical event listening:
+```objc
+[config addListener:@"url" callback:^(id value) { ... }];        // Flat (legacy)
+[config addListener:@"http.url" callback:^(id value) { ... }];   // Hierarchical (preferred)
+```
  */
 @interface TSConfig : NSObject <NSCoding>
 
 #pragma mark - Singleton
+- (instancetype)init NS_UNAVAILABLE;
++ (instancetype)new NS_UNAVAILABLE;
+
+#if DEBUG
+/// Reset the singleton so a fresh instance is created on next +sharedInstance (TESTS ONLY).
++ (void)resetSharedInstanceForTests;
+
+/// Route persistence to a dedicated suite (TESTS ONLY). Pass nil to clear override.
++ (void)useUserDefaultsSuiteForTests:(NSString * _Nullable)suiteName;
+
+/// Disable on-disk persistence entirely (TESTS ONLY).
++ (void)disablePersistenceForTests:(BOOL)disabled;
+#endif
 
 /// Returns the singleton instance.
 + (TSConfig *)sharedInstance;
-/// :nodoc:
-+ (Class) classForPropertyName:(NSString*)name fromObject:(id)object;
-
-+ (NSUserDefaults*) userDefaults;
-
++ (NSUserDefaults *)userDefaults;
 +(TSConfig*) decodeConfig:(id)data;
 
 /**
- `YES` when the SDK is in the *location + geofence* tracking mode, where `-[TSLocationManager start]` was called.
- `NO` when the SDK is in *geofences-only* tracking mode, where `-[TSLocationMangager startGeofences]` was called.
+ `YES` when the SDK is in the *location + geofence* tracking mode.
+ `NO` when the SDK is in *geofences-only* tracking mode.
  */
--(BOOL)isLocationTrackingMode;
+- (BOOL)isLocationTrackingMode;
+
 /**
- `YES` when this is the first launch after initial installation of you application.
+ `YES` when this is the first launch after initial installation.
  */
--(BOOL)isFirstBoot;
+- (BOOL)isFirstBoot;
+
 /**
  `YES` when the application was launched in the background.
  */
--(BOOL)didLaunchInBackground;
+- (BOOL)didLaunchInBackground;
 
-# pragma mark Initializers
+#pragma mark - Configuration Modules
 
 /**
- Update the SDK with new configuration options.
+ HTTP configuration module containing networking and sync-related properties.
+ 
+ Access properties like:
+ - config.http.url
+ - config.http.headers
+ - config.http.method
+ - config.http.timeout
  */
-- (void)updateWithBlock:(void(^)(TSConfigBuilder*))block;
-/// :nodoc:
-- (void)updateWithDictionary:(NSDictionary*)config;
+@property (nonatomic, strong, readonly) TSHttpConfig *http;
 
 /**
- Resets the SDK's configuration to default values.
+ Authorization configuration module containing networking and sync-related properties.
+ 
+ Access properties like:
+ - config.authorization.accessToke
+ - config.authorization.refreshUrl
+
  */
-- (void)reset;
-/// :nodoc:
-- (void)reset:(BOOL)silent;
+@property (nonatomic, strong, readonly) TSAuthorizationConfig *authorization;
 
-# pragma mark Geolocation methods
-/// :nodoc:
-- (BOOL) getPausesLocationUpdates;
-
-# pragma mark Events
-/// :nodoc:
-- (void)onChange:(NSString*)property callback:(void(^)(id))block;
-/// :nodoc:
-- (void) removeListeners;
-
-# pragma mark State methods
-/// :nodoc:
--(void)incrementOdometer:(CLLocationDistance)distance;
-/// :nodoc:
--(BOOL)hasValidUrl;
-/// :nodoc:
--(BOOL)hasSchedule;
-/// :nodoc:
--(NSDictionary*)getLocationAuthorizationAlertStrings;
-
-- (BOOL)didDeviceReboot;
-    
-# pragma mark Utility methods
 /**
- Returns an `NSDictionary` representation of the configuration options.
+ Geolocation configuration module containing location tracking properties.
+ 
+ Access properties like:
+ - config.geolocation.desiredAccuracy
+ - config.geolocation.distanceFilter
+ - config.geolocation.locationAuthorizationRequest
+ - config.geolocation.geofenceProximityRadius
  */
-- (NSDictionary*) toDictionary;
-/// :nodoc:
-- (NSDictionary*) toDictionary:(BOOL)redact;
-/// :nodoc:
-- (NSString*) toJson;
-/// :nodoc:
-- (void) registerPlugin:(NSString*)pluginName;
-/// :nodoc:
-- (BOOL) hasPluginForEvent:(NSString*)eventName;
+@property (nonatomic, strong, readonly) TSGeolocationConfig *geolocation;
 
--(BOOL) hasTriggerActivities;
-
--(BOOL) shouldPersist:(TSLocationType)type;
-
-
-# pragma mark - State properties.
 /**
- enabled is tracking enabled?
+ Persistence configuration module containing data storage and sync properties.
+ 
+ Access properties like:
+ - config.persistence.autoSync
+ - config.persistence.maxDaysToPersist
+ - config.persistence.persistMode
+ */
+@property (nonatomic, strong, readonly) TSPersistenceConfig *persistence;
+
+/**
+ Activity recognition configuration module containing motion detection properties.
+ 
+ Access properties like:
+ - config.activity.activityType
+ - config.activity.stopTimeout
+ - config.activity.minimumActivityRecognitionConfidence
+ */
+@property (nonatomic, strong, readonly) TSActivityConfig *activity;
+
+/**
+ Application lifecycle configuration module containing app behavior properties.
+ 
+ Access properties like:
+ - config.application.debug
+ - config.application.startOnBoot
+ - config.application.preventSuspend
+ - config.application.logLevel
+ */
+@property (nonatomic, strong, readonly) TSAppConfig *app;
+
+/**
+ Application lifecycle configuration module containing app behavior properties.
+ 
+ Access properties like:
+ - config.application.debug
+ - config.application.startOnBoot
+ - config.application.preventSuspend
+ - config.application.logLevel
+ */
+@property (nonatomic, strong, readonly) TSLoggerConfig *logger;
+
+
+/**
+ Authorization configuration module for HTTP authentication.
+ 
+ Access properties like:
+ - config.authorization.accessToken
+ - config.authorization.strategy
+ - config.authorization.refreshUrl
+ */
+/// TODO: @property (nonatomic, strong, readonly) TSAuthorization *authorization;
+
+#pragma mark - State Properties
+
+/**
+ Is tracking currently enabled?
  */
 @property (nonatomic) BOOL enabled;
+
 /**
- State of plugin, moving or stationary.
+ Current motion state of the device (moving or stationary).
  */
 @property (nonatomic) BOOL isMoving;
+
 /**
- True when scheduler is enabled
+ Is the scheduler currently enabled?
  */
 @property (nonatomic) BOOL schedulerEnabled;
 
-@property (nonatomic) CLLocationDistance odometer;
+/**
+ Current tracking mode (location or geofence-only).
+ */
 @property (nonatomic) TSTrackingMode trackingMode;
+
+/**
+ Last known location authorization status.
+ */
 @property (nonatomic) CLAuthorizationStatus lastLocationAuthorizationStatus;
+
+/**
+ Has iOS shown the location services disabled warning?
+ */
 @property (nonatomic) BOOL iOSHasWarnedLocationServicesOff;
+
+/**
+ Has the SDK requested location authorization upgrade?
+ */
 @property (nonatomic) BOOL didRequestUpgradeLocationAuthorization;
+
+/**
+ Was the app launched in the background?
+ */
 @property (nonatomic) BOOL didLaunchInBackground;
 
+#pragma mark - Transition Control
 
-# pragma mark - Geolocation Properties
 /**
- * GPS is only used when kCLDesiredAccuracyBest or kCLDesiredAccuracyBestForNavigation.
+ Include deprecated flat properties in toDictionary output.
+ 
+ When YES (default), toDictionary returns both modular and flat properties:
+ ```json
+ {
+   "url": "https://api.example.com",           // Flat (deprecated)
+   "desiredAccuracy": -1,                      // Flat (deprecated)
+   "http": {"url": "https://api.example.com"}, // Modular (preferred)
+   "geolocation": {"desiredAccuracy": -1}      // Modular (preferred)
+ }
+ ```
+ 
+ When NO, only modular structure is included:
+ ```json
+ {
+   "http": {"url": "https://api.example.com"},
+   "geolocation": {"desiredAccuracy": -1}
+ }
+ ```
+ 
+ Default: YES (to ease transition), will change to NO in future release.
  */
-@property (nonatomic, readonly) CLLocationAccuracy desiredAccuracy;
+@property (nonatomic) BOOL includeDeprecatedPropertiesInDictionary;
+
+#pragma mark - Configuration Update Methods
+
 /**
- * A location will be recorded each distanceFilter meters
+ Update configuration from dictionary with intelligent property routing.
+ 
+ Supports multiple input formats:
+ 
+ 1. Flat properties (backward compatible):
+ ```objc
+ [config updateWithDictionary:@{
+     @"url": @"https://api.example.com",
+     @"desiredAccuracy": @(-1),
+     @"debug": @(YES)
+ }];
+ ```
+ 
+ 2. Nested modules (preferred):
+ ```objc
+ [config updateWithDictionary:@{
+     @"http": @{@"url": @"https://api.example.com"},
+     @"geolocation": @{@"desiredAccuracy": @(-1)},
+     @"application": @{@"debug": @(YES)}
+ }];
+ ```
+ 
+ 3. Mixed format:
+ ```objc
+ [config updateWithDictionary:@{
+     @"http": @{@"url": @"https://api.example.com"},
+     @"desiredAccuracy": @(-1),  // Routed to geolocation module
+     @"includeDeprecatedPropertiesInDictionary": @(NO)
+ }];
+ ```
+ 
+ Properties are automatically routed to the correct module using the canHandleProperty: protocol method.
+ Nested module objects are deep-merged, preserving existing properties.
+ 
+ @param config Dictionary containing configuration updates
  */
-@property (nonatomic, readonly) CLLocationDistance distanceFilter;
-@property (nonatomic, readonly) CLLocationDistance stationaryRadius;
-@property (nonatomic, readonly) NSTimeInterval locationTimeout;
-@property (nonatomic, readonly) BOOL useSignificantChangesOnly;
-@property (nonatomic, readonly) BOOL pausesLocationUpdatesAutomatically;
-@property (nonatomic, readonly) BOOL disableElasticity;
-@property (nonatomic, readonly) double elasticityMultiplier;
-@property (nonatomic, readonly) NSTimeInterval stopAfterElapsedMinutes;
-@property (nonatomic, readonly, copy) NSString* locationAuthorizationRequest;
-@property (nonatomic, readonly) BOOL disableLocationAuthorizationAlert;
-@property (nonatomic, readonly, copy) NSDictionary* locationAuthorizationAlert;
-@property (nonatomic, readonly) CLLocationDistance geofenceProximityRadius;
-@property (nonatomic, readonly) BOOL geofenceInitialTriggerEntry;
-@property (nonatomic, readonly) CLLocationAccuracy desiredOdometerAccuracy;
-@property (nonatomic) BOOL enableTimestampMeta;
-@property (nonatomic) BOOL showsBackgroundLocationIndicator;
+- (void)updateWithDictionary:(NSDictionary *)config;
 
-# pragma mark -  ActivityRecognition Properties
-@property (nonatomic, readonly) CLActivityType activityType;
-@property (nonatomic, readonly) NSTimeInterval stopDetectionDelay;
-@property (nonatomic, readonly) NSTimeInterval stopTimeout;
-@property (nonatomic, readonly) NSTimeInterval activityRecognitionInterval;
-@property (nonatomic, readonly) NSInteger minimumActivityRecognitionConfidence;
-@property (nonatomic, readonly) BOOL disableMotionActivityUpdates;
-@property (nonatomic, readonly) BOOL disableStopDetection;
-@property (nonatomic, readonly) BOOL stopOnStationary;
+- (void)batchUpdate:(void(^)(TSConfig *config))block;
 
-# pragma mark - HTTP & Persistence Properties
-@property (nonatomic, readonly, copy) NSString* url;
-@property (nonatomic, readonly, copy) NSString* method;
-@property (nonatomic, readonly, copy) NSString* httpRootProperty;
-@property (nonatomic, readonly, copy) NSDictionary* params;
-@property (nonatomic, readonly, copy) NSDictionary* headers;
-@property (nonatomic, readonly, copy) NSDictionary* extras;
-@property (nonatomic, readonly) BOOL autoSync;
-@property (nonatomic, readonly) NSInteger autoSyncThreshold;
-@property (nonatomic, readonly) BOOL batchSync;
-@property (nonatomic, readonly) NSInteger maxBatchSize;
-@property (nonatomic, readonly, copy) NSString *locationTemplate;
-@property (nonatomic, readonly, copy) NSString *geofenceTemplate;
-@property (nonatomic, readonly) NSInteger maxDaysToPersist;
-@property (nonatomic, readonly) NSInteger maxRecordsToPersist;
-@property (nonatomic, readonly) NSString* locationsOrderDirection;
-@property (nonatomic, readonly) NSInteger httpTimeout;
-@property (nonatomic) TSPersistMode persistMode;
-@property (nonatomic) BOOL disableAutoSyncOnCellular;
-@property (nonatomic, strong) TSAuthorization* authorization;
+/**
+ Reset all configuration to default values.
+ Emits change events for all modified properties.
+ */
+- (void)reset;
 
-# pragma mark - Application Properties
-@property (nonatomic, readonly) BOOL stopOnTerminate;
-@property (nonatomic, readonly) BOOL startOnBoot;
-@property (nonatomic, readonly) BOOL preventSuspend;
-@property (nonatomic, readonly) NSTimeInterval heartbeatInterval;
-@property (nonatomic, readonly, copy) NSArray *schedule;
-@property (nonatomic, readonly, copy) NSString *triggerActivities;
-# pragma mark - Logging & Debug Properties
-@property (nonatomic, readonly) BOOL debug;
-@property (nonatomic, readonly) TSLogLevel logLevel;
-@property (nonatomic, readonly) NSInteger logMaxDays;
+#pragma mark - Event Listeners
+
+/**
+ Add a listener for configuration property changes.
+ 
+ Supports both flat property names and hierarchical module.property names:
+ 
+ ```objc
+ // Flat property names (backward compatible)
+ [config addListener:@"url" callback:^(id value) { ... }];
+ [config addListener:@"desiredAccuracy" callback:^(id value) { ... }];
+ 
+ // Hierarchical property names (preferred)
+ [config addListener:@"http.url" callback:^(id value) { ... }];
+ [config addListener:@"geolocation.desiredAccuracy" callback:^(id value) { ... }];
+ 
+ // Module-level changes
+ [config addListener:@"http" callback:^(id moduleDict) { ... }];
+ ```
+ 
+ @param property Property name to listen for
+ @param block Callback block called when property changes
+ @return Token for removing the listener
+ */
+- (NSString *)addListener:(NSString *)property callback:(void(^)(id))block;
+
+/**
+ Remove a specific listener by token.
+ */
+- (void)removeListener:(NSString *)token forProperty:(NSString *)property;
+
+/**
+ Remove all listeners for a specific property.
+ */
+- (void)removeAllListenersForProperty:(NSString *)property;
+
+/**
+ Remove all configuration listeners.
+ */
+- (void)removeAllListeners;
+
+#pragma mark - Serialization
+
+/**
+ Returns a dictionary representation of all configuration.
+ 
+ Format depends on includeDeprecatedPropertiesInDictionary setting:
+ - When YES: Includes both flat and modular properties
+ - When NO: Includes only modular structure
+ 
+ Compatible with cross-platform frameworks and persistence.
+ */
+- (NSDictionary *)toDictionary;
+
+/**
+ Returns a dictionary representation with optional sensitive data redaction.
+ @param redact Whether to redact sensitive information like access tokens
+ */
+- (NSDictionary *)toDictionary:(BOOL)redact;
+
+/**
+ Returns a JSON string representation of the configuration.
+ */
+- (NSString *)toJson;
+
+#pragma mark - Utility Methods
+
+/**
+ Register a plugin for specific events.
+ */
+- (void)registerPlugin:(NSString *)pluginName;
+
+/**
+ Check if a plugin is registered for a specific event.
+ */
+- (BOOL)hasPluginForEvent:(NSString *)eventName;
+
+/**
+ Check if device rebooted since last launch.
+ */
+- (BOOL)didDeviceReboot;
+/**
+ Check if a valid HTTP URL is configured.
+ */
+- (BOOL)hasValidUrl;
+
+/**
+ Check if a schedule is configured.
+ */
+- (BOOL)hasSchedule;
+
+/**
+ Check if trigger activities are configured.
+ */
+- (BOOL)hasTriggerActivities;
+
+/**
+ Determine if a location type should be persisted based on current settings.
+ */
+- (BOOL)shouldPersist:(TSLocationType)type;
+
+/**
+ Get location authorization alert strings with interpolated values.
+ */
+- (NSDictionary *)getLocationAuthorizationAlertStrings;
 
 @end
 

@@ -525,7 +525,7 @@ class BackgroundGeolocation {
       int? timeout,
       int? maximumAge,
       bool? persist,
-      int? desiredAccuracy,
+      double? desiredAccuracy,
       Map<String, dynamic>? extras}) async {
     Map<String, dynamic> options = {};
     if (samples != null) options['samples'] = samples;

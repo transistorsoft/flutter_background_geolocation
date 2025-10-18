@@ -6,7 +6,7 @@
 	<dict>
 		<key>Resources/Info.plist</key>
 		<data>
-		6+UTMni9TQQFvluT0wUvE+cEdi0=
+		IMP1U+kNDkGcXBTCX7N7UM4K2Ic=
 		</data>
 		<key>Resources/Miniball/Miniball.hpp</key>
 		<data>
@@ -25,10 +25,6 @@
 	<dict>
 		<key>Headers/LogQuery.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			zsNHQnnFg+hAzMO7BOnyYzJBnNg=
-			</data>
 			<key>hash2</key>
 			<data>
 			CyvxfMkRv0TAzMIE1F3Te1nSbKOMjTg2Iz6l1blP5d4=
@@ -36,10 +32,6 @@
 		</dict>
 		<key>Headers/SQLQuery.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			JA/9AQL4Olq0axsCkgkd0VGI8pg=
-			</data>
 			<key>hash2</key>
 			<data>
 			w4BfcVv9QOo/997Gb7dn8kgDD4wliVcmU4BvdKQzXHQ=
@@ -47,32 +39,34 @@
 		</dict>
 		<key>Headers/TSActivityChangeEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			gpZdW/U5dojfxQidHQvMsjIy8hc=
-			</data>
 			<key>hash2</key>
 			<data>
 			tpd/NwL0TLC7VdJhiC4LyqAkIZ6ZlVv/XuNYUBQvi3Y=
 			</data>
 		</dict>
-		<key>Headers/TSAuthorization.h</key>
+		<key>Headers/TSActivityConfig.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			8hvoUeK/KCr+lM1aHgw2WDaCqds=
-			</data>
 			<key>hash2</key>
 			<data>
-			Z8GasUQz6vCiZBNjhJIobpmOHuuVxd1pEolZD1tiT7s=
+			AEAXEnbjPRRhFhkotzDvFrD3oom5nuGUFgv3HhBExIo=
+			</data>
+		</dict>
+		<key>Headers/TSAppConfig.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			OUraQRfcB6ruMNhFoagWBm76+hSUthINe/4pDWul3Z4=
+			</data>
+		</dict>
+		<key>Headers/TSAuthorizationConfig.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			31XT4GVvEFGBvjbGxTP+4mIpHVAbjxSJLJ3/BcqOttk=
 			</data>
 		</dict>
 		<key>Headers/TSAuthorizationEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			qU27arOzs2NvxDkXfJiyCr5bwnk=
-			</data>
 			<key>hash2</key>
 			<data>
 			72ni1QamDcqY2xpZbKCQPXmeU5wH1OIyEM006MU5pdE=
@@ -80,10 +74,6 @@
 		</dict>
 		<key>Headers/TSCallback.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			nvePnpYzVEHcu65maOCiRAghG10=
-			</data>
 			<key>hash2</key>
 			<data>
 			r2rukLyZH7Hk1iD+znWnd/czxB23WUnxaw+qs9CpHuc=
@@ -91,32 +81,27 @@
 		</dict>
 		<key>Headers/TSConfig.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			NL6LWSCkDF8x7um/JyFcVHOKp7g=
-			</data>
 			<key>hash2</key>
 			<data>
-			mQwBbf+YesLfB8MDFbfTu7U3F8y+nQoGcpzH7Akdr9c=
+			hOB8ysZ4U3IK//Ad2Dd4jocTyFHllBIo7BSkwy3WKoo=
 			</data>
 		</dict>
 		<key>Headers/TSConfigModule.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			vD9qu9vXUrZaWVfzafZGr/fGXpA=
-			</data>
 			<key>hash2</key>
 			<data>
-			y3yyV4DmJEWPfgNd3KQdgffCEbRZYEje2Yenq5v4jtY=
+			uqwIMj2dPx7A0pnAC6EPgm9Ao1N722BKLUlxs1wHbhI=
+			</data>
+		</dict>
+		<key>Headers/TSConfigModuleBase.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Nnp3H1RrPANik0LMxRsLrPp5McH88tHtV3il0Qdc8XI=
 			</data>
 		</dict>
 		<key>Headers/TSConnectivityChangeEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			ZVV9fEPZZ7gpXpoGKaxDeYyw1t4=
-			</data>
 			<key>hash2</key>
 			<data>
 			Zrq/sEObcT+yhVL6HtG4GwixMc5Nvc4MfP2Erd5scgQ=
@@ -124,10 +109,6 @@
 		</dict>
 		<key>Headers/TSCurrentPositionRequest.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			+rvIEoujc/xAIxLJ2j5C/9DcGEg=
-			</data>
 			<key>hash2</key>
 			<data>
 			QkEBl7w7GmwEDkOMWJp42v3oa3noeB/X/znRsRD8KII=
@@ -135,10 +116,6 @@
 		</dict>
 		<key>Headers/TSDeviceInfo.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			IwKmxj8I6eVT0ozE9JrZusrv59k=
-			</data>
 			<key>hash2</key>
 			<data>
 			KgY2GBdjL5xzMtW7QyEdfZEDd+UOEiNJ6Ngpiwt5Grs=
@@ -146,10 +123,6 @@
 		</dict>
 		<key>Headers/TSEnabledChangeEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			ryq5dbqHsHhDn5zTUbba/NzCq/M=
-			</data>
 			<key>hash2</key>
 			<data>
 			3Q382u3pyobwkNQrXNkS0+nyDALRC5pJYjRzyO4FG4U=
@@ -157,21 +130,13 @@
 		</dict>
 		<key>Headers/TSEventNames.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			iLlgUIhZH8I3B0cDoqs2InucQ/A=
-			</data>
 			<key>hash2</key>
 			<data>
-			x4J0YglWL0/IFgfIPHr16QA8E2nVUgXsgFaI05Fag2A=
+			erdBTaUdZDL7hDPi41rvUfiW+1MsXG+/rzHzbJszb5Y=
 			</data>
 		</dict>
 		<key>Headers/TSGeofence.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			JbHcPbwy380CKA8TCGVzfzPuVVI=
-			</data>
 			<key>hash2</key>
 			<data>
 			zP8qUzDXpfN49/3j48zSn8F6PACYJM2ocahSZxs7fLM=
@@ -179,10 +144,6 @@
 		</dict>
 		<key>Headers/TSGeofenceEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			f3TXkzHWAE9gmYxZrM1o2FVMNf4=
-			</data>
 			<key>hash2</key>
 			<data>
 			9tSA5RuffTyPqglcHVrrXQpIJKhnYeD6f8YVXIYqTMw=
@@ -190,10 +151,6 @@
 		</dict>
 		<key>Headers/TSGeofenceManager.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			EOFevAGF+pAD8SBv5M6VaEZ7CIU=
-			</data>
 			<key>hash2</key>
 			<data>
 			pgYwKgDAEoW1CEAbIeCeO3ZlCX80r+VQc4/+e5t7S6c=
@@ -201,32 +158,34 @@
 		</dict>
 		<key>Headers/TSGeofencesChangeEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			YW+f+02fo9rNJpCcb/0zYvjIVuY=
-			</data>
 			<key>hash2</key>
 			<data>
 			lmDkmG3W/Hyr8KZvXdcV9MtTz22+mD0tqIt/cni4ddo=
 			</data>
 		</dict>
+		<key>Headers/TSGeolocationConfig.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			SpKTnmjTbqQjuoV8RT7WoxdQ20GpEOFJ8DSnAZzbARc=
+			</data>
+		</dict>
 		<key>Headers/TSHeartbeatEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			dSnYARozTzixqEXXVWOi3sLRNBg=
-			</data>
 			<key>hash2</key>
 			<data>
 			o2HgB6Frme343Wif0A+9NsfDXHxgRcHP9sPKX6lAbhI=
 			</data>
 		</dict>
+		<key>Headers/TSHttpConfig.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			i83/r1CsxyDzjTnFnvT3Nh4W6nuBknaEf9R+lkeyDgc=
+			</data>
+		</dict>
 		<key>Headers/TSHttpErrorCodes.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			l8C/8ruRsd9pPx41RMIQB9rMFO4=
-			</data>
 			<key>hash2</key>
 			<data>
 			vWURGotZrd6m0zdcuJR0Oy7lu2r7PIqVF5FjvHozPMw=
@@ -234,10 +193,6 @@
 		</dict>
 		<key>Headers/TSHttpEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			6FVIGjXzSiWIxffd58jL/sXRiFU=
-			</data>
 			<key>hash2</key>
 			<data>
 			OxdVLNLYRGr6iEpQaugXBjZZGeaIcJptFb89PJJ2ksI=
@@ -245,10 +200,6 @@
 		</dict>
 		<key>Headers/TSHttpService.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			lb08gPdMPn316WuNHvFq3tBdq7k=
-			</data>
 			<key>hash2</key>
 			<data>
 			972ZJ75F9MLEYM9aZSrNfjOrPxEJ7ZFz96bl2DlQTTQ=
@@ -256,21 +207,27 @@
 		</dict>
 		<key>Headers/TSJSON.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			wldUYc6bU3vr3zaOwUiZhbaIhqE=
-			</data>
 			<key>hash2</key>
 			<data>
 			AVooJ8++D755rxViZgvAr+lt5HvXltCuQgVeVXLqLBc=
 			</data>
 		</dict>
+		<key>Headers/TSKalmanProfile.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			pWSvqrxcUMEU5M7I9vUan75kdm6GYNz/bZ8ncEoH47o=
+			</data>
+		</dict>
+		<key>Headers/TSLMActionNames.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			mmlsmdHnNJIGdqfmKOE+KvIehJQYSVrY0PAmAbAu6Hg=
+			</data>
+		</dict>
 		<key>Headers/TSLocationErrors.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			kEuCKi3sGpsv7juDRLQoXzLrClc=
-			</data>
 			<key>hash2</key>
 			<data>
 			ztJhffPwZRHQEHASgeFCeh1jTve1XvN9OsMnzHncjA0=
@@ -278,43 +235,41 @@
 		</dict>
 		<key>Headers/TSLocationEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			nlbqL6OokLlkUbd0stmdeI6Bv6c=
-			</data>
 			<key>hash2</key>
 			<data>
 			ewduqjEabKuGtJt6nblEMoalt8G95xKamTDuZp9Z1gw=
 			</data>
 		</dict>
-		<key>Headers/TSLocationManager-Swift.h</key>
+		<key>Headers/TSLocationFilterConfig.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			xEAYk6XvDvwr09SFlxFmacatFpk=
-			</data>
 			<key>hash2</key>
 			<data>
-			RhC87wo8cxbKHuz0uMRancVprFYDnk+u89rsRIWMA40=
+			dWQJoLQxXxwrBWU0jjPOHhN3gyiD9aLpi4+S1S3gjIo=
+			</data>
+		</dict>
+		<key>Headers/TSLocationFilterPolicy.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/Iwg6IUibGafoC9py7tzuMOYv1XqFICaYjNE2Bwj+OA=
+			</data>
+		</dict>
+		<key>Headers/TSLocationManager-Swift.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			DkSJA3juX2yM6LthFwFDB8ayu2BHu24/fUGObUIW82s=
 			</data>
 		</dict>
 		<key>Headers/TSLocationManager.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			LEFjCJVfSZsPSPp8TcWGO7iSWrg=
-			</data>
 			<key>hash2</key>
 			<data>
-			s1HwoMPyNmHbuCX3nV7UzKe4PkeobeTIUxpF0FHGEOw=
+			MgKZ+DS//hpoed5hGUcXBA+x/BJLexnDhG8oMCy9rnw=
 			</data>
 		</dict>
 		<key>Headers/TSLocationStreamEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			Et4v9XOyp2vaSjm2WnbDrkEKtwE=
-			</data>
 			<key>hash2</key>
 			<data>
 			aFKfl37Qx02IiS4luc89FIR88b/zkPlxx83YYr2yZLw=
@@ -322,32 +277,62 @@
 		</dict>
 		<key>Headers/TSLocationTypes.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			bp1aY2k16erQS+FSermutAnyvG8=
-			</data>
 			<key>hash2</key>
 			<data>
 			r1eIko45R+crQbDIw0GqyJi0/+g4a345JEDe81xxqIU=
 			</data>
 		</dict>
+		<key>Headers/TSLogLevel.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			rq2NTUvTF5F3LGGgcM5yBWd5m9Y4kyrADla16NMQi/A=
+			</data>
+		</dict>
+		<key>Headers/TSLoggerConfig.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			rSPWhnAf1690J8jXaRDBwqYHLRF9OvFYAH+bokR3xYU=
+			</data>
+		</dict>
+		<key>Headers/TSOdometer.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			lvbAw/B0oHdK75jBq7vcCqn5/prcwtLgn95i8XTO8Xs=
+			</data>
+		</dict>
+		<key>Headers/TSPersistMode.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			tieRV9Gi49dp5NK9od8keZSRBO1zKfVVtgXmSRFkIk4=
+			</data>
+		</dict>
+		<key>Headers/TSPersistenceConfig.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			guPgO4gAld9r4NEd5QWxxl4C/8kXAAb+6YB+Vczxe+E=
+			</data>
+		</dict>
 		<key>Headers/TSPowerSaveChangeEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			A62dG1XOKflWwi1EoDfNHUuQ09E=
-			</data>
 			<key>hash2</key>
 			<data>
 			ytEE+fFVvMIICYTGyDQd2OhRd0zfXuvGvzYcRvbJk6s=
 			</data>
 		</dict>
+		<key>Headers/TSPropertySpec.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			X6rRj8FvWl9qmZbI9f7flKWum5Uu9s0GrNKZOd55Wyw=
+			</data>
+		</dict>
 		<key>Headers/TSProviderChangeEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			6bGCY0+CqRsfgBp/PVD0KMYNtZU=
-			</data>
 			<key>hash2</key>
 			<data>
 			OALRQATFVGAVObe3BL7+NTg+YYI5N9KrDZqbue5UQO8=
@@ -355,10 +340,6 @@
 		</dict>
 		<key>Headers/TSReachability.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			5ltcq6adTirIEjWp0mVuRg+tLxY=
-			</data>
 			<key>hash2</key>
 			<data>
 			+hhEzofZOEDzgANPhZ3VyBVQxLSuCtdjIEQalI43rPs=
@@ -366,21 +347,13 @@
 		</dict>
 		<key>Headers/TSSchedule.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			NUfn+Tz9pfmqlI3ZSjLsoEfayww=
-			</data>
 			<key>hash2</key>
 			<data>
-			jPJebyYuFpAy3M0i0pId2YkKxTWhCvH5epKU+F91mAc=
+			wsd/DSFgIbMkJURl0UPYD6/ux3bs30/eL3KGY0wfkbw=
 			</data>
 		</dict>
 		<key>Headers/TSScheduleEvent.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			OAm3n5IA+JVNtp+UdXF/tSAQJOk=
-			</data>
 			<key>hash2</key>
 			<data>
 			a7a6Yd0/5nB3lhpQbV8RfIU9NYZ3Ft3jTrF5CJtK9KM=
@@ -388,21 +361,20 @@
 		</dict>
 		<key>Headers/TSTimerService.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			htzdl+bxRGjdq8D5h875dL5dMKs=
-			</data>
 			<key>hash2</key>
 			<data>
 			nWEQEE/lK0FZ0Nh4Su8b+T0jWag5CtP0TpMW1gffH1o=
 			</data>
 		</dict>
+		<key>Headers/TSTrackingMode.h</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/WkEqjFcV+KHMWxkbbui/dl6f6SWerpmtuhIR7RItFc=
+			</data>
+		</dict>
 		<key>Headers/TSWatchPositionRequest.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			tPDTsr6E+/8QwzgTkhSfGKGsKaY=
-			</data>
 			<key>hash2</key>
 			<data>
 			io/yQGDMwvb1s81qVmkbJPgsNkF5xv08+Pe3CPDAblg=
@@ -410,131 +382,83 @@
 		</dict>
 		<key>Headers/TransistorAuthorizationToken.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			ZugB0TfnXixGWevvF9xePiHa9GQ=
-			</data>
 			<key>hash2</key>
 			<data>
-			DXf2m/rkThUw82Ajvs9mLgD17pyHqcJrrwvFMFkjxgw=
+			Q//WjBh9LW79Sa7/8o772+QOdzfW3dP5DvgzRYXybWw=
 			</data>
 		</dict>
 		<key>Modules/TSLocationManager.swiftmodule/arm64-apple-ios-macabi.abi.json</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			c5YGIafs5DzrL0aKCIj2zEi3XxQ=
-			</data>
 			<key>hash2</key>
 			<data>
-			zZGduuOIgkNr1FBjhoucvOyT7KMxjR/f0NFjKeM70Xo=
+			mZxI7TkuluM47BRtywREUU+lRDpvcow75jOsBJNKzhI=
 			</data>
 		</dict>
 		<key>Modules/TSLocationManager.swiftmodule/arm64-apple-ios-macabi.private.swiftinterface</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			NB+d8kC7c678pAc317S3H2BmlvU=
-			</data>
 			<key>hash2</key>
 			<data>
-			xOlqqBjzHs8fF2E3PfiRAGTr4tTR6Dat7xJSiR5U0ns=
+			f68TXWxj8lDURmG/Yqa+ERtfAbwH0blErvy89qNBDog=
 			</data>
 		</dict>
 		<key>Modules/TSLocationManager.swiftmodule/arm64-apple-ios-macabi.swiftdoc</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			+j8RdjiWI6wH9fX4vfxIvwaxfpQ=
-			</data>
 			<key>hash2</key>
 			<data>
-			rAvGXJairzsYHdggeEN3YIyj4kJW4rrxq6RwZjHAkqA=
+			QX8zfmI6hT7/fjByRoFN6VU9inYmmvotlLyCSWi1hEM=
 			</data>
 		</dict>
 		<key>Modules/TSLocationManager.swiftmodule/arm64-apple-ios-macabi.swiftinterface</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			NB+d8kC7c678pAc317S3H2BmlvU=
-			</data>
 			<key>hash2</key>
 			<data>
-			xOlqqBjzHs8fF2E3PfiRAGTr4tTR6Dat7xJSiR5U0ns=
+			f68TXWxj8lDURmG/Yqa+ERtfAbwH0blErvy89qNBDog=
 			</data>
 		</dict>
 		<key>Modules/TSLocationManager.swiftmodule/arm64-apple-ios-macabi.swiftmodule</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			6TcJ0OpSQy7bETdZVpRT2qh1bQE=
-			</data>
 			<key>hash2</key>
 			<data>
-			9OomO0d6kV/41hzRdKDDfZL4leZHcLQIoN8sX/nR/fg=
+			GvkvBE+JBjFvGKheyzgzFt4Ki3zx5naptrNSNx2KAIs=
 			</data>
 		</dict>
 		<key>Modules/TSLocationManager.swiftmodule/x86_64-apple-ios-macabi.abi.json</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			c5YGIafs5DzrL0aKCIj2zEi3XxQ=
-			</data>
 			<key>hash2</key>
 			<data>
-			zZGduuOIgkNr1FBjhoucvOyT7KMxjR/f0NFjKeM70Xo=
+			mZxI7TkuluM47BRtywREUU+lRDpvcow75jOsBJNKzhI=
 			</data>
 		</dict>
 		<key>Modules/TSLocationManager.swiftmodule/x86_64-apple-ios-macabi.private.swiftinterface</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			CQHGt21G5hdyN7Wxr+nmY1yt7m8=
-			</data>
 			<key>hash2</key>
 			<data>
-			WfCcAsn9qqQ86LP3fEYzgeUIciArYFi4qLyYJ8NsGfg=
+			imoTUG0g41L6Xm2O1hmxOqSJ2bp3/TqDFGwvek71qIc=
 			</data>
 		</dict>
 		<key>Modules/TSLocationManager.swiftmodule/x86_64-apple-ios-macabi.swiftdoc</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			Ux2+s7fD6L6UDP/ldWSHE9TJN5M=
-			</data>
 			<key>hash2</key>
 			<data>
-			TljcNtcdEZfZUNlH0kuuGsfosT90ATt6C+pFOjwubnQ=
+			kHO4qc91sUHFLVUppowm4LW6rXC0TD/0oPVum0jtC5M=
 			</data>
 		</dict>
 		<key>Modules/TSLocationManager.swiftmodule/x86_64-apple-ios-macabi.swiftinterface</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			CQHGt21G5hdyN7Wxr+nmY1yt7m8=
-			</data>
 			<key>hash2</key>
 			<data>
-			WfCcAsn9qqQ86LP3fEYzgeUIciArYFi4qLyYJ8NsGfg=
+			imoTUG0g41L6Xm2O1hmxOqSJ2bp3/TqDFGwvek71qIc=
 			</data>
 		</dict>
 		<key>Modules/TSLocationManager.swiftmodule/x86_64-apple-ios-macabi.swiftmodule</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			y8zpS/NBoR5n5jPvtB5kg0Kf86U=
-			</data>
 			<key>hash2</key>
 			<data>
-			xu90nlGIDvaVWhIwkcyS5lh4wWjVhA31DF++apC1tiQ=
+			yyg/oBdrxRNOZnz+H+mOOO7ntjHHhvmLaEMOXs4dNww=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			y1zPtmkIVcyR1t1P2n50QVaEVG0=
-			</data>
 			<key>hash2</key>
 			<data>
 			eVt6iqXN+wdpMKdVeoAMhVR0qMqTmCY/q2/MmER9Aco=
@@ -542,21 +466,13 @@
 		</dict>
 		<key>Resources/Info.plist</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			6+UTMni9TQQFvluT0wUvE+cEdi0=
-			</data>
 			<key>hash2</key>
 			<data>
-			0MaNLPrBZ+xISaSqfQPvzxh+IFoUmL120gdYLs+ubxc=
+			ncG7zQnWdJJoQWnNUCwST4cdP97I26z+h7vI6JxYmeE=
 			</data>
 		</dict>
 		<key>Resources/Miniball/Miniball.hpp</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			lo7ra6XQHmgYrTI5jrrDngVBMdI=
-			</data>
 			<key>hash2</key>
 			<data>
 			irSX3kKOdPJz/cee4qUU7PXU7HMfZ4KuX2DXnvy43VE=
@@ -564,10 +480,6 @@
 		</dict>
 		<key>Resources/PrivacyInfo.xcprivacy</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			eIiWJYOAAQYc3q8Z8126HoAj0sY=
-			</data>
 			<key>hash2</key>
 			<data>
 			Mqmebi7LJeFXux1wzarbNggySwBA8KVz+iSXJ/17rss=
@@ -575,10 +487,6 @@
 		</dict>
 		<key>Resources/TSLocationTypes.h</key>
 		<dict>
-			<key>hash</key>
-			<data>
-			bp1aY2k16erQS+FSermutAnyvG8=
-			</data>
 			<key>hash2</key>
 			<data>
 			r1eIko45R+crQbDIw0GqyJi0/+g4a345JEDe81xxqIU=

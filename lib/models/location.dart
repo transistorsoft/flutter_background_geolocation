@@ -36,9 +36,9 @@ class Coords {
   /// Accuracy in meters.
   late double accuracy;
 
-  /// [iOS] Altitude above sea-level in meters.
-  /// [Android] The altitude of this location in meters above the WGS84 reference ellipsoid.
-  /// - See [ellipsoidal_altitude]
+  /// **iOS**: Altitude above sea-level in meters.
+  /// **Android**: The altitude of this location in meters above the WGS84 reference ellipsoid.
+  /// - See [ellipsoidalAltitude]
   late double altitude;
 
   /// The altitude of this location in meters above the WGS84 reference ellipsoid.

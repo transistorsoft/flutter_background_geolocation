@@ -33,7 +33,7 @@ void _onHttp(bg.HttpEvent event) async {
 }
 
 class TransistorAuth {
-  static Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  static final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   static Future<bool> register() async {
     try {

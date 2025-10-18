@@ -15,12 +15,7 @@ public class AuthorizationStreamHandler extends StreamHandler implements TSAutho
     @Override
     public void onListen(Object args, EventChannel.EventSink eventSink) {
         super.onListen(args, eventSink);
-        HttpService.getInstance(mContext).onAuthorization(this);
-    }
-
-    @Override
-    public void onCancel(Object args) {
-        HttpService.getInstance(mContext).removeListener(mEvent, this);
+        mSubscription = HttpService.getInstance(mContext).onAuthorization(this);
     }
 
     @Override

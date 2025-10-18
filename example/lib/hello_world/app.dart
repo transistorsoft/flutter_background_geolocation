@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -14,36 +13,38 @@ import '../config/ENV.dart';
 //
 import 'dart:convert';
 
-JsonEncoder encoder = new JsonEncoder.withIndent("     ");
+JsonEncoder encoder = JsonEncoder.withIndent("     ");
 
 class HelloWorldApp extends StatelessWidget {
   static const String NAME = 'hello_world';
+
+  const HelloWorldApp({super.key});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData();
-    return new MaterialApp(
+    return MaterialApp(
       title: 'BackgroundGeolocation Demo',
       theme: theme.copyWith(
           colorScheme: theme.colorScheme.copyWith(secondary:Colors.black),
           primaryTextTheme: Theme.of(context).primaryTextTheme.apply(
                 bodyColor: Colors.black,
               )),
-      home: new HelloWorldPage(),
+      home: HelloWorldPage(),
     );
   }
 }
 
 class HelloWorldPage extends StatefulWidget {
-  HelloWorldPage({Key? key}) : super(key: key);
+  const HelloWorldPage({super.key});
 
   @override
-  _HelloWorldPageState createState() => new _HelloWorldPageState();
+  _HelloWorldPageState createState() => _HelloWorldPageState();
 }
 
 class _HelloWorldPageState extends State<HelloWorldPage> {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   late bool _isMoving;
   late bool _enabled;
@@ -157,7 +158,7 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
     bg.BackgroundGeolocation.changePace(_isMoving).then((bool isMoving) {
       print('[changePace] success $isMoving');
     }).catchError((e) {
-      print('[changePace] ERROR: ' + e.code.toString());
+      print('[changePace] ERROR: ${e.code}');
     });
   }
 
@@ -219,7 +220,7 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
     print('[${bg.Event.AUTHORIZATION}] = $event');
 
     bg.BackgroundGeolocation.setConfig(
-        bg.Config(url: ENV.TRACKER_HOST + '/api/locations'));
+        bg.Config(url: '${ENV.TRACKER_HOST}/api/locations'));
   }
 
   void _onProviderChange(bg.ProviderChangeEvent event) {
@@ -248,7 +249,7 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
         ],
         backgroundColor: Colors.amberAccent
       ),
-      body: SingleChildScrollView(child: Text('$_content')),
+      body: SingleChildScrollView(child: Text(_content)),
       bottomNavigationBar: BottomAppBar(
           color: Colors.amberAccent,
           child: Container(
@@ -264,11 +265,11 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
                     Text('$_motionActivity · $_odometer km'),
                     MaterialButton(
                         minWidth: 50.0,
+                        color: (_isMoving) ? Colors.red : Colors.green,
+                        onPressed: _onClickChangePace,
                         child: Icon(
                             (_isMoving) ? Icons.pause : Icons.play_arrow,
-                            color: Colors.white),
-                        color: (_isMoving) ? Colors.red : Colors.green,
-                        onPressed: _onClickChangePace)
+                            color: Colors.white))
                   ]))),
     );
   }

@@ -97,32 +97,32 @@ class Dialog {
 
   static Future prompt(BuildContext context,
       {required String title, required String labelText, required String hintText, required String value}) {
-    TextEditingController controller = new TextEditingController(text: value);
+    TextEditingController controller = TextEditingController(text: value);
 
-    Completer completer = new Completer<String>();
+    Completer completer = Completer<String>();
 
     String submittedValue = value;
 
     showDialog<String>(
       context: context,
       builder: (BuildContext context) {
-        return new AlertDialog(
+        return AlertDialog(
           title: Text(title),
           contentPadding: const EdgeInsets.all(16.0),
           content: SizedBox(
             height: 100.0,
             child: Column(children: <Widget>[
               //new Text(''),  TODO could add some paragrah here before text-field.
-              new Row(
+              Row(
                 children: <Widget>[
                   Expanded(
-                      child: new TextField(
+                      child: TextField(
                     controller: controller,
                     onChanged: (String value) {
                       submittedValue = value;
                     },
                     autofocus: true,
-                    decoration: new InputDecoration(
+                    decoration: InputDecoration(
                       labelText: labelText,
                       hintText: hintText,
                     ),
@@ -132,12 +132,12 @@ class Dialog {
             ]),
           ),
           actions: <Widget>[
-            new TextButton(
+            TextButton(
                 child: Text('Cancel'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 }),
-            new TextButton(
+            TextButton(
                 child: Text('Submit'),
                 onPressed: () {
                   Navigator.of(context).pop();

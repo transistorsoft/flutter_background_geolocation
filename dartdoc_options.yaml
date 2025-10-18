@@ -1,0 +1,7 @@
+dartdoc:
+  autoIncludeDependencies: false
+  nodoc:
+    - "lib/**/internal/**"
+    - "lib/models/**/index.dart"
+    - "lib/**/example/**"
+  

@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
+import com.transistorsoft.locationmanager.event.EventName;
 import com.transistorsoft.locationmanager.event.HeadlessEvent;
 import com.transistorsoft.locationmanager.logger.TSLog;
 
@@ -111,41 +112,41 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
     private Object getEventObject(HeadlessEvent event) {
         String name = event.getName();
         Object result = null;
-        if (name.equals(BackgroundGeolocation.EVENT_TERMINATE)) {
+        if (name.equals(EventName.TERMINATE)) {
             result = event.getTerminateEvent();
-        } else if (name.equals(BackgroundGeolocation.EVENT_LOCATION)) {
+        } else if (name.equals(EventName.LOCATION)) {
             try {
                 result = event.getLocationEvent().toJson();
             } catch (JSONException e) {
                 TSLog.logger.error(e.getMessage(), e);
             }
-        } else if (name.equals(BackgroundGeolocation.EVENT_MOTIONCHANGE)) {
+        } else if (name.equals(EventName.MOTIONCHANGE)) {
             result = event.getMotionChangeEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_HTTP)) {
+        } else if (name.equals(EventName.HTTP)) {
             result = event.getHttpEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_PROVIDERCHANGE)) {
+        } else if (name.equals(EventName.PROVIDERCHANGE)) {
             result = event.getProviderChangeEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_ACTIVITYCHANGE)) {
+        } else if (name.equals(EventName.ACTIVITYCHANGE)) {
             result = event.getActivityChangeEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_SCHEDULE)) {
+        } else if (name.equals(EventName.SCHEDULE)) {
             result = event.getScheduleEvent();
-        } else if (name.equals(BackgroundGeolocation.EVENT_BOOT)) {
+        } else if (name.equals(EventName.BOOT)) {
             result = event.getBootEvent();
-        } else if (name.equals(BackgroundGeolocation.EVENT_GEOFENCE)) {
+        } else if (name.equals(EventName.GEOFENCE)) {
             result = event.getGeofenceEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_GEOFENCES_CHANGE)) {
+        } else if (name.equals(EventName.GEOFENCESCHANGE)) {
             result = event.getGeofencesChangeEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_HEARTBEAT)) {
+        } else if (name.equals(EventName.HEARTBEAT)) {
             result = event.getHeartbeatEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_CONNECTIVITYCHANGE)) {
+        } else if (name.equals(EventName.CONNECTIVITYCHANGE)) {
             result = event.getConnectivityChangeEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_POWERSAVECHANGE)) {
+        } else if (name.equals(EventName.POWERSAVECHANGE)) {
             result = event.getPowerSaveChangeEvent().isPowerSaveMode();
-        } else if (name.equals(BackgroundGeolocation.EVENT_ENABLEDCHANGE)) {
+        } else if (name.equals(EventName.ENABLEDCHANGE)) {
             result = event.getEnabledChangeEvent();
-        } else if (name.equals(BackgroundGeolocation.EVENT_AUTHORIZATION)) {
+        } else if (name.equals(EventName.AUTHORIZATION)) {
             result = event.getAuthorizationEvent().toJson();
-        } else if (name.equalsIgnoreCase(BackgroundGeolocation.EVENT_NOTIFICATIONACTION)) {
+        } else if (name.equalsIgnoreCase(EventName.NOTIFICATIONACTION)) {
             result = event.getNotificationEvent();
         } else {
             TSLog.logger.warn(TSLog.warn("Unknown Headless Event: " + name));

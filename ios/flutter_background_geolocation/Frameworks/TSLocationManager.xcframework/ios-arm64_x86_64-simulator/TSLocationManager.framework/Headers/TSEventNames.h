@@ -27,6 +27,7 @@ extern NSString *const TSEventNameEnabledChange;
 extern NSString *const TSEventNameAuthorization;
 extern NSString *const TSEventNameCLLocation;
 extern NSString *const TSEventNameWatchPosition;
+extern NSString *const TSEventNameRPCError;
 # pragma mark - EventBus Events
 
 extern NSString *const TSEventNameStopMonitoringSignificantLocationChanges;

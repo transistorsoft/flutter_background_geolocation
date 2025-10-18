@@ -17,6 +17,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter_background_geolocation:
     path: ../
+  background_fetch: any
 environment:
   sdk: ^3.8.1
 

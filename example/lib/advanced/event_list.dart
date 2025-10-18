@@ -4,6 +4,8 @@ import 'shared_events.dart';
 /// Renders a simple list of [BackgroundGeolocation] events.  Fetches its data from [SharedEvents] (which is an [InheritedWidget].
 ///
 class EventList extends StatefulWidget {
+  const EventList({super.key});
+
   @override
   State createState() => EventListState();
 }
@@ -15,10 +17,6 @@ class EventListState extends State<EventList>
     return true;
   }
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

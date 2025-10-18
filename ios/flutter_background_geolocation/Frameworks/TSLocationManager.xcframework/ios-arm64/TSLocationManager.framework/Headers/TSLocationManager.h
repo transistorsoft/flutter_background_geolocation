@@ -5,8 +5,19 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 #import <TSLocationManager/TSConfig.h>
-
-#import <TSLocationManager/TSAuthorization.h>
+#import <TSLocationManager/TSConfigModule.h>
+#import <TSLocationManager/TSHttpConfig.h>
+#import <TSLocationManager/TSAuthorizationConfig.h>
+#import <TSLocationManager/TSGeolocationConfig.h>
+#import <TSLocationManager/TSGeolocationConfig.h>
+#import <TSLocationManager/TSLocationFilterConfig.h>
+#import <TSLocationManager/TSLocationFilterPolicy.h>
+#import <TSLocationManager/TSKalmanProfile.h>
+#import <TSLocationManager/TSPersistenceConfig.h>
+#import <TSLocationManager/TSActivityConfig.h>
+#import <TSLocationManager/TSAppConfig.h>
+#import <TSLocationManager/TSOdometer.h>
+#import <TSLocationManager/TSLMActionNames.h>
 #import <TSLocationManager/TSGeofenceManager.h>
 #import <TSLocationManager/TSGeofence.h>
 #import <TSLocationManager/TSHttpService.h>
@@ -26,15 +37,17 @@
 #import <TSLocationManager/TSEnabledChangeEvent.h>
 #import <TSLocationManager/TSGeofenceEvent.h>
 #import <TSLocationManager/TSAuthorizationEvent.h>
-
 #import <TSLocationManager/TSCurrentPositionRequest.h>
 #import <TSLocationManager/TSWatchPositionRequest.h>
-
 #import <TSLocationManager/TSLocationErrors.h>
 #import <TSLocationManager/LogQuery.h>
 #import <TSLocationManager/TSDeviceInfo.h>
 #import <TSLocationManager/TSTimerService.h>
 #import <TSLocationManager/TSJSON.h>
+#import <TSLocationManager/TransistorAuthorizationToken.h>
+#import <TSLocationManager/TSLogLevel.h>
+#import <TSLocationManager/TSTrackingMode.h>
+#import <TSLocationManager/TSPersistMode.h>
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -481,7 +481,7 @@ class Test {
 
     List<bg.Geofence> geofences = [];
 
-    data.forEach((dynamic item) {
+    for (var item in data) {
       geofences.add(bg.Geofence(
           identifier: item['identifier'],
           latitude: item['latitude'],
@@ -493,7 +493,7 @@ class Test {
           notifyOnExit: true,
           vertices: (item["vertices"] != null) ? item['vertices'] : null,
           extras: item['extras']));
-    });
+    }
 
     /**
      * TEST:  Inflate geofences > 100 to engage infinite geofencing
@@ -823,7 +823,7 @@ class Test {
 
     List<bg.Geofence> geofences = [];
     int index = 0;
-    data.forEach((dynamic geofence) {
+    for (var geofence in data) {
       geofences.add(bg.Geofence(
           identifier: "freeway_drive_${++index}",
           latitude: geofence['lat'],
@@ -840,7 +840,7 @@ class Test {
               "longitude": geofence['lng']
             }
           }));
-    });
+    }
     return geofences;
   }
 }

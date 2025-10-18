@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
@@ -13,6 +12,8 @@ import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart
     as util;
 
 class MainMenuButton extends StatefulWidget {
+  const MainMenuButton({super.key});
+
   @override
   State createState() => MainMenuButtonState();
 }

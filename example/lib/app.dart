@@ -4,6 +4,7 @@
 ///
 /// Go look at the source for those apps instead.
 ///
+library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -24,8 +25,10 @@ import 'package:flutter_background_geolocation_example/advanced/util/dialog.dart
     as util;
 
 class HomeApp extends StatefulWidget {
+  const HomeApp({super.key});
+
   @override
-  _HomeAppState createState() => new _HomeAppState();
+  _HomeAppState createState() => _HomeAppState();
 }
 
 class _HomeAppState extends State<HomeApp> {
@@ -37,16 +40,16 @@ class _HomeAppState extends State<HomeApp> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = ThemeData();
-    return new MaterialApp(
+    return MaterialApp(
         theme: theme.copyWith(
             colorScheme: theme.colorScheme.copyWith(secondary:Colors.black)),
-        home: new _HomeView());
+        home: _HomeView());
   }
 }
 
 class _HomeView extends StatefulWidget {
   @override
-  _HomeViewState createState() => new _HomeViewState();
+  _HomeViewState createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<_HomeView> {
@@ -57,7 +60,7 @@ class _HomeViewState extends State<_HomeView> {
   late String _username;
   late String _deviceId;
 
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   @override
   void initState() {
     super.initState();
@@ -166,10 +169,10 @@ class _HomeViewState extends State<_HomeView> {
     Widget app;
     switch (appName) {
       case HelloWorldApp.NAME:
-        app = new HelloWorldApp();
+        app = HelloWorldApp();
         break;
       case AdvancedApp.NAME:
-        app = new AdvancedApp();
+        app = AdvancedApp();
         break;
       default:
         return;
@@ -181,8 +184,8 @@ class _HomeViewState extends State<_HomeView> {
 
   bool _usernameIsValid(String username) {
     return (username != null) &&
-        new RegExp(USERNAME_REGEXP).hasMatch(username) &&
-        (username.length > 0);
+        RegExp(USERNAME_REGEXP).hasMatch(username) &&
+        (username.isNotEmpty);
   }
 
   void _launchUrl() async {
@@ -249,7 +252,7 @@ class _HomeViewState extends State<_HomeView> {
                             Container(
                                 color: Colors.white,
                                 margin: EdgeInsets.all(0.0),
-                                child: new ListTile(
+                                child: ListTile(
                                     leading: const Icon(Icons.account_box),
                                     title: Text("Org: $_orgname"),
                                     subtitle: Text("Device ID: $_deviceId"),
@@ -267,10 +270,10 @@ class _HomeViewState extends State<_HomeView> {
                       onPressed: () {
                         _showRegistration();
                       },
-                      child: Text('Edit'),
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
-                      )
+                        backgroundColor: WidgetStateProperty.all<Color>(Colors.redAccent),
+                      ),
+                      child: Text('Edit')
                   )),
                       //color: Colors.redAccent,
                       //textColor: Colors.white),
@@ -280,10 +283,10 @@ class _HomeViewState extends State<_HomeView> {
                         onPressed: () {
                           _launchUrl();
                         },
-                        child: Text('View Tracking'),
                         style: ButtonStyle(
                             //foregroundColor: MaterialStateProperty.all<Color>(Colors.redAccent),
-                            backgroundColor: MaterialStateProperty.all<Color>(Colors.blue))
+                            backgroundColor: WidgetStateProperty.all<Color>(Colors.blue)),
+                        child: Text('View Tracking')
                         )
                   )
                       //color: Colors.blue,
@@ -294,8 +297,8 @@ class _HomeViewState extends State<_HomeView> {
   MaterialButton _buildApplicationButton(String text, {onPressed=Function}) {
     return MaterialButton(
         onPressed: onPressed,
-        child: Text(text, style: TextStyle(fontSize: 18.0)),
         color: Colors.amber,
-        height: 50.0);
+        height: 50.0,
+        child: Text(text, style: TextStyle(fontSize: 18.0)));
   }
 }

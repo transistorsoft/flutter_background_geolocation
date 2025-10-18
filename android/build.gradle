@@ -36,7 +36,7 @@ android {
     compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 19
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'proguard-rules.pro'
     }
@@ -84,10 +84,6 @@ dependencies {
     implementation "io.github.nishkarsh:android-permissions:$androidPermissionsVersion"
     // GMS location
     implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
-    // HMS location
-    implementation("com.huawei.hms:location:$hmsLocationVersion") {
-        exclude(group: "com.huawei.hms", module: 'hianalytics')
-    }
 
     implementation "androidx.localbroadcastmanager:localbroadcastmanager:$localBroadcastManagerVersion"
     implementation "androidx.appcompat:appcompat:$appCompatVersion"

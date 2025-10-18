@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 6.1.2 effective-5.10 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)
+// swift-compiler-version: Apple Swift version 6.2 effective-5.10 (swiftlang-6.2.0.19.9 clang-1700.3.19.1)
 // swift-module-flags: -target arm64-apple-ios15.6 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name TSLocationManager
-// swift-module-flags-ignorable: -no-verify-emitted-module-interface -interface-compiler-version 6.1.2
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2
 import CoreLocation
 import Foundation
 import Swift
@@ -34,7 +34,7 @@ public struct LocationEvent {
   public let timestamp: Foundation.Date?
   public let timestampString: Swift.String
   public let data: [Swift.String : Any]
-  public let location: CoreLocation.CLLocation
+  public let location: _LocationEssentials.CLLocation
   public let event: Swift.String?
   public let coords: TSLocationManager.LocationEvent.Coords?
   public let battery: TSLocationManager.LocationEvent.Battery?

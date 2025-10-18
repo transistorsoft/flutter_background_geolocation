@@ -12,19 +12,21 @@ const INPUT_TYPE_TOGGLE = "toggle";
 const INPUT_TYPE_TEXT = "text";
 
 class SettingsView extends StatefulWidget {
+  const SettingsView({super.key});
+
   @override
   State createState() => _SettingsViewState();
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  bg.State? _state = null;
+  bg.State? _state;
 
   // Categorized field-lists.
-  List<Map> _geolocationSettings = [];
-  List<Map> _activityRecognitionSettings = [];
-  List<Map> _httpSettings = [];
-  List<Map> _applicationSettings = [];
-  List<Map> _debugSettings = [];
+  final List<Map> _geolocationSettings = [];
+  final List<Map> _activityRecognitionSettings = [];
+  final List<Map> _httpSettings = [];
+  final List<Map> _applicationSettings = [];
+  final List<Map> _debugSettings = [];
 
   // Geofence test params.
   double _radius = 200.0;
@@ -33,6 +35,7 @@ class _SettingsViewState extends State<SettingsView> {
   bool _notifyOnDwell = false;
   int _loiteringDelay = 10000;
 
+  @override
   void initState() {
     super.initState();
 
@@ -189,11 +192,11 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     if (_state == null) {
-      return new Scaffold(body: new Text('Loading...'));
+      return Scaffold(body: Text('Loading...'));
     }
 
-    return new Scaffold(
-        appBar: new AppBar(
+    return Scaffold(
+        appBar: AppBar(
             foregroundColor: Colors.black,
             leading: IconButton(
                 onPressed: _onClickClose,
@@ -203,7 +206,7 @@ class _SettingsViewState extends State<SettingsView> {
             backgroundColor: Colors.amberAccent,
             iconTheme: IconThemeData(color: Colors.black),
             actions: [
-              new PopupMenuButton(
+              PopupMenuButton(
                   itemBuilder: (_) => <PopupMenuEntry<String>>[
                         const PopupMenuItem<String>(
                             value: actions.Actions.RESET_ODOMETER,
@@ -258,7 +261,7 @@ class _SettingsViewState extends State<SettingsView> {
                       ],
                   onSelected: _onSelectMenu)
             ]),
-        body: new CustomScrollView(
+        body: CustomScrollView(
           slivers: <Widget>[
             _buildListHeader("Geolocation"),
             _buildList(_geolocationSettings),
@@ -278,8 +281,8 @@ class _SettingsViewState extends State<SettingsView> {
 
   SliverAppBar _buildListHeader(String title,
       [List<PopupMenuItem<String>>? menu]) {
-    return new SliverAppBar(
-      title: new Text(title),
+    return SliverAppBar(
+      title: Text(title),
       centerTitle: true,
       actions: (menu != null)
           ? [
@@ -298,7 +301,7 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Widget _buildList(List<Map> list) {
-    return new SliverFixedExtentList(
+    return SliverFixedExtentList(
       delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
         return _buildField(list[index]);
       }, childCount: list.length),
@@ -322,7 +325,7 @@ class _SettingsViewState extends State<SettingsView> {
         field = _buildTextField(setting);
         break;
       default:
-        field = new Text('field: $name - Unsupported inputType: $inputType');
+        field = Text('field: $name - Unsupported inputType: $inputType');
         break;
     }
     return field;
@@ -333,89 +336,120 @@ class _SettingsViewState extends State<SettingsView> {
     List? labels = setting['labels'];
     String name = setting['name'];
 
-    dynamic value = _state?.map[name];
-    if (value.runtimeType == double) {
-      value = value.round();
-    }
+    dynamic value = _state != null ? _readConfigValue(_state!, name) : null;
+    if (value is double) value = value.round();
+    final currentValue = value?.toString();
 
     List<DropdownMenuItem<String>> menuItems = [];
     bool foundCurrentValue = false;
-    values.forEach((dynamic item) {
-      if (item == value) {
-        foundCurrentValue = true;
-      }
+    for (var item in values) {
+      final candidate = item.toString();
+      if (candidate == currentValue) foundCurrentValue = true;
       String itemValue = item.toString();
       String itemLabel =
-          (labels != null) ? labels[values.indexOf(item)] : itemValue;
+      (labels != null) ? labels[values.indexOf(item)] : itemValue;
       menuItems.add(
-          new DropdownMenuItem(child: new Text(itemLabel), value: itemValue));
-    });
-    // Ensure currently configured value exists as DropdownMenuItem or an exception blows up:
-    if (!foundCurrentValue) {
-      menuItems.add(new DropdownMenuItem(
-          child: new Text(value.toString()), value: value.toString()));
+          DropdownMenuItem(value: itemValue, child: Text(itemLabel)));
     }
-    return InputDecorator(
+
+    // Ensure currently configured value exists as DropdownMenuItem or an exception blows up:
+    if (!foundCurrentValue && currentValue != null) {
+      menuItems.add(DropdownMenuItem(
+          value: value.toString(),
+          child: Text(value.toString())));
+    }
+    if (currentValue != null) {
+      return InputDecorator(
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
-          labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
-          labelText: name,
+          contentPadding: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5.0),
+          labelStyle: const TextStyle(color: Colors.blue, fontSize: 20.0),
+          labelText: name
+          // labelText set below:
         ),
         child: DropdownButtonHideUnderline(
-            child: DropdownButton(
-                isDense: true,
-                value: value.toString(),
-                items: menuItems,
-                onChanged: _createSelectChangeHandler(setting))));
+          child: DropdownButton<String>(
+            isDense: true,
+            value: currentValue,                 // ✅ use the guarded value
+            items: menuItems,                    // List<DropdownMenuItem<String>>
+            onChanged: _createSelectChangeHandler(setting),
+          ),
+        ),
+      );
+    }
+    // safe fallback when there's no value:
+    return const SizedBox.shrink();
   }
 
   Widget _buildSwitchField(Map setting) {
-    String name = setting['name'];
-    bool value = _state?.map[name];
+    final String name = setting['name'];
+    final dynamic raw = _state != null ? _readConfigValue(_state!, name) : null;
+    final bool boolValue = raw is bool ? raw : false;
+
     return InputDecorator(
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(top: 0.0, left: 10.0, bottom: 0.0),
-          labelStyle: TextStyle(color: Colors.blue),
-          //labelText: name
-        ),
-        child: Row(children: <Widget>[
-          Expanded(flex: 3, child: _buildLabel(name)),
+      decoration: const InputDecoration(
+        contentPadding: EdgeInsets.only(top: 0.0, left: 10.0, bottom: 0.0),
+        labelStyle: TextStyle(color: Colors.blue),
+        // no labelText here (avoids extra label space)
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          // Label takes all remaining width
           Expanded(
-              flex: 1,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    Switch(
-                        value: value,
-                        onChanged: _createSwitchChangeHandler(name))
-                  ]))
-        ]));
+            child: _buildLabel(name),
+          ),
+          // Fixed width for Switch
+          SizedBox(
+            width: 56,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Switch.adaptive(
+                value: boolValue,
+                onChanged: _createSwitchChangeHandler(name),
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildTextField(Map setting) {
-    String name = setting['name'];
-    String value = _state?.map[name];
+    final String name = setting['name'];
+    dynamic value = _state != null ? _readConfigValue(_state!, name) : null;
 
     return GestureDetector(
-        onTap: () async {
-          value = await util.Dialog.prompt(context,
-              title: "Edit $name", labelText: name, hintText: "", value: value);
-          bg.Config config = bg.Config().set(name, value);
-          bg.BackgroundGeolocation.setConfig(config).then((bg.State state) {
-            setState(() {
-              _state = state;
-            });
+      onTap: () async {
+        final newValue = await util.Dialog.prompt(
+          context,
+          title: "Edit $name",
+          labelText: name,
+          hintText: "",
+          value: value,
+        );
+        if (newValue == null) return;
+
+        // Build the right compound config for this field
+        final bg.Config cfg = _buildConfigFor(name, newValue);
+
+        bg.BackgroundGeolocation.setConfig(cfg).then((bg.State state) {
+          if (!mounted) return;
+          setState(() {
+            _state = state;
           });
-        },
-        child: InputDecorator(
-            decoration: InputDecoration(
-              contentPadding:
-                  EdgeInsets.only(left: 10.0, top: 10.0, bottom: 20.0),
-              labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
-              labelText: name,
-            ),
-            child: Text(value)));
+        });
+      },
+      child: InputDecorator(
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.only(left: 10.0),
+          labelStyle: TextStyle(color: Colors.blue, fontSize: 20.0),
+          labelText: name
+          // labelText set below
+        ),
+        child: Text(value?.toString() ?? ''),
+      ),
+    );
   }
 
   Text _buildLabel(String label) {
@@ -428,31 +462,31 @@ class _SettingsViewState extends State<SettingsView> {
   Widget _buildGeofenceTestPanel() {
     List<DropdownMenuItem<String>> radiusItems = [];
     radiusItems
-        .add(new DropdownMenuItem(child: Text('100 meters'), value: '100'));
+        .add(DropdownMenuItem(value: '100', child: Text('100 meters')));
     radiusItems
-        .add(new DropdownMenuItem(child: Text('150 meters'), value: '150'));
+        .add(DropdownMenuItem(value: '150', child: Text('150 meters')));
     radiusItems
-        .add(new DropdownMenuItem(child: Text('200 meters'), value: '200'));
+        .add(DropdownMenuItem(value: '200', child: Text('200 meters')));
     radiusItems
-        .add(new DropdownMenuItem(child: Text('500 meters'), value: '500'));
+        .add(DropdownMenuItem(value: '500', child: Text('500 meters')));
     radiusItems
-        .add(new DropdownMenuItem(child: Text('1000 meters'), value: '1000'));
+        .add(DropdownMenuItem(value: '1000', child: Text('1000 meters')));
     radiusItems
-        .add(new DropdownMenuItem(child: Text('5000 meters'), value: '5000'));
+        .add(DropdownMenuItem(value: '5000', child: Text('5000 meters')));
     radiusItems
-        .add(new DropdownMenuItem(child: Text('10000 meters'), value: '10000'));
+        .add(DropdownMenuItem(value: '10000', child: Text('10000 meters')));
 
     List<DropdownMenuItem<String>> loiteringDelayItems = [];
     loiteringDelayItems
-        .add(new DropdownMenuItem(child: Text('1000 ms'), value: '1000'));
+        .add(DropdownMenuItem(value: '1000', child: Text('1000 ms')));
     loiteringDelayItems
-        .add(new DropdownMenuItem(child: Text('5000 ms'), value: '5000'));
+        .add(DropdownMenuItem(value: '5000', child: Text('5000 ms')));
     loiteringDelayItems
-        .add(new DropdownMenuItem(child: Text('10000 ms'), value: '10000'));
+        .add(DropdownMenuItem(value: '10000', child: Text('10000 ms')));
     loiteringDelayItems
-        .add(new DropdownMenuItem(child: Text('30000 ms'), value: '30000'));
+        .add(DropdownMenuItem(value: '30000', child: Text('30000 ms')));
     loiteringDelayItems
-        .add(new DropdownMenuItem(child: Text('60000 ms'), value: '60000'));
+        .add(DropdownMenuItem(value: '60000', child: Text('60000 ms')));
 
     return SliverFixedExtentList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
@@ -463,16 +497,16 @@ class _SettingsViewState extends State<SettingsView> {
                 children: <Widget>[
                   MaterialButton(
                       minWidth: 150.0,
-                      child: Text('Remove Geofences',
-                          style: TextStyle(color: Colors.white)),
                       color: Colors.red,
-                      onPressed: _onClickRemoveGeofences),
+                      onPressed: _onClickRemoveGeofences,
+                      child: Text('Remove Geofences',
+                          style: TextStyle(color: Colors.white))),
                   MaterialButton(
                       minWidth: 150.0,
-                      child: Text('Add Geofences',
-                          style: TextStyle(color: Colors.white)),
                       color: Colors.blue,
-                      onPressed: _onClickAddGeofences)
+                      onPressed: _onClickAddGeofences,
+                      child: Text('Add Geofences',
+                          style: TextStyle(color: Colors.white)))
                 ]),
             InputDecorator(
                 decoration: InputDecoration(
@@ -590,14 +624,14 @@ class _SettingsViewState extends State<SettingsView> {
     String name = setting['name'];
     switch (name) {
       case 'trackingMode':
-        dynamic onSuccess = (bg.State state) {
+        void onSuccess(bg.State state) {
           setState(() {
             _state = state;
           });
-        };
-        dynamic onFailure = (error) {
+        }
+        void onFailure(error) {
           print('[Error] failed to start the plugin: $error');
-        };
+        }
         return (String? value) {
           int trackingMode = int.parse(value!);
           if (trackingMode == 1) {
@@ -613,7 +647,7 @@ class _SettingsViewState extends State<SettingsView> {
         break;
       default:
         return (String? value) {
-          bg.Config config = new bg.Config();
+          bg.Config config = bg.Config();
           print("select value: $name: $value");
           switch (type) {
             case 'integer':
@@ -641,6 +675,181 @@ class _SettingsViewState extends State<SettingsView> {
         });
       });
     };
+  }
+}
+
+dynamic _readConfigValue(bg.State state, String name) {
+  switch (name) {
+  // ---- GEOLOCATION ----
+    case 'distanceFilter':
+      return state.geolocation.distanceFilter;
+    case 'desiredAccuracy':
+      return state.geolocation.desiredAccuracy?.id;
+    case 'useSignificantChangesOnly':
+      return state.geolocation.useSignificantChangesOnly;
+    case 'disableElasticity':
+      return state.geolocation.disableElasticity;
+    case 'elasticityMultiplier':
+      return state.geolocation.elasticityMultiplier;
+    case 'geofenceProximityRadius':
+      return state.geolocation.geofenceProximityRadius;
+    case 'stopTimeout':
+      return state.geolocation.stopTimeout;
+    case 'activityType':
+      return state.geolocation.activityType?.id;
+  // ---- HTTP ----
+    case 'url':
+      return state.http.url;
+    case 'autoSync':
+      return state.http.autoSync;
+    case 'disableAutoSyncOnCellular':
+      return state.http.disableAutoSyncOnCellular;
+    case 'autoSyncThreshold':
+      return state.http.autoSyncThreshold;
+  // ---- PERSISTENCE ----
+    case 'maxRecordsToPersist':
+      return state.persistence.maxRecordsToPersist;
+    case 'maxDaysToPersist':
+      return state.persistence.maxDaysToPersist;
+    case 'persistMode':
+      return state.persistence.persistMode?.id;
+  // ---- APPLICATION ----
+    case 'stopOnTerminate':
+      return state.app.stopOnTerminate;
+    case 'startOnBoot':
+      return state.app.startOnBoot;
+    case 'heartbeatInterval':
+      return state.app.heartbeatInterval;
+  // ---- LOGGER ----
+    case 'debug':
+      return state.logger.debug;
+    case 'logLevel':
+      return state.logger.logLevel;
+    default:
+    // fallback to flattened map for any unmapped legacy field
+      return state.map[name];
+  }
+}
+
+bg.Config _buildConfigFor(String name, dynamic value) {
+  switch (name) {
+  // -------------------------
+  // GEOLOCATION
+  // -------------------------
+    case 'distanceFilter':
+      return bg.Config(geolocation: bg.GeoConfig(distanceFilter: (value is num) ? value.toDouble() : double.parse(value)));
+    case 'desiredAccuracy': // your dropdown values are ints
+      return bg.Config(geolocation: bg.GeoConfig(desiredAccuracy: bg.DesiredAccuracy.from(value)));
+    case 'useSignificantChangesOnly':
+      return bg.Config(geolocation: bg.GeoConfig(useSignificantChangesOnly: value as bool));
+    case 'disableElasticity':
+      return bg.Config(geolocation: bg.GeoConfig(disableElasticity: value as bool));
+    case 'elasticityMultiplier':
+      return bg.Config(geolocation: bg.GeoConfig(elasticityMultiplier: (value is num) ? value.toDouble() : double.parse(value)));
+    case 'geofenceProximityRadius':
+      return bg.Config(geolocation: bg.GeoConfig(geofenceProximityRadius: int.parse('$value')));
+    case 'stopAfterElapsedMinutes':
+      return bg.Config(geolocation: bg.GeoConfig(stopAfterElapsedMinutes: int.parse('$value')));
+    case 'locationAuthorizationRequest':
+      return bg.Config(geolocation: bg.GeoConfig(locationAuthorizationRequest: value as String));
+    case 'stationaryRadius':
+      return bg.Config(geolocation: bg.GeoConfig(stationaryRadius: int.parse('$value')));
+    case 'stopTimeout': // moved to GeoConfig
+      return bg.Config(geolocation: bg.GeoConfig(stopTimeout: int.parse('$value')));
+    case 'activityType':
+      return bg.Config(geolocation: bg.GeoConfig(activityType: bg.ActivityType.from(value is int ? value : int.parse('$value'))));
+    case 'showsBackgroundLocationIndicator':
+      return bg.Config(geolocation: bg.GeoConfig(showsBackgroundLocationIndicator: value as bool));
+    case 'locationUpdateInterval':
+      return bg.Config(geolocation: bg.GeoConfig(locationUpdateInterval: int.parse('$value')));
+    case 'fastestLocationUpdateInterval':
+      return bg.Config(geolocation: bg.GeoConfig(fastestLocationUpdateInterval: int.parse('$value')));
+    case 'deferTime':
+      return bg.Config(geolocation: bg.GeoConfig(deferTime: int.parse('$value')));
+    case 'geofenceModeHighAccuracy':
+      return bg.Config(geolocation: bg.GeoConfig(geofenceModeHighAccuracy: value as bool));
+    case 'disableLocationAuthorizationAlert':
+      return bg.Config(geolocation: bg.GeoConfig(disableLocationAuthorizationAlert: value as bool));
+
+  // -------------------------
+  // ACTIVITY (leave only true activity-recognition fields here)
+  // -------------------------
+    case 'disableMotionActivityUpdates':
+      return bg.Config(
+        activity: bg.ActivityConfig(
+          disableMotionActivityUpdates: value as bool,
+        ),
+      );
+  // If you still expose activityRecognitionInterval/minimum confidence, route here.
+
+  // -------------------------
+  // HTTP
+  // -------------------------
+    case 'url':
+      return bg.Config(http: bg.HttpConfig(url: value as String));
+    case 'autoSync':
+      return bg.Config(http: bg.HttpConfig(autoSync: value as bool));
+    case 'disableAutoSyncOnCellular':
+      return bg.Config(http: bg.HttpConfig(disableAutoSyncOnCellular: value as bool));
+    case 'autoSyncThreshold':
+      return bg.Config(http: bg.HttpConfig(autoSyncThreshold: int.parse('$value')));
+    case 'batchSync':
+      return bg.Config(http: bg.HttpConfig(batchSync: value as bool));
+    case 'maxBatchSize':
+      return bg.Config(http: bg.HttpConfig(maxBatchSize: int.parse('$value')));
+
+  // -------------------------
+  // PERSISTENCE
+  // -------------------------
+    case 'maxRecordsToPersist':
+      return bg.Config(persistence: bg.PersistenceConfig(maxRecordsToPersist: int.parse('$value')));
+    case 'maxDaysToPersist':
+      return bg.Config(persistence: bg.PersistenceConfig(maxDaysToPersist: int.parse('$value')));
+    case 'persistMode':
+    // Your UI uses raw ints; map them to the enum if you’ve switched:
+    // values [2, 1, -1, 0]  -> PersistMode.all, location, geofence, none
+      final v = int.parse('$value');
+      final mode = {
+        2: bg.PersistMode.all,
+        1: bg.PersistMode.location,
+        -1: bg.PersistMode.geofence,
+        0: bg.PersistMode.none,
+      }[v]!;
+      return bg.Config(persistence: bg.PersistenceConfig(persistMode: mode));
+
+  // -------------------------
+  // APPLICATION
+  // -------------------------
+    case 'stopOnTerminate':
+      return bg.Config(app: bg.AppConfig(stopOnTerminate: value as bool));
+    case 'startOnBoot':
+      return bg.Config(app: bg.AppConfig(startOnBoot: value as bool));
+    case 'heartbeatInterval':
+      return bg.Config(app: bg.AppConfig(heartbeatInterval: double.parse('$value')));
+    case 'preventSuspend': // iOS
+      return bg.Config(app: bg.AppConfig(preventSuspend: value as bool));
+    case 'enableHeadless': // Android
+      return bg.Config(app: bg.AppConfig(enableHeadless: value as bool));
+
+  // -------------------------
+  // LOGGER
+  // -------------------------
+    case 'debug':
+      return bg.Config(logger: bg.LoggerConfig(debug: value as bool));
+    case 'logLevel':
+      return bg.Config(
+        logger: bg.LoggerConfig(
+          logLevel: bg.LogLevel.from(value), // accepts String/int/enum
+        ),
+      );
+    case 'logMaxDays':
+      return bg.Config(logger: bg.LoggerConfig(logMaxDays: int.parse('$value')));
+
+    default:
+    // Fallback — preserves any old flat keys (will still work due to your State flattener)
+      final c = bg.Config();
+      c.set(name, value);
+      return c;
   }
 }
 
