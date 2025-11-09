@@ -11,6 +11,13 @@ Version 5 introduces a new **Compound Config** format that replaces the legacy "
 
 ---
 
+## ⚙️ Compatibility
+
+The legacy **flat config** style remains fully supported for backward compatibility.  
+You can continue using your existing flat configuration if you prefer, though new features may only appear in the compound structure.
+
+---
+
 ## ⏩ Why Compound Config?
 
 - **Clarity:** Groups related settings together (e.g., geolocation, HTTP, logging).
@@ -224,12 +231,12 @@ Each group is a separate Dart class. See API docs for details.
 
 ## ⚠️ Breaking Changes
 
-- **Flat config keys are no longer supported.** Use compound config objects.
 - **Some keys have new enum types:**  
-  - `logLevel` is now `LogLevel` enum, not an integer.
+  - `logLevel` is now a `LogLevel` enum (e.g., `LogLevel.info`), but legacy integer values are still supported for backward compatibility. You may use either the new enum or the legacy integer type.
 - **Some keys have moved to new groups:**  
   - E.g., `debug` is now in `LoggerConfig`.
-- **Legacy config will result in a runtime error.**
+- **Legacy flat config remains supported but deprecated:**  
+  - Using the legacy flat config will show warnings at runtime, but will **not** result in an error. Migration to the new grouped config is recommended for future compatibility.
 
 ---
 
