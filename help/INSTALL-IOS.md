@@ -43,6 +43,8 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
 | *Privacy - Location When in Use Usage Description* | `String` | *CHANGEME: Location required when app is in use* |
 | *Privacy - Motion Usage Description* | `String` | *CHANGEME: Motion permission helps detect when device in in-motion* |
 
+![](https://dl.dropboxusercontent.com/s/wyoejgko6xq4pi4/iOS-permissions.png?dl=1)
+
 ### Background Fetch
 
 The *Background Geolocation* SDK has internal handling for periodic *Background Fetch* events (if enabled).  It can use these periodic events to gather current state information (*is the device moving?*), evaluating the `schedule` (if you configured one) or checking if there are any location records in the queue, waiting to be uploaded to your configured `url`:
@@ -55,7 +57,7 @@ The *Background Geolocation* SDK has internal handling for periodic *Background 
 
 ![](https://dl.dropboxusercontent.com/s/kwdio2rr256d852/ios-setup-permitted-identifiers-add.png?dl=1)
 
-![](https://dl.dropboxusercontent.com/s/wyoejgko6xq4pi4/iOS-permissions.png?dl=1)
+
 
 ### Or edit `Info.plist` directly
 
