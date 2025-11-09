@@ -33,7 +33,7 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
     - [x] Background fetch
     - [x] Audio (**optional for debug-mode sound FX**)
 
-![](https://www.dropbox.com/scl/fi/muwq6wwor83acl64w4214/setup-ios-background-modes.png?rlkey=cbbuz0pg5j3ql1z4sttxpufyl&dl=1)
+![](https://www.dropbox.com/scl/fi/muwq6wwor83acl64w4214/setup-ios-background-modes.png?dl=1)
 
 - Add the following permissions to `Info.plist`:
 
