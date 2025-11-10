@@ -41,13 +41,13 @@ class _Subscription {
 /// |------------------------|-----------------------------------------|
 /// | [onLocation]           | Fired with each recorded [Location]     |
 /// | [onMotionChange]       | Fired when the plugin changes state between *moving* / *stationary* |
-/// | [onHttp]               | Fired with each HTTP response from your server.  (see [Config.url]). |
+/// | [onHttp]               | Fired with each HTTP response from your server.  (see [HttpConfig.url]). |
 /// | [onActivityChange]     | Fired with each change in device motion-activity.                    |
 /// | [onProviderChange]     | Fired after changes to device location-services configuration.       |
-/// | [onHeartbeat]          | Periodic timed events.  See [Config.heartbeatInterval].  iOS requires [Config.preventSuspend]. |
+/// | [onHeartbeat]          | Periodic timed events.  See [AppConfig.heartbeatInterval].  iOS requires [AppConfig.preventSuspend]. |
 /// | [onGeofence]           | Fired with each [Geofence] transition event (`ENTER, EXIT, DWELL`).  |
-/// | [onGeofencesChange]    | Fired when the list of actively-monitored geofences changed.  See [Config.geofenceProximityRadius]. |
-/// | [onSchedule]           | Fired for [Config.schedule] events.                                  |
+/// | [onGeofencesChange]    | Fired when the list of actively-monitored geofences changed.  See [GeoConfig.geofenceProximityRadius]. |
+/// | [onSchedule]           | Fired for [AppConfig.schedule] events.                                  |
 /// | [onConnectivityChange] | Fired when network-connectivity changes (connected / disconnected).  |
 /// | [onPowerSaveChange]    | Fired when state of operating-system's "power-saving" feature is enabled / disabled. |
 /// | [onEnabledChange]      | Fired when the plugin is enabled / disabled via its [start] / [stop] methods.        |
@@ -270,8 +270,8 @@ class BackgroundGeolocation {
   /// Enable location tracking.
   ///
   /// This is the plugin's power **ON** button.  The plugin will initially start into its **stationary** state, fetching an initial location before turning off location services.
-  /// Android will be monitoring its **Activity Recognition System** while iOS will create a stationary geofence around the current location.  **NOTE** If you've configured a
-  /// [Config.schedule], this method will override that schedule and engage tracking immediately.
+  /// Android will be monitoring its **Activity Recognition System** while iOS will create a stationary geofence around the current location.  **NOTE** If you've configured an
+  /// [AppConfig.schedule], this method will override that schedule and engage tracking immediately.
   ///
   /// ## Example
   ///
@@ -295,7 +295,7 @@ class BackgroundGeolocation {
   /// BackgroundGeolocation.stop();
   /// ```
   ///
-  ///  **WARNING:** If you've configured a [Config.schedule], **`#stop`** will **not** halt the Scheduler.  You must explicitly stop the Scheduler as well:
+  ///  **WARNING:** If you've configured an [AppConfig.schedule], **`#stop`** will **not** halt the Scheduler.  You must explicitly stop the Scheduler as well:
   ///
   /// ```dart
   /// // Later when you want to stop the Scheduler (eg: user logout)
@@ -307,9 +307,9 @@ class BackgroundGeolocation {
     return State(state);
   }
 
-  /// Initiate the configure [Config.schedule].
+  /// Initiate the configured [AppConfig.schedule].
   ///
-  /// If a [Config.schedule] was configured, this method will initiate that schedule.  The plugin will automatically be started or stopped according to the configured [Config.schedule].
+  /// If an [AppConfig.schedule] was configured, this method will initiate that schedule.  The plugin will automatically be started or stopped according to the configured [AppConfig.schedule].
   ///
   /// ## Example
   ///
@@ -477,7 +477,7 @@ class BackgroundGeolocation {
   /// Retrieves the current [Location].
   ///
   /// This method instructs the native code to fetch exactly one location using maximum power & accuracy.  The native code will persist the fetched location to
-  /// its SQLite database just as any other location in addition to POSTing to your configured [Config.url].
+  /// its SQLite database just as any other location in addition to POSTing to your configured [HttpConfig.url].
   /// If an error occurs while fetching the location, `catchError` will be provided with an **`Integer`** [Error Code](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Location-Error-Codes).
   ///
   /// ## Options
@@ -490,9 +490,9 @@ class BackgroundGeolocation {
   ///
   /// #### `@config {int} samples [3]` Sets the maximum number of location-samples to fetch.  The plugin will return the [Location] having the best accuracy.  Defaults to `3`.  Only the final [Location] will be persisted.
   ///
-  /// #### `@config {int} desiredAccuracy [Config.stationaryRadius]` Sets the desired accuracy of location you're attempting to fetch.  When a location having `accuracy <= desiredAccuracy` is retrieved, the plugin will stop sampling and immediately return that location.  Defaults to your configured [Config.stationaryRadius].
+  /// #### `@config {int} desiredAccuracy [GeoConfig.stationaryRadius]` Sets the desired accuracy of location you're attempting to fetch.  When a location having `accuracy <= desiredAccuracy` is retrieved, the plugin will stop sampling and immediately return that location.  Defaults to your configured [GeoConfig.stationaryRadius].
   ///
-  /// #### `@config {Map} extras` Optional extra-data to attach to the location.  These `extras` will be merged to the configure [Config.extras] and persisted / POSTed to your server (if you've configured the HTTP Layer).
+  /// #### `@config {Map} extras` Optional extra-data to attach to the location.  These `extras` will be merged to the configured [PersistenceConfig.extras] and persisted / POSTed to your server (if you've configured the HTTP Layer).
   ///
   ///
   /// ## Error Codes
@@ -959,11 +959,11 @@ class BackgroundGeolocation {
   /// ```
   ///
   /// ### ℹ️ See also:
-  /// - [Config.locationAuthorizationRequest]
-  /// - [Config.disableLocationAuthorizationAlert]
-  /// - [Config.locationAuthorizationAlert]
+  /// - [GeoConfig.locationAuthorizationRequest]
+  /// - [GeoConfig.disableLocationAuthorizationAlert]
+  /// - [GeoConfig.locationAuthorizationAlert]
   /// - [requestTemporaryFullAccuracy] (_iOS 14+_)
-  /// - [Config.backgroundPermissionRationale] (_Android 11+_)
+  /// - [AppConfig.backgroundPermissionRationale] (_Android 11+_)
   ///
   static Future<int> requestPermission() async {
     // For future, we will accept an optional String of a specific permission to request (NOT YET IMPLEMENTED)

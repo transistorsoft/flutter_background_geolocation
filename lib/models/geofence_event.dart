@@ -18,7 +18,7 @@ part of '../flutter_background_geolocation.dart';
 /// __ℹ️ Note:__
 /// - Native iOS & Android API support only *circular* geofences, however the plugin does implement a custom mechanism for handling *Polygon Geofences*; see [Geofence.vertices].
 /// - The minimum reliable [Geofence.radius] is `200` meters.
-/// - The native geofencing API for both iOS and Android *require* the user authorize [Config.locationAuthorizationRequest] **`Always`** &mdash; **`When in Use`** will **not** work.
+/// - The native geofencing API for both iOS and Android *require* the user authorize [GeoConfig.locationAuthorizationRequest] **`Always`** &mdash; **`When in Use`** will **not** work.
 ///
 /// ## Adding Geofences
 /// ---------------------------------------------------------------------------------------------------------

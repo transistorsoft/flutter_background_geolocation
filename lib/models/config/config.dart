@@ -1,5 +1,6 @@
 part of '../../flutter_background_geolocation.dart';
 
+// ignore_for_file: deprecated_member_use_from_same_package
 
 /// Configuration API.
 ///
@@ -442,7 +443,7 @@ class Config {
 
   /// *Convenience* option to automatically configures the SDK to upload locations to the Transistor Software demo server at http://tracker.transistorsoft.com (or your own local instance of [background-geolocation-console](https://github.com/transistorsoft/background-geolocation-console))
   ///
-  /// See [TransistorAuthorizationToken].  This option will **automatically configures** the [url] to point at the Demo server as well as well as the required [Authorization] configuration.
+  /// See [TransistorAuthorizationToken].  This option will **automatically configure** [HttpConfig.url] to point at the Demo server as well as well as the required [Authorization] configuration.
   ///
   ///
   /// ## Example
@@ -466,6 +467,7 @@ class Config {
   ///   TransistorAuthorizationToken.findOrCreate('my-company-name', 'my-username');
   ///
   /// BackgroundGeolocation.ready(Config(
+  ///   /// This convenience option sets [HttpConfig.url] to the Demo server and configures [Authorization].
   ///   url: "$url/api/locations",
   ///   authorization: Authorization(
   ///     strategy: "JWT",

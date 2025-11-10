@@ -308,7 +308,7 @@ class Location {
   ///
   late Activity activity;
 
-  /// Arbitrary extras object from configured [Config.extras].
+  /// Arbitrary extras object from configured [PersistenceConfig.extras].
   ///
   Map? extras;
 

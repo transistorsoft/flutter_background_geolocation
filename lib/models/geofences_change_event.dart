@@ -7,13 +7,13 @@ part of '../flutter_background_geolocation.dart';
 class GeofencesChangeEvent {
   /// List of [Geofence.identifier] which stopped being monitored.
   ///
-  /// The plugin ceases active-monitoring upon those [Geofence] whose center coordinate lies outside of [Config.geofenceProximityRadius].  `off` is a list of those [Geofence.identifier].
+  /// The plugin ceases active-monitoring upon those [Geofence] whose center coordinate lies outside of [GeoConfig.geofenceProximityRadius].  `off` is a list of those [Geofence.identifier].
   ///
   late List<String> off;
 
   /// List of [Geofence] which the plugin has just begun active-monitoring upon.
   ///
-  /// The plugin active-monitors only those [Geofence] whose center coordinate lies within [Config.geofenceProximityRadius].  `on` is a list of those [Geofence].
+  /// The plugin active-monitors only those [Geofence] whose center coordinate lies within [GeoConfig.geofenceProximityRadius].  `on` is a list of those [Geofence].
   ///
   late List<Geofence> on;
 

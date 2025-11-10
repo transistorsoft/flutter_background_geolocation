@@ -17,13 +17,13 @@ class Authorization {
   /// Authorization strategy.  Only [JWT](https://jwt.io/) is currently supported.
   String? strategy = STRATEGY_JWT;
 
-  /// Authorization token (eg: [JWT](https://jwt.io/)) required for authorization by your server at [Config.url].
+  /// Authorization token (eg: [JWT](https://jwt.io/)) required for authorization by your server at [HttpConfig.url].
   ///
   /// The SDK will automatically apply the configured `accessToken` to each HTTP request's `Authorization` header, eg:
   ///
   /// `"Authorization": "Bearer XXX.YYY.ZZZ"`
   ///
-  /// You do **not** need to manually configure [Config.headers] with the `Authorization` parameter.  It is all **automatic**.
+  /// You do **not** need to manually configure [HttpConfig.headers] with the `Authorization` parameter.  It is all **automatic**.
   String? accessToken;
 
   /// The url to your authorization server that provides new [accessToken] when expired.

@@ -66,7 +66,7 @@ class State extends Config {
   ///
   late bool enabled;
 
-  /// Whether the plugin's [Config.schedule] has been activated with [BackgroundGeolocation.startSchedule].
+  /// Whether the plugin's [AppConfig.schedule] has been activated with [BackgroundGeolocation.startSchedule].
   ///
   late bool schedulerEnabled;
 
@@ -250,6 +250,6 @@ class State extends Config {
 
   /// Return String representation of `State` for `print` to log.
   String toString() {
-    return '[State enabled: $enabled, isMoving: $isMoving, trackingMode: $trackingMode, desiredAccuracy: $desiredAccuracy, distanceFilter: $distanceFilter, odometer: $odometer, schedulerEnabled: $schedulerEnabled, foregroundService: $foregroundService]';
+    return '[State enabled: $enabled, isMoving: $isMoving, trackingMode: $trackingMode, desiredAccuracy: ${geolocation.desiredAccuracy}, distanceFilter: ${geolocation.distanceFilter}, odometer: $odometer, schedulerEnabled: $schedulerEnabled';
   }
 }

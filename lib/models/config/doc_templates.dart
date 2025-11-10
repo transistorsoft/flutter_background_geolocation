@@ -1,6 +1,9 @@
 // doc_templates.dart (must be in same library via `part of`)
 part of '../../flutter_background_geolocation.dart';
 
+// ignore_for_file: deprecated_member_use_from_same_package
+
+//
 // -----------------------------------------------------------------------------
 // Dartdoc reusable templates for Config & compound config classes.
 // Use with {@macro <key>} from both flat Config and compound classes
@@ -16,7 +19,7 @@ part of '../../flutter_background_geolocation.dart';
 /// These parameters control how often the SDK acquires locations, how accurately, how long tracking persists when stationary,
 /// and how it handles platform-specific permissions, filtering, and elasticity.
 ///
-/// ## Overview
+/// ## Overviewd
 ///
 /// [GeoConfig] is consumed via the [Config.geolocation] property when calling [BackgroundGeolocation.ready] or [BackgroundGeolocation.setConfig].
 ///
@@ -2259,7 +2262,7 @@ class MacroConfigHttpTimeout {}
 class MacroConfigDisableAutosyncOnCellular {}
 
 /// {@template config.disable_providerchange_record}
-/// __`[Android-only]`__ Disables the automatic insert of a location record into the SDK's SQLite database and subsequent HTTP upload if configured with [Config.url].
+/// __`[Android-only]`__ Disables the automatic insert of a location record into the SDK's SQLite database and subsequent HTTP upload if configured with [HttpConfig.url].
 /// When a [BackgroundGeolocation.onProviderChange] event fires, the Android SDK has traditionally recorded a location to show exactly *when* and *where* the state of location-services was changed (eg: Location-services disabled).
 ///
 /// Some developers' servers have strict HTTP JSON payloads and possibly using [PersistenceConfig.locationTemplate], where it's impossible to template the automatically appended `provider` key in the payload.
@@ -2520,7 +2523,7 @@ class MacroConfigStartOnBoot {}
 ///     print('[getCurrentPosition] ${location}');
 ///   });
 /// })
-///
+/// ```
 /// {@endtemplate}
 /// @nodoc
 class MacroConfigHeartbeatInterval {}
@@ -2697,7 +2700,7 @@ class MacroConfigDebug {}
 /// {@template config.log_level}
 /// Controls the volume of recorded events in the SDK's logging database.
 ///
-/// [BackgroundGeolocation] contains powerful logging features.  By default, the SDK boots with a value of [Config.LOG_LEVEL_VERBOSE], storing [LoggerConfig.logMaxDays] (default `3`) days worth of logs in its SQLite database.
+/// [BackgroundGeolocation] contains powerful logging features.  By default, the SDK boots with a value of [LogLevel.off], storing [LoggerConfig.logMaxDays] (default `3`) days worth of logs in its SQLite database.
 ///
 /// The following log-levels are defined as **constants** on this [Config] class:
 ///
@@ -2908,9 +2911,9 @@ class MacroConfigReset {}
 ///
 /// Just as in iOS 13/14, Android 11 has [changed location authorization](https://developer.android.com/preview/privacy/location) and no longer offers the __`[Allow all the time]`__ button on the location authorization dialog.  Instead, Android now offers a hook to present a custom dialog to the user where you will explain exactly why you require _"Allow all the time"_ location permission.
 ///
-/// This dialog can forward the user directly to your application's __Location Permissions__ screen, where the user must *explicity* authorize __`[Allow all the time]`__.  The Background Geolocation SDK will present this dialog, which can be customized with [Config.backgroundPermissionRationale].
-/// - Android will offer the [Config.backgroundPermissionRationale] dialog __just once__.  Once the user presses the `positiveAction` on the dialog, it will __not__ be shown again (pressing `[Cancel]` button does not count).
-/// - If the user resets your application's _Location Permissions_ to __`[Ask every time]`__, the [Config.backgroundPermissionRationale] _can_ be shown once again.
+/// This dialog can forward the user directly to your application's __Location Permissions__ screen, where the user must *explicity* authorize __`[Allow all the time]`__.  The Background Geolocation SDK will present this dialog, which can be customized with [AppConfig.backgroundPermissionRationale].
+/// - Android will offer the [AppConfig.backgroundPermissionRationale] dialog __just once__.  Once the user presses the `positiveAction` on the dialog, it will __not__ be shown again (pressing `[Cancel]` button does not count).
+/// - If the user resets your application's _Location Permissions_ to __`[Ask every time]`__, the [AppConfig.backgroundPermissionRationale] _can_ be shown once again.
 ///
 /// ![](https://dl.dropbox.com/s/4fq4erz2lpqz00m/android11-location-permission-rationale-dialog.png?dl=1)
 /// ![](https://dl.dropbox.com/s/dy65k8b0sgj5cgy/android11-location-authorization-upgrade-settings.png?dl=1)
@@ -2933,7 +2936,7 @@ class MacroConfigReset {}
 ///
 /// ### 1.  __`locationAuthorizationRequest: 'Always'`__:
 ///
-/// If your app requests __`locationAuthorizationRequest: 'Always'`__, the user must first authorize __`[While using the app]`__, followed ///immediately* by the [Config.backgroundPermissionRationale] dialog prompting the user to upgrade location permission with __`[Allow all the time]`__:
+/// If your app requests __`locationAuthorizationRequest: 'Always'`__, the user must first authorize __`[While using the app]`__, followed ///immediately* by the [AppConfig.backgroundPermissionRationale] dialog prompting the user to upgrade location permission with __`[Allow all the time]`__:
 ///
 /// ![](https://dl.dropbox.com/s/343nbrzpaavfser/android11-location-authorization-rn.gif?dl=1)
 ///
@@ -2943,7 +2946,7 @@ class MacroConfigReset {}
 ///
 /// ![](https://dl.dropbox.com/s/ymybwme7fvda0ii/android11-location-when-in-use-system-dialog.png?dl=1)
 ///
-/// _However_, if your app _later_ uses __`setConfig`__ to change __`locationAuthorizationRequest: 'Always'`__, the SDK will _immediately_ show the [Config.backgroundPermissionRationale] dialog:
+/// _However_, if your app _later_ uses __`setConfig`__ to change __`locationAuthorizationRequest: 'Always'`__, the SDK will _immediately_ show the [AppConfig.backgroundPermissionRationale] dialog:
 ///
 /// ![](https://dl.dropbox.com/s/4fq4erz2lpqz00m/android11-location-permission-rationale-dialog.png?dl=1)
 ///
@@ -2953,7 +2956,7 @@ class MacroConfigReset {}
 ///
 /// ## Android 11+ (with `targetSdkVersion <=29`)
 ///
-/// Just to add a bit more confusion, for Android 11+ devices and your app built with __`targetSdkVersion 29`__, Android will present an extra dialog after the user clicks through on the [Config.backgroundPermissionRationale] dialog, where the user is prompted with a link _"Allow in Settings"*, rather than forwarding them directly to the _Location Permissions_ screen, as with __`targetSdkVersion 30+`__:
+/// Just to add a bit more confusion, for Android 11+ devices and your app built with __`targetSdkVersion 29`__, Android will present an extra dialog after the user clicks through on the [AppConfig.backgroundPermissionRationale] dialog, where the user is prompted with a link _"Allow in Settings"*, rather than forwarding them directly to the _Location Permissions_ screen, as with __`targetSdkVersion 30+`__:
 ///
 /// ![](https://dl.dropbox.com/s/mp3zykohr95wafq/android11-location-authorization-upgrade.png?dl=1)
 ///
@@ -3019,7 +3022,7 @@ class MacroConfigLocationAuthorizationAlert {}
 ///
 /// ## Android
 ///
-/// Android can detect when the user has configured the device's *Settings->Location* in a manner that does not match your location request (eg: [Config.desiredAccuracy].  For example, if the user configures *Settings->Location->Mode* with *Battery Saving* (ie: Wifi only) but you've specifically requested [DesiredAccuracy.high] (ie: GPS), Android will show a dialog asking the user to confirm the desired changes.  If the user clicks `[OK]`, the OS will automcatically modify the Device settings.
+/// Android can detect when the user has configured the device's *Settings->Location* in a manner that does not match your location request (eg: [GeoConfig.desiredAccuracy].  For example, if the user configures *Settings->Location->Mode* with *Battery Saving* (ie: Wifi only) but you've specifically requested [DesiredAccuracy.high] (ie: GPS), Android will show a dialog asking the user to confirm the desired changes.  If the user clicks `[OK]`, the OS will automcatically modify the Device settings.
 ///
 /// ![](https://dl.dropbox.com/scl/fi/t7bwdrmogr26rcmrbemkt/android-location-resolution-dialog.png?rlkey=won88t8xo5zcei7ktmurebb5t&dl=1)
 ///
@@ -3229,8 +3232,8 @@ class MacroConfigEnableHeadless {}
 ///
 /// ![](https://dl.dropbox.com/s/343nbrzpaavfser/android11-location-authorization-rn.gif?dl=1)
 ///
-/// - Android will offer the [Config.backgroundPermissionRationale] dialog __just once__.  Once the user presses the `positiveAction` on the dialog, it will __not__ be shown again (pressing `[Cancel]` button does not count).
-/// - If the user resets your application's _Location Permissions_ to __`[Ask every time]`__, the [Config.backgroundPermissionRationale] _can_ be shown once again.
+/// - Android will offer the [AppConfig.backgroundPermissionRationale] dialog __just once__.  Once the user presses the `positiveAction` on the dialog, it will __not__ be shown again (pressing `[Cancel]` button does not count).
+/// - If the user resets your application's _Location Permissions_ to __`[Ask every time]`__, the [AppConfig.backgroundPermissionRationale] _can_ be shown once again.
 ///
 /// ![](https://dl.dropbox.com/s/4fq4erz2lpqz00m/android11-location-permission-rationale-dialog.png?dl=1)
 /// ![](https://dl.dropbox.com/s/dy65k8b0sgj5cgy/android11-location-authorization-upgrade-settings.png?dl=1)
