@@ -155,6 +155,7 @@ class BackgroundGeolocation {
   static Stream<bool>? _eventsEnabledChange;
   static Stream<String>? _eventsNotificationAction;
   static Stream<AuthorizationEvent>? _eventsAuthorization;
+  // ignore: unused_field
   static Stream<Location>? _eventsWatchPosition;
 
   /// Return the current [State] of the plugin, including all [Config] parameters.

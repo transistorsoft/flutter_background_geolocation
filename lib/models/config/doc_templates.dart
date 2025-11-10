@@ -804,7 +804,7 @@ class MacroConfigMotionTriggerDelay {}
 ///     minimumActivityRecognitionConfidence: 50, // <-- trigger less confidently.
 ///   ),
 /// ));
-///
+/// ```
 /// {@endtemplate}
 /// @nodoc
 class MacroConfigMinimumActivityRecognitionConfidence {}
@@ -1024,7 +1024,7 @@ class MacroConfigActivityType {}
 
 // ===== LocationFilter ===============================================================
 
-/// {@template config.max_implied_speed
+/// {@template config.max_implied_speed}
 /// Experimental filter to ignore anomalous locations that suddenly jump an unusual distance from last.
 /// The SDK will calculate an apparent speed and distance relative to last known location.  If the location suddenly
 /// teleports from last location, it will be ignored.
