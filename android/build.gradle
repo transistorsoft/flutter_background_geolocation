@@ -1,6 +1,18 @@
 group 'com.transistorsoft.flutter.backgroundgeolocation'
 version '1.0-SNAPSHOT'
 
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Android Gradle Plugin compatible with Gradle 8.11.x
+        classpath 'com.android.tools.build:gradle:8.7.2'
+    }
+}
+
+
 rootProject.allprojects {
     repositories {
         google()
@@ -53,6 +65,13 @@ repositories {
 
 dependencies {
     def playServicesLocationVersion = safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
+
+    implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
+
+    implementation "com.transistorsoft:tslocationmanager:4.0.0-beta.1"
+    implementation 'org.greenrobot:eventbus:3.3.1'
+    /*
+    def playServicesLocationVersion = safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
     def hmsLocationVersion = safeExtGet('hmsLocationVersion', DEFAULT_HMS_LOCATION_VERSION);
     def appCompatVersion = safeExtGet('appCompatVersion', safeExtGet('supportLibVersion', DEFAULT_APP_COMPAT_VERSION))
     def okHttpVersion = safeExtGet('okHttpVersion', DEFAULT_OK_HTTP_VERSION)
@@ -91,9 +110,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime:$lifeCycleRuntimeVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifeCycleExtensionsVersion"
 
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.78.1'
+
     // WorkManager
     def workVersion = safeExtGet('workVersion', DEFAULT_WORK_VERSION)
     def concurrentFuturesVersion = safeExtGet('concurrentFuturesVersion', DEFAULT_CONCURRENT_FUTURES_VERSION)
     implementation "androidx.work:work-runtime:$workVersion"
     implementation "androidx.concurrent:concurrent-futures:$concurrentFuturesVersion"
+    */
 }

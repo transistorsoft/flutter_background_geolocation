@@ -11,12 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiActivity;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.*;
 
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.Actions;
-import com.transistorsoft.locationmanager.config2.TSConfig;
+import com.transistorsoft.locationmanager.config.TSConfig;
 import com.transistorsoft.locationmanager.adapter.callback.TSBackgroundTaskCallback;
 import com.transistorsoft.locationmanager.adapter.callback.TSCallback;
 import com.transistorsoft.locationmanager.adapter.callback.TSEmailLogCallback;
@@ -31,10 +30,9 @@ import com.transistorsoft.locationmanager.adapter.callback.TSLocationCallback;
 import com.transistorsoft.locationmanager.adapter.callback.TSPlayServicesConnectErrorCallback;
 import com.transistorsoft.locationmanager.adapter.callback.TSRequestPermissionCallback;
 import com.transistorsoft.locationmanager.adapter.callback.TSSyncCallback;
-import com.transistorsoft.locationmanager.config.TSAuthorization;
-import com.transistorsoft.locationmanager.config.TransistorAuthorizationToken;
-import com.transistorsoft.locationmanager.config2.edit.AuthEditor;
-import com.transistorsoft.locationmanager.config2.edit.Editor;
+import com.transistorsoft.locationmanager.http.TSAuthorization;
+import com.transistorsoft.locationmanager.http.TransistorAuthorizationToken;
+import com.transistorsoft.locationmanager.config.edit.Editor;
 import com.transistorsoft.locationmanager.data.LocationModel;
 import com.transistorsoft.locationmanager.data.SQLQuery;
 import com.transistorsoft.locationmanager.device.DeviceInfo;
@@ -43,7 +41,6 @@ import com.transistorsoft.locationmanager.event.LocationEvent;
 import com.transistorsoft.locationmanager.event.TerminateEvent;
 import com.transistorsoft.locationmanager.geofence.TSGeofence;
 import com.transistorsoft.locationmanager.location.TSCurrentPositionRequest;
-import com.transistorsoft.locationmanager.location.TSLocation;
 import com.transistorsoft.locationmanager.location.TSWatchPositionRequest;
 import com.transistorsoft.locationmanager.logger.TSLog;
 import com.transistorsoft.locationmanager.scheduler.TSScheduleManager;
@@ -85,8 +82,6 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     private static final String ACTION_READY             = "ready";
     private static final String ACTION_REGISTER_HEADLESS_TASK = "registerHeadlessTask";
     private static final String ACTION_GET_STATE         = "getState";
-    private static final String ACTION_START_SCHEDULE    = "startSchedule";
-    private static final String ACTION_STOP_SCHEDULE     = "stopSchedule";
     private static final String ACTION_LOG               = "log";
     private static final String ACTION_REQUEST_SETTINGS  = "requestSettings";
     private static final String ACTION_SHOW_SETTINGS     = "showSettings";
@@ -367,20 +362,14 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     @SuppressWarnings("unchecked")
     private void ready(@NonNull Map<String, Object> params, final MethodChannel.Result result) {
-
-        TSLog.logger.debug("*** ready params: " + params);
-
         boolean reset = (!params.containsKey("reset")) || (boolean) params.get("reset");
         TSConfig config = TSConfig.getInstance(mContext);
-
-        TSLog.logger.debug("*** ready Rx params: " + params);
-
         if (mReady) {
             if (reset) {
-                TSLog.logger.warn(TSLog.warn("#ready already called.  Redirecting to #setConfig"));
+                Log.w(BackgroundGeolocation.TAG, TSLog.warn("#ready already called.  Redirecting to #setConfig"));
                 setConfig(params, result);
             } else {
-                TSLog.logger.warn(TSLog.warn("#ready already called.  Config ignored since reset:false"));
+                Log.w(BackgroundGeolocation.TAG, TSLog.warn("#ready already called.  Config ignored since reset:false"));
                 resultWithState(result);
             }
             return;

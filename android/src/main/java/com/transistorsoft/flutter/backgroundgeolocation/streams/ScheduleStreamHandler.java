@@ -27,7 +27,7 @@ public class ScheduleStreamHandler extends StreamHandler implements TSScheduleCa
         try {
             mEventSink.success(Util.toMap(event.getState()));
         } catch (JSONException e) {
-            TSLog.logger.error(e.getMessage(), e);
+            android.util.Log.e(BackgroundGeolocation.TAG, e.getMessage(), e);
         }
     }
 }

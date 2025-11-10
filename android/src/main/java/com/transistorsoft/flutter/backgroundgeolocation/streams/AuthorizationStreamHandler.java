@@ -1,7 +1,7 @@
 package com.transistorsoft.flutter.backgroundgeolocation.streams;
 
 import com.transistorsoft.locationmanager.adapter.callback.TSAuthorizationCallback;
-import com.transistorsoft.locationmanager.config.TSAuthorization;
+import com.transistorsoft.locationmanager.http.TSAuthorization;
 import com.transistorsoft.locationmanager.event.AuthorizationEvent;
 import com.transistorsoft.locationmanager.http.HttpService;
 
