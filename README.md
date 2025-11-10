@@ -1,5 +1,21 @@
 # flutter_background_geolocation
 
+[!IMPORTANT]
+**Beta channel (`5.0.0-beta.1`)**  
+ 
+**Opt in to the beta** by adding this to your `pubspec.yaml`:
+ 
+```yaml
+dependencies:
+  flutter_background_geolocation: ^5.0.0-beta
+```
+ 
+See the **[Migration Guide to 5.0.0](./MIGRATION-GUIDE-5.0.0.md)** for details about new config APIs (e.g., `LocationFilter`) and how to migrate from flat to compound config (legacy config is still supported).
+
+Be sure to see updated [Setup Guides](#-setup-guides)
+
+---------------------------------------------------------
+
 [![](https://dl.dropboxusercontent.com/s/nm4s5ltlug63vv8/logo-150-print.png?dl=1)](https://www.transistorsoft.com)
 
 -------------------------------------------------------------------------------
