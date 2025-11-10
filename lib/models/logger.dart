@@ -2,8 +2,10 @@ part of '../flutter_background_geolocation.dart';
 
 /// # Logger API
 ///
-/// The Background Geolocation SDK includes powerful logging features for debugging location-tracking problems.  The SDK stores log-entries for a period of [Config.logMaxDays] (default `3`).  The volume of logging events
-/// inserted into the database is controlled via [Config.logLevel].
+/// The Background Geolocation SDK includes powerful logging features for debugging location-tracking problems.  The SDK stores log-entries for a period of [LoggerConfig.logMaxDays] (default `3`).  The volume of logging events
+/// inserted into the database is controlled via [LoggerConfig.logLevel].
+///
+/// See [LoggerConfig]
 ///
 /// ## Fetching the Logs:
 ///
@@ -167,11 +169,11 @@ class Logger {
 
   /// Returns the contents of the log database as a `String`.  Provide an optional [SQLQuery] to contrain results between dates.
   ///
-  /// Depending on the configured [Config.logLevel], the plugin can store an *immense* amount of helpful logging information for debugging location-tracking problems.
+  /// Depending on the configured [LoggerConfig.logLevel], the plugin can store an *immense* amount of helpful logging information for debugging location-tracking problems.
   ///
   /// See also:
-  /// - [Config.logMaxDays] (default `3` days)
-  /// - [Config.logLevel]   (default [Config.LOG_LEVEL_OFF])
+  /// - [LoggerConfig.logMaxDays] (default `3` days)
+  /// - [LoggerConfig.logLevel]   (default [LogLevel.off])
   /// - [emailLog]
   /// - [uploadLog]
   ///
@@ -283,7 +285,7 @@ class Logger {
   }
 
   /// Upload the result of [getLog] to provided url.  Provide an optional [SQLQuery] to contrain results between dates.  The file-upload
-  /// request will attach your configured [Config.headers] for authentication.
+  /// request will attach your configured [HttpConfig.headers] for authentication.
   ///
   /// ## Example
   ///

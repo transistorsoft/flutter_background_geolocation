@@ -93,19 +93,19 @@ part of '../flutter_background_geolocation.dart';
 ///
 /// The Background Geolocation SDK contains unique and powerful Geofencing features that allow you to monitor any number of circular geofences you wish (thousands even), in spite of limits imposed by the native platform APIs (**20 for iOS; 100 for Android**).
 ///
-/// The SDK achieves this by storing your geofences in its database, using a [geospatial query](https://en.wikipedia.org/wiki/Spatial_query) to determine those geofences in proximity ([Config.geofenceProximityRadius]), activating only those geofences closest to the device's current location (according the limit imposed by the corresponding platform).
+/// The SDK achieves this by storing your geofences in its database, using a [geospatial query](https://en.wikipedia.org/wiki/Spatial_query) to determine those geofences in proximity ([GeoConfig.geofenceProximityRadius]), activating only those geofences closest to the device's current location (according the limit imposed by the corresponding platform).
 ///
 /// ![](https://www.transistorsoft.com/shop/products/assets/images/background-geolocation-infinite-geofencing.gif)
 ///
-/// - When the device is determined to be moving, the plugin periodically queries for geofences within the [Config.geofenceProximityRadius] (eg. every minute) using the latest recorded location.  This geospatial query is **very fast**, even with tens-of-thousands geofences in the database.
-/// - The SDK **enforces** a *minimum* [Config.geofenceProximityRadius] of `1000` meters.
-/// - In the following image, the *green* geofences within [Config.geofenceProximityRadius] are *actively* monitored.  The *grey* geofences outside [Config.geofenceProximityRadius] still exist within the SDK's database but are *not* actively being monitored.
+/// - When the device is determined to be moving, the plugin periodically queries for geofences within the [GeoConfig.geofenceProximityRadius] (eg. every minute) using the latest recorded location.  This geospatial query is **very fast**, even with tens-of-thousands geofences in the database.
+/// - The SDK **enforces** a *minimum* [GeoConfig.geofenceProximityRadius] of `1000` meters.
+/// - In the following image, the *green* geofences within [GeoConfig.geofenceProximityRadius] are *actively* monitored.  The *grey* geofences outside [GeoConfig.geofenceProximityRadius] still exist within the SDK's database but are *not* actively being monitored.
 ///
 /// ![](https://dl.dropboxusercontent.com/s/7sggka4vcbrokwt/geofenceProximityRadius_iphone6_spacegrey_portrait.png?dl=1)
 ///
 /// ## Listening for changes in the actively-monitored set-of-geofences.
 ///
-/// As the SDK periodically queries for geofences within the [Config.geofenceProximityRadius], you can listen for changes in the actively-monitored geofences using the event [BackgroundGeolocation.onGeofencesChange].  This event will let you know those geofences which have *begun* to be *actively monitored* ([GeofencesChangeEvent.on]) in addition to those which just *ceased* to be actively monitored ([GeofencesChangeEvent.off]).
+/// As the SDK periodically queries for geofences within the [GeoConfig.geofenceProximityRadius], you can listen for changes in the actively-monitored geofences using the event [BackgroundGeolocation.onGeofencesChange].  This event will let you know those geofences which have *begun* to be *actively monitored* ([GeofencesChangeEvent.on]) in addition to those which just *ceased* to be actively monitored ([GeofencesChangeEvent.off]).
 ///
 /// ### Example
 ///
@@ -128,7 +128,7 @@ part of '../flutter_background_geolocation.dart';
 ///
 /// ## Removing Geofences
 ///
-/// Once a geofence has been inserted into the SDK's database using [BackgroundGeolocation.addGeofence] or [BackgroundGeolocation.addGeofences], they will be monitored *forever* (as long as the plugin remains `State.enabled == true`).  If you've configured [Config.stopOnTerminate] __`false`__ and [Config.startOnBoot] __`true`__, geofences will continue to be monitored even if the application is terminated or device rebooted.
+/// Once a geofence has been inserted into the SDK's database using [BackgroundGeolocation.addGeofence] or [BackgroundGeolocation.addGeofences], they will be monitored *forever* (as long as the plugin remains `State.enabled == true`).  If you've configured [AppConfig.stopOnTerminate] __`false`__ and [AppConfig.startOnBoot] __`true`__, geofences will continue to be monitored even if the application is terminated or device rebooted.
 /// To cease monitoring a geofence or *geofences*, you must *remove* them from the SDK's database (or call [BackgroundGeolocation.stop]).
 ///
 /// ### Removing a single geofence by [Geofence.identifier]:
@@ -167,7 +167,7 @@ part of '../flutter_background_geolocation.dart';
 ///
 /// The BackgroundGeolocation SDK allows you to optionally monitor *only* geofences without constant location-tracking.  To engage *geofences-only* mode, use the method [BackgroundGeolocation.startGeofences] instead of [BackgroundGeolocation.start].
 ///
-/// Use option [Config.geofenceModeHighAccuracy]:true to improve the responsiveness of geofence events.
+/// Use option [GeoConfig.geofenceModeHighAccuracy]:true to improve the responsiveness of geofence events.
 ///
 /// ```dart
 /// BackgroundGeolocation.onGeofence((GeofenceEvent event) {

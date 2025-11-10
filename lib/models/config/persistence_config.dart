@@ -29,7 +29,8 @@ enum PersistMode {
   }
 }
 
-/// Persistence / storage compound configuration.
+/// {@macro config.persistence}
+/// 
 class PersistenceConfig {
   /// {@macro config.location_template}
   final String? locationTemplate;
@@ -83,11 +84,11 @@ class PersistenceConfig {
   factory PersistenceConfig.fromMap(Map<String, dynamic> m) => PersistenceConfig(
     locationTemplate: m['locationTemplate'],
     geofenceTemplate: m['geofenceTemplate'],
-    maxDaysToPersist: m['maxDaysToPersist'],
-    maxRecordsToPersist: m['maxRecordsToPersist'],
+    maxDaysToPersist: _ensureInt(m['maxDaysToPersist']),
+    maxRecordsToPersist: _ensureInt(m['maxRecordsToPersist']),
     locationsOrderDirection: m['locationsOrderDirection'],
     persistMode: m['persistMode'] != null ? PersistMode.from(m['persistMode']) : null,
     extras: (m['extras'] is Map) ? (m['extras'] as Map).cast<String, dynamic>() : null,
-    disableProviderChangeRecord: m['disableProviderChangeRecord'],
+    disableProviderChangeRecord: _ensureBool(m['disableProviderChangeRecord']),
   );
 }

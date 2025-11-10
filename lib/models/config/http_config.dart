@@ -68,17 +68,17 @@ class HttpConfig {
   }
 
   factory HttpConfig.fromMap(Map<String, dynamic> m) => HttpConfig(
-    autoSync: m['autoSync'],
-    autoSyncThreshold: m['autoSyncThreshold'],
-    disableAutoSyncOnCellular: m['disableAutoSyncOnCellular'],
-    batchSync: m['batchSync'],
-    maxBatchSize: m['maxBatchSize'],
+    autoSync: _ensureBool(m['autoSync']),
+    autoSyncThreshold: _ensureInt(m['autoSyncThreshold']),
+    disableAutoSyncOnCellular: _ensureBool(m['disableAutoSyncOnCellular']),
+    batchSync: _ensureBool(m['batchSync']),
+    maxBatchSize: _ensureInt(m['maxBatchSize']),
     method: m['method'],
     url: m['url'],
     params: (m['params'] is Map) ? (m['params'] as Map).cast<String, dynamic>() : null,
     headers: (m['headers'] is Map) ? (m['headers'] as Map).cast<String, dynamic>() : null,
     rootProperty: m['rootProperty'] ?? m['httpRootProperty'],
-    timeout: m['timeout'] ?? m['httpTimeout'],
+    timeout: _ensureInt(m['timeout'] ?? m['httpTimeout']),
   );
 }
 

@@ -8,7 +8,7 @@
 ///
 /// ## 📚 Help
 /// - 📘 [Philosophy of Operation](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Philosophy-of-Operation)
-/// - 📘 HTTP Guide: [HttpEvent].
+/// - 📘 HTTP Guide: [HttpConfig].
 /// - 📘 Geofencing Guide:  [GeofenceEvent].
 /// - 📘 [Android Headless Mode](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode).
 /// - 📘 [Android Custom Notification Layout](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Custom-Notification-Layout).

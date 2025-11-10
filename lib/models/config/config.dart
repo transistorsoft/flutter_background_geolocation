@@ -296,8 +296,8 @@ class Config {
   @Deprecated('Use activity.stopOnStationary (ActivityConfig)')
   bool? stopOnStationary;
 
-  /// **Deprecated:** Use [ActivityConfig.triggerActivitiesCsv] via [Config.activity].
-  @Deprecated('Use activity.triggerActivitiesCsv (ActivityConfig)')
+  /// **Deprecated:** Use [ActivityConfig.triggerActivities] via [Config.activity].
+  @Deprecated('Use activity.triggerActivities (ActivityConfig)')
   String? triggerActivities;
 
   /// **Deprecated:** Use [ActivityConfig.motionTriggerDelay] via [Config.activity].

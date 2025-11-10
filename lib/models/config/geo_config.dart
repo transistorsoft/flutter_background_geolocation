@@ -52,6 +52,15 @@ enum DesiredAccuracy {
 /// Represents iOS-specific activity types used by CoreLocation’s `activityType`.
 ///
 /// Each value maps to the legacy integer understood by the native layer.
+///
+/// ## Example
+/// ```dart
+/// BackgroundGeolocation.ready(Config(
+///   geolocation: GeoConfig(
+///     activityType: ActivityType.other,
+///   ),
+/// ));
+/// ```
 enum ActivityType {
   /// Default activity type for general use.
   other(Config.ACTIVITY_TYPE_OTHER),
@@ -316,7 +325,7 @@ enum LocationFilterPolicy {
   /// **No changes are made to latitude or longitude values.**
   ///
   /// In effect, this policy “adjusts” the *criteria* for inclusion, not the
-  /// *positions* themselves. When [useKalman] is enabled, samples may be
+  /// *positions* themselves. When [LocationFilter.useKalman] is enabled, samples may be
   /// smoothed for noise reduction, but their physical coordinates remain
   /// untouched. 
   adjust,
@@ -436,18 +445,21 @@ class LocationFilter {
     policy: (m['policy'] != null)
         ? LocationFilterPolicy.values[m['policy']]
         : null,
-    useKalman: m['useKalman'],
-    kalmanDebug: m['kalmanDebug'],
+    useKalman: _ensureBool(m['useKalman']),
+    kalmanDebug: _ensureBool(m['kalmanDebug']),
     kalmanProfile: (m['kalmanProfile'] != null)
-        ? KalmanProfile.fromId(m['kalmanProfile'])
+        ? KalmanProfile.fromId(_ensureInt(m['kalmanProfile'])!)
         : null,
-    rollingWindow: m['rollingWindow'],
-    burstWindow: (m['burstWindow'] as num?)?.toDouble(),
-    maxBurstDistance: (m['maxBurstDistance'] as num?)?.toDouble(),
-    trackingAccuracyThreshold: m['trackingAccuracyThreshold'],
-    maxImpliedSpeed: (m['maxImpliedSpeed'] as num?)?.toDouble(),
-    filterDebug: m['filterDebug'],
-    odometerUseKalmanFilter: m['odometerUseKalmanFilter'],
-    odometerAccuracyThreshold: m['odometerAccuracyThreshold'],
+    rollingWindow: _ensureInt(m['rollingWindow']),
+    burstWindow: _ensureDouble(m['burstWindow']),
+    maxBurstDistance: _ensureDouble(m['maxBurstDistance']),
+    // Accept legacy iOS key `accuracyThreshold` as alias
+    trackingAccuracyThreshold: _ensureDouble(
+        m['trackingAccuracyThreshold'] ?? m['accuracyThreshold']
+    ),
+    maxImpliedSpeed: _ensureDouble(m['maxImpliedSpeed']),
+    filterDebug: _ensureBool(m['filterDebug']),
+    odometerUseKalmanFilter: _ensureBool(m['odometerUseKalmanFilter']),
+    odometerAccuracyThreshold: _ensureDouble(m['odometerAccuracyThreshold']),
   );
 }

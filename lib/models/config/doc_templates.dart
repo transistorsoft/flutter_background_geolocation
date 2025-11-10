@@ -313,15 +313,33 @@ class MacroConfigAllowIdenticalLocations {}
 /// The plugin can optionally automatically [BackgroundGeolocation.stop] after some number of minutes elapses after the [BackgroundGeolocation.start] method was called.
 ///
 /// ```dart
-/// BackgroundGeolocation.ready(Config(
-///   stopAfterElapsedMinutes: 30
-/// )).then((State state) {
-///   BackgroundGeolocation.start();  // <-- plugin will automatically #stop in 30 minutes
+/// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+///
+/// // Configure the plugin to automatically stop after 30 minutes.
+/// await bg.BackgroundGeolocation.ready(bg.Config(
+///   geolocation: bg.GeoConfig(
+///     stopAfterElapsedMinutes: 30,
+///   ),
+/// )).then((bg.State state) {
+///   // Start tracking; the plugin will automatically stop after 30 minutes.
+///   bg.BackgroundGeolocation.start();
 /// });
 /// ```
 /// {@endtemplate}
 /// @nodoc
 class MacroConfigStopAfterElapsedMinutes {}
+
+/// {@template config.pauses_location_updates_automatically}
+/// __`[iOS only]`__ Configure iOS location API to *never* automatically turn off.
+///
+///  **WARNING:** This option should generally be left `undefined`.  You should only specify this option if you know *exactly* what you're doing.
+///
+/// The default behavior of the plugin is to turn **off** location-services *automatically* when the device is detected to be stationary for [GeoConfig.stopTimeout] minutes.  When set to `false`, location-services will **never** be turned off (and [ActivityConfig.disableStopDetection] will automatically be set to `true`) -- it's your responsibility to turn them off when you no longer need to track the device.  This feature should **not** generally be used.  [AppConfig.preventSuspend] will no longer work either.
+///
+/// {@endtemplate}
+/// @nodoc
+class MacroConfigPausesLocationUpdatesAutomatically {}
+
 
 /// {@template config.enable_timestamp_meta}
 ///
@@ -666,14 +684,20 @@ class MacroConfigActivityRecognitionInterval {}
 /// ## Example
 ///
 /// ```dart
+/// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+///
 /// // Only trigger tracking for vehicles
-/// BackgroundGeolocation.ready(Config(
-///   triggerActivities: 'in_vehicle'
+/// await bg.BackgroundGeolocation.ready(bg.Config(
+///   activity: bg.ActivityConfig(
+///     triggerActivities: 'in_vehicle',
+///   ),
 /// ));
 ///
 /// // Only trigger tracking for on_foot, walking and running
-/// BackgroundGeolocation.ready(Config(
-///   triggerActivities: 'on_foot, walking, running'
+/// await bg.BackgroundGeolocation.ready(bg.Config(
+///   activity: bg.ActivityConfig(
+///     triggerActivities: 'on_foot,walking,running',
+///   ),
 /// ));
 /// ```
 ///
@@ -705,8 +729,12 @@ class MacroConfigTriggerActivities {}
 /// ## Example
 ///
 /// ```dart
-/// BackgroundGeolocation.ready(Config(
-///   disableMotionActivityUpdates: true
+/// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+///
+/// await bg.BackgroundGeolocation.ready(bg.Config(
+///   activity: bg.ActivityConfig(
+///     disableMotionActivityUpdates: true,
+///   ),
 /// ));
 /// ```
 /// 
@@ -722,10 +750,14 @@ class MacroConfigDisableMotionActivityUpdates {}
 /// If the Motion API returns to the `still` state before `motionTriggerDelay` times-out, the trigger to the *moving* state will be cancelled.
 /// ## example
 /// ```dart
+/// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+///
 /// // Delay Android motion-triggering by 30000ms
-/// BackgroundGeolocation.ready(Config(
-///   motionTriggerDelay: 30000
-/// ))
+/// await bg.BackgroundGeolocation.ready(bg.Config(
+///   activity: bg.ActivityConfig(
+///     motionTriggerDelay: 30000,
+///   ),
+/// ));f
 /// ```
 ///
 /// The following `logcat` shows an Android device detecting motion __`on_foot`__ but returning to __`still`__ before __`motionTriggerDelay`__ expires, cancelling the transition to the *moving* state (see `⏰ Cancel OneShot: MOTION_TRIGGER_DELAY`):
@@ -765,8 +797,12 @@ class MacroConfigMotionTriggerDelay {}
 /// ## Example
 ///
 /// ```dart
-/// BackgroundGeolocation.ready(Config(
-///   minimumActivityRecognitionConfidence: 50 // <-- trigger less confidently.
+/// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+///
+/// await bg.BackgroundGeolocation.ready(bg.Config(
+///   activity: bg.ActivityConfig(
+///     minimumActivityRecognitionConfidence: 50, // <-- trigger less confidently.
+///   ),
 /// ));
 ///
 /// {@endtemplate}
@@ -785,8 +821,12 @@ class MacroConfigMinimumActivityRecognitionConfidence {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   disableStopDetection: true,
-///   pausesLocationUpdatesAutomatically: false
+///   activity: ActivityConfig(
+///     disableStopDetection: true,
+///   ),
+///   geolocation: GeoConfig(
+///     pausesLocationUpdatesAutomatically: false,
+///   ),
 /// ));
 /// ```
 ///  **WARNING** iOS location-services will **never** turn off with the above configuration.  Do **not** do this unless you know *exactly* why you're doing (eg: A jogging app with `[Start workout]` / `[Stop Workout]` buttons).
@@ -824,8 +864,10 @@ class MacroConfigStopDetectionDelay {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   stopOnStationary: true,
-///   isMoving: true
+///   activity: ActivityConfig(
+///     stopOnStationary: true,
+///   ),
+///   isMoving: true,
 /// )).then((State state) {
 ///   BackgroundGeolocation.start();
 /// });
@@ -887,7 +929,9 @@ class MacroConfigGeofenceProximityRadius {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   maxMonitoredGeofences: 50 // override the Platform maximum (Android: 100)
+///   geolocation: GeoConfig(
+///     maxMonitoredGeofences: 50, // override the Platform maximum (Android: 100)
+///   ),
 /// )).then((State state) {
 ///   BackgroundGeolocation.start();  // <-- plugin will automatically #stop in 30 minutes
 /// });
@@ -929,10 +973,12 @@ class MacroConfigGeofenceInitialTriggerEntry {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   geofenceModeHighAccuracy: true,
-///   desiredAccuracy: Config.DESIRED_ACCURACY_MEDIUM,
-///   locationUpdateInterval: 5000,
-///   distanceFilter: 50
+///   geolocation: GeoConfig(
+///     geofenceModeHighAccuracy: true,
+///     desiredAccuracy: DesiredAccuracy.medium,
+///     locationUpdateInterval: 5000,
+///     distanceFilter: 50,
+///   ),
 /// )).then((state) {
 ///   BackgroundGeolocation.startGeofences();
 /// });
@@ -955,17 +1001,19 @@ class MacroConfigGeofenceModeHighAccuracy {}
 ///
 /// | Name                                          |
 /// |-----------------------------------------------|
-/// | [Config.ACTIVITY_TYPE_OTHER]                  |
-/// | [Config.ACTIVITY_TYPE_AUTOMOTIVE_NAVIGATION]  |
-/// | [Config.ACTIVITY_TYPE_FITNESS]                |
-/// | [Config.ACTIVITY_TYPE_OTHER_NAVIGATION]       |
-/// | [Config.ACTIVITY_TYPE_AIRBORNE]               |
+/// | [ActivityType.other]                  |
+/// | [ActivityType.automotiveNavigation]  |
+/// | [ActivityType.fitness]                |
+/// | [ActivityType.otherNavigation]       |
+/// | [ActivityType.airborne]               |
 ///
 /// ## Example
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   activityType: Config.ACTIVITY_TYPE_OTHER
+///   geolocation: GeoConfig(
+///     activityType: ActivityType.other,
+///   ),
 /// ));
 /// ```
 ///
@@ -981,7 +1029,7 @@ class MacroConfigActivityType {}
 /// The SDK will calculate an apparent speed and distance relative to last known location.  If the location suddenly
 /// teleports from last location, it will be ignored.
 ///
-/// __`Android-only`__ The measurement is in meters/second.  The default is to throw away any location which apparently moved at 300 meters/second from last known location.
+/// The measurement is in meters/second.  The default is to throw away any location which apparently moved at 300 meters/second from last known location.
 /// {@endtemplate}
 /// @nodoc
 class MacroConfigMaxImpliedSpeed {}
@@ -995,6 +1043,18 @@ class MacroConfigMaxImpliedSpeed {}
 /// server. It defines the endpoint, HTTP verb, headers and params, batching
 /// behavior, and request timeouts. These options apply to all automatic syncs
 /// as well as manual syncs triggered by the app.
+///
+/// ```dart
+/// BackgroundGeolocation.ready(Config(
+///   http: HttpConfig(
+///     url: 'https://example.com/locations',
+///     autoSync: true,
+///     params: {
+///       "user_id": 1234
+///     }
+///   }
+/// ));
+/// ```
 ///
 /// ## Overview
 ///
@@ -1027,9 +1087,152 @@ class MacroConfigMaxImpliedSpeed {}
 /// 4. On a successful 2xx response, uploaded records are deleted.
 /// 5. Failed or timed-out records are unlocked and retried later.
 ///
+/// ## The SQLite buffer
+///
+/// The database is a durable, rolling buffer. It prefers to be **empty**. Records are
+/// removed when:
+/// - Your server returns a 2xx (see [HttpEvent]).
+/// - You call [BackgroundGeolocation.destroyLocations].
+/// - [PersistenceConfig.maxDaysToPersist] expires (rolling TTL).
+/// - [PersistenceConfig.maxRecordsToPersist] would be exceeded (oldest dropped).
+///
+/// Inspect the queue with [BackgroundGeolocation.count] and fetch with
+/// [BackgroundGeolocation.locations].
+///
+/// ## Payload composition
+///
+/// - **Body:** Location uploads are JSON. If `batchSync` is `true`, an array of records
+///   is sent. If `rootProperty` is set, the payload becomes `{ "<rootProperty>": [...] }`.
+///
+/// - **Headers:** Merged from [HttpConfig.headers] (and authorization when configured).
+///   For authorization refresh requests, see the Authorization docs; those use their
+///   own `Content-Type`.
+///
+/// - **Params:** Key/value pairs merged into each outgoing payload (at the root or
+///   under `rootProperty`).
+///
+/// The SDK applies an appropriate JSON content type for location uploads; authorization
+/// refresh requests use `application/x-www-form-urlencoded`.
+///
+/// ## Sync strategy
+///
+/// - `autoSync`: Upload immediately after each record.
+/// - `autoSyncThreshold`: Wait until N records before auto-syncing.
+/// - `batchSync`: Combine multiple records into one request.
+/// - `maxBatchSize`: Limit records per request.
+/// - `timeout`: Max request duration (ms).
+/// - `disableAutoSyncOnCellular`: Queue until Wi-Fi is available.
+///
+/// **Note:** If `autoSyncThreshold` is set, it is **ignored** during
+/// [BackgroundGeolocation.onMotionChange] transitions so that state changes are not delayed.
+///
+/// ## Error handling & retries
+///
+/// On non-2xx responses or connection failures, records remain in the local queue.
+/// The uploader retries automatically when conditions improve. Triggers include:
+/// - A new location recorded
+/// - App lifecycle changes (pause/resume, boot)
+/// - [BackgroundGeolocation.onConnectivityChange] events
+/// - [BackgroundGeolocation.onHeartbeat] ticks
+/// - iOS background fetch
+///
+/// You can also call [BackgroundGeolocation.sync] manually at any time.
+///
+/// ## HTTP Logging
+///
+/// You can observe the SDK performing HTTP in the logs (see the Debugging guide). Example:
+///
+/// ```text
+/// ╔═════════════════════════════════════════════
+/// ║ LocationService: location
+/// ╠═════════════════════════════════════════════
+/// ╟─ 📍 Location[45.519199,-73.617054]
+/// ✅ INSERT: 70727f8b-df7d-48d0-acbd-15f10cacdf33
+/// ╔═════════════════════════════════════════════
+/// ║ HTTP Service
+/// ╠═════════════════════════════════════════════
+/// ✅ Locked 1 records
+/// 🔵 HTTP POST: 70727f8b-df7d-48d0-acbd-15f10cacdf33
+/// 🔵 Response: 200
+/// ✅ DESTROY: 70727f8b-df7d-48d0-acbd-15f10cacdf33
+/// ```
+///
+/// | # | Log entry                 | Description                                                                 |
+/// |:-:|---------------------------|-----------------------------------------------------------------------------|
+/// | 1 | `📍Location`              | Location received from native Location API.                                 |
+/// | 2 | `✅INSERT`                | Record inserted into the SDK’s SQLite database.                             |
+/// | 3 | `✅Locked`                | HTTP service locks record(s) to prevent duplicate uploads.                  |
+/// | 4 | `🔵HTTP POST/PUT/…`       | Attempt to upload to your configured `url`.                                 |
+/// | 5 | `🔵Response`              | Response status from your server.                                           |
+/// | 6 | `✅DESTROY` or `UNLOCK`   | On 2xx, record is deleted; otherwise it’s unlocked for a future retry.      |
+///
+/// ## Remote control via HTTP response (RPC)
+///
+/// Your server can remotely invoke SDK commands by returning a JSON body containing
+/// a `background_geolocation` payload. The SDK scans the JSON and executes commands
+/// synchronously upon receipt of the HTTP response.
+///
+/// **Shape (multiple commands):**
+/// ```json
+/// {
+///   "background_geolocation": [
+///     ["command1", <optional argument>],
+///     ["command2"]
+///   ]
+/// }
+/// ```
+///
+/// **Shape (single command):**
+/// ```json
+/// {
+///   "background_geolocation": ["stop"]
+/// }
+/// ```
+///
+/// **Supported commands**
+///
+/// | Command             | Arguments                              | Description                                                    |
+/// |---------------------|----------------------------------------|----------------------------------------------------------------|
+/// | `start`             | none                                   | `BackgroundGeolocation.start()`                                |
+/// | `stop`              | none                                   | `BackgroundGeolocation.stop()`                                 |
+/// | `startGeofences`    | none                                   | `BackgroundGeolocation.startGeofences()`                       |
+/// | `changePace`        | `Boolean`                              | `BackgroundGeolocation.changePace(true/false)`                 |
+/// | `setConfig`         | `{Config}` (compound-form recommended) | `BackgroundGeolocation.setConfig({...})`                       |
+/// | `addGeofence`       | `{Geofence}`                           | `BackgroundGeolocation.addGeofence({...})`                     |
+/// | `addGeofences`      | `[{Geofence}, ...]`                    | `BackgroundGeolocation.addGeofences([...])`                    |
+/// | `removeGeofence`    | `identifier:String`                    | `BackgroundGeolocation.removeGeofence(id)`                     |
+/// | `removeGeofences`   | none or `[identifier:String,...]`      | Remove all or list of geofences                                |
+/// | `uploadLog`         | `url:String`                           | Upload the plugin log to `url`                                 |
+/// | `destroyLog`        | none                                   | Delete the on-device plugin log                                |
+///
+/// **Examples**
+///
+/// Stop the SDK:
+/// ```json
+/// { "background_geolocation": ["stop"] }
+/// ```
+///
+/// Change pace:
+/// ```json
+/// { "background_geolocation": ["changePace", true] }
+/// ```
+///
+/// Update configuration (compound form):
+/// ```json
+/// {
+///   "background_geolocation": [
+///     "setConfig",
+///     {
+///       "geolocation": { "distanceFilter": 25, "desiredAccuracy": 3 },
+///       "http": { "autoSync": true, "batchSync": true, "maxBatchSize": 50 }
+///     }
+///   ]
+/// }
+/// ```
+///
 /// ## Examples
 ///
-/// ### 1) Simple configuration (immediate uploads)
+/// ### Simple configuration (immediate uploads)
 /// ```dart
 /// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
 ///
@@ -1046,7 +1249,7 @@ class MacroConfigMaxImpliedSpeed {}
 /// );
 /// ```
 ///
-/// ### 2) Batched uploads with threshold
+/// ### Batched uploads with threshold
 /// ```dart
 /// final config = bg.Config(
 ///   http: bg.HttpConfig(
@@ -1060,7 +1263,7 @@ class MacroConfigMaxImpliedSpeed {}
 /// );
 /// ```
 ///
-/// ### 3) Conserve cellular data
+/// ### Conserve cellular data
 /// ```dart
 /// final config = bg.Config(
 ///   http: bg.HttpConfig(
@@ -1071,7 +1274,7 @@ class MacroConfigMaxImpliedSpeed {}
 /// );
 /// ```
 ///
-/// ### 4) Manual sync
+/// ### Manual sync
 /// ```dart
 /// await bg.BackgroundGeolocation.setConfig(bg.Config(
 ///   http: bg.HttpConfig(
@@ -1082,35 +1285,6 @@ class MacroConfigMaxImpliedSpeed {}
 ///
 /// await bg.BackgroundGeolocation.sync();
 /// ```
-///
-/// ## Payload composition
-///
-/// - **Body**: Each record is serialized as JSON. If `batchSync` is true,
-///   an array of records is sent. If `rootProperty` is set, the payload
-///   becomes `{ "<rootProperty>": [...] }`.
-///
-/// - **Headers**: Merged with any authorization-related headers (e.g., JWT).
-///   If duplicates exist, the more specific context for the request wins.
-///
-/// - **Params**: Key/value pairs merged into each outgoing payload.
-///
-/// The uploader automatically applies an appropriate JSON content type for
-/// location uploads. Authorization refresh requests use their own content type.
-///
-/// ## Sync strategy
-///
-/// - `autoSync`: Upload immediately after each record.
-/// - `autoSyncThreshold`: Wait until N records before auto-syncing.
-/// - `batchSync`: Combine multiple records into one request.
-/// - `maxBatchSize`: Limit number of records per request.
-/// - `timeout`: Maximum request duration (ms).
-/// - `disableAutoSyncOnCellular`: Queue until Wi-Fi is available.
-///
-/// ## Error handling
-///
-/// On non-2xx responses or connection failures, records remain in the local
-/// queue. The uploader retries automatically when connectivity or power
-/// conditions improve. You can also call [BackgroundGeolocation.sync] manually.
 ///
 /// ## Migration from legacy flat Config
 ///
@@ -1140,7 +1314,6 @@ class MacroConfigMaxImpliedSpeed {}
 ///
 /// Legacy keys remain available but are marked **@Deprecated** and will be
 /// removed in a future major release. Prefer the new compound form.
-///
 /// {@endtemplate}
 /// @nodoc
 class MacroConfigHttp {}
@@ -1152,24 +1325,29 @@ class MacroConfigHttp {}
 /// Both the iOS and Android native code host their own robust HTTP service which can automatically upload recorded locations to your server.  This is particularly important on **Android** when running "Headless" configured with [AppConfig.stopOnTerminate]:false, since only the plugin's background-service is running in this state.
 ///
 /// ```dart
+/// // Listen to http events.
+/// BackkgroundGeolocation.onHttp((HttpEvent event) {
+///   print("[onHttp] $event");
+/// });
+///
 /// BackgroundGeolocation.ready(Config(
-///   url: 'https://my-server.com/locations',
-///   params: {
-///     "user_id": 1234
-///   },
-///   headers: {
-///     "Authorization": "Basic my-secret-key"
-///   },
-///   autoSync: true,
-///   httpMethod: 'POST'
+///   http: HttpConfig(
+///     url: 'https://my-server.com/locations',
+///     params: {
+///       "user_id": 1234
+///     },
+///     headers: {
+///       "Authorization": "Basic my-secret-key"
+///     },
+///     autoSync: true,
+///     method: 'POST',
+///   ),
 /// ));
 /// ```
 ///
-/// __See also:__ __HTTP Guide__ at [HttpEvent].
-///
 /// __WARNING:__ It is highly recommended to let the plugin manage uploading locations to your server, **particularly for Android** when configured with **`stopOnTerminate: false`**, since your App Component *will* terminate &mdash; only the plugin's native Android background service will continue to operate, recording locations and uploading to your server.  The plugin's native HTTP service *is* better at this task than your own http requests, since the SDK will automatically retry on server failure.
 ///
-/// See the **HTTP Guide** at [HttpEvent] for end‑to‑end examples, error handling, and payload structure.
+/// See the **HTTP Guide** at [HttpConfig] for end‑to‑end examples, error handling, and payload structure.
 ///
 /// {@endtemplate}
 /// @nodoc
@@ -1182,8 +1360,10 @@ class MacroConfigUrl {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   url: 'http://my-server.com/locations',
-///   method: 'PUT'
+///   http: HttpConfig(
+///     url: 'http://my-server.com/locations',
+///     method: 'PUT',
+///   ),
 /// ));
 /// ```
 /// {@endtemplate}
@@ -1193,7 +1373,7 @@ class MacroConfigMethod {}
 /// {@template config.http_root_property}
 /// The root property of the JSON schema where location-data will be attached.
 ///
-///  **Note:** See __HTTP Guide__ at [HttpEvent] for more information.
+///  **Note:** See __HTTP Guide__ at [HttpConfig] for more information.
 ///
 /// __See also:__
 /// - [PersistenceConfig.locationTemplate]
@@ -1203,8 +1383,10 @@ class MacroConfigMethod {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   httpRootProperty: "myData",
-///   url: "https://my.server.com"
+///   http: HttpConfig(
+///     rootProperty: "myData",
+///     url: "https://my.server.com",
+///   ),
 /// ));
 ///
 /// ```
@@ -1241,11 +1423,13 @@ class MacroConfigHttpRootProperty {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   url: 'https://my-server.com/locations',
-///   params: {
-///     'user_id': 1234,
-///     'device_id': 'abc123'
-///   }
+///   http: HttpConfig(
+///     url: 'https://my-server.com/locations',
+///     params: {
+///       'user_id': 1234,
+///       'device_id': 'abc123',
+///     },
+///   ),
 /// ));
 /// ```
 ///
@@ -1267,7 +1451,7 @@ class MacroConfigHttpRootProperty {}
 ///   "device_id": 'abc123'
 /// }
 /// ```
-/// __See also:__ __HTTP Guide__ at [HttpEvent].
+/// __See also:__ __HTTP Guide__ at [HttpConfig].
 ///
 /// {@endtemplate}
 /// @nodoc
@@ -1279,11 +1463,13 @@ class MacroConfigParams {}
 /// ## Example
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   url: 'https://my.server.com',
-///   headers: {
-///     'authorization': "Bearer <a secret key>",
-///     'X-FOO": "BAR'
-///   }
+///   http: HttpConfig(
+///     url: 'https://my.server.com',
+///     headers: {
+///       'Authorization': "Bearer <a secret key>",
+///       'X-FOO': "BAR",
+///     },
+///   ),
 /// ));
 /// ```
 ///
@@ -1304,7 +1490,7 @@ class MacroConfigParams {}
 /// ```
 ///
 ///  **Note:**  The plugin automatically applies a number of required headers, including `"content-type": "application/json"`
-/// __See also:__ __HTTP Guide__ at [HttpEvent].
+/// __See also:__ __HTTP Guide__ at [HttpConfig].
 ///
 /// {@endtemplate}
 /// @nodoc
@@ -1323,7 +1509,7 @@ class MacroConfigHeaders {}
 /// - [HttpConfig.autoSyncThreshold]
 /// - [HttpConfig.batchSync]
 /// - [HttpConfig.maxBatchSize]
-/// - __HTTP Guide__ at [HttpEvent].
+/// - __HTTP Guide__ at [HttpConfig].
 ///
 /// {@endtemplate}
 /// @nodoc
@@ -1345,7 +1531,7 @@ class MacroConfigAutoSync {}
 /// - If an `onMotionChange` event fires **into the *stationary* state**, the device may be *about to* lie dormant for a long period of time.  The plugin is *eager* to upload all queued locations to the server before going dormant.
 /// ----------------------------------------------------------------------
 ///
-/// __See also:__ __HTTP Guide__ at [HttpEvent].
+/// __See also:__ __HTTP Guide__ at [HttpConfig].
 ///
 /// {@endtemplate}
 /// @nodoc
@@ -1356,7 +1542,7 @@ class MacroConfigAutoSyncThreshold {}
 ///
 /// Default is **`false`**.  If you've enabled HTTP feature by configuring an [HttpConfig.url], [HttpConfig.batchSync]: true will POST *all* the locations currently stored in native SQLite database to your server in a single HTTP POST request.  With [HttpConfig.batchSync]: false, an HTTP POST request will be initiated for **each** location in database.
 ///
-/// __See also:__ __HTTP Guide__ at [HttpEvent].
+/// __See also:__ __HTTP Guide__ at [HttpConfig].
 ///
 /// {@endtemplate}
 /// @nodoc
@@ -1369,7 +1555,7 @@ class MacroConfigBatchSync {}
 ///
 /// The plugin can potentially accumulate mega-bytes worth of location-data if operating in a disconnected environment for long periods.  You will not want to [HttpConfig.batchSync]:true a large amount of data in a single HTTP request.
 ///
-/// __See also:__ __HTTP Guide__ at [HttpEvent].
+/// __See also:__ __HTTP Guide__ at [HttpConfig].
 ///
 /// {@endtemplate}
 /// @nodoc
@@ -1521,6 +1707,19 @@ class MacroConfigAuthorization {}
 /// purges records in its on-device SQLite database. The database acts as a
 /// durable buffer between data producers (locations, geofences) and consumers
 /// (your app code and the HTTP service).
+///
+/// ```dart
+/// BackgroundGeolocation.ready(Config(
+///   persistence: PersistenceConfig(
+///     maxDaysToPersist: 3,
+///     maxRecordsToPersist: 1000,
+///     extras: {
+///       'user_id': 123,
+///       'appVersion': '1.2.3'
+///     },
+///     persistMode: PersistMode.all
+///  ))
+/// ```
 ///
 /// The SDK **prefers an empty database**. Each new [Location] (and geofence
 /// event) is written to SQLite immediately, then consumed (and typically
@@ -1724,19 +1923,22 @@ class MacroConfigPersistence {}
 /// ```
 ///
 ///  **See also:**
-/// - __HTTP Guide__ at [HttpEvent].
+/// - __HTTP Guide__ at [HttpConfig].
 /// - [PersistenceConfig.geofenceTemplate]
 /// - [HttpConfig.rootProperty]
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   locationTemplate: '{"lat":<%= latitude %>,"lng":<%= longitude %>,"event":"<%= event %>",isMoving:<%= isMoving %>}'
+///   persistence: PersistenceConfig(
+///     locationTemplate: '{"lat":<%= latitude %>,"lng":<%= longitude %>,"event":"<%= event %>",isMoving:<%= isMoving %>}',
+///   )
 /// ));
 ///
 /// // Or use a compact [Array] template!
-/// BackgroundGeolocation.ready(Config(
-///   locationTemplate: '[<%=latitude%>, <%=longitude%>, "<%=event%>", <%=is_moving%>]'
-/// ))
+///   persistence: PersistenceConfig(
+///     locationTemplate: '[<%=latitude%>, <%=longitude%>, "<%=event%>", <%=is_moving%>]'
+///   ),
+/// ));
 /// ```
 ///
 /// ## Warning:  quoting `String` data.
@@ -1747,7 +1949,9 @@ class MacroConfigPersistence {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   locationTemplate: '{"timestamp": <%= timestamp %>}'
+///   persistence: PersistenceConfig(
+///     locationTemplate: '{"timestamp": <%= timestamp %>}'
+///   )
 /// ));
 /// ```
 ///
@@ -1761,7 +1965,9 @@ class MacroConfigPersistence {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   locationTemplate: '{"timestamp": "<%= timestamp %>"}'
+///   persistence: PersistenceConfig(
+///     locationTemplate: '{"timestamp": "<%= timestamp %>"}'
+///   )
 /// ));
 /// ```
 ///
@@ -1775,11 +1981,15 @@ class MacroConfigPersistence {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   httpRootProperty: 'data',
-///   locationTemplate: '{"lat":<%= latitude %>,"lng":<%= longitude %>}',
-///   extras: {
-///     "foo": "bar"
-///   }
+///   http: HttpConfig(
+///     rRootProperty: 'data'
+///   ),
+///   persistence: PersistenceConfig(
+///     locationTemplate: '{"lat":<%= latitude %>,"lng":<%= longitude %>}',
+///     extras: {
+///       "foo": "bar"
+///     }
+///   )
 /// ))
 /// ```
 ///
@@ -1809,6 +2019,7 @@ class MacroConfigPersistence {}
 /// | `uuid`                | `String` |Unique ID    |
 /// | `event`               | `String` |`motionchange,geofence,heartbeat,providerchange` |
 /// | `odometer`            | `Float`  | Meters      |
+/// | `odometer_error`      | 'Float`  | Meters      |
 /// | `activity.type`       | `String` | `still,on_foot,running,on_bicycle,in_vehicle,unknown`|
 /// | `activity.confidence` | `Integer`| 0-100%      |
 /// | `battery.level`       | `Float`  | 0-100%      |
@@ -1833,18 +2044,22 @@ class MacroConfigLocationTemplate {}
 /// ```
 ///
 ///  **See also:**
-/// - [HttpEvent]
+/// - [HttpConfig]
 /// - [PersistenceConfig.locationTemplate]
 /// - [HttpConfig.rootProperty]
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   geofenceTemplate: '{ "lat":<%= latitude %>, "lng":<%= longitude %>, "geofence":"<%= geofence.identifier %>:<%= geofence.action %>" }'
+///   persistence: PersistenceConfig(
+///     geofenceTemplate: '{ "lat":<%= latitude %>, "lng":<%= longitude %>, "geofence":"<%= geofence.identifier %>:<%= geofence.action %>" }'
+///   )
 /// ));
 ///
 /// // Or use a compact [Array] template!
 /// BackgroundGeolocation.ready(Config(
-///   geofenceTemplate: '[<%= latitude %>, <%= longitude %>, "<%= geofence.identifier %>", "<%= geofence.action %>"]'
+///   persistence: PersistenceConfig(
+///     geofenceTemplate: '[<%= latitude %>, <%= longitude %>, "<%= geofence.identifier %>", "<%= geofence.action %>"]'
+///   )
 /// ))
 /// ```
 ///
@@ -1856,7 +2071,9 @@ class MacroConfigLocationTemplate {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   locationTemplate: '{"timestamp": <%= timestamp %>}'
+///   persistence: PersistenceConfig(
+///     locationTemplate: '{"timestamp": <%= timestamp %>}'
+///   )
 /// ));
 /// ```
 ///
@@ -1870,7 +2087,9 @@ class MacroConfigLocationTemplate {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   locationTemplate: '{"timestamp": "<%= timestamp %>"}'
+///   persistence: PersistenceConfig(
+///     locationTemplate: '{"timestamp": "<%= timestamp %>"}'
+///   )
 /// ));
 /// ```
 ///
@@ -1897,6 +2116,7 @@ class MacroConfigLocationTemplate {}
 /// | `uuid`                | `String` |Unique ID    |
 /// | `event`               | `String` |`motionchange,geofence,heartbeat,providerchange` |
 /// | `odometer`            | `Float`  | Meters      |
+/// | `odometer_error`      | `Float`  | Meters      |
 /// | `activity.type`       | `String` | `still,on_foot,running,on_bicycle,in_vehicle,unknown`|
 /// | `activity.confidence` | `Integer`| 0-100%      |
 /// | `battery.level`       | `Float`  | 0-100%      |
@@ -1911,19 +2131,23 @@ class MacroConfigGeofenceTemplate {}
 /// {@template config.extras}
 /// Optional arbitrary key/values `{}` applied to each recorded location.
 ///
-///  **Note:**  See [HttpEvent] for more information.
+///  **Note:**  See [HttpConfig] for more information.
 ///
 /// ## Example
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   url: 'https://my-server.com/locations',
-///   extras: {
-///     'route_id': 1234
-///   },
-///   params: {
-///     'device_id': 'abc123'
-///   }
+///   persistence: PersistenceConfig(
+///     extras: {
+///       'device_id': 'abc123'
+///     }
+///   ),
+///   http: HttpConfig(
+///     url: 'https://my-server.com/locations',
+///     params: {
+///       'device_id': 'abc123'
+///     }
+///   )
 /// ));
 /// ```
 ///
@@ -1948,7 +2172,7 @@ class MacroConfigGeofenceTemplate {}
 /// }
 /// ```
 ///
-/// __See also:__ __HTTP Guide__ at [HttpEvent].
+/// __See also:__ __HTTP Guide__ at [HttpConfig].
 /// {@endtemplate}
 /// @nodoc
 class MacroConfigExtras {}
@@ -1967,7 +2191,7 @@ class MacroConfigExtras {}
 /// | [PersistMode.geofence]              | Persist only geofence events (ignore location events)   |
 /// | [PersistMode.none]                  | Persist nothing (neither geofence nor location events)  |
 ///
-/// __See also:__ __HTTP Guide__ at [HttpEvent].
+/// __See also:__ __HTTP Guide__ at [HttpConfig].
 /// {@endtemplate}
 /// @nodoc
 class MacroConfigPersistMode {}
@@ -2013,8 +2237,10 @@ class MacroConfigLocationsOrderDirection {}
 /// });
 ///
 /// BackgroundGeolocation.ready(Config(
-///   url: 'https://my-server.com/locations',
-///   httpTimeout: 3000
+///   http: HttpConfig(
+///     url: 'https://my-server.com/locations',
+///     timeout: 3000
+///   )
 /// ));
 /// ```
 ///
@@ -2046,7 +2272,9 @@ class MacroConfigDisableAutosyncOnCellular {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   disableProviderChangeRecord: true
+///   persistence: PersistenceConfig(
+///     disableProviderChangeRecord: true
+///   )
 /// ))
 /// ```
 /// {@endtemplate}
@@ -2064,6 +2292,15 @@ class MacroConfigDisableProviderChangeRecord {}
 /// the Android background-permission rationale dialog.
 ///
 /// Use this class via [Config.app].
+///
+/// ```dart
+/// BackgroundGeolocation.ready(Config(
+///   app: AppConfig(
+///     stopOnTerminate: false,
+///     startOnBoot: true,
+///   }
+/// ));
+/// ```
 ///
 /// ### What belongs in `AppConfig`?
 /// - Whether tracking **stops on app terminate**: see [AppConfig.stopOnTerminate].
@@ -2173,7 +2410,7 @@ class MacroConfigApplication {}
 ///
 /// # Custom Notification Layouts
 ///
-/// Use the [layout] option to provide the name of your own Android Layout XML File.  See [Android Custom Notification Layout](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Custom-Notification-Layout) for setup instructions.
+/// Use the [Notification.layout] option to provide the name of your own Android Layout XML File.  See [Android Custom Notification Layout](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Custom-Notification-Layout) for setup instructions.
 ///
 /// {@endtemplate}
 /// @nodoc
@@ -2203,7 +2440,7 @@ class MacroConfigNotification {}
 ///  **See also:**
 /// - [Android Headless Mode](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode)
 /// - [AppConfig.enableHeadless]
-/// - __HTTP Guide__ at [HttpEvent].
+/// - __HTTP Guide__ at [HttpConfig].
 ///
 /// {@endtemplate}
 /// @nodoc
@@ -2227,8 +2464,10 @@ class MacroConfigStopOnTerminate {}
 /// });
 ///
 /// BackgroundGeolocation.ready(Config(
-///   preventSuspend: true,
-///   heartbeatInterval: 60
+///   app: AppConfig(
+///     preventSuspend: true,
+///     heartbeatInterval: 60
+///   )
 /// ));
 /// ```
 /// {@endtemplate}
@@ -2265,7 +2504,9 @@ class MacroConfigStartOnBoot {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   heartbeatInterval: 60
+///   app: AppConfig(
+///     heartbeatInterval: 60
+///   )
 /// ));
 ///
 /// BackgroundGeolocation.onHeartbeat((HeartbeatEvent event) {
@@ -2302,12 +2543,14 @@ class MacroConfigHeartbeatInterval {}
 ///   .
 ///   .
 ///   .
-///   schedule: [
-///     '1 17:30-21:00',    // Sunday: 5:30pm-9:00pm
-///     '2-6 9:00-17:00',   // Mon-Fri: 9:00am to 5:00pm
-///     '2,4,6 20:00-00:00',// Mon, Web, Fri: 8pm to midnight (next day)
-///     '7 10:00-19:00'     // Sat: 10am-7pm
-///   ]
+///   app: AppConfig(
+///     schedule: [
+///       '1 17:30-21:00',    // Sunday: 5:30pm-9:00pm
+///       '2-6 9:00-17:00',   // Mon-Fri: 9:00am to 5:00pm
+///       '2,4,6 20:00-00:00',// Mon, Web, Fri: 8pm to midnight (next day)
+///       '7 10:00-19:00'     // Sat: 10am-7pm
+///     ]
+///   )
 /// )).then((State state) {
 ///   // Start the Scheduler
 ///   BackgroundGeolocation.startSchedule();
@@ -2351,9 +2594,11 @@ class MacroConfigHeartbeatInterval {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   schedule: [
-///     "2018-01-01 09:00-17:00"
-///   ]
+///   app: AppConfig(
+///     schedule: [
+///       "2018-01-01 09:00-17:00"
+///     ]
+///   )
 /// ));
 /// ```
 ///
@@ -2418,8 +2663,10 @@ class MacroConfigSchedule {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   schedule: ['1-7 09:00-17:00'],
-///   scheduleUseAlarmManager: true
+///   app: AppConfig(
+///     schedule: ['1-7 09:00-17:00'],
+///     scheduleUseAlarmManager: true
+///   )
 /// ));
 /// ```
 /// {@endtemplate}
@@ -2516,7 +2763,9 @@ class MacroConfigDebug {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE
+///   logger: LoggerConfig(
+///     logLevel: BackgroundGeolocation.LOG_LEVEL_VERBOSE
+///   )
 /// ));
 /// ```
 ///
@@ -2553,7 +2802,9 @@ class MacroConfigLogMaxDays {}
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
 ///   reset: true,  // <-- set true to ALWAYS apply supplied config; not just at first launch.
-///   distanceFilter: 50
+///   geolocation: GeoConfig(
+///     distanceFilter: 50
+///   )
 /// )).then((State state) {
 ///   print('Ready with reset: true: ${state.distanceFilter}');
 /// });
@@ -2616,7 +2867,9 @@ class MacroConfigReset {}
 /// initPlatformState() async {
 ///   // Initially configure for 'WhenInUse'.
 ///   BackgroundGeolocation.ready(Config(
-///     locationAuthorizationRequest: 'WhenInUse',
+///     geoloation: GeoConfig(
+///       locationAuthorizationRequest: 'WhenInUse'
+///     )
 ///     .
 ///     .
 ///     .
@@ -2664,13 +2917,17 @@ class MacroConfigReset {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///  locationAuthorizationRequest: 'Always',
-///  backgroundPermissionRationale: PermissionRationale(
-///    title: "Allow access to this device's location in the background?",
-///    message: "In order to allow X, Y and Z, please enable 'Allow all the time permission",
-///    positiveAction: "Change to Allow all the time",
-///    negativeAction: "Cancel"
-///  )
+///   geolocation: GeoConfig(
+///     locationAuthorizationRequest: 'Always'
+///   ),
+///   app: AppConfig(
+///     backgroundPermissionRationale: PermissionRationale(
+///       title: "Allow access to this device's location in the background?",
+///       message: "In order to allow X, Y and Z, please enable 'Allow all the time permission",
+///       positiveAction: "Change to Allow all the time",
+///       negativeAction: "Cancel"
+///     )
+///   )
 /// ));
 /// ```
 ///
@@ -2730,13 +2987,15 @@ class MacroConfigLocationAuthorizationRequest {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   locationAuthorizationAlert: {
-///     'titleWhenNotEnabled': 'Yo, location-services not enabled',
-///     'titleWhenOff': 'Yo, location-services OFF',
-///     'instructions': 'You must enable 'Always' in location-services, buddy',
-///     'cancelButton': 'Cancel',
-///     'settingsButton': 'Settings'
-///   }
+///   geolocation: GeoConfig(
+///     locationAuthorizationAlert: {
+///       'titleWhenNotEnabled': 'Yo, location-services not enabled',
+///       'titleWhenOff': 'Yo, location-services OFF',
+///       'instructions': 'You must enable 'Always' in location-services, buddy',
+///       'cancelButton': 'Cancel',
+///       'settingsButton': 'Settings'
+///     }
+///   )
 /// ))
 /// ```
 ///
@@ -2781,7 +3040,9 @@ class MacroConfigLocationAuthorizationAlert {}
 /// });
 ///
 /// BackgroundGeolocation.ready(Config(
-///   disableLocationAuthorizationAlert: true
+///   geolocation: GeoConfig(
+///     disableLocationAuthorizationAlert: true
+///   )
 /// ));
 /// ```
 /// {@endtemplate}
@@ -2824,8 +3085,10 @@ class MacroConfigShowsBackgroundLocationIndicator {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///   distanceFilter: 0,            // Must be 0 or locationUpdateInterval is ignored!
-///   locationUpdateInterval: 5000  // Get a location every 5 seconds
+///   geolocation: GeoConfig(
+///     distanceFilter: 0,            // Must be 0 or locationUpdateInterval is ignored!
+///     locationUpdateInterval: 5000  // Get a location every 5 seconds
+///   )
 /// ));
 /// ```
 /// {@endtemplate}
@@ -2976,12 +3239,17 @@ class MacroConfigEnableHeadless {}
 ///
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
-///  locationAuthorizationRequest: 'Always',
-///  backgroundPermissionRationale: PermissionRationale(
-///    title: "Allow {applicationName} to access to this device's location in the background?",
-///    message: "In order to track your activity in the background, please enable {backgroundPermissionOptionLabel} location permission",
-///    positiveAction: "Change to {backgroundPermissionOptionLabel}",
-///    negativeAction: "Cancel"
+///   geolocation: GeoConfig(
+///     locationAuthorizationRequest: 'Always'
+///   ),
+///   app: AppConfig(
+///     backgroundPermissionRationale: PermissionRationale(
+///       title: "Allow {applicationName} to access to this device's location in the background?",
+///       message: "In order to track your activity in the background, please enable {backgroundPermissionOptionLabel} location permission",
+///       positiveAction: "Change to {backgroundPermissionOptionLabel}",
+///       negativeAction: "Cancel"
+///     )
+///   )
 ///  )
 /// ));
 /// ```

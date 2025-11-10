@@ -58,21 +58,21 @@ class AppConfig {
     return m;
   }
   factory AppConfig.fromMap(Map<String, dynamic> m) => AppConfig(
-    stopOnTerminate: m['stopOnTerminate'],
-    startOnBoot: m['startOnBoot'],
-    enableHeadless: m['enableHeadless'],
-    heartbeatInterval: m['heartbeatInterval'],
+    stopOnTerminate: _ensureBool(m['stopOnTerminate']),
+    startOnBoot: _ensureBool(m['startOnBoot']),
+    enableHeadless: _ensureBool(m['enableHeadless']),
+    heartbeatInterval: _ensureDouble(m['heartbeatInterval']),
     schedule: (m['schedule'] is List)
         ? (m['schedule'] as List).whereType<String>().toList()
         : null,
-    scheduleUseAlarmManager: m['scheduleUseAlarmManager'],
+    scheduleUseAlarmManager: _ensureBool(m['scheduleUseAlarmManager']),
     notification: (m['notification'] is Map)
         ? Notification.fromMap((m['notification'] as Map).cast<String, dynamic>())
         : null,
     backgroundPermissionRationale: (m['backgroundPermissionRationale'] is Map)
         ? PermissionRationale.fromMap((m['backgroundPermissionRationale'] as Map).cast<String, dynamic>())
         : null,
-    preventSuspend: m['preventSuspend'],
+    preventSuspend: _ensureBool(m['preventSuspend']),
   );
 }
 

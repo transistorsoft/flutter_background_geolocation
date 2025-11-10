@@ -557,7 +557,7 @@ class BackgroundGeolocation {
   /// double odometer = await BackgroundGeolocation.getOdometer();
   /// ```
   ///
-  ///  **NOTE:** Also see [Config.desiredOdometerAccuracy] to set control the accuracy of locations being used in odometer calculations.
+  ///  **NOTE:** Also see [LocationFilter.odometerAccuracyThreshold] to set control the accuracy of locations being used in odometer calculations.
   ///
   ///  **WARNING:** Odometer calculations are dependent upon the accuracy of received locations.  If location accuracy is poor, this will necessarily introduce error into odometer calculations.
   ///
@@ -643,13 +643,13 @@ class BackgroundGeolocation {
         as FutureOr<String>;
   }
 
-  /// Manually execute upload configured [Config.url]
+  /// Manually execute upload configured [HttpConfig.url]
   ///
-  /// If the plugin is configured for HTTP with an [Config.url] and [Config.autoSync] `false`, the [sync] method will initiate POSTing the locations currently stored in the native SQLite database to your configured [Config.url].
+  /// If the plugin is configured for HTTP with an [HttpConfig.url] and [HttpConfig.autoSync] `false`, the [sync] method will initiate POSTing the locations currently stored in the native SQLite database to your configured [HttpConfig.url].
   /// When your HTTP server returns a response of `200 OK`, that record(s) in the database will be DELETED.
   ///
-  /// If you configured [Config.batchSync] `true`, all the locations will be sent to your server in a single HTTP POST request, otherwise the plugin will execute an HTTP post for **each** [Location] in the database (REST-style).
-  /// Your callback will be executed and provided with a `List` of all the locations from the SQLite database.  If you configured the plugin for HTTP (by configuring a [Config.url], your callback will be executed after all the HTTP request(s) have completed.
+  /// If you configured [HttpConfig.batchSync] `true`, all the locations will be sent to your server in a single HTTP POST request, otherwise the plugin will execute an HTTP post for **each** [Location] in the database (REST-style).
+  /// Your callback will be executed and provided with a `List` of all the locations from the SQLite database.  If you configured the plugin for HTTP (by configuring a [HttpConfig.url], your callback will be executed after all the HTTP request(s) have completed.
   /// If the plugin failed to sync to your server (possibly because of no network connection), the failure callback will be called with an error message.  If you are **not** using the HTTP features, [sync] will delete all records from its SQLite database.
   ///
   /// ## Example
@@ -917,15 +917,15 @@ class BackgroundGeolocation {
     return Sensors(data);
   }
 
-  /// Manually request location permission from the user with the configured [Config.locationAuthorizationRequest].
+  /// Manually request location permission from the user with the configured [GeoConfig.locationAuthorizationRequest].
   ///
-  /// The method will resolve successful if *either* __`WhenInUse`__ or __`Always`__ is authorized, regardless of [Config.locationAuthorizationRequest].  Otherwise an error will be returned (eg: user denies location permission).
+  /// The method will resolve successful if *either* __`WhenInUse`__ or __`Always`__ is authorized, regardless of [GeoConfig.locationAuthorizationRequest].  Otherwise an error will be returned (eg: user denies location permission).
   ///
   /// If the user has already provided authorization for location-services, the method will resolve successfully immediately.
   ///
-  /// If iOS has *already* presented the location authorization dialog and the user has not currently authorized your desired [Config.locationAuthorizationRequest], the SDK will present an error dialog offering to direct the user to your app's Settings screen.
-  /// - To disable this behaviour, see [Config.disableLocationAuthorizationAlert].
-  /// - To customize the text on this dialog, see [Config.locationAuthorizationAlert].
+  /// If iOS has *already* presented the location authorization dialog and the user has not currently authorized your desired [GeoConfig.locationAuthorizationRequest], the SDK will present an error dialog offering to direct the user to your app's Settings screen.
+  /// - To disable this behaviour, see [GeoConfig.disableLocationAuthorizationAlert].
+  /// - To customize the text on this dialog, see [GeoConfig.locationAuthorizationAlert].
   ///
   /// ### ⚠️ Note:
   /// - The SDK will **already request permission** from the user when you execute [start], [startGeofences], [getCurrentPosition], etc.  You **do not need to explicitly execute this method** with typical use-cases.
@@ -1227,7 +1227,7 @@ class BackgroundGeolocation {
   ///
   /// Fired when the list of monitored-geofences changed.  The BackgroundGeolocation SDK contains powerful geofencing features that allow you to monitor any number of circular geofences you wish (thousands even), in spite of limits imposed by the native platform APIs (**20 for iOS; 100 for Android**).
   ///
-  /// The plugin achieves this by storing your geofences in its database, using a [geospatial query](https://en.wikipedia.org/wiki/Spatial_query) to determine those geofences in proximity (@see [Config.geofenceProximityRadius]), activating only those geofences closest to the device's current location (according to limit imposed by the corresponding platform).
+  /// The plugin achieves this by storing your geofences in its database, using a [geospatial query](https://en.wikipedia.org/wiki/Spatial_query) to determine those geofences in proximity (@see [GeoConfig.geofenceProximityRadius]), activating only those geofences closest to the device's current location (according to limit imposed by the corresponding platform).
   ///
   /// When the device is determined to be moving, the plugin periodically queries for geofences in proximity (eg. every minute) using the latest recorded location.  This geospatial query is **very fast**, even with tens-of-thousands geofences in the database.
   ///
@@ -1270,7 +1270,7 @@ class BackgroundGeolocation {
 
   /// Subscribe to periodic heartbeat events.
   ///
-  /// Your `callback` will be executed for each [Config.heartbeatInterval] while the device is in **stationary** state (**iOS** requires [Config.preventSuspend]: true as well).
+  /// Your `callback` will be executed for each [AppConfig.heartbeatInterval] while the device is in **stationary** state (**iOS** requires [AppConfig.preventSuspend]: true as well).
   ///
   ///  **NOTE:** The [Location] provided to the [HeartbeatEvent] is only the last-known location.  The *heartbeat* event does not actively engage location-services.  If you wish to get the current location in your `callback`, use [getCurrentPosition].
   ///
@@ -1326,9 +1326,9 @@ class BackgroundGeolocation {
     _registerSubscription(_eventsHttp!.listen(callback), callback);
   }
 
-  /// Subscribe to [Config.schedule] events.
+  /// Subscribe to [AppConfig.schedule] events.
   ///
-  /// Your `callback` will be executed each time a [Config.schedule] event fires.  Your `callback` will be provided with the current [State]:  **`state.enabled`** will reflect the state according to your [Config.schedule].
+  /// Your `callback` will be executed each time a [AppConfig.schedule] event fires.  Your `callback` will be provided with the current [State]:  **`state.enabled`** will reflect the state according to your [AppConfig.schedule].
   ///
   /// ## Example
   ///
@@ -1433,7 +1433,7 @@ class BackgroundGeolocation {
 
   /// Subscribe to changes in plugin [State.enabled].
   ///
-  /// Fired when the plugin's [State.enabled] changes.  For example, executing [start] and [stop] will cause the `onEnabledChnage` event to fire.  This event is primarily designed for use with the configuration option [Config.stopAfterElapsedMinutes], which automatically executes the plugin's [stop] method.
+  /// Fired when the plugin's [State.enabled] changes.  For example, executing [start] and [stop] will cause the `onEnabledChnage` event to fire.  This event is primarily designed for use with the configuration option [GeoConfig.stopAfterElapsedMinutes], which automatically executes the plugin's [stop] method.
   ///
   /// ## Example
   ///
@@ -1556,7 +1556,7 @@ class BackgroundGeolocation {
 
   /// Registers a function to receive events from __`BackgroundGeolocation`__ while in the *terminated* ("Headless") state.
   ///
-  /// __Note:__ Requires [Config.enableHeadless]:true.  See the [Android Headless Mode Guide](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode).
+  /// __Note:__ Requires [AppConfig.enableHeadless]:true.  See the [Android Headless Mode Guide](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode).
   ///
   /// In **`main.dart`**, create a global function beside `void main() {}` (**Must** be defined as a distinct function, not an anonymous callback).  This `function` will receive *all* events from `BackgroundGeolocation` in the headless state, and provided with a [HeadlessEvent] containing a [HeadlessEvent.name] and [HeadlessEvent.event].
   ///

@@ -49,17 +49,16 @@ class ActivityConfig {
   };
 
   factory ActivityConfig.fromMap(Map<String, dynamic> m) => ActivityConfig(
-    activityRecognitionInterval: m['activityRecognitionInterval'],
-    minimumActivityRecognitionConfidence: m['minimumActivityRecognitionConfidence'],
-    disableStopDetection: m['disableStopDetection'],
-    stopOnStationary: m['stopOnStationary'],
-    motionTriggerDelay: m['motionTriggerDelay'],
-    // Accept either CSV or array -> CSV
+    activityRecognitionInterval: _ensureDouble(m['activityRecognitionInterval']),
+    minimumActivityRecognitionConfidence: _ensureInt(m['minimumActivityRecognitionConfidence']),
+    disableStopDetection: _ensureBool(m['disableStopDetection']),
+    stopOnStationary: _ensureBool(m['stopOnStationary']),
+    motionTriggerDelay: _ensureInt(m['motionTriggerDelay']),
     triggerActivities: m['triggerActivities'] ??
         ((m['triggerActivities'] is List)
             ? (m['triggerActivities'] as List).whereType<String>().join(', ')
             : m['triggerActivities']),
-    disableMotionActivityUpdates: m['disableMotionActivityUpdates'],
-    stopDetectionDelay: m['stopDetectionDelay'],
+    disableMotionActivityUpdates: _ensureBool(m['disableMotionActivityUpdates']),
+    stopDetectionDelay: _ensureDouble(m['stopDetectionDelay']),
   );
 }
