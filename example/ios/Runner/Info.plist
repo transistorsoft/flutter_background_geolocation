@@ -37,12 +37,13 @@
 	<string>Location is required for background location updates</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Motion API improves tracking performance</string>
+	<key>TSLocationManagerLicense</key>
+	<string>eyJhbGciOiJFZERTQSIsImtpZCI6ImVkMjU1MTktbWFpbi12MSIsImtpZCI6ImVkMjU1MTktbWFpbi12MSJ9.eyJvcyI6ImlvcyIsImFwcF9pZCI6ImNvbS50cmFuc2lzdG9yc29mdC5mbHV0dGVyLmRlbW8iLCJvcmRlcl9udW1iZXIiOjcwMzQsInJlbmV3YWxfdXJsIjoiaHR0cHM6Ly9zaG9wLnRyYW5zaXN0b3Jzb2Z0LmNvbS9jYXJ0LzMxODc0MzU2MDUyMDcxOjE_bm90ZT01MzkwIiwiY3VzdG9tZXJfaWQiOjMwOSwicHJvZHVjdCI6ImZsdXR0ZXItYmFja2dyb3VuZC1nZW9sb2NhdGlvbiIsImtleV92ZXJzaW9uIjoxLCJhbGxvd2VkX3N1ZmZpeGVzIjpbIi5kZXYiLCIuZGV2ZWxvcG1lbnQiLCIuc3RhZ2luZyIsIi5zdGFnZSIsIi5xYSIsIi51YXQiLCIudGVzdCIsIi5kZWJ1ZyJdLCJtYXhfYnVpbGRfc3RhbXAiOjIwMjYxMTI4LCJncmFjZV9idWlsZHMiOjAsImVudGl0bGVtZW50cyI6WyJjb3JlIiwicG9seWdvbi1nZW9mZW5jaW5nIiwiZmlyZWJhc2UiLCJobXMiXSwiaWF0IjoxNzYyMTYzNTIzfQ.-OXtiSaU0IbUnnoiKBWIe1YZs6nPfNPDiQxqmy1AnLYoZYZDGFSSUMsG6TCGiCvTNL_zDj-MJyytHaBpGu_PAQ</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
-		<string>processing</string>
 		<string>location</string>
 	</array>
 	<key>UILaunchStoryboardName</key>

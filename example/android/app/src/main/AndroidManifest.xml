@@ -28,9 +28,7 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="025736af0c3b480ecc1a6fc8aea17e73cc012049ed117472072b76e5e170953d" />
-        <meta-data android:name="com.transistorsoft.locationmanager.hms.license" android:value="bd0bf2738a5b3d3335225ee43ec3a806c58f40999065a065b8504911ebc122a8" />
-        <meta-data android:name="com.transistorsoft.locationmanager.polygon.license" android:value="b581ad7ac9cd66c712e423fa1989f5052df5d166c4a1e1511d1f1d5b1a1c665a" />
+        <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="eyJhbGciOiJFZERTQSIsImtpZCI6ImVkMjU1MTktbWFpbi12MSIsImtpZCI6ImVkMjU1MTktbWFpbi12MSJ9.eyJvcyI6ImFuZHJvaWQiLCJhcHBfaWQiOiJjb20udHJhbnNpc3RvcnNvZnQuZmx1dHRlcmJhY2tncm91bmRnZW9sb2NhdGlvbmV4YW1wbGUiLCJvcmRlcl9udW1iZXIiOjcwMzQsInJlbmV3YWxfdXJsIjoiaHR0cHM6Ly9zaG9wLnRyYW5zaXN0b3Jzb2Z0LmNvbS9jYXJ0LzMxODc0MzU2MDUyMDcxOjE_bm90ZT01MzkwIiwiY3VzdG9tZXJfaWQiOjMwOSwicHJvZHVjdCI6ImZsdXR0ZXItYmFja2dyb3VuZC1nZW9sb2NhdGlvbiIsImtleV92ZXJzaW9uIjoxLCJhbGxvd2VkX3N1ZmZpeGVzIjpbIi5kZXYiLCIuZGV2ZWxvcG1lbnQiLCIuc3RhZ2luZyIsIi5zdGFnZSIsIi5xYSIsIi51YXQiLCIudGVzdCIsIi5kZWJ1ZyJdLCJtYXhfYnVpbGRfc3RhbXAiOjIwMjYxMTI4LCJncmFjZV9idWlsZHMiOjAsImVudGl0bGVtZW50cyI6WyJjb3JlIiwicG9seWdvbi1nZW9mZW5jaW5nIiwiZmlyZWJhc2UiLCJobXMiXSwiaWF0IjoxNzYyMTYzNTI0fQ.pYWYRSoR3KJ0ZbA7L_gjrOVuZfgAI42OTOkeVLfG8ta28elrOFlsFA0lau6L-EuI_91Hxz-eXZYPKx2s7692DA" />
 
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

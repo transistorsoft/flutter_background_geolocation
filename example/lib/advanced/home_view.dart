@@ -128,7 +128,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         transistorAuthorizationToken: token,
         geolocation: bg.GeoConfig(
             desiredAccuracy: bg.DesiredAccuracy.navigation,
-            distanceFilter: 69.0,
+            distanceFilter: 10,
             stopTimeout: 5
         ),
         http: bg.HttpConfig(

@@ -7,7 +7,9 @@ allprojects {
         google()
         mavenCentral()
         // [required] background_geolocation
-        maven(url = "${project(":flutter_background_geolocation").projectDir}/libs")
+        // Sonatype SNAPSHOT url
+        //maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
+
         // [required] background_fetch
         maven(url = "${project(":background_fetch").projectDir}/libs")
     }
