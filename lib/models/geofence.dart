@@ -78,6 +78,30 @@ class Geofence {
   ///
   List<List<double>>? vertices;
 
+  ///
+  /// Runtime state:  Number of times this geofence has been triggered.
+  ///
+  /// ⚠️ Readonly
+  ///
+  int? hits;
+
+  ///
+  /// Runtime state:  The current entry-state of the geofence.
+  ///
+  /// - 0 = OUTSIDE
+  /// - 1 = INSIDE
+  ///
+  /// ⚠️ Readonly
+  ///
+  int? entryState;
+
+  ///
+  /// Runtime state:  Epoch timestamp (seconds) of last geofence transition.
+  ///
+  /// ⚠️ Readonly
+  ///
+  double? stateUpdatedAt;
+
   /// Arbitrary key/values appended to the recorded geofence record.
   Map<String, dynamic>? extras;
 
@@ -138,11 +162,20 @@ class Geofence {
     if (this.vertices != null) {
       params['vertices'] = this.vertices;
     }
+    if (this.hits != null) {
+      params['hits'] = this.hits;
+    }
+    if (this.entryState != null) {
+      params['entryState'] = this.entryState;
+    }
+    if (this.stateUpdatedAt != null) {
+      params['stateUpdatedAt'] = this.stateUpdatedAt;
+    }
     return params;
   }
 
   /// String representation of `Geofence` for `print` to log.
   String toString() {
-    return '[Geofence identifier: $identifier, radius: $radius, $latitude / $longitude, notifyOnEntry:$notifyOnEntry, notifyOnExit:$notifyOnExit, notifyOnDwell: $notifyOnDwell, vertices: $vertices"]';
+    return '[Geofence identifier: $identifier, radius: $radius, $latitude / $longitude, notifyOnEntry:$notifyOnEntry, notifyOnExit:$notifyOnExit, notifyOnDwell: $notifyOnDwell, vertices: $vertices"], hits: $hits, entryState: $entryState, stateUpdatedAt: $stateUpdatedAt, extras: $extras]';
   }
 }

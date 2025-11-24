@@ -19,8 +19,8 @@ Pod::Spec.new do |s|
   s.public_header_files = 'flutter_background_geolocation/Sources/flutter_background_geolocation/include/**/*.h'
   s.dependency 'Flutter'
   s.dependency 'CocoaLumberjack', '~> 3.8.5'
-  s.dependency 'TSLocationManager', '~> 4.0.0-beta.2'
-  s.dependency 'TSBackgroundFetch', '~> 4.0.5'
+  s.dependency 'TSLocationManager', '~> 4.0.0-beta.6'
+
   s.libraries           = 'sqlite3', 'z', 'stdc++'
   s.static_framework = true
   s.resource_bundles = {'TSLocationManagerPrivacy' => ['flutter_background_geolocation/Sources/flutter_background_geolocation/PrivacyInfo.xcprivacy']}

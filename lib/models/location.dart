@@ -86,16 +86,16 @@ class Coords {
     //this.longitude = (coords['longitude'] as num).toDouble();
     /// /////////////////////////////////////////////////////////
 
-    latitude  = (coords['latitude']  as num).toDouble();
+    latitude = (coords['latitude'] as num).toDouble();
     longitude = (coords['longitude'] as num).toDouble();
-    accuracy  = (coords['accuracy']  as num).toDouble();
-    altitude  = (coords['altitude']  as num).toDouble();
+    accuracy = (coords['accuracy'] as num).toDouble();
+    altitude = (coords['altitude'] as num).toDouble();
     ellipsoidalAltitude = (coords['ellipsoidal_altitude'] as num).toDouble();
-    heading   = (coords['heading']   as num).toDouble();
+    heading = (coords['heading'] as num).toDouble();
     if (coords['heading_accuracy'] != null) {
       headingAccuracy = (coords['heading_accuracy'] as num).toDouble();
     }
-    speed     = (coords['speed']     as num).toDouble();
+    speed = (coords['speed'] as num).toDouble();
     if (coords['speed_accuracy'] != null) {
       speedAccuracy = (coords['speed_accuracy'] as num).toDouble();
     }
@@ -324,7 +324,7 @@ class Location {
     this.isMoving = params['is_moving'];
     this.uuid = params['uuid'];
     this.odometer = (params['odometer'] as num).toDouble();
-    
+
     this.sample = (params['sample'] != null) ? params['sample'] : false;
     this.event = (params['event'] != null) ? params['event'] : '';
 

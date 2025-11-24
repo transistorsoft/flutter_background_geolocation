@@ -9,7 +9,6 @@ PODS:
   - flutter_background_geolocation (5.0.0-beta.1):
     - CocoaLumberjack (~> 3.8.5)
     - Flutter
-    - TSBackgroundFetch (~> 4.0.5)
     - TSLocationManager (~> 4.0.0-beta.2)
   - path_provider_foundation (0.0.1):
     - Flutter
@@ -18,7 +17,7 @@ PODS:
     - Flutter
     - FlutterMacOS
   - TSBackgroundFetch (4.0.5)
-  - TSLocationManager (4.0.0-beta.2):
+  - TSLocationManager (4.0.0-beta.5):
     - TSBackgroundFetch (~> 4.0)
   - url_launcher_ios (0.0.1):
     - Flutter
@@ -55,11 +54,11 @@ SPEC CHECKSUMS:
   background_fetch: 7457cb2c7be3086b37d87207866f30bed2f9fb58
   CocoaLumberjack: 6a459bc897d6d80bd1b8c78482ec7ad05dffc3f0
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_background_geolocation: e89b313b7b88ce1894906a9c0125481da1c373ca
+  flutter_background_geolocation: bb41600cbbbb551b7744e56714ff5303dec38382
   path_provider_foundation: bb55f6dbba17d0dccd6737fe6f7f34fbd0376880
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   TSBackgroundFetch: e91020924db32f27d0a43df7dec6f73f10743571
-  TSLocationManager: 0330b9f5301bc0e93be0557c8341542e2aad329a
+  TSLocationManager: bb42abfba63aa579283ec8a87751c1a70a898ff3
   url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
 
 PODFILE CHECKSUM: 1b4e38c5a7977b1d2784dfb12c349b2547df92da

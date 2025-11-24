@@ -152,10 +152,10 @@ class Config {
 
   /// {@macro config.authorization}
   Authorization? authorization;
-  
+
   /// Determines whether to reset the existing Config to defaults before appying new config (default true)
   bool? reset;
-  
+
   ///
   /// Geolocation Config
   ///
@@ -209,7 +209,8 @@ class Config {
   bool? geofenceModeHighAccuracy;
 
   /// **Deprecated:** Use [LocationFilter.odometerAccuracyThreshold] via `Config.geolocation.filter`.
-  @Deprecated('Use geolocation.filter.odometerAccuracyThreshold (LocationFilter)')
+  @Deprecated(
+      'Use geolocation.filter.odometerAccuracyThreshold (LocationFilter)')
   double? desiredOdometerAccuracy;
 
   /// **Deprecated:** Use [GeoConfig.stopTimeout] via [Config.geolocation].
@@ -286,7 +287,8 @@ class Config {
   int? activityRecognitionInterval;
 
   /// **Deprecated:** Use [ActivityConfig.minimumActivityRecognitionConfidence] via [Config.activity].
-  @Deprecated('Use activity.minimumActivityRecognitionConfidence (ActivityConfig)')
+  @Deprecated(
+      'Use activity.minimumActivityRecognitionConfidence (ActivityConfig)')
   int? minimumActivityRecognitionConfidence;
 
   /// **Deprecated:** Use [ActivityConfig.disableStopDetection] via [Config.activity].
@@ -426,7 +428,7 @@ class Config {
   /// **Deprecated:** Use [AppConfig.notification] via [Config.app].
   @Deprecated('Use app.notification (AppConfig)')
   Notification? notification;
-  
+
   /// Logger Config
 
   /// **Deprecated:** Use [LoggerConfig.debug] via [Config.logger].
@@ -486,106 +488,106 @@ class Config {
 
   Config(
       {
-        // [New] Compound Config objects
-        this.geolocation,
-        this.app,
-        this.http,
-        this.persistence,
-        this.logger,
-        this.activity,
-        this.authorization,
-        // [Deprecated] flat config options
-        // Geolocation Options
-        this.desiredAccuracy,
-        this.distanceFilter,
-        this.stationaryRadius,
-        this.locationTimeout,
-        this.disableElasticity,
-        this.elasticityMultiplier,
-        this.stopAfterElapsedMinutes,
-        this.geofenceProximityRadius,
-        this.maxMonitoredGeofences,
-        this.geofenceInitialTriggerEntry,
-        this.desiredOdometerAccuracy,
-        this.useSignificantChangesOnly,
-        this.locationAuthorizationRequest,
-        // ActivityRecognition
-        this.isMoving,
-        this.stopTimeout,
-        this.activityRecognitionInterval,
-        this.minimumActivityRecognitionConfidence,
-        this.disableStopDetection,
-        this.stopOnStationary,
-        // HTTP & Persistence
-        this.url,
-        this.persistMode,
-        this.method,
-        this.httpRootProperty,
-        this.params,
-        this.headers,
-        this.extras,
-        this.autoSync,
-        this.disableAutoSyncOnCellular,
-        this.disableProviderChangeRecord,
-        this.autoSyncThreshold,
-        this.batchSync,
-        this.maxBatchSize,
-        this.locationTemplate,
-        this.geofenceTemplate,
-        this.maxDaysToPersist,
-        this.maxRecordsToPersist,
-        this.locationsOrderDirection,
-        this.httpTimeout,
+      // [New] Compound Config objects
+      this.geolocation,
+      this.app,
+      this.http,
+      this.persistence,
+      this.logger,
+      this.activity,
+      this.authorization,
+      // [Deprecated] flat config options
+      // Geolocation Options
+      this.desiredAccuracy,
+      this.distanceFilter,
+      this.stationaryRadius,
+      this.locationTimeout,
+      this.disableElasticity,
+      this.elasticityMultiplier,
+      this.stopAfterElapsedMinutes,
+      this.geofenceProximityRadius,
+      this.maxMonitoredGeofences,
+      this.geofenceInitialTriggerEntry,
+      this.desiredOdometerAccuracy,
+      this.useSignificantChangesOnly,
+      this.locationAuthorizationRequest,
+      // ActivityRecognition
+      this.isMoving,
+      this.stopTimeout,
+      this.activityRecognitionInterval,
+      this.minimumActivityRecognitionConfidence,
+      this.disableStopDetection,
+      this.stopOnStationary,
+      // HTTP & Persistence
+      this.url,
+      this.persistMode,
+      this.method,
+      this.httpRootProperty,
+      this.params,
+      this.headers,
+      this.extras,
+      this.autoSync,
+      this.disableAutoSyncOnCellular,
+      this.disableProviderChangeRecord,
+      this.autoSyncThreshold,
+      this.batchSync,
+      this.maxBatchSize,
+      this.locationTemplate,
+      this.geofenceTemplate,
+      this.maxDaysToPersist,
+      this.maxRecordsToPersist,
+      this.locationsOrderDirection,
+      this.httpTimeout,
 
-        // Application
-        this.stopOnTerminate,
-        this.startOnBoot,
-        this.heartbeatInterval,
-        this.schedule,
-        this.scheduleUseAlarmManager,
-        // Logging & Debug
-        this.debug,
-        this.logLevel,
-        this.logMaxDays,
-        this.reset,
+      // Application
+      this.stopOnTerminate,
+      this.startOnBoot,
+      this.heartbeatInterval,
+      this.schedule,
+      this.scheduleUseAlarmManager,
+      // Logging & Debug
+      this.debug,
+      this.logLevel,
+      this.logMaxDays,
+      this.reset,
 
-        ////
-        // iOS Options
-        //
+      ////
+      // iOS Options
+      //
 
-        // Geolocation Options
-        this.pausesLocationUpdatesAutomatically,
-        this.locationAuthorizationAlert,
-        this.disableLocationAuthorizationAlert,
-        this.showsBackgroundLocationIndicator,
-        // Activity Recognition Options
-        this.activityType,
-        this.stopDetectionDelay,
-        this.disableMotionActivityUpdates,
-        // Application Options
-        this.preventSuspend,
+      // Geolocation Options
+      this.pausesLocationUpdatesAutomatically,
+      this.locationAuthorizationAlert,
+      this.disableLocationAuthorizationAlert,
+      this.showsBackgroundLocationIndicator,
+      // Activity Recognition Options
+      this.activityType,
+      this.stopDetectionDelay,
+      this.disableMotionActivityUpdates,
+      // Application Options
+      this.preventSuspend,
 
-        ////
-        // Android Options
-        //
+      ////
+      // Android Options
+      //
 
-        // Geolocation Options
-        this.locationUpdateInterval,
-        this.fastestLocationUpdateInterval,
-        this.deferTime,
-        this.allowIdenticalLocations,
-        this.enableTimestampMeta,
-        this.speedJumpFilter,
-        this.geofenceModeHighAccuracy,
-        // Activity Recognition Options
-        this.triggerActivities,
-        this.motionTriggerDelay,
-        // Application Options
-        this.enableHeadless,
-        this.foregroundService,
-        this.notification,
-        this.backgroundPermissionRationale,
-        this.transistorAuthorizationToken});
+      // Geolocation Options
+      this.locationUpdateInterval,
+      this.fastestLocationUpdateInterval,
+      this.deferTime,
+      this.allowIdenticalLocations,
+      this.enableTimestampMeta,
+      this.speedJumpFilter,
+      this.geofenceModeHighAccuracy,
+      // Activity Recognition Options
+      this.triggerActivities,
+      this.motionTriggerDelay,
+      // Application Options
+      this.enableHeadless,
+      this.foregroundService,
+      this.notification,
+      this.backgroundPermissionRationale,
+      this.transistorAuthorizationToken});
 
   Config set(String key, dynamic value) {
     if (_map == null) {
@@ -626,7 +628,8 @@ class Config {
         if (notif != null) config['notification'] = notif;
 
         final rationale = app['backgroundPermissionRationale'];
-        if (rationale != null) config['backgroundPermissionRationale'] = rationale;
+        if (rationale != null)
+          config['backgroundPermissionRationale'] = rationale;
       }
     }
 
@@ -871,7 +874,7 @@ class Config {
     Map map = deviceInfo.toMap();
     RegExp re = new RegExp(r"[\s\.,]");
     String uuid =
-    '${deviceInfo.model}-${deviceInfo.version}'.replaceAll(re, '-');
+        '${deviceInfo.model}-${deviceInfo.version}'.replaceAll(re, '-');
     map['uuid'] = uuid;
     map['framework'] = 'flutter';
     return map as FutureOr<Map<String, dynamic>>;

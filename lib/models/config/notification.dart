@@ -27,7 +27,7 @@ enum NotificationPriority {
     if (v is NotificationPriority) return v;
     if (v is int) {
       return NotificationPriority.values.firstWhere(
-            (e) => e.id == v,
+        (e) => e.id == v,
         orElse: () => NotificationPriority.defaultPriority,
       );
     }
@@ -52,7 +52,7 @@ enum NotificationPriority {
 
 ///
 /// {@macro config.notification}
-/// 
+///
 class Notification {
   /// Specifies the name of your custom Android Layout XML file.
   ///
@@ -484,7 +484,9 @@ class Notification {
         color: (map['color'] != null) ? map['color'] : null,
         smallIcon: (map['smallIcon'] != null) ? map['smallIcon'] : null,
         largeIcon: (map['largeIcon'] != null) ? map['largeIcon'] : null,
-        priority: (map['priority'] != null) ? NotificationPriority.from(map['priority']) : null,
+        priority: (map['priority'] != null)
+            ? NotificationPriority.from(map['priority'])
+            : null,
         sticky: (map['sticky'] != null) ? map['sticky'] : null,
         channelName: (map['channelName'] != null) ? map['channelName'] : null,
         channelId: (map['channelId'] != null) ? map['channelId'] : null,
@@ -527,4 +529,3 @@ class Notification {
     };
   }
 }
-

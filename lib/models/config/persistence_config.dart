@@ -30,7 +30,7 @@ enum PersistMode {
 }
 
 /// {@macro config.persistence}
-/// 
+///
 class PersistenceConfig {
   /// {@macro config.location_template}
   final String? locationTemplate;
@@ -72,8 +72,10 @@ class PersistenceConfig {
       if (locationTemplate != null) 'locationTemplate': locationTemplate,
       if (geofenceTemplate != null) 'geofenceTemplate': geofenceTemplate,
       if (maxDaysToPersist != null) 'maxDaysToPersist': maxDaysToPersist,
-      if (maxRecordsToPersist != null) 'maxRecordsToPersist': maxRecordsToPersist,
-      if (locationsOrderDirection != null) 'locationsOrderDirection': locationsOrderDirection,
+      if (maxRecordsToPersist != null)
+        'maxRecordsToPersist': maxRecordsToPersist,
+      if (locationsOrderDirection != null)
+        'locationsOrderDirection': locationsOrderDirection,
       if (persistMode != null) 'persistMode': persistMode!.id,
       if (extras != null) 'extras': extras,
       if (disableProviderChangeRecord != null)
@@ -81,14 +83,20 @@ class PersistenceConfig {
     };
   }
 
-  factory PersistenceConfig.fromMap(Map<String, dynamic> m) => PersistenceConfig(
-    locationTemplate: m['locationTemplate'],
-    geofenceTemplate: m['geofenceTemplate'],
-    maxDaysToPersist: _ensureInt(m['maxDaysToPersist']),
-    maxRecordsToPersist: _ensureInt(m['maxRecordsToPersist']),
-    locationsOrderDirection: m['locationsOrderDirection'],
-    persistMode: m['persistMode'] != null ? PersistMode.from(m['persistMode']) : null,
-    extras: (m['extras'] is Map) ? (m['extras'] as Map).cast<String, dynamic>() : null,
-    disableProviderChangeRecord: _ensureBool(m['disableProviderChangeRecord']),
-  );
+  factory PersistenceConfig.fromMap(Map<String, dynamic> m) =>
+      PersistenceConfig(
+        locationTemplate: m['locationTemplate'],
+        geofenceTemplate: m['geofenceTemplate'],
+        maxDaysToPersist: _ensureInt(m['maxDaysToPersist']),
+        maxRecordsToPersist: _ensureInt(m['maxRecordsToPersist']),
+        locationsOrderDirection: m['locationsOrderDirection'],
+        persistMode: m['persistMode'] != null
+            ? PersistMode.from(m['persistMode'])
+            : null,
+        extras: (m['extras'] is Map)
+            ? (m['extras'] as Map).cast<String, dynamic>()
+            : null,
+        disableProviderChangeRecord:
+            _ensureBool(m['disableProviderChangeRecord']),
+      );
 }

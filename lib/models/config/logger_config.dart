@@ -1,4 +1,3 @@
-
 part of '../../flutter_background_geolocation.dart';
 
 /// Represents the verbosity level of the SDK’s internal logger.
@@ -29,18 +28,24 @@ enum LogLevel {
     if (v is LogLevel) return v;
     if (v is int) {
       return LogLevel.values.firstWhere(
-            (e) => e.id == v,
+        (e) => e.id == v,
         orElse: () => LogLevel.info,
       );
     }
     if (v is String) {
       switch (v.toLowerCase()) {
-        case 'off': return LogLevel.off;
-        case 'error': return LogLevel.error;
-        case 'warning': return LogLevel.warning;
-        case 'info': return LogLevel.info;
-        case 'debug': return LogLevel.debug;
-        case 'verbose': return LogLevel.verbose;
+        case 'off':
+          return LogLevel.off;
+        case 'error':
+          return LogLevel.error;
+        case 'warning':
+          return LogLevel.warning;
+        case 'info':
+          return LogLevel.info;
+        case 'debug':
+          return LogLevel.debug;
+        case 'verbose':
+          return LogLevel.verbose;
       }
     }
     return LogLevel.info;
@@ -60,7 +65,7 @@ class LoggerConfig {
   /// {@macro config.log_max_days}
   final int? logMaxDays;
 
-  const LoggerConfig({ this.debug, this.logLevel, this.logMaxDays });
+  const LoggerConfig({this.debug, this.logLevel, this.logMaxDays});
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -69,11 +74,10 @@ class LoggerConfig {
       if (logMaxDays != null) 'logMaxDays': logMaxDays,
     };
   }
+
   factory LoggerConfig.fromMap(Map<String, dynamic> m) => LoggerConfig(
-    debug: m['debug'],
-    logLevel: (m['logLevel'] != null)
-        ? LogLevel.from(m['logLevel'])
-        : null,
-    logMaxDays: m['logMaxDays'],
-  );
+        debug: m['debug'],
+        logLevel: (m['logLevel'] != null) ? LogLevel.from(m['logLevel']) : null,
+        logMaxDays: m['logMaxDays'],
+      );
 }

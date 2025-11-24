@@ -1,4 +1,3 @@
-
 part of '../../flutter_background_geolocation.dart';
 
 /// {@macro config.http}
@@ -68,17 +67,20 @@ class HttpConfig {
   }
 
   factory HttpConfig.fromMap(Map<String, dynamic> m) => HttpConfig(
-    autoSync: _ensureBool(m['autoSync']),
-    autoSyncThreshold: _ensureInt(m['autoSyncThreshold']),
-    disableAutoSyncOnCellular: _ensureBool(m['disableAutoSyncOnCellular']),
-    batchSync: _ensureBool(m['batchSync']),
-    maxBatchSize: _ensureInt(m['maxBatchSize']),
-    method: m['method'],
-    url: m['url'],
-    params: (m['params'] is Map) ? (m['params'] as Map).cast<String, dynamic>() : null,
-    headers: (m['headers'] is Map) ? (m['headers'] as Map).cast<String, dynamic>() : null,
-    rootProperty: m['rootProperty'] ?? m['httpRootProperty'],
-    timeout: _ensureInt(m['timeout'] ?? m['httpTimeout']),
-  );
+        autoSync: _ensureBool(m['autoSync']),
+        autoSyncThreshold: _ensureInt(m['autoSyncThreshold']),
+        disableAutoSyncOnCellular: _ensureBool(m['disableAutoSyncOnCellular']),
+        batchSync: _ensureBool(m['batchSync']),
+        maxBatchSize: _ensureInt(m['maxBatchSize']),
+        method: m['method'],
+        url: m['url'],
+        params: (m['params'] is Map)
+            ? (m['params'] as Map).cast<String, dynamic>()
+            : null,
+        headers: (m['headers'] is Map)
+            ? (m['headers'] as Map).cast<String, dynamic>()
+            : null,
+        rootProperty: m['rootProperty'] ?? m['httpRootProperty'],
+        timeout: _ensureInt(m['timeout'] ?? m['httpTimeout']),
+      );
 }
-

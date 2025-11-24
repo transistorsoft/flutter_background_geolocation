@@ -31,18 +31,24 @@ enum DesiredAccuracy {
     if (v is DesiredAccuracy) return v;
     if (v is int) {
       return DesiredAccuracy.values.firstWhere(
-            (e) => e.id == v,
+        (e) => e.id == v,
         orElse: () => DesiredAccuracy.high,
       );
     }
     if (v is String) {
       switch (v) {
-        case 'navigation': return DesiredAccuracy.navigation;
-        case 'high': return DesiredAccuracy.high;
-        case 'medium': return DesiredAccuracy.medium;
-        case 'low': return DesiredAccuracy.low;
-        case 'veryLow': return DesiredAccuracy.veryLow;
-        case 'lowest': return DesiredAccuracy.lowest;
+        case 'navigation':
+          return DesiredAccuracy.navigation;
+        case 'high':
+          return DesiredAccuracy.high;
+        case 'medium':
+          return DesiredAccuracy.medium;
+        case 'low':
+          return DesiredAccuracy.low;
+        case 'veryLow':
+          return DesiredAccuracy.veryLow;
+        case 'lowest':
+          return DesiredAccuracy.lowest;
       }
     }
     return DesiredAccuracy.high;
@@ -64,12 +70,16 @@ enum DesiredAccuracy {
 enum ActivityType {
   /// Default activity type for general use.
   other(Config.ACTIVITY_TYPE_OTHER),
+
   /// Intended for automotive navigation.
   automotiveNavigation(Config.ACTIVITY_TYPE_AUTOMOTIVE_NAVIGATION),
+
   /// Intended for fitness activities.
   fitness(Config.ACTIVITY_TYPE_FITNESS),
+
   /// Intended for navigation other than automotive.
   otherNavigation(Config.ACTIVITY_TYPE_OTHER_NAVIGATION),
+
   /// Intended for airborne activities.
   airborne(Config.ACTIVITY_TYPE_AIRBORNE);
 
@@ -83,17 +93,22 @@ enum ActivityType {
     if (v is ActivityType) return v;
     if (v is int) {
       return ActivityType.values.firstWhere(
-            (e) => e.id == v,
+        (e) => e.id == v,
         orElse: () => ActivityType.other,
       );
     }
     if (v is String) {
       switch (v) {
-        case 'other': return ActivityType.other;
-        case 'automotiveNavigation': return ActivityType.automotiveNavigation;
-        case 'fitness': return ActivityType.fitness;
-        case 'otherNavigation': return ActivityType.otherNavigation;
-        case 'airborne': return ActivityType.airborne;
+        case 'other':
+          return ActivityType.other;
+        case 'automotiveNavigation':
+          return ActivityType.automotiveNavigation;
+        case 'fitness':
+          return ActivityType.fitness;
+        case 'otherNavigation':
+          return ActivityType.otherNavigation;
+        case 'airborne':
+          return ActivityType.airborne;
       }
     }
     return ActivityType.other;
@@ -206,84 +221,92 @@ class GeoConfig {
   });
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-    if (distanceFilter != null) 'distanceFilter': distanceFilter,
-    if (desiredAccuracy != null) 'desiredAccuracy': desiredAccuracy!.id,
-    if (locationUpdateInterval != null)
-      'locationUpdateInterval': locationUpdateInterval,
-    if (fastestLocationUpdateInterval != null)
-      'fastestLocationUpdateInterval': fastestLocationUpdateInterval,
-    if (locationTimeout != null) 'locationTimeout': locationTimeout,
-    if (deferTime != null) 'deferTime': deferTime,
-    if (disableElasticity != null) 'disableElasticity': disableElasticity,
-    if (elasticityMultiplier != null)
-      'elasticityMultiplier': elasticityMultiplier,
-    if (allowIdenticalLocations != null)
-      'allowIdenticalLocations': allowIdenticalLocations,
-    if (enableTimestampMeta != null)
-      'enableTimestampMeta': enableTimestampMeta,
-    if (useSignificantChangesOnly != null)
-      'useSignificantChangesOnly': useSignificantChangesOnly,
-    if (disableLocationAuthorizationAlert != null)
-      'disableLocationAuthorizationAlert':
-      disableLocationAuthorizationAlert,
-    if (locationAuthorizationRequest != null)
-      'locationAuthorizationRequest': locationAuthorizationRequest,
-    if (stationaryRadius != null) 'stationaryRadius': stationaryRadius,
-    if (stopTimeout != null) 'stopTimeout': stopTimeout,
-    if (stopAfterElapsedMinutes != null)
-      'stopAfterElapsedMinutes': stopAfterElapsedMinutes,
-    if (geofenceProximityRadius != null)
-      'geofenceProximityRadius': geofenceProximityRadius,
-    if (geofenceInitialTriggerEntry != null)
-      'geofenceInitialTriggerEntry': geofenceInitialTriggerEntry,
-    if (geofenceModeHighAccuracy != null)
-      'geofenceModeHighAccuracy': geofenceModeHighAccuracy,
-    if (filter != null) 'filter': filter!.toMap(),
-    if (pausesLocationUpdatesAutomatically != null)
-      'pausesLocationUpdatesAutomatically': pausesLocationUpdatesAutomatically,
-    if (showsBackgroundLocationIndicator != null)
-      'showsBackgroundLocationIndicator': showsBackgroundLocationIndicator,
-    if (activityType != null) 'activityType': activityType!.id,
-    if (locationAuthorizationAlert != null)
-      'locationAuthorizationAlert': locationAuthorizationAlert,
-    if (maxMonitoredGeofences != null)
-      'maxMonitoredGeofences': maxMonitoredGeofences,
-  };
+        if (distanceFilter != null) 'distanceFilter': distanceFilter,
+        if (desiredAccuracy != null) 'desiredAccuracy': desiredAccuracy!.id,
+        if (locationUpdateInterval != null)
+          'locationUpdateInterval': locationUpdateInterval,
+        if (fastestLocationUpdateInterval != null)
+          'fastestLocationUpdateInterval': fastestLocationUpdateInterval,
+        if (locationTimeout != null) 'locationTimeout': locationTimeout,
+        if (deferTime != null) 'deferTime': deferTime,
+        if (disableElasticity != null) 'disableElasticity': disableElasticity,
+        if (elasticityMultiplier != null)
+          'elasticityMultiplier': elasticityMultiplier,
+        if (allowIdenticalLocations != null)
+          'allowIdenticalLocations': allowIdenticalLocations,
+        if (enableTimestampMeta != null)
+          'enableTimestampMeta': enableTimestampMeta,
+        if (useSignificantChangesOnly != null)
+          'useSignificantChangesOnly': useSignificantChangesOnly,
+        if (disableLocationAuthorizationAlert != null)
+          'disableLocationAuthorizationAlert':
+              disableLocationAuthorizationAlert,
+        if (locationAuthorizationRequest != null)
+          'locationAuthorizationRequest': locationAuthorizationRequest,
+        if (stationaryRadius != null) 'stationaryRadius': stationaryRadius,
+        if (stopTimeout != null) 'stopTimeout': stopTimeout,
+        if (stopAfterElapsedMinutes != null)
+          'stopAfterElapsedMinutes': stopAfterElapsedMinutes,
+        if (geofenceProximityRadius != null)
+          'geofenceProximityRadius': geofenceProximityRadius,
+        if (geofenceInitialTriggerEntry != null)
+          'geofenceInitialTriggerEntry': geofenceInitialTriggerEntry,
+        if (geofenceModeHighAccuracy != null)
+          'geofenceModeHighAccuracy': geofenceModeHighAccuracy,
+        if (filter != null) 'filter': filter!.toMap(),
+        if (pausesLocationUpdatesAutomatically != null)
+          'pausesLocationUpdatesAutomatically':
+              pausesLocationUpdatesAutomatically,
+        if (showsBackgroundLocationIndicator != null)
+          'showsBackgroundLocationIndicator': showsBackgroundLocationIndicator,
+        if (activityType != null) 'activityType': activityType!.id,
+        if (locationAuthorizationAlert != null)
+          'locationAuthorizationAlert': locationAuthorizationAlert,
+        if (maxMonitoredGeofences != null)
+          'maxMonitoredGeofences': maxMonitoredGeofences,
+      };
 
   factory GeoConfig.fromMap(Map<String, dynamic> m) => GeoConfig(
-    distanceFilter: _ensureDouble(m['distanceFilter']),
-    desiredAccuracy: (m['desiredAccuracy'] != null)
-        ? DesiredAccuracy.from(m['desiredAccuracy'])
-        : null,
-    locationUpdateInterval: _ensureInt(m['locationUpdateInterval'] ?? m['interval']),
-    fastestLocationUpdateInterval: _ensureInt(m['fastestLocationUpdateInterval'] ?? m['fastestInterval']),
-    locationTimeout: _ensureInt(m['locationTimeout']),
-    deferTime: _ensureInt(m['deferTime']),
-    disableElasticity: _ensureBool(m['disableElasticity']),
-    elasticityMultiplier: _ensureDouble(m['elasticityMultiplier']),
-    allowIdenticalLocations: _ensureBool(m['allowIdenticalLocations']),
-    enableTimestampMeta: _ensureBool(m['enableTimestampMeta']),
-    useSignificantChangesOnly: _ensureBool(m['useSignificantChangesOnly']),
-    disableLocationAuthorizationAlert: _ensureBool(m['disableLocationAuthorizationAlert']),
-    stationaryRadius: _ensureInt(m['stationaryRadius']),
-    stopTimeout: _ensureInt(m['stopTimeout']),
-    stopAfterElapsedMinutes: _ensureInt(m['stopAfterElapsedMinutes']),
-    geofenceProximityRadius: _ensureInt(m['geofenceProximityRadius']),
-    geofenceInitialTriggerEntry: _ensureBool(m['geofenceInitialTriggerEntry']),
-    geofenceModeHighAccuracy: _ensureBool(m['geofenceModeHighAccuracy']),
-    filter: (m['filter'] is Map)
-        ? LocationFilter.fromMap((m['filter'] as Map).cast<String, dynamic>())
-        : null,
-    pausesLocationUpdatesAutomatically: _ensureBool(m['pausesLocationUpdatesAutomatically']),
-    showsBackgroundLocationIndicator: _ensureBool(m['showsBackgroundLocationIndicator']),
-    activityType: (m['activityType'] != null)
-        ? ActivityType.from(m['activityType'])
-        : null,
-    locationAuthorizationAlert: (m['locationAuthorizationAlert'] is Map)
-        ? (m['locationAuthorizationAlert'] as Map).cast<String, dynamic>()
-        : null,
-    maxMonitoredGeofences: _ensureInt(m['maxMonitoredGeofences']),
-  );
+        distanceFilter: _ensureDouble(m['distanceFilter']),
+        desiredAccuracy: (m['desiredAccuracy'] != null)
+            ? DesiredAccuracy.from(m['desiredAccuracy'])
+            : null,
+        locationUpdateInterval:
+            _ensureInt(m['locationUpdateInterval'] ?? m['interval']),
+        fastestLocationUpdateInterval: _ensureInt(
+            m['fastestLocationUpdateInterval'] ?? m['fastestInterval']),
+        locationTimeout: _ensureInt(m['locationTimeout']),
+        deferTime: _ensureInt(m['deferTime']),
+        disableElasticity: _ensureBool(m['disableElasticity']),
+        elasticityMultiplier: _ensureDouble(m['elasticityMultiplier']),
+        allowIdenticalLocations: _ensureBool(m['allowIdenticalLocations']),
+        enableTimestampMeta: _ensureBool(m['enableTimestampMeta']),
+        useSignificantChangesOnly: _ensureBool(m['useSignificantChangesOnly']),
+        disableLocationAuthorizationAlert:
+            _ensureBool(m['disableLocationAuthorizationAlert']),
+        stationaryRadius: _ensureInt(m['stationaryRadius']),
+        stopTimeout: _ensureInt(m['stopTimeout']),
+        stopAfterElapsedMinutes: _ensureInt(m['stopAfterElapsedMinutes']),
+        geofenceProximityRadius: _ensureInt(m['geofenceProximityRadius']),
+        geofenceInitialTriggerEntry:
+            _ensureBool(m['geofenceInitialTriggerEntry']),
+        geofenceModeHighAccuracy: _ensureBool(m['geofenceModeHighAccuracy']),
+        filter: (m['filter'] is Map)
+            ? LocationFilter.fromMap(
+                (m['filter'] as Map).cast<String, dynamic>())
+            : null,
+        pausesLocationUpdatesAutomatically:
+            _ensureBool(m['pausesLocationUpdatesAutomatically']),
+        showsBackgroundLocationIndicator:
+            _ensureBool(m['showsBackgroundLocationIndicator']),
+        activityType: (m['activityType'] != null)
+            ? ActivityType.from(m['activityType'])
+            : null,
+        locationAuthorizationAlert: (m['locationAuthorizationAlert'] is Map)
+            ? (m['locationAuthorizationAlert'] as Map).cast<String, dynamic>()
+            : null,
+        maxMonitoredGeofences: _ensureInt(m['maxMonitoredGeofences']),
+      );
 }
 
 /// {@macro location_filter.kalman_profile}
@@ -327,7 +350,7 @@ enum LocationFilterPolicy {
   /// In effect, this policy “adjusts” the *criteria* for inclusion, not the
   /// *positions* themselves. When [LocationFilter.useKalman] is enabled, samples may be
   /// smoothed for noise reduction, but their physical coordinates remain
-  /// untouched. 
+  /// untouched.
   adjust,
 
   /// Aggressive — filters heavily to remove noise, preferring stability.
@@ -399,13 +422,13 @@ class LocationFilter {
   /// If both [useKalman] and [odometerUseKalmanFilter] are `true`, each
   /// subsystem (tracking and odometer) maintains its own Kalman instance.
   ///
-  /// Default: `false`.
+  /// Default: `true`.
   final bool? odometerUseKalmanFilter;
 
   /// Maximum horizontal accuracy (in meters) allowed to affect the odometer.
   ///
   /// Samples with `accuracy > odometerAccuracyThreshold` are ignored for
-  /// odometer updates. Default: `100`.
+  /// odometer updates. Default: `20`.
   final double? odometerAccuracyThreshold;
 
   const LocationFilter({
@@ -424,42 +447,42 @@ class LocationFilter {
   });
 
   Map<String, dynamic> toMap() => <String, dynamic>{
-    if (policy != null) 'policy': policy!.index,
-    if (useKalman != null) 'useKalman': useKalman,
-    if (kalmanDebug != null) 'kalmanDebug': kalmanDebug,
-    if (kalmanProfile != null) 'kalmanProfile': kalmanProfile!.id,
-    if (rollingWindow != null) 'rollingWindow': rollingWindow,
-    if (burstWindow != null) 'burstWindow': burstWindow,
-    if (maxBurstDistance != null) 'maxBurstDistance': maxBurstDistance,
-    if (trackingAccuracyThreshold != null)
-      'trackingAccuracyThreshold': trackingAccuracyThreshold,
-    if (maxImpliedSpeed != null) 'maxImpliedSpeed': maxImpliedSpeed,
-    if (filterDebug != null) 'filterDebug': filterDebug,
-    if (odometerUseKalmanFilter != null)
-      'odometerUseKalmanFilter': odometerUseKalmanFilter,
-    if (odometerAccuracyThreshold != null)
-      'odometerAccuracyThreshold': odometerAccuracyThreshold,
-  };
+        if (policy != null) 'policy': policy!.index,
+        if (useKalman != null) 'useKalman': useKalman,
+        if (kalmanDebug != null) 'kalmanDebug': kalmanDebug,
+        if (kalmanProfile != null) 'kalmanProfile': kalmanProfile!.id,
+        if (rollingWindow != null) 'rollingWindow': rollingWindow,
+        if (burstWindow != null) 'burstWindow': burstWindow,
+        if (maxBurstDistance != null) 'maxBurstDistance': maxBurstDistance,
+        if (trackingAccuracyThreshold != null)
+          'trackingAccuracyThreshold': trackingAccuracyThreshold,
+        if (maxImpliedSpeed != null) 'maxImpliedSpeed': maxImpliedSpeed,
+        if (filterDebug != null) 'filterDebug': filterDebug,
+        if (odometerUseKalmanFilter != null)
+          'odometerUseKalmanFilter': odometerUseKalmanFilter,
+        if (odometerAccuracyThreshold != null)
+          'odometerAccuracyThreshold': odometerAccuracyThreshold,
+      };
 
   factory LocationFilter.fromMap(Map<String, dynamic> m) => LocationFilter(
-    policy: (m['policy'] != null)
-        ? LocationFilterPolicy.values[m['policy']]
-        : null,
-    useKalman: _ensureBool(m['useKalman']),
-    kalmanDebug: _ensureBool(m['kalmanDebug']),
-    kalmanProfile: (m['kalmanProfile'] != null)
-        ? KalmanProfile.fromId(_ensureInt(m['kalmanProfile'])!)
-        : null,
-    rollingWindow: _ensureInt(m['rollingWindow']),
-    burstWindow: _ensureDouble(m['burstWindow']),
-    maxBurstDistance: _ensureDouble(m['maxBurstDistance']),
-    // Accept legacy iOS key `accuracyThreshold` as alias
-    trackingAccuracyThreshold: _ensureDouble(
-        m['trackingAccuracyThreshold'] ?? m['accuracyThreshold']
-    ),
-    maxImpliedSpeed: _ensureDouble(m['maxImpliedSpeed']),
-    filterDebug: _ensureBool(m['filterDebug']),
-    odometerUseKalmanFilter: _ensureBool(m['odometerUseKalmanFilter']),
-    odometerAccuracyThreshold: _ensureDouble(m['odometerAccuracyThreshold']),
-  );
+        policy: (m['policy'] != null)
+            ? LocationFilterPolicy.values[m['policy']]
+            : null,
+        useKalman: _ensureBool(m['useKalman']),
+        kalmanDebug: _ensureBool(m['kalmanDebug']),
+        kalmanProfile: (m['kalmanProfile'] != null)
+            ? KalmanProfile.fromId(_ensureInt(m['kalmanProfile'])!)
+            : null,
+        rollingWindow: _ensureInt(m['rollingWindow']),
+        burstWindow: _ensureDouble(m['burstWindow']),
+        maxBurstDistance: _ensureDouble(m['maxBurstDistance']),
+        // Accept legacy iOS key `accuracyThreshold` as alias
+        trackingAccuracyThreshold: _ensureDouble(
+            m['trackingAccuracyThreshold'] ?? m['accuracyThreshold']),
+        maxImpliedSpeed: _ensureDouble(m['maxImpliedSpeed']),
+        filterDebug: _ensureBool(m['filterDebug']),
+        odometerUseKalmanFilter: _ensureBool(m['odometerUseKalmanFilter']),
+        odometerAccuracyThreshold:
+            _ensureDouble(m['odometerAccuracyThreshold']),
+      );
 }

@@ -68,7 +68,7 @@ dependencies {
 
     implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
 
-    implementation "com.transistorsoft:tslocationmanager:4.0.0-beta.1"
+    implementation "com.transistorsoft:tslocationmanager:4.0.0-beta.+"
     implementation 'org.greenrobot:eventbus:3.3.1'
     /*
     def playServicesLocationVersion = safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)

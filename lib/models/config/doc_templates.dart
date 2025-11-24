@@ -151,7 +151,6 @@ part of '../../flutter_background_geolocation.dart';
 /// @nodoc
 class MacroConfigGeolocation {}
 
-
 /// {@template config.desired_accuracy}
 /// Specify the desired-accuracy of the geolocation system.
 ///
@@ -343,7 +342,6 @@ class MacroConfigStopAfterElapsedMinutes {}
 /// @nodoc
 class MacroConfigPausesLocationUpdatesAutomatically {}
 
-
 /// {@template config.enable_timestamp_meta}
 ///
 /// Enable extra timestamp meta data to be appended to each recorded location, including system-time.
@@ -473,7 +471,7 @@ class MacroConfigOdometerAccuracyThreshold {}
 ///
 /// This refactor provides a clearer separation of responsibilities and aligns with
 /// other configuration groups such as [GeoConfig], [HttpConfig], and [AppConfig].
-/// 
+///
 /// ## See also
 /// - [GeoConfig] for geolocation and filtering behavior.
 /// - [AppConfig] for lifecycle and startup options.
@@ -482,7 +480,6 @@ class MacroConfigOdometerAccuracyThreshold {}
 /// {@endtemplate}
 /// @nodoc
 class MacroConfigActivity {}
-
 
 /// {@template config.is_moving}
 /// Configure the initial tracking-state after [BackgroundGeolocation.start] is called.
@@ -740,13 +737,13 @@ class MacroConfigTriggerActivities {}
 ///   ),
 /// ));
 /// ```
-/// 
+///
 /// {@endtemplate}
 /// @nodoc
 class MacroConfigDisableMotionActivityUpdates {}
 
 /// {@template config.motion_trigger_delay}
-/// 
+///
 /// __`[Android only]`__  Optionally add a delay in milliseconds to trigger Android into the *moving* state when Motion API reports the device is moving (eg: `on_foot`, `in_vehicle`)
 ///
 /// This can help prevent false-positive motion-triggering when one moves about their home, for example.  Only if the Motion API stays in the *moving* state for `motionTriggerDelay` milliseconds will the plugin trigger into the *moving* state and begin tracking the location.
@@ -1498,8 +1495,6 @@ class MacroConfigParams {}
 /// {@endtemplate}
 /// @nodoc
 class MacroConfigHeaders {}
-
-
 
 /// {@template config.auto_sync}
 /// Immediately upload each recorded location to your configured [HttpConfig.url].
@@ -3007,7 +3002,7 @@ class MacroConfigLocationAuthorizationRequest {}
 class MacroConfigLocationAuthorizationAlert {}
 
 /// {@template config.disable_location_authorization_alert}
-/// 
+///
 /// Disables automatic authorization alert when SDK detects the user has disabled location authorization.
 ///
 /// You will be responsible for handling disabled location authorization by listening to the [BackgroundGeolocation.onProviderChange] event.
@@ -3069,7 +3064,7 @@ class MacroConfigShowsBackgroundLocationIndicator {}
 // ===== Android‑specific =======================================================
 
 /// {@template config.location_update_interval}
-/// 
+///
 /// __`[Android only]`__ Set the desired interval for active location updates, in milliseconds.
 ///
 ///  **Note:** To use **`locationUpdateInterval`** you **must** also configure [GeoConfig.distanceFilter]:0, since [GeoConfig.distanceFilter] *overrides* **`locationUpdateInterval`**.

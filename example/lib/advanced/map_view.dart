@@ -125,7 +125,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   }
 
   void _onGeofence(bg.GeofenceEvent event) async {
-    bg.Logger.info('[onGeofence] Flutter received onGeofence event $event');
+    bg.Logger.info('[onGeofence] Flutter received onGeofence event $event');    
     // Provide the location of this event to the Polyline.  BGGeo does not fire an onLocation for geofence events.
     _polyline.add(ll.LatLng(
         event.location.coords.latitude,

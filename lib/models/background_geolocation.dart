@@ -24,6 +24,7 @@ const _EVENT_CHANNEL_NOTIFICATIONACTION =
 const _EVENT_CHANNEL_AUTHORIZATION =
     "$_PLUGIN_PATH/events/" + Event.AUTHORIZATION;
 const _EVENT_CHANNEL_WATCH_POSITION = "$_PLUGIN_PATH/events/watchPosition";
+
 class _Subscription {
   final StreamSubscription<dynamic> subscription;
   final Function callback;
@@ -810,7 +811,7 @@ class BackgroundGeolocation {
         });
       }
 
-      rs.add(Geofence(
+      final geofence = Geofence(
           identifier: data['identifier'],
           radius: data['radius'],
           latitude: data['latitude'],
@@ -824,7 +825,19 @@ class BackgroundGeolocation {
           vertices: vertices,
           extras: (data['extras'] != null)
               ? data['extras'].cast<String, dynamic>()
-              : {}));
+              : {});
+      // 🔹 NEW: hydrate readonly runtime fields from native payload.
+      if (data['hits'] != null) {
+        geofence.hits = (data['hits'] as num).toInt();
+      }
+      if (data['entryState'] != null) {
+        geofence.entryState = (data['entryState'] as num).toInt();
+      }
+      if (data['stateUpdatedAt'] != null) {
+        geofence.stateUpdatedAt = (data['stateUpdatedAt'] as num).toDouble();
+      }
+
+      rs.add(geofence);
     });
     return rs;
   }
@@ -851,7 +864,7 @@ class BackgroundGeolocation {
           vertices.add(v);
         });
       }
-      return Geofence(
+      final geofence = Geofence(
           identifier: data['identifier'],
           radius: data['radius'],
           latitude: data['latitude'],
@@ -866,6 +879,18 @@ class BackgroundGeolocation {
           extras: (data['extras'] != null)
               ? data['extras'].cast<String, dynamic>()
               : {});
+
+      // 🔹 NEW: hydrate readonly runtime fields from native payload.
+      if (data['hits'] != null) {
+        geofence.hits = (data['hits'] as num).toInt();
+      }
+      if (data['entryState'] != null) {
+        geofence.entryState = (data['entryState'] as num).toInt();
+      }
+      if (data['stateUpdatedAt'] != null) {
+        geofence.stateUpdatedAt = (data['stateUpdatedAt'] as num).toDouble();
+      }
+      return geofence;
     } on PlatformException catch (e) {
       if (e.code == "404") {
         return null;
@@ -1701,7 +1726,6 @@ class BackgroundGeolocation {
   static final Map<int, void Function(Location)?> _watchPositionCallbacks = {};
   static bool _isWatchPositionStreamInitialized = false;
 
-
   static Future<int> watchPosition({
     int? timeout,
     int? interval,
@@ -1718,7 +1742,8 @@ class BackgroundGeolocation {
     if (extras != null) options['extras'] = extras;
 
     // Call native iOS method and await the watchId
-    final int watchId = await _methodChannel.invokeMethod('watchPosition', options);
+    final int watchId =
+        await _methodChannel.invokeMethod('watchPosition', options);
 
     _watchPositionCallbacks[watchId] = onLocation;
 
@@ -1738,16 +1763,15 @@ class BackgroundGeolocation {
     }
 
     return watchId;
-}
+  }
 
-static Future<bool> stopWatchPosition(int watchId) async {
-  _watchPositionCallbacks.remove(watchId);
-  print("*** watchPositionCallbacks: $_watchPositionCallbacks");
-  return (await _methodChannel.invokeMethod<bool>('stopWatchPosition', watchId))
-    as FutureOr<bool>;
+  static Future<bool> stopWatchPosition(int watchId) async {
+    _watchPositionCallbacks.remove(watchId);
+    print("*** watchPositionCallbacks: $_watchPositionCallbacks");
+    return (await _methodChannel.invokeMethod<bool>(
+        'stopWatchPosition', watchId)) as FutureOr<bool>;
   }
 }
-
 
 // Initiate a constant stream of location-updates
 // DISABLED:  can't execute callback more than once with Flutter.  Will have to use an EventChannel.

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 5.0.0-beta.2 &mdash; 2025-11-24
+* Bug fixes.
+* [Android] Add guards against spurious geofence exit events reported with certain devices.
+
 ## 5.0.0-beta.1 &mdash; 2025-11-10
 * Initial introduction of v5 beta.  See the [Migration Guide](https://github.com/transistorsoft/flutter_background_geolocation/blob/5.0.0-beta/help/MIGRATION-GUIDE-5.0.0.md)
 
