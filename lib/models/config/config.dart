@@ -628,8 +628,9 @@ class Config {
         if (notif != null) config['notification'] = notif;
 
         final rationale = app['backgroundPermissionRationale'];
-        if (rationale != null)
+        if (rationale != null) {
           config['backgroundPermissionRationale'] = rationale;
+        }
       }
     }
 

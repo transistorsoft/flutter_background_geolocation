@@ -255,45 +255,43 @@ class GeofenceEvent {
     this.extras = params['extras'];
 
     Map geofenceData = params['geofence'];
-    if (geofenceData != null) {
-      dynamic loiteringDelay = geofenceData['loiteringDelay'];
-      List<List<double>> vertices = [];
-      if (geofenceData['vertices'] != null) {
-        List<Object?> tmp = geofenceData['vertices'];
-        tmp.forEach((vertex) {
-          List<double> v = List.from(vertex as List);
-          vertices.add(v);
-        });
-      }
-
-      this.geofence = Geofence(
-          identifier: geofenceData['identifier'],
-          radius: geofenceData['radius'],
-          latitude: geofenceData['latitude'],
-          longitude: geofenceData['longitude'],
-          notifyOnEntry: geofenceData['notifyOnEntry'],
-          notifyOnExit: geofenceData['notifyOnExit'],
-          notifyOnDwell: geofenceData['notifyOnDwell'],
-          loiteringDelay: (loiteringDelay.runtimeType == double)
-              ? loiteringDelay.round()
-              : loiteringDelay,
-          vertices: vertices,
-          extras: (geofenceData['extras'] != null)
-              ? geofenceData['extras'].cast<String, dynamic>()
-              : {});
-      // 🔹 NEW: hydrate readonly runtime fields from native payload.
-      if (geofenceData['hits'] != null) {
-        this.geofence.hits = (geofenceData['hits'] as num).toInt();
-      }
-      if (geofenceData['entryState'] != null) {
-        this.geofence.entryState = (geofenceData['entryState'] as num).toInt();
-      }
-      if (geofenceData['stateUpdatedAt'] != null) {
-        this.geofence.stateUpdatedAt =
-            (geofenceData['stateUpdatedAt'] as num).toDouble();
-      }
+    dynamic loiteringDelay = geofenceData['loiteringDelay'];
+    List<List<double>> vertices = [];
+    if (geofenceData['vertices'] != null) {
+      List<Object?> tmp = geofenceData['vertices'];
+      tmp.forEach((vertex) {
+        List<double> v = List.from(vertex as List);
+        vertices.add(v);
+      });
     }
-  }
+
+    this.geofence = Geofence(
+        identifier: geofenceData['identifier'],
+        radius: geofenceData['radius'],
+        latitude: geofenceData['latitude'],
+        longitude: geofenceData['longitude'],
+        notifyOnEntry: geofenceData['notifyOnEntry'],
+        notifyOnExit: geofenceData['notifyOnExit'],
+        notifyOnDwell: geofenceData['notifyOnDwell'],
+        loiteringDelay: (loiteringDelay.runtimeType == double)
+            ? loiteringDelay.round()
+            : loiteringDelay,
+        vertices: vertices,
+        extras: (geofenceData['extras'] != null)
+            ? geofenceData['extras'].cast<String, dynamic>()
+            : {});
+    // 🔹 NEW: hydrate readonly runtime fields from native payload.
+    if (geofenceData['hits'] != null) {
+      this.geofence.hits = (geofenceData['hits'] as num).toInt();
+    }
+    if (geofenceData['entryState'] != null) {
+      this.geofence.entryState = (geofenceData['entryState'] as num).toInt();
+    }
+    if (geofenceData['stateUpdatedAt'] != null) {
+      this.geofence.stateUpdatedAt =
+          (geofenceData['stateUpdatedAt'] as num).toDouble();
+    }
+    }
 
   /// String representation of `GeofenceEvent` for `print` to logs.
   String toString() {
