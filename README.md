@@ -7,7 +7,7 @@
  
 ```yaml
 dependencies:
-  flutter_background_geolocation: ^5.0.0-beta
+  flutter_background_geolocation: ^5.0.0-beta.2
 ```
  
 See the **[Migration Guide to 5.0.0](./MIGRATION-GUIDE-5.0.0.md)** for details about new config APIs (e.g., `LocationFilter`) and how to migrate from flat to compound config (legacy config is still supported).
