@@ -42,7 +42,7 @@ Also available for [Cordova](https://github.com/transistorsoft/cordova-backgroun
 ![Settings](https://dl.dropboxusercontent.com/s/8oad228siog49kt/settings-framed-350.png?dl=1)
 
 # Contents
-- ### 📚 [API Documentation](https://pub.dev/documentation/flutter_background_geolocation/5.0.0-beta.1/flt_background_geolocation/)
+- ### 📚 [API Documentation](https://pub.dev/documentation/flutter_background_geolocation/5.0.0-beta.2/flt_background_geolocation/)
 - ### [Installing the Plugin](#-installing-the-plugin)
 - ### [Setup Guides](#-setup-guides)
 - ### [Using the plugin](#-using-the-plugin)
@@ -61,7 +61,7 @@ Also available for [Cordova](https://github.com/transistorsoft/cordova-backgroun
 
 ```yaml
 dependencies:
-  flutter_background_geolocation: '^4.12.0'
+  flutter_background_geolocation: '^5.0.0-beta.2'
 ```
 
 ### Or latest from Git:
