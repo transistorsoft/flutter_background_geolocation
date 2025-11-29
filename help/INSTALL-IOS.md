@@ -31,7 +31,7 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
 - Enable the background modes:
     - [x] Location updates
     - [x] Background fetch
-    - [x] Audio (**optional for debug-mode sound FX**)
+    - [x] Audio ( ℹ️ **optional for debug-mode sound FX** )
 
 ![](https://dl.dropboxusercontent.com/scl/fi/muwq6wwor83acl64w4214/setup-ios-background-modes.png?rlkey=cbbuz0pg5j3ql1z4sttxpufyl&dl=1)
 
@@ -39,9 +39,9 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
 
 | Key | Type | Value |
 |-----|-------|-------------|
-| *Privacy - Location Always and When in Use Usage Description* | `String` | *CHANGEME: Location required in background* |
-| *Privacy - Location When in Use Usage Description* | `String` | *CHANGEME: Location required when app is in use* |
-| *Privacy - Motion Usage Description* | `String` | *CHANGEME: Motion permission helps detect when device in in-motion* |
+| *`Privacy - Location Always and When in Use Usage Description`* | `String` | *CHANGEME: Location required in background* |
+| *`Privacy - Location When in Use Usage Description`* | `String` | *CHANGEME: Location required when app is in use* |
+| *`Privacy - Motion Usage Description`* | `String` | *CHANGEME: Motion permission helps detect when device in in-motion* |
 
 ### Or edit `Info.plist` directly
 
@@ -71,6 +71,20 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
 </plist>
 ```
 
+## Configure Your License
+
+> [!NOTE]
+> If you've **not** [purchased a license](https://www.transistorsoft.com/shop/products/flutter-background-geolocation#plans), **ignore this step** &mdash; the plugin is fully functional in *DEBUG* builds so you can try before you [buy](https://www.transistorsoft.com/shop/products/flutter-background-geolocation#plans).
+
+In your __`Info.plist`__, add the following key:
+
+|      Key     |     Type     |     Value     |
+|-----|-------|-------------|
+| *`TSLocationManagerLicense`* | `String` | `                    <PASTE YOUR LICENSE KEY HERE>                     ` |
+
+ __`TSLocationManagerLicense`__.  Paste the contents of your license key into the __`value`__.
+
+
 ![](https://dl.dropboxusercontent.com/s/wyoejgko6xq4pi4/iOS-permissions.png?dl=1)
 
 ### Background Fetch
@@ -78,6 +92,12 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
 The *Background Geolocation* SDK has internal handling for periodic *Background Fetch* events (if enabled).  It can use these periodic events to gather current state information (*is the device moving?*), evaluating the `schedule` (if you configured one) or checking if there are any location records in the queue, waiting to be uploaded to your configured `url`:
 
 1.  Open your __`Info.plist`__ and add the key *"Permitted background task scheduler identifiers"*
+
+|      Key     |     Type     |     Value     |
+|-----|-------|-------------|
+| *`Permitted background task scheduler identifiers          `* | `Array` |  |
+| *`    Item 0                                                 `* | `String` | `com.transistorsoft.fetch` |
+
 
 ![](https://dl.dropboxusercontent.com/s/t5xfgah2gghqtws/ios-setup-permitted-identifiers.png?dl=1)
 
