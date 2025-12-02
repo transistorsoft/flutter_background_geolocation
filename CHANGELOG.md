@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 5.0.0-beta.4 &mdash; 2025-12-02
+* Fix type-cast bug in GeofenceEvent while in headless-mode.
+
 ## 5.0.0-beta.3 &mdash; 2025-12-02
 * [Android] Add proguard rules to preserve flutter plugin classnames (eg: HeadlessTask) in release with minifyEnabled.
 
