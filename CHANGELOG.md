@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 5.0.0-beta.3 &mdash; 2025-12-02
+* [Android] Add proguard rules to preserve flutter plugin classnames (eg: HeadlessTask) in release with minifyEnabled.
+
 ## 5.0.0-beta.2 &mdash; 2025-11-24
 * Bug fixes.
 * [Android] Add guards against spurious geofence exit events reported with certain devices.
