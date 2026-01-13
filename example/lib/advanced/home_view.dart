@@ -138,12 +138,13 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
             maxDaysToPersist: -1,
             persistMode: bg.PersistMode.all
         ),
-        app: bg.AppConfig(
+        app: bg.AppConfig(          
           stopOnTerminate: false,
           startOnBoot: true,
           notification: bg.Notification(
+            title: "Advanced Demo",
+            text: "Tracking enabled",
             priority: bg.NotificationPriority.defaultPriority,
-            text: 'Custom Text'
           ),
           backgroundPermissionRationale: bg.PermissionRationale(
               title: "Allow {applicationName} to access this device's location even when the app is closed or not in use.",

@@ -82,26 +82,30 @@ class _HomeViewState extends State<_HomeView> {
     final SharedPreferences prefs = await _prefs;
     prefs.setString("app", "");
 
-    // Set username.
+    // Set username and orgname from prefs (may be null on first run).
     String? username = prefs.getString("username");
-    String? orgname = prefs.getString("orgname");
+    String? orgname  = prefs.getString("orgname");
 
-    if (_usernameIsValid(username!) && (orgname == null)) {
+    // If username is valid but orgname is missing, migrate username -> orgname.
+    if (_usernameIsValid(username) && orgname == null) {
       await prefs.remove('username');
-      await prefs.setString('orgname', username);
+      await prefs.setString('orgname', username!);
       orgname = username;
       username = null;
     }
 
     setState(() {
-      _orgname = (orgname != null) ? orgname : '';
-      _username = (username != null) ? username : '';
-      _deviceId = (username != null)
-          ? "${_deviceInfo.model}-$_username"
+      _orgname  = orgname ?? '';
+      _username = username ?? '';
+      _deviceId = (username != null && username.isNotEmpty)
+          ? "${_deviceInfo.model}-$username"
           : _deviceInfo.model;
     });
 
-    if (!_usernameIsValid(username!) || !_usernameIsValid(orgname!)) {
+    final hasValidUsername = _usernameIsValid(username);
+    final hasValidOrgname  = _usernameIsValid(orgname);
+
+    if (!hasValidUsername || !hasValidOrgname) {
       _showRegistration();
     }
   }
@@ -182,7 +186,7 @@ class _HomeViewState extends State<_HomeView> {
     runApp(app);
   }
 
-  bool _usernameIsValid(String username) {
+  bool _usernameIsValid(String? username) {
     return (username != null) &&
         RegExp(USERNAME_REGEXP).hasMatch(username) &&
         (username.isNotEmpty);
