@@ -124,19 +124,26 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     ////
-    // 2.  Configure the plugin
+    // 2.  Configure the plugin (See API docs for dozens of available options)
     //
     bg.BackgroundGeolocation.ready(bg.Config(
-        desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
-        distanceFilter: 10.0,
-        stopOnTerminate: false,
-        startOnBoot: true,
-        debug: true,
-        logLevel: bg.Config.LOG_LEVEL_VERBOSE
+        geolocation: bg.GeoConfig(
+          desiredAccuracy: bg.DesiredAccuracy.high
+          distanceFilter: 10.0,
+        ),
+        app: bg.AppConfig(
+          stopOnTerminate: false,
+          startOnBoot: true
+        ),
+        logger: bg.LoggerConfig(
+          debug: true,  // <-- Emit debug soundFX during development
+          logLevel: bg.LogLevel.verbose // <-- Emit verbose logs for development / debugging
+        )
     )).then((bg.State state) {
-      if (!state.enabled) {
+      // The SDK persists its enabled state between app restarts / device reboots.
+      if (!state.enabled) { 
         ////
-        // 3.  Start the plugin.
+        // 3.  Start the plugin (like the power switch of an electronic device)
         //
         bg.BackgroundGeolocation.start();
       }
