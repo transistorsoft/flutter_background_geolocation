@@ -12,8 +12,8 @@ static NSString *const LOCATION_ERROR = @"LOCATION_ERROR";
 }
 
 - (FlutterError*)onListenWithArguments:(id)arguments eventSink:(FlutterEventSink)events {
-    self.callback = ^void(TSLocation *tsLocation) {
-        events([tsLocation toDictionary]);
+    self.callback = ^void(TSLocationEvent *event) {
+        events([event toDictionary]);
     };
     
     [[TSLocationManager sharedInstance] onLocation:self.callback failure:^(NSError *error) {    

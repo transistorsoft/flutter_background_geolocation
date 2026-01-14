@@ -35,25 +35,25 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   bg.Location? _lastLocation;
 
   ll.LatLng _currentPosition = ll.LatLng(45.508888, -73.561668);
-  List<ll.LatLng> _polyline = [];
-  List<Marker> _locations = [];
-  List<CircleMarker> _stopLocations = [];
-  List<Polyline> _motionChangePolylines = [];
-  List<CircleMarker> _stationaryMarker = [];
+  final List<ll.LatLng> _polyline = [];
+  final List<Marker> _locations = [];
+  final List<CircleMarker> _stopLocations = [];
+  final List<Polyline> _motionChangePolylines = [];
+  final List<CircleMarker> _stationaryMarker = [];
 
-  List<GeofenceMarker> _geofences = [];
-  List<Polygon> _geofencePolygons = [];
-  List<GeofenceMarker> _geofenceEvents = [];
-  List<Marker> _geofenceEventEdges = [];
-  List<Marker> _geofenceEventLocations = [];
-  List<Polyline> _geofenceEventPolylines = [];
-  List<Marker> _polygonGeofenceCursorMarkers = [];
-  List<ll.LatLng> _polygonGeofenceCursorPoints = [];
+  final List<GeofenceMarker> _geofences = [];
+  final List<Polygon> _geofencePolygons = [];
+  final List<GeofenceMarker> _geofenceEvents = [];
+  final List<Marker> _geofenceEventEdges = [];
+  final List<Marker> _geofenceEventLocations = [];
+  final List<Polyline> _geofenceEventPolylines = [];
+  final List<Marker> _polygonGeofenceCursorMarkers = [];
+  final List<ll.LatLng> _polygonGeofenceCursorPoints = [];
 
   bool _isCreatingPolygonGeofence = false;
-  OverlayEntry? _polygonGeofenceMenuOverlay = null;
+  OverlayEntry? _polygonGeofenceMenuOverlay;
 
-  ll.LatLng _center = ll.LatLng(45.508888, -73.561668);
+  final ll.LatLng _center = ll.LatLng(45.508888, -73.561668);
 
   late MapController _mapController;
   late MapOptions _mapOptions;
@@ -125,7 +125,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   }
 
   void _onGeofence(bg.GeofenceEvent event) async {
-    bg.Logger.info('[onGeofence] Flutter received onGeofence event $event');
+    bg.Logger.info('[onGeofence] Flutter received onGeofence event $event');    
     // Provide the location of this event to the Polyline.  BGGeo does not fire an onLocation for geofence events.
     _polyline.add(ll.LatLng(
         event.location.coords.latitude,
@@ -165,7 +165,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
     // 2.  A CircleMarker for the actual location of the geofence event.
     // 3.  A black PolyLine joining the two above.
     bg.Location location = event.location;
-    ll.LatLng center = ll.LatLng(geofence!.latitude!, geofence!.longitude!);
+    ll.LatLng center = ll.LatLng(geofence!.latitude!, geofence.longitude!);
     ll.LatLng hit = ll.LatLng(location.coords.latitude, location.coords.longitude);
 
     // Update current position marker.
@@ -227,15 +227,15 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
   void _onGeofencesChange(bg.GeofencesChangeEvent event) {
     print('[${bg.Event.GEOFENCESCHANGE}] - $event');
     setState(() {
-      event.off.forEach((String identifier) {
+      for (var identifier in event.off) {
         _geofences.removeWhere((GeofenceMarker marker) {
           return marker.geofence?.identifier == identifier;
         });
-      });
+      }
 
-      event.on.forEach((bg.Geofence geofence) {
+      for (var geofence in event.on) {
         // Don't re-render markers for existing geofences.
-        if (hasGeofenceMarker(geofence.identifier)) return;
+        if (hasGeofenceMarker(geofence.identifier)) continue;
         _geofences.add(GeofenceMarker(geofence));
 
         if (geofence.vertices!.isNotEmpty) {
@@ -251,7 +251,7 @@ class MapViewState extends State<MapView> with AutomaticKeepAliveClientMixin<Map
               }).toList()
           ));
         }
-      });
+      }
 
       if (event.off.isEmpty && event.on.isEmpty) {
         _geofences.clear();

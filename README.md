@@ -1,5 +1,12 @@
 # flutter_background_geolocation
 
+ 
+See the **[Migration Guide to 5.0.0](./MIGRATION-GUIDE-5.0.0.md)** for details about new config APIs (e.g., `LocationFilter`) and how to migrate from flat to compound config (legacy config is still supported).
+
+Be sure to see updated [Setup Guides](#-setup-guides)
+
+---------------------------------------------------------
+
 [![](https://dl.dropboxusercontent.com/s/nm4s5ltlug63vv8/logo-150-print.png?dl=1)](https://www.transistorsoft.com)
 
 -------------------------------------------------------------------------------
@@ -12,7 +19,7 @@ The plugin's [Philosophy of Operation](https://github.com/transistorsoft/flutter
 
 - When the device is detected be **stationary**, the plugin will automatically turn off location-services to conserve energy.
 
-Also available for [Cordova](https://github.com/transistorsoft/cordova-background-geolocation-lt), [React Native](https://github.com/transistorsoft/react-native-background-geolocation), [NativeScript](https://github.com/transistorsoft/nativescript-background-geolocation-lt) and [pure native](https://github.com/transistorsoft/background-geolocation-lt) apps.
+Also available for [Cordova](https://github.com/transistorsoft/cordova-background-geolocation-lt), [React Native](https://github.com/transistorsoft/react-native-background-geolocation), [Capacitor](https://github.com/transistorsoft/capacitor-background-geolocation) and [pure native](https://github.com/transistorsoft/native-background-geolocation) apps.
 
 
 > [!NOTE]  
@@ -26,10 +33,11 @@ Also available for [Cordova](https://github.com/transistorsoft/cordova-backgroun
 ![Settings](https://dl.dropboxusercontent.com/s/8oad228siog49kt/settings-framed-350.png?dl=1)
 
 # Contents
-- ### 📚 [API Documentation](https://pub.dartlang.org/documentation/flutter_background_geolocation/latest/flt_background_geolocation/flt_background_geolocation-library.html)
+- ### 📚 [API Documentation](https://pub.dev/documentation/flutter_background_geolocation/5.0.0-beta.2/flt_background_geolocation/)
 - ### [Installing the Plugin](#-installing-the-plugin)
 - ### [Setup Guides](#-setup-guides)
 - ### [Using the plugin](#-using-the-plugin)
+- ### [v5 Migration Guide](help/MIGRATION-GUIDE-5.0.0.md)
 - ### [Example](#l-example)
 - ### [Debugging](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Debugging)
 - ### [Demo Application](#-demo-application)
@@ -44,7 +52,7 @@ Also available for [Cordova](https://github.com/transistorsoft/cordova-backgroun
 
 ```yaml
 dependencies:
-  flutter_background_geolocation: '^4.12.0'
+  flutter_background_geolocation: '^5.0.0'
 ```
 
 ### Or latest from Git:
@@ -58,8 +66,8 @@ dependencies:
 
 ## 🔷 Setup Guides
 
-- [iOS](https://github.com/transistorsoft/flutter_background_geolocation/blob/master/help/INSTALL-IOS.md)
-- [Android](https://github.com/transistorsoft/flutter_background_geolocation/blob/master/help/INSTALL-ANDROID.md)
+- [iOS](help/INSTALL-IOS.md)
+- [Android](help/INSTALL-ANDROID.md)
 
 
 ## 🔷 Using the plugin ##
@@ -116,19 +124,26 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     ////
-    // 2.  Configure the plugin
+    // 2.  Configure the plugin (See API docs for dozens of available options)
     //
     bg.BackgroundGeolocation.ready(bg.Config(
-        desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
-        distanceFilter: 10.0,
-        stopOnTerminate: false,
-        startOnBoot: true,
-        debug: true,
-        logLevel: bg.Config.LOG_LEVEL_VERBOSE
+        geolocation: bg.GeoConfig(
+          desiredAccuracy: bg.DesiredAccuracy.high
+          distanceFilter: 10.0,
+        ),
+        app: bg.AppConfig(
+          stopOnTerminate: false,
+          startOnBoot: true
+        ),
+        logger: bg.LoggerConfig(
+          debug: true,  // <-- Emit debug soundFX during development
+          logLevel: bg.LogLevel.verbose // <-- Emit verbose logs for development / debugging
+        )
     )).then((bg.State state) {
-      if (!state.enabled) {
+      // The SDK persists its enabled state between app restarts / device reboots.
+      if (!state.enabled) { 
         ////
-        // 3.  Start the plugin.
+        // 3.  Start the plugin (like the power switch of an electronic device)
         //
         bg.BackgroundGeolocation.start();
       }

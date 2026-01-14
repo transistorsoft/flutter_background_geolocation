@@ -2,6 +2,7 @@ package com.transistorsoft.flutter.backgroundgeolocation.streams;
 
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.callback.TSHttpResponseCallback;
+import com.transistorsoft.locationmanager.event.EventName;
 import com.transistorsoft.locationmanager.http.HttpResponse;
 
 import java.util.HashMap;
@@ -12,13 +13,13 @@ import io.flutter.plugin.common.EventChannel;
 public class HttpStreamHandler extends StreamHandler implements TSHttpResponseCallback {
 
     public HttpStreamHandler() {
-        mEvent = BackgroundGeolocation.EVENT_HTTP;
+        mEvent = EventName.HTTP;
     }
 
     @Override
     public void onListen(Object args, EventChannel.EventSink eventSink) {
         super.onListen(args, eventSink);
-        BackgroundGeolocation.getInstance(mContext).onHttp(this);
+        mSubscription = BackgroundGeolocation.getInstance(mContext).onHttp(this);
     }
 
     @Override

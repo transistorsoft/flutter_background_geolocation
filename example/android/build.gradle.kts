@@ -2,15 +2,17 @@ allprojects {
     ext {
         set("appCompatVersion", "1.4.2")             // or higher / as desired
         set("playServicesLocationVersion", "21.3.0") // or higher / as desired
+        set("tslocationmanagerVersion", "4.0.0")
     }
     repositories {
         google()
         mavenCentral()
         // [required] background_geolocation
-        maven(url = "${project(":flutter_background_geolocation").projectDir}/libs")
-        maven(url = "https://developer.huawei.com/repo/")
+        // Sonatype SNAPSHOT url
+        //maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
+
         // [required] background_fetch
-        maven(url = "${project(":background_fetch").projectDir}/libs")
+        //maven(url = "${project(":background_fetch").projectDir}/libs")
     }
 }
 

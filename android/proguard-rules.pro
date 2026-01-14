@@ -3,10 +3,6 @@
 -keep class com.transistorsoft** { *; }
 -dontwarn com.transistorsoft.**
 
-# Huawei Adapter
--keep class com.google.android.gms.** {*;}
--keep interface com.google.android.gms.** {*;}
--dontwarn com.huawei.**
 
 # BackgroundGeolocation (EventBus)
 -keepattributes *Annotation*

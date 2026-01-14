@@ -1,6 +1,18 @@
 group 'com.transistorsoft.flutter.backgroundgeolocation'
 version '1.0-SNAPSHOT'
 
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Android Gradle Plugin compatible with Gradle 8.11.x
+        classpath 'com.android.tools.build:gradle:8.7.2'
+    }
+}
+
+
 rootProject.allprojects {
     repositories {
         google()
@@ -11,7 +23,9 @@ rootProject.allprojects {
 apply plugin: 'com.android.library'
 
 def DEFAULT_COMPILE_SDK_VERSION                 = 34
-def DEFAULT_PLAY_SERVICES_LOCATION_VERSION      = "20.0.0"
+def DEFAULT_PLAY_SERVICES_LOCATION_VERSION      = "21.3.0"
+def DEFAULT_TSLOCATIONMANAGER_VERSION           = "4.0.+"
+
 def DEFAULT_HMS_LOCATION_VERSION                = "6.12.0.300"
 def DEFAULT_APP_COMPAT_VERSION                  = "1.6.1"
 def DEFAULT_OK_HTTP_VERSION                     = "3.12.13"
@@ -35,7 +49,7 @@ android {
     compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
 
     defaultConfig {
-        minSdkVersion 16
+        minSdkVersion 19
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'proguard-rules.pro'
     }
@@ -51,6 +65,14 @@ repositories {
 }
 
 dependencies {
+    def playServicesLocationVersion = safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
+    def tslocationmanagerVersion = safeExtGet('tslocationmanagerVersion', DEFAULT_TSLOCATIONMANAGER_VERSION)
+
+    implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
+
+    implementation "com.transistorsoft:tslocationmanager:$tslocationmanagerVersion"
+    implementation 'org.greenrobot:eventbus:3.3.1'
+    /*
     def playServicesLocationVersion = safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
     def hmsLocationVersion = safeExtGet('hmsLocationVersion', DEFAULT_HMS_LOCATION_VERSION);
     def appCompatVersion = safeExtGet('appCompatVersion', safeExtGet('supportLibVersion', DEFAULT_APP_COMPAT_VERSION))
@@ -90,9 +112,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime:$lifeCycleRuntimeVersion"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifeCycleExtensionsVersion"
 
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.78.1'
+
     // WorkManager
     def workVersion = safeExtGet('workVersion', DEFAULT_WORK_VERSION)
     def concurrentFuturesVersion = safeExtGet('concurrentFuturesVersion', DEFAULT_CONCURRENT_FUTURES_VERSION)
     implementation "androidx.work:work-runtime:$workVersion"
     implementation "androidx.concurrent:concurrent-futures:$concurrentFuturesVersion"
+    */
 }

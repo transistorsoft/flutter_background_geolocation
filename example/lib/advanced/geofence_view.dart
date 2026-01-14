@@ -10,9 +10,9 @@ class GeofenceView extends StatefulWidget {
   LatLng? center;
   List<LatLng>? vertices;
 
-  GeofenceView({this.center, this.vertices});
+  GeofenceView({super.key, this.center, this.vertices});
   @override
-  State createState() => _GeofenceViewState(center: this.center, vertices: this.vertices);
+  State createState() => _GeofenceViewState(center: center, vertices: vertices);
 }
 
 class _GeofenceViewState extends State<GeofenceView> {
@@ -61,7 +61,7 @@ class _GeofenceViewState extends State<GeofenceView> {
       }).catchError((error) {
         print('[addGeofence] ERROR: $error');
       });
-    } else if (this.vertices != null) {
+    } else if (vertices != null) {
       // Polygon Geofence
       var vertices = this.vertices?.map((LatLng ll) {
         return [ll.latitude, ll.longitude];
@@ -98,8 +98,8 @@ class _GeofenceViewState extends State<GeofenceView> {
   @override
   Widget build(BuildContext context) {
     const labelStyle = TextStyle(color: Colors.blue, fontSize: 16.0);
-    return new Scaffold(
-        appBar: new AppBar(
+    return Scaffold(
+        appBar: AppBar(
             leading: IconButton(
                 onPressed: _onClickClose,
                 icon: Icon(Icons.close),
@@ -109,7 +109,7 @@ class _GeofenceViewState extends State<GeofenceView> {
             backgroundColor: Colors.amberAccent,
             iconTheme: IconThemeData(color: Colors.black),
             actions: [
-              MaterialButton(child: Text('Add'), onPressed: _onClickAdd)
+              MaterialButton(onPressed: _onClickAdd, child: Text('Add'))
             ]),
         body: Container(
             padding: EdgeInsets.only(left: 10.0),
@@ -131,8 +131,8 @@ class _GeofenceViewState extends State<GeofenceView> {
                     return InputDecorator(
                       decoration: InputDecoration(
                           labelText: 'Radius', labelStyle: labelStyle),
-                      child: new DropdownButtonHideUnderline(
-                        child: new DropdownButton(
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
                             value: _radius.toInt().toString(),
                             isDense: true,
                             onChanged: (String? value) {
@@ -142,15 +142,15 @@ class _GeofenceViewState extends State<GeofenceView> {
                             },
                             items: [
                               DropdownMenuItem(
-                                  value: '150', child: new Text('150')),
+                                  value: '150', child: Text('150')),
                               DropdownMenuItem(
-                                  value: '200', child: new Text('200')),
+                                  value: '200', child: Text('200')),
                               DropdownMenuItem(
-                                  value: '500', child: new Text('500')),
+                                  value: '500', child: Text('500')),
                               DropdownMenuItem(
-                                  value: '1000', child: new Text('1000')),
+                                  value: '1000', child: Text('1000')),
                               DropdownMenuItem(
-                                  value: '5000', child: new Text('5000'))
+                                  value: '5000', child: Text('5000'))
                             ]),
                       ),
                     );

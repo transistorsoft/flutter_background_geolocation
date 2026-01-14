@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## 5.0.0 &mdash; 2026-01-14
+* [Release] 5.0.0.  
+* See [5.0.0 Migration Guide](https://github.com/transistorsoft/flutter_background_geolocation/tree/master/help/MIGRATION-GUIDE-5.0.0.md)
+* See [5.0.0 Discussion](https://github.com/transistorsoft/flutter_background_geolocation/discussions/1595)
+
+## 5.0.0-beta.4 &mdash; 2025-12-02
+* Fix type-cast bug in GeofenceEvent while in headless-mode.
+
+## 5.0.0-beta.3 &mdash; 2025-12-02
+* [Android] Add proguard rules to preserve flutter plugin classnames (eg: HeadlessTask) in release with minifyEnabled.
+
+## 5.0.0-beta.2 &mdash; 2025-11-24
+* Bug fixes.
+* [Android] Add guards against spurious geofence exit events reported with certain devices.
+
+## 5.0.0-beta.1 &mdash; 2025-11-10
+* Initial introduction of v5 beta.  See the [Migration Guide](https://github.com/transistorsoft/flutter_background_geolocation/blob/5.0.0-beta/help/MIGRATION-GUIDE-5.0.0.md)
+
 ## 4.18.3 &mdash; 2026-01-14
 * [Android] Backport spurious stationary geofence exit detection from v5.  Google Play Services seems to have a bug where
  geofence exit events fire even while the device is still inside the geofence, causing the SDK to constantly enter the *m

@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
+import com.transistorsoft.locationmanager.event.EventName;
 import com.transistorsoft.locationmanager.event.HeadlessEvent;
 import com.transistorsoft.locationmanager.logger.TSLog;
 
@@ -52,7 +53,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
 
     @Override
     public void onMethodCall(MethodCall call, @NonNull MethodChannel.Result result) {
-        TSLog.logger.debug("$ " + call.method);
+        Log.d(BackgroundGeolocation.TAG, "$ " + call.method);
         if (call.method.equalsIgnoreCase("initialized")) {
             mHeadlessTaskRegistered.set(true);
             dispatch();
@@ -66,7 +67,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
     public void onHeadlessEvent(HeadlessEvent event) {
         mContext = event.getContext();
         String eventName = event.getName();
-        TSLog.logger.debug("\uD83D\uDC80 [HeadlessTask " + eventName + "]");
+        Log.d(BackgroundGeolocation.TAG, "\uD83D\uDC80 [HeadlessTask " + eventName + "]");
         synchronized (mEvents) {
             mEvents.add(event);
         }
@@ -87,7 +88,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
 
         if (!mHeadlessTaskRegistered.get()) {
             // Queue up events while background isolate is starting
-            TSLog.logger.debug("[HeadlessTask] waiting for client to initialize");
+            Log.d(BackgroundGeolocation.TAG, "[HeadlessTask] waiting for client to initialize");
             return;
         }
 
@@ -100,7 +101,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
                     response.put("params", getEventObject(event));
                     mDispatchChannel.invokeMethod("", response);
                 } catch (JSONException | IllegalStateException e) {
-                    TSLog.logger.error(TSLog.error(e.getMessage()));
+                   // TODO TSLog.logger.error(TSLog.error(e.getMessage()));
                     e.printStackTrace();
                 }
             }
@@ -111,44 +112,44 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
     private Object getEventObject(HeadlessEvent event) {
         String name = event.getName();
         Object result = null;
-        if (name.equals(BackgroundGeolocation.EVENT_TERMINATE)) {
+        if (name.equals(EventName.TERMINATE)) {
             result = event.getTerminateEvent();
-        } else if (name.equals(BackgroundGeolocation.EVENT_LOCATION)) {
+        } else if (name.equals(EventName.LOCATION)) {
             try {
                 result = event.getLocationEvent().toJson();
             } catch (JSONException e) {
-                TSLog.logger.error(e.getMessage(), e);
+                // TODO TSLog.logger.error(e.getMessage(), e);
             }
-        } else if (name.equals(BackgroundGeolocation.EVENT_MOTIONCHANGE)) {
+        } else if (name.equals(EventName.MOTIONCHANGE)) {
             result = event.getMotionChangeEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_HTTP)) {
+        } else if (name.equals(EventName.HTTP)) {
             result = event.getHttpEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_PROVIDERCHANGE)) {
+        } else if (name.equals(EventName.PROVIDERCHANGE)) {
             result = event.getProviderChangeEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_ACTIVITYCHANGE)) {
+        } else if (name.equals(EventName.ACTIVITYCHANGE)) {
             result = event.getActivityChangeEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_SCHEDULE)) {
+        } else if (name.equals(EventName.SCHEDULE)) {
             result = event.getScheduleEvent();
-        } else if (name.equals(BackgroundGeolocation.EVENT_BOOT)) {
+        } else if (name.equals(EventName.BOOT)) {
             result = event.getBootEvent();
-        } else if (name.equals(BackgroundGeolocation.EVENT_GEOFENCE)) {
+        } else if (name.equals(EventName.GEOFENCE)) {
             result = event.getGeofenceEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_GEOFENCES_CHANGE)) {
+        } else if (name.equals(EventName.GEOFENCESCHANGE)) {
             result = event.getGeofencesChangeEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_HEARTBEAT)) {
+        } else if (name.equals(EventName.HEARTBEAT)) {
             result = event.getHeartbeatEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_CONNECTIVITYCHANGE)) {
+        } else if (name.equals(EventName.CONNECTIVITYCHANGE)) {
             result = event.getConnectivityChangeEvent().toJson();
-        } else if (name.equals(BackgroundGeolocation.EVENT_POWERSAVECHANGE)) {
+        } else if (name.equals(EventName.POWERSAVECHANGE)) {
             result = event.getPowerSaveChangeEvent().isPowerSaveMode();
-        } else if (name.equals(BackgroundGeolocation.EVENT_ENABLEDCHANGE)) {
+        } else if (name.equals(EventName.ENABLEDCHANGE)) {
             result = event.getEnabledChangeEvent();
-        } else if (name.equals(BackgroundGeolocation.EVENT_AUTHORIZATION)) {
+        } else if (name.equals(EventName.AUTHORIZATION)) {
             result = event.getAuthorizationEvent().toJson();
-        } else if (name.equalsIgnoreCase(BackgroundGeolocation.EVENT_NOTIFICATIONACTION)) {
+        } else if (name.equalsIgnoreCase(EventName.NOTIFICATIONACTION)) {
             result = event.getNotificationEvent();
         } else {
-            TSLog.logger.warn(TSLog.warn("Unknown Headless Event: " + name));
+            // TODO TSLog.logger.warn(TSLog.warn("Unknown Headless Event: " + name));
         }
         return result;
     }
@@ -173,7 +174,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
             FlutterCallbackInformation callbackInfo = FlutterCallbackInformation.lookupCallbackInformation(sRegistrationCallbackId);
 
             if (callbackInfo == null) {
-                TSLog.logger.error(TSLog.error("Fatal: failed to find callback: " + sRegistrationCallbackId));
+                // TODO TSLog.logger.error(TSLog.error("Fatal: failed to find callback: " + sRegistrationCallbackId));
                 return;
             }
             DartExecutor.DartCallback dartCallback = new DartExecutor.DartCallback(assets, appBundlePath, callbackInfo);
@@ -231,7 +232,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
             sClientCallbackId = prefs.getLong(KEY_CLIENT_CALLBACK_ID, -1);
 
             if ((sRegistrationCallbackId == -1) || (sClientCallbackId == -1)) {
-                TSLog.logger.error(TSLog.error("Invalid Headless Callback ids.  Cannot handle headless event"));
+                // TODO TSLog.logger.error(TSLog.error("Invalid Headless Callback ids.  Cannot handle headless event"));
                 return;
             }
 

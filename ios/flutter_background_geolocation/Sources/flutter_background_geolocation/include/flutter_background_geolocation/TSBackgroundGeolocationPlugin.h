@@ -15,6 +15,7 @@
 #import "TSEnabledChangeStreamHandler.h"
 #import "TSNotificationActionStreamHandler.h"
 #import "TSAuthorizationStreamHandler.h"
+#import "TSWatchPositionStreamHandler.h"
 
 @interface TSBackgroundGeolocationPlugin : NSObject<FlutterPlugin>
 

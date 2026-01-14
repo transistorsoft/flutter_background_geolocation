@@ -18,7 +18,7 @@ part of '../flutter_background_geolocation.dart';
 /// __ℹ️ Note:__
 /// - Native iOS & Android API support only *circular* geofences, however the plugin does implement a custom mechanism for handling *Polygon Geofences*; see [Geofence.vertices].
 /// - The minimum reliable [Geofence.radius] is `200` meters.
-/// - The native geofencing API for both iOS and Android *require* the user authorize [Config.locationAuthorizationRequest] **`Always`** &mdash; **`When in Use`** will **not** work.
+/// - The native geofencing API for both iOS and Android *require* the user authorize [GeoConfig.locationAuthorizationRequest] **`Always`** &mdash; **`When in Use`** will **not** work.
 ///
 /// ## Adding Geofences
 /// ---------------------------------------------------------------------------------------------------------
@@ -93,19 +93,19 @@ part of '../flutter_background_geolocation.dart';
 ///
 /// The Background Geolocation SDK contains unique and powerful Geofencing features that allow you to monitor any number of circular geofences you wish (thousands even), in spite of limits imposed by the native platform APIs (**20 for iOS; 100 for Android**).
 ///
-/// The SDK achieves this by storing your geofences in its database, using a [geospatial query](https://en.wikipedia.org/wiki/Spatial_query) to determine those geofences in proximity ([Config.geofenceProximityRadius]), activating only those geofences closest to the device's current location (according the limit imposed by the corresponding platform).
+/// The SDK achieves this by storing your geofences in its database, using a [geospatial query](https://en.wikipedia.org/wiki/Spatial_query) to determine those geofences in proximity ([GeoConfig.geofenceProximityRadius]), activating only those geofences closest to the device's current location (according the limit imposed by the corresponding platform).
 ///
 /// ![](https://www.transistorsoft.com/shop/products/assets/images/background-geolocation-infinite-geofencing.gif)
 ///
-/// - When the device is determined to be moving, the plugin periodically queries for geofences within the [Config.geofenceProximityRadius] (eg. every minute) using the latest recorded location.  This geospatial query is **very fast**, even with tens-of-thousands geofences in the database.
-/// - The SDK **enforces** a *minimum* [Config.geofenceProximityRadius] of `1000` meters.
-/// - In the following image, the *green* geofences within [Config.geofenceProximityRadius] are *actively* monitored.  The *grey* geofences outside [Config.geofenceProximityRadius] still exist within the SDK's database but are *not* actively being monitored.
+/// - When the device is determined to be moving, the plugin periodically queries for geofences within the [GeoConfig.geofenceProximityRadius] (eg. every minute) using the latest recorded location.  This geospatial query is **very fast**, even with tens-of-thousands geofences in the database.
+/// - The SDK **enforces** a *minimum* [GeoConfig.geofenceProximityRadius] of `1000` meters.
+/// - In the following image, the *green* geofences within [GeoConfig.geofenceProximityRadius] are *actively* monitored.  The *grey* geofences outside [GeoConfig.geofenceProximityRadius] still exist within the SDK's database but are *not* actively being monitored.
 ///
 /// ![](https://dl.dropboxusercontent.com/s/7sggka4vcbrokwt/geofenceProximityRadius_iphone6_spacegrey_portrait.png?dl=1)
 ///
 /// ## Listening for changes in the actively-monitored set-of-geofences.
 ///
-/// As the SDK periodically queries for geofences within the [Config.geofenceProximityRadius], you can listen for changes in the actively-monitored geofences using the event [BackgroundGeolocation.onGeofencesChange].  This event will let you know those geofences which have *begun* to be *actively monitored* ([GeofencesChangeEvent.on]) in addition to those which just *ceased* to be actively monitored ([GeofencesChangeEvent.off]).
+/// As the SDK periodically queries for geofences within the [GeoConfig.geofenceProximityRadius], you can listen for changes in the actively-monitored geofences using the event [BackgroundGeolocation.onGeofencesChange].  This event will let you know those geofences which have *begun* to be *actively monitored* ([GeofencesChangeEvent.on]) in addition to those which just *ceased* to be actively monitored ([GeofencesChangeEvent.off]).
 ///
 /// ### Example
 ///
@@ -128,7 +128,7 @@ part of '../flutter_background_geolocation.dart';
 ///
 /// ## Removing Geofences
 ///
-/// Once a geofence has been inserted into the SDK's database using [BackgroundGeolocation.addGeofence] or [BackgroundGeolocation.addGeofences], they will be monitored *forever* (as long as the plugin remains `State.enabled == true`).  If you've configured [Config.stopOnTerminate] __`false`__ and [Config.startOnBoot] __`true`__, geofences will continue to be monitored even if the application is terminated or device rebooted.
+/// Once a geofence has been inserted into the SDK's database using [BackgroundGeolocation.addGeofence] or [BackgroundGeolocation.addGeofences], they will be monitored *forever* (as long as the plugin remains `State.enabled == true`).  If you've configured [AppConfig.stopOnTerminate] __`false`__ and [AppConfig.startOnBoot] __`true`__, geofences will continue to be monitored even if the application is terminated or device rebooted.
 /// To cease monitoring a geofence or *geofences*, you must *remove* them from the SDK's database (or call [BackgroundGeolocation.stop]).
 ///
 /// ### Removing a single geofence by [Geofence.identifier]:
@@ -167,7 +167,7 @@ part of '../flutter_background_geolocation.dart';
 ///
 /// The BackgroundGeolocation SDK allows you to optionally monitor *only* geofences without constant location-tracking.  To engage *geofences-only* mode, use the method [BackgroundGeolocation.startGeofences] instead of [BackgroundGeolocation.start].
 ///
-/// Use option [Config.geofenceModeHighAccuracy]:true to improve the responsiveness of geofence events.
+/// Use option [GeoConfig.geofenceModeHighAccuracy]:true to improve the responsiveness of geofence events.
 ///
 /// ```dart
 /// BackgroundGeolocation.onGeofence((GeofenceEvent event) {
@@ -240,16 +240,66 @@ class GeofenceEvent {
   /// Optional [Geofence.extras]
   Map? extras;
 
+  /// The [Geofence] which fired this event.
+  late Geofence geofence;
+
   GeofenceEvent(Map params) {
     // Remove geofence from location to prevent recursive creation of GeofenceEvent.
     Map locationData = params['location'];
     locationData.remove("geofence");
 
-    this.identifier = params['identifier'];
-    this.action = params['action'];
-    this.timestamp = params['timestamp'];
-    this.location = new Location(locationData);
-    this.extras = params['extras'];
+    identifier = params['identifier'];
+    action = params['action'];
+    timestamp = params['timestamp'];
+    location = Location(locationData);
+    extras = params['extras'];
+
+    Map geofenceData = params['geofence'];
+
+    // Normalize numeric fields.
+    final double? radius = _ensureDouble(geofenceData['radius']);
+    final double? latitude = _ensureDouble(geofenceData['latitude']);
+    final double? longitude = _ensureDouble(geofenceData['longitude']);
+
+    final int? loiteringDelay = _ensureInt(geofenceData['loiteringDelay']);
+
+    // Normalize vertices: List<List<double>>
+    List<List<double>> vertices = [];
+    if (geofenceData['vertices'] != null) {
+      List<Object?> tmp = geofenceData['vertices'];
+      tmp.forEach((vertex) {
+        final coords = vertex as List;
+        vertices.add(
+          coords.map((e) => _ensureDouble(e) ?? 0.0).toList(),
+        );
+      });
+    }
+
+    geofence = Geofence(
+      identifier: geofenceData['identifier'],
+      radius: radius,
+      latitude: latitude,
+      longitude: longitude,
+      notifyOnEntry: geofenceData['notifyOnEntry'],
+      notifyOnExit: geofenceData['notifyOnExit'],
+      notifyOnDwell: geofenceData['notifyOnDwell'],
+      loiteringDelay: loiteringDelay,
+      vertices: vertices,
+      extras: (geofenceData['extras'] != null)
+          ? geofenceData['extras'].cast<String, dynamic>()
+          : {},
+    );
+
+    // 🔹 Hydrate readonly runtime fields from native payload.
+    if (geofenceData['hits'] != null) {
+      geofence.hits = _ensureInt(geofenceData['hits']) ?? 0;
+    }
+    if (geofenceData['entryState'] != null) {
+      geofence.entryState = _ensureInt(geofenceData['entryState']) ?? 0;
+    }
+    if (geofenceData['stateUpdatedAt'] != null) {
+      geofence.stateUpdatedAt = _ensureDouble(geofenceData['stateUpdatedAt']);
+    }
   }
 
   /// String representation of `GeofenceEvent` for `print` to logs.

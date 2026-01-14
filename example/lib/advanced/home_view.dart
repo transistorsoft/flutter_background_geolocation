@@ -17,23 +17,27 @@ import './util/test.dart';
 import 'shared_events.dart';
 
 // For pretty-printing location JSON
-JsonEncoder encoder = new JsonEncoder.withIndent("    ");
+JsonEncoder encoder = JsonEncoder.withIndent("    ");
 
 /// The main home-screen of the AdvancedApp.  Builds the Scaffold of the App.
 ///
 class HomeView extends StatefulWidget {
+  const HomeView({super.key});
+
   @override
   State createState() => HomeViewState();
 }
 
 class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeView>, WidgetsBindingObserver {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   TabController? _tabController;
 
   bool? _isMoving;
   bool? _enabled;
   String? _motionActivity;
   String? _odometer;
+  int? _watchPositionId;
+  int? _watchPositionId2;
 
   DateTime? _lastRequestedTemporaryFullAccuracy;
 
@@ -120,6 +124,59 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
 
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
+        reset: false,
+        transistorAuthorizationToken: token,
+        geolocation: bg.GeoConfig(
+            desiredAccuracy: bg.DesiredAccuracy.navigation,
+            distanceFilter: 10,
+            stopTimeout: 5
+        ),
+        http: bg.HttpConfig(
+            autoSync: true,
+        ),
+        persistence: bg.PersistenceConfig(
+            maxDaysToPersist: -1,
+            persistMode: bg.PersistMode.all
+        ),
+        app: bg.AppConfig(          
+          stopOnTerminate: false,
+          startOnBoot: true,
+          notification: bg.Notification(
+            title: "Advanced Demo",
+            text: "Tracking enabled",
+            priority: bg.NotificationPriority.defaultPriority,
+          ),
+          backgroundPermissionRationale: bg.PermissionRationale(
+              title: "Allow {applicationName} to access this device's location even when the app is closed or not in use.",
+              message: "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
+              positiveAction: 'Change to "{backgroundPermissionOptionLabel}"',
+              negativeAction: 'Cancel'
+          ),
+        ),
+        logger: bg.LoggerConfig(
+            logLevel: bg.LogLevel.verbose,
+            debug: true
+        )
+    )).then((bg.State state) async {
+      print('[ready] ${state.toMap()}');
+      print('[didDeviceReboot] ${state.didDeviceReboot}');
+      if (state.schedule!.isNotEmpty) {
+        bg.BackgroundGeolocation.startSchedule();
+      }
+      print("*** enabled: ${state.enabled}, switchState: ${_enabled}");
+
+      _validateCompoundConfig(state);
+
+      setState(() {
+        _enabled = state.enabled;
+        _isMoving = state.isMoving;
+      });
+    }).catchError((error) {
+      print('[ready] ERROR: $error');
+    });
+
+    /*
+    bg.BackgroundGeolocation.ready(bg.Config(
         reset: false,  // <-- lets the Settings screen drive the config rather than re-applying each boot.
         // Convenience option to automatically configure the SDK to post to Transistor Demo server.
         transistorAuthorizationToken: token,
@@ -150,6 +207,8 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       if (state.schedule!.isNotEmpty) {
         bg.BackgroundGeolocation.startSchedule();
       }
+      print("*** enabled: ${state.enabled}, switchState: ${_enabled}");
+
       setState(() {
         _enabled = state.enabled;
         _isMoving = state.isMoving;
@@ -157,7 +216,8 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     }).catchError((error) {
       print('[ready] ERROR: $error');
     });
-    
+    */
+
     // Fetch currently selected tab.
     SharedPreferences prefs = await _prefs;
     int? tabIndex = prefs.getInt("tabIndex");
@@ -169,6 +229,53 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       }
     });
   }
+
+  void _validateCompoundConfig(bg.State state) {
+    print('═════════════════════════════════════════════');
+    print('🧩 VALIDATING COMPOUND CONFIG GROUPS');
+    print('═════════════════════════════════════════════');
+
+    final groups = {
+      'app': state.app,
+      'geolocation': state.geolocation,
+      'http': state.http,
+      'activity': state.activity,
+      'persistence': state.persistence,
+      'logger': state.logger,
+    };
+
+    groups.forEach((key, value) {
+      if (value == null) {
+        print('❌ $key: NULL (expected non-null)');
+      } else {
+        print('✅ $key: ${value.runtimeType}');
+      }
+    });
+
+    print('\n═════════════════════════════════════════════');
+    print('🔍 FIELD VALIDATION');
+    print('═════════════════════════════════════════════');
+
+    try {
+      print('• desiredAccuracy: ${state.geolocation.desiredAccuracy}');
+      print('• distanceFilter: ${state.geolocation.distanceFilter}');
+      print('• http.url: ${state.http.url}');
+      print('• persistence.persistMode: ${state.persistence.persistMode}');
+      print('• app.startOnBoot: ${state.app.startOnBoot}');
+      print('• logger.logLevel: ${state.logger.logLevel}');
+      print('• geolocation.stopTimeout: ${state.geolocation.stopTimeout}');
+    } catch (e) {
+      print('⚠️ Exception while reading compound properties: $e');
+    }
+
+    print('\n═════════════════════════════════════════════');
+    print('🧠 STATE SUMMARY');
+    print('═════════════════════════════════════════════');
+    print('enabled=${state.enabled}, isMoving=${state.isMoving}, trackingMode=${state.trackingMode}');
+    print('odometer=${state.odometer}, didLaunchInBackground=${state.didLaunchInBackground}');
+    print('═════════════════════════════════════════════');
+  }
+
 
   // Configure BackgroundFetch (not required by BackgroundGeolocation).
   void _configureBackgroundFetch() async {
@@ -184,7 +291,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         requiredNetworkType: NetworkType.NONE
     ), (String taskId) async {
       print("[BackgroundFetch] received event $taskId");
-      bg.Logger.debug("🔔 [BackgroundFetch start] " + taskId);
+      bg.Logger.debug("🔔 [BackgroundFetch start] $taskId");
       SharedPreferences prefs = await SharedPreferences.getInstance();
       int count = 0;
       if (prefs.get("fetch-count") != null) {
@@ -222,7 +329,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
             enableHeadless: true
         ));
       }
-      bg.Logger.debug("🔔 [BackgroundFetch finish] " + taskId);
+      bg.Logger.debug("🔔 [BackgroundFetch finish] $taskId");
       BackgroundFetch.finish(taskId);
     });
   }
@@ -230,13 +337,13 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   void _onClickEnable(enabled) async {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
     if (enabled) {
-      dynamic callback = (bg.State state) async {
+      Future<void> callback(bg.State state) async {
         print('[start] success: $state');
         setState(() {
           _enabled = state.enabled;
           _isMoving = state.isMoving;
         });
-      };
+      }
       bg.State state = await bg.BackgroundGeolocation.state;
       if (state.trackingMode == 1) {
         bg.BackgroundGeolocation.start().then(callback);
@@ -244,13 +351,13 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         bg.BackgroundGeolocation.startGeofences().then(callback);
       }
     } else {
-      dynamic callback = (bg.State state) {
+      void callback(bg.State state) {
         print('[stop] success: $state');
         setState(() {
           _enabled = state.enabled;
           _isMoving = state.isMoving;
         });
-      };
+      }
       bg.BackgroundGeolocation.stop().then(callback);
     }
   }
@@ -265,13 +372,30 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     bg.BackgroundGeolocation.changePace(_isMoving!).then((bool isMoving) {
       print('[changePace] success $isMoving');
     }).catchError((e) {
-      print('[changePace] ERROR: ' + e.code.toString());
+      print('[changePace] ERROR: ${e.code}');
     });
   }
 
   // Manually fetch the current position.
   void _onClickGetCurrentPosition() async {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("BUTTON_CLICK"));
+    /*
+    if (_watchPositionId != null) {
+      print("**** stopWatchPosition: $_watchPositionId");
+      await bg.BackgroundGeolocation.stopWatchPosition(_watchPositionId!);
+      await bg.BackgroundGeolocation.stopWatchPosition(_watchPositionId2!);
+      _watchPositionId = null;
+    } else {
+      _watchPositionId = await bg.BackgroundGeolocation.watchPosition(interval: 1000, extras: {"***ID***": 1}, onLocation: (location) {
+        print("*** [watchPosition] ONE: $location");
+      });
+
+      _watchPositionId2 = await bg.BackgroundGeolocation.watchPosition(interval: 1000, extras: {"***ID***": 2}, onLocation: (location) {
+        print("*** [watchPosition] TWO: $location");
+      });
+
+    }
+     */
 
     bg.BackgroundGeolocation.getCurrentPosition(
         persist: true,       // <-- do not persist this location
@@ -285,6 +409,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     }).catchError((error) {
       print('[getCurrentPosition] ERROR: $error');
     });
+
   }
 
   // Go back to HomeApp
@@ -311,7 +436,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
   void _onLocationError(bg.LocationError error) {
     print('[${bg.Event.LOCATION}] ERROR - $error');
     setState(() {
-      events.insert(0, Event(bg.Event.LOCATION + " error", error, error.toString()));
+      events.insert(0, Event("${bg.Event.LOCATION} error", error, error.toString()));
     });
   }
 
@@ -478,11 +603,11 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
           events: events,
           child: TabBarView(
               controller: _tabController,
+              physics: NeverScrollableScrollPhysics(),
               children: [
                 MapView(),
                 EventList()
-              ],
-              physics: new NeverScrollableScrollPhysics()
+              ]
           )
       ),
       bottomNavigationBar: BottomAppBar(
@@ -498,17 +623,17 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
                       onPressed: _onClickGetCurrentPosition,
                     ),
                     TextButton(
-                        child: Text('$_motionActivity · $_odometer km'),
                         onPressed: _onClickTestMode,
                         style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black)
-                        )
+                          foregroundColor: WidgetStateProperty.all<Color>(Colors.black)
+                        ),
+                        child: Text('$_motionActivity · $_odometer km')
                     ),
                     MaterialButton(
                         minWidth: 50.0,
-                        child: Icon((_isMoving!) ? Icons.pause : Icons.play_arrow, color: Colors.white),
                         color: (_isMoving!) ? Colors.red : Colors.green,
-                        onPressed: _onClickChangePace
+                        onPressed: _onClickChangePace,
+                        child: Icon((_isMoving!) ? Icons.pause : Icons.play_arrow, color: Colors.white)
                     )
                   ]
               )
@@ -527,11 +652,11 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("TEST_MODE_SUCCESS"));
       Test.applyTestConfig();
     }
-    var _testModeTimer = this._testModeTimer;
-    if (_testModeTimer != null) {
-      _testModeTimer.cancel();
+    var testModeTimer = _testModeTimer;
+    if (testModeTimer != null) {
+      testModeTimer.cancel();
     }
-    _testModeTimer = new Timer(Duration(seconds: 2), () {
+    testModeTimer = Timer(Duration(seconds: 2), () {
       _testModeClicks = 0;
     });
   }

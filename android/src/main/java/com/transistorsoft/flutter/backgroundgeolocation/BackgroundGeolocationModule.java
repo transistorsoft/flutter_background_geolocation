@@ -5,16 +5,21 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> master
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.*;
 
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
-import com.transistorsoft.locationmanager.adapter.TSConfig;
+import com.transistorsoft.locationmanager.adapter.Actions;
+import com.transistorsoft.locationmanager.config.TSConfig;
 import com.transistorsoft.locationmanager.adapter.callback.TSBackgroundTaskCallback;
 import com.transistorsoft.locationmanager.adapter.callback.TSCallback;
 import com.transistorsoft.locationmanager.adapter.callback.TSEmailLogCallback;
@@ -29,16 +34,17 @@ import com.transistorsoft.locationmanager.adapter.callback.TSLocationCallback;
 import com.transistorsoft.locationmanager.adapter.callback.TSPlayServicesConnectErrorCallback;
 import com.transistorsoft.locationmanager.adapter.callback.TSRequestPermissionCallback;
 import com.transistorsoft.locationmanager.adapter.callback.TSSyncCallback;
-import com.transistorsoft.locationmanager.config.TSAuthorization;
-import com.transistorsoft.locationmanager.config.TransistorAuthorizationToken;
+import com.transistorsoft.locationmanager.http.TSAuthorization;
+import com.transistorsoft.locationmanager.http.TransistorAuthorizationToken;
+import com.transistorsoft.locationmanager.config.edit.Editor;
 import com.transistorsoft.locationmanager.data.LocationModel;
 import com.transistorsoft.locationmanager.data.SQLQuery;
 import com.transistorsoft.locationmanager.device.DeviceInfo;
 import com.transistorsoft.locationmanager.device.DeviceSettingsRequest;
+import com.transistorsoft.locationmanager.event.LocationEvent;
 import com.transistorsoft.locationmanager.event.TerminateEvent;
 import com.transistorsoft.locationmanager.geofence.TSGeofence;
 import com.transistorsoft.locationmanager.location.TSCurrentPositionRequest;
-import com.transistorsoft.locationmanager.location.TSLocation;
 import com.transistorsoft.locationmanager.location.TSWatchPositionRequest;
 import com.transistorsoft.locationmanager.logger.TSLog;
 import com.transistorsoft.locationmanager.scheduler.TSScheduleManager;
@@ -80,8 +86,6 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     private static final String ACTION_READY             = "ready";
     private static final String ACTION_REGISTER_HEADLESS_TASK = "registerHeadlessTask";
     private static final String ACTION_GET_STATE         = "getState";
-    private static final String ACTION_START_SCHEDULE    = "startSchedule";
-    private static final String ACTION_STOP_SCHEDULE     = "stopSchedule";
     private static final String ACTION_LOG               = "log";
     private static final String ACTION_REQUEST_SETTINGS  = "requestSettings";
     private static final String ACTION_SHOW_SETTINGS     = "showSettings";
@@ -138,13 +142,12 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                     BackgroundGeolocation adapter = BackgroundGeolocation.getInstance(activity);
                     adapter.setActivity(activity);
                     adapter.removeListeners();
-
                     TSConfig config = TSConfig.getInstance(mContext.getApplicationContext());
-                    config.useCLLocationAccuracy(true);
-
-                    config.updateWithBuilder()
-                            .setHeadlessJobService(JOB_SERVICE_CLASS)
-                            .commit();
+                    config.setUseCLLocationAccuracy(true);
+                    Editor ed = config.edit();
+                    //ed.geo().setUseCLLocationAccuracy(true);
+                    ed.app().setHeadlessJobService(JOB_SERVICE_CLASS);
+                    ed.commit();
                 }
             });
         } else if (mActivity != null) {
@@ -244,61 +247,62 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             ready(params, result);
         } else if (call.method.equals(ACTION_GET_STATE)) {
             getState(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_START)) {
+
+        } else if (call.method.equalsIgnoreCase(Actions.START)) {
             start(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_STOP)) {
+        } else if (call.method.equalsIgnoreCase(Actions.STOP)) {
             stop(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_START_GEOFENCES)) {
+        } else if (call.method.equalsIgnoreCase(Actions.START_GEOFENCES)) {
             startGeofences(result);
-        } else if (call.method.equalsIgnoreCase(ACTION_START_SCHEDULE)) {
+        } else if (call.method.equalsIgnoreCase(Actions.START_SCHEDULE)) {
             startSchedule(result);
-        } else if (call.method.equalsIgnoreCase(ACTION_STOP_SCHEDULE)) {
+        } else if (call.method.equalsIgnoreCase(Actions.STOP_SCHEDULE)) {
             stopSchedule(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_START_BACKGROUND_TASK)) {
+        } else if (call.method.equalsIgnoreCase(Actions.START_BACKGROUND_TASK)) {
             startBackgroundTask(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_FINISH)) {
+        } else if (call.method.equalsIgnoreCase(Actions.FINISH)) {
             stopBackgroundTask((int) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_RESET)) {
             reset(call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_SET_CONFIG)) {
+        } else if (call.method.equalsIgnoreCase(Actions.SET_CONFIG)) {
             setConfig((Map) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_CHANGE_PACE)) {
+        } else if (call.method.equalsIgnoreCase(Actions.CHANGE_PACE)) {
             changePace(call, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_CURRENT_POSITION)) {
+        } else if (call.method.equalsIgnoreCase(Actions.GET_CURRENT_POSITION)) {
             getCurrentPosition((Map) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_WATCH_POSITION)) {
+        } else if (call.method.equalsIgnoreCase(Actions.WATCH_POSITION)) {
             watchPosition((Map) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_STOP_WATCH_POSITION)) {
+        } else if (call.method.equalsIgnoreCase(Actions.STOP_WATCH_POSITION)) {
             stopWatchPosition(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_LOCATIONS)) {
+        } else if (call.method.equalsIgnoreCase(Actions.GET_LOCATIONS)) {
             getLocations(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_INSERT_LOCATION)) {
+        } else if (call.method.equalsIgnoreCase(Actions.INSERT_LOCATION)) {
             insertLocation((Map) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_COUNT)) {
+        } else if (call.method.equalsIgnoreCase(Actions.GET_COUNT)) {
             getCount(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_DESTROY_LOCATIONS)) {
+        } else if (call.method.equalsIgnoreCase(Actions.DESTROY_LOCATIONS)) {
             destroyLocations(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_DESTROY_LOCATION)) {
+        } else if (call.method.equalsIgnoreCase(Actions.DESTROY_LOCATION)) {
             destroyLocation((String) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_SYNC)) {
+        } else if (call.method.equalsIgnoreCase(Actions.SYNC)) {
             sync(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_ODOMETER)) {
+        } else if (call.method.equalsIgnoreCase(Actions.GET_ODOMETER)) {
             getOdometer(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_SET_ODOMETER)) {
+        } else if (call.method.equalsIgnoreCase(Actions.SET_ODOMETER)) {
             setOdometer((Double) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_ADD_GEOFENCE)) {
+        } else if (call.method.equalsIgnoreCase(Actions.ADD_GEOFENCE)) {
             addGeofence((Map) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_ADD_GEOFENCES)) {
+        } else if (call.method.equalsIgnoreCase(Actions.ADD_GEOFENCES)) {
             addGeofences((List) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_REMOVE_GEOFENCE)) {
+        } else if (call.method.equalsIgnoreCase(Actions.REMOVE_GEOFENCE)) {
             removeGeofence((String) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_REMOVE_GEOFENCES)) {
+        } else if (call.method.equalsIgnoreCase(Actions.REMOVE_GEOFENCES)) {
             removeGeofences(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_GEOFENCES)) {
+        } else if (call.method.equalsIgnoreCase(Actions.GET_GEOFENCES)) {
             getGeofences(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_GEOFENCE)) {
+        } else if (call.method.equalsIgnoreCase(Actions.GET_GEOFENCE)) {
             getGeofence((String) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GEOFENCE_EXISTS)) {
+        } else if (call.method.equalsIgnoreCase(Actions.GEOFENCE_EXISTS)) {
             geofenceExists((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(TSLog.ACTION_LOG)) {
             log((List) call.arguments, result);
@@ -308,16 +312,16 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             emailLog((List) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(TSLog.ACTION_UPLOAD_LOG)) {
             uploadLog((List) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_DESTROY_LOG)) {
+        } else if (call.method.equalsIgnoreCase(Actions.DESTROY_LOG)) {
             destroyLog(result);
         } else if (call.method.equalsIgnoreCase(ACTION_LOG)) {
             Map<String, String> args = (Map) call.arguments;
             log(args.get("level"), args.get("message"), result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_SENSORS)) {
+        } else if (call.method.equalsIgnoreCase(Actions.GET_SENSORS)) {
             getSensors(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_IS_POWER_SAVE_MODE)) {
+        } else if (call.method.equalsIgnoreCase(Actions.IS_POWER_SAVE_MODE)) {
             isPowerSaveMode(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_IS_IGNORING_BATTERY_OPTIMIZATIONS)) {
+        } else if (call.method.equalsIgnoreCase(Actions.IS_IGNORING_BATTERY_OPTIMIZATIONS)) {
             isIgnoringBatteryOptimizations(result);
         } else if (call.method.equalsIgnoreCase(ACTION_REQUEST_SETTINGS)) {
             requestSettings((List) call.arguments, result);
@@ -325,13 +329,13 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             showSettings((List) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(DeviceInfo.ACTION_GET_DEVICE_INFO)) {
             getDeviceInfo(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_PLAY_SOUND)) {
+        } else if (call.method.equalsIgnoreCase(Actions.PLAY_SOUND)) {
             playSound((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_REGISTER_HEADLESS_TASK)) {
             registerHeadlessTask((List<Object>) call.arguments, result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_GET_PROVIDER_STATE)) {
+        } else if (call.method.equalsIgnoreCase(Actions.GET_PROVIDER_STATE)) {
             getProviderState(result);
-        } else if (call.method.equalsIgnoreCase(BackgroundGeolocation.ACTION_REQUEST_PERMISSION)) {
+        } else if (call.method.equalsIgnoreCase(Actions.REQUEST_PERMISSION)) {
             requestPermission((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(ACTION_REQUEST_TEMPORARY_FULL_ACCURACY)) {
             requestTemporaryFullAccuracy((String) call.arguments, result);
@@ -362,16 +366,14 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     @SuppressWarnings("unchecked")
     private void ready(@NonNull Map<String, Object> params, final MethodChannel.Result result) {
-
         boolean reset = (!params.containsKey("reset")) || (boolean) params.get("reset");
         TSConfig config = TSConfig.getInstance(mContext);
-
         if (mReady) {
             if (reset) {
-                TSLog.logger.warn(TSLog.warn("#ready already called.  Redirecting to #setConfig"));
+                Log.w(BackgroundGeolocation.TAG, TSLog.warn("#ready already called.  Redirecting to #setConfig"));
                 setConfig(params, result);
             } else {
-                TSLog.logger.warn(TSLog.warn("#ready already called.  Config ignored since reset:false"));
+                Log.w(BackgroundGeolocation.TAG, TSLog.warn("#ready already called.  Config ignored since reset:false"));
                 resultWithState(result);
             }
             return;
@@ -390,11 +392,11 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                     return;
                 }
             } else if (params.containsKey(TSAuthorization.NAME)) {
-                Map options = (Map) params.get(TSAuthorization.NAME);
+                Map<String, Object> options = (Map<String, Object>) params.get(TSAuthorization.NAME);
                 if (options != null) {
-                    config.updateWithBuilder()
-                            .setAuthorization(new TSAuthorization((Map<String,Object>)options))
-                            .commit();
+                    Editor ed = config.edit();
+                    ed.auth().setAuthorization(options);
+                    ed.commit();
                 }
             }
         }
@@ -484,12 +486,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         TSCurrentPositionRequest.Builder builder = new TSCurrentPositionRequest.Builder(mContext);
 
         builder.setCallback(new TSLocationCallback() {
-            @Override public void onLocation(TSLocation tsLocation) {
-                try {
-                    result.success(tsLocation.toMap());
-                } catch (JSONException e) {
-                    TSLog.logger.error(e.getMessage(), e);
-                }
+            @Override public void onLocation(LocationEvent event) {
+                result.success(event.toMap());
             }
             @Override public void onError(Integer errorCode) {
                 result.error(errorCode.toString(), null, null);
@@ -500,7 +498,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         if (options.containsKey("persist"))         { builder.setPersist((boolean) options.get("persist")); }
         if (options.containsKey("timeout"))         { builder.setTimeout((int) options.get("timeout")); }
         if (options.containsKey("maximumAge"))      { builder.setMaximumAge(((Integer) options.get("maximumAge")).longValue()); }
-        if (options.containsKey("desiredAccuracy")) { builder.setDesiredAccuracy((int) options.get("desiredAccuracy")); }
+        if (options.containsKey("desiredAccuracy")) { builder.setDesiredAccuracy((double) options.get("desiredAccuracy")); }
         if (options.containsKey("extras")) {
             Object extras = options.get("extras");
             if ((extras != null) && (extras.getClass() == HashMap.class)) {
@@ -522,12 +520,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         TSWatchPositionRequest.Builder builder = new TSWatchPositionRequest.Builder(mContext);
 
         builder.setCallback(new TSLocationCallback() {
-            @Override public void onLocation(TSLocation tsLocation) {
-                try {
-                    result.success(tsLocation.toMap());
-                } catch (JSONException e) {
-                    TSLog.logger.error(e.getMessage(), e);
-                }
+            @Override public void onLocation(LocationEvent event) {
+                result.success(event.toMap());
             }
             @Override public void onError(Integer error) {
                 result.error(error.toString(), null, null);
@@ -541,7 +535,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             builder.setPersist((boolean) options.get("persist"));
         }
         if (options.containsKey("desiredAccuracy")) {
-            builder.setDesiredAccuracy((int) options.get("desiredAccuracy"));
+            builder.setDesiredAccuracy((double) options.get("desiredAccuracy"));
         }
         if (options.containsKey("extras")) {
             try {
@@ -646,13 +640,9 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
 
     private void setOdometer(@NonNull Double odometer, final MethodChannel.Result result) {
-        BackgroundGeolocation.getInstance(mContext).setOdometer(odometer.floatValue(), new TSLocationCallback() {
-            @Override public void onLocation(TSLocation location) {
-                try {
-                    result.success(location.toMap());
-                } catch (JSONException e) {
-                    TSLog.logger.error(e.getMessage(), e);
-                }
+        BackgroundGeolocation.getInstance(mContext).setOdometer(odometer, new TSLocationCallback() {
+            @Override public void onLocation(LocationEvent event) {
+                result.success(event.toMap());
             }
             @Override public void onError(Integer errorCode) {
                 result.error(errorCode.toString(), null, null);
@@ -1081,12 +1071,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
 
     private void resultWithState(@NonNull MethodChannel.Result result) {
-        try {
-            result.success(jsonToMap(TSConfig.getInstance(mContext).toJson()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-            result.error(e.getMessage(), null, null);
-        }
+        result.success(TSConfig.getInstance(mContext).toMap(false));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.transistorsoft.flutter.backgroundgeolocation.streams;
 
 import com.transistorsoft.locationmanager.adapter.BackgroundGeolocation;
 import com.transistorsoft.locationmanager.adapter.callback.TSScheduleCallback;
+import com.transistorsoft.locationmanager.event.EventName;
 import com.transistorsoft.locationmanager.logger.TSLog;
 import com.transistorsoft.locationmanager.scheduler.ScheduleEvent;
 import com.transistorsoft.locationmanager.util.Util;
@@ -13,12 +14,12 @@ import io.flutter.plugin.common.EventChannel;
 public class ScheduleStreamHandler extends StreamHandler implements TSScheduleCallback {
 
     public ScheduleStreamHandler() {
-        mEvent = BackgroundGeolocation.EVENT_SCHEDULE;
+        mEvent = EventName.SCHEDULE;
     }
     @Override
     public void onListen(Object args, EventChannel.EventSink eventSink) {
         super.onListen(args, eventSink);
-        BackgroundGeolocation.getInstance(mContext).onSchedule(this);
+        mSubscription = BackgroundGeolocation.getInstance(mContext).onSchedule(this);
     }
 
     @Override
@@ -26,7 +27,7 @@ public class ScheduleStreamHandler extends StreamHandler implements TSScheduleCa
         try {
             mEventSink.success(Util.toMap(event.getState()));
         } catch (JSONException e) {
-            TSLog.logger.error(e.getMessage(), e);
+            android.util.Log.e(BackgroundGeolocation.TAG, e.getMessage(), e);
         }
     }
 }

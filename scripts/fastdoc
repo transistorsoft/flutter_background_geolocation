@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+
+# cd to repo root (directory containing this script)
+#cd "$(dirname "$0")/../.."
+
+rm -rf doc/api
+
+dart pub global run dartdoc \
+  --include=flt_background_geolocation \
+  --no-validate-links \
+  --no-include-source \
+  --quiet

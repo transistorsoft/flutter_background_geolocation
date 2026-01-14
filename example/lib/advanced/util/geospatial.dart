@@ -19,7 +19,7 @@ class Geospatial {
         atan2(sin(heading) * sin(distance) * cos(lat1),
             cos(distance) - sin(lat1) * sin(lat2));
 
-    return new LatLng(toDeg(lat2), toDeg(lng2));
+    return LatLng(toDeg(lat2), toDeg(lng2));
   }
 
   static double getBearing(LatLng start, LatLng end) {

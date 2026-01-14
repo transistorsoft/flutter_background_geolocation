@@ -1,28 +1,5 @@
 # Android Installation
 
-## `AndroidManifest`
-
-Flutter seems to have a problem with 3rd-party Android libraries which merge their own `AndroidManifest.xml` into the application, particularly the `android:label` attribute.
-
-### :open_file_folder: `android/app/src/main/AndroidManifest.xml`:
-
-```diff
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-+   xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.helloworld">
-
-    <application
-+        tools:replace="android:label"
-         android:name="io.flutter.app.FlutterApplication"
-         android:label="flutter_background_geolocation_example"
-         android:icon="@mipmap/ic_launcher">
-</manifest>
-
-```
-
-> [!WARNING]
-> Failure to perform the step above will result in a **build error**: __`Manifest merger failed`__
-
 
 ## :open_file_folder: `android/build.gradle` (or `build.gradle.kts`)
 
@@ -31,18 +8,18 @@ Flutter seems to have a problem with 3rd-party Android libraries which merge the
 > - __`build.gradle`__
 > - __`build.gradle.kts`__ (new Kotlin-based version)
 >
-> Add the following **required** `maven` repo url to **whichever file** your app has:
 
 ### `build.gradle`
 
-If your app contains an `android/build.gradle`:
+If your app contains an `android/build.gradle`, you can control the version of Google's `play-services:location` that this plugin will use:
 
 ```diff
 +ext {
-+    appCompatVersion    = "1.4.2"           // or higher / as desired
 +    playServicesLocationVersion = "21.3.0"  // or higher / as desired
 +}
 
+<<<<<<< HEAD
+=======
 allprojects {  // <-- IMPORTANT:  allprojects
     repositories {
         google()
@@ -53,6 +30,7 @@ allprojects {  // <-- IMPORTANT:  allprojects
 +       maven { url "${project(':background_fetch').projectDir}/libs" }
     }
 }
+>>>>>>> master
 ```
 
 ### `build.gradle.kts`
@@ -62,9 +40,10 @@ OR if your app contains an `android/build.gradle.kts`:
 ```diff
 allprojects {
 +   ext {
-+       set("appCompatVersion", "1.4.2")             // or higher / as desired
 +       set("playServicesLocationVersion", "21.3.0") // or higher / as desired
 +   }
+<<<<<<< HEAD
+=======
     repositories {
         google()
         mavenCentral()
@@ -73,6 +52,7 @@ allprojects {
 +       // [required] background_fetch
 +       maven(url = "${project(":background_fetch").projectDir}/libs")
     }
+>>>>>>> master
 }
 ```
 
@@ -149,28 +129,33 @@ If you've not yet purchased a license to unlock Android, you can purchase one [h
 </manifest>
 ```
 
+<<<<<<< HEAD
+## `v5` Licensing.
+
+Version `5.0.0` of `flutter_background_geolocation` requires a new license-key format (previous license are no longer accepted).  You can generate your new license in the customer dashboard.
+=======
 ### Huawei Mobile Services (HMS) Support
 :warning: Huawei HMS support ended in `v4.18.0` since they failed to release their SDKs with *Android 16KB page size* support.
 <!--
 If you've [purchased an *HMS Background Geolocation* License](https://shop.transistorsoft.com/collections/frontpage/products/huawei-background-geolocation) for installing the plugin on _Huawei_ devices without *Google Play Services* installed, add your *HMS Background Geolocation* license key:
 -->
+>>>>>>> master
 
-```diff
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.your.package.id">
+These new license keys now have the ability to unlock any purshased add-on, without the need to add a separate license key for each:
+- *Polygon Geofencing*
+- *Huawei HMS Adapter*
+- *Firebase Adapter*
 
-  <application>
-    <!-- flutter_background_geolocation licence -->
-    <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="YOUR_LICENCE_KEY_HERE" />
-    <!-- HMS Background Geolocation licence -->
-+   <meta-data android:name="com.transistorsoft.locationmanager.hms.license" android:value="YOUR_HMS_LICENCE_KEY_HERE" />
-    .
-    .
-    .
-  </application>
-</manifest>
-```
+## Legacy License Keys
 
+<<<<<<< HEAD
+For versions of `flutter_background_geolocation` `<v5.0.0`:
+
+
+### Polygon Geofencing Add-on
+
+If you've purchased a license for the [Polygon Geofencing add-on](https://shop.transistorsoft.com/products/polygon-geofencing), login to the customer dashboard and ensure you enable the *[x] Polygon Geofencing* entitlement to your license key.  Update your *Background Geolocation* license with the new key (as documented above).
+=======
 ### Polygon Geofencing Add-on
 
 If you've purchased a license for the [Polygon Geofencing add-on](https://shop.transistorsoft.com/products/polygon-geofencing), add the following license key to your __`AndroidManifest`__ (Polygon Geofencing is fully functional in DEBUG builds so you can try before you buy):
@@ -190,6 +175,7 @@ If you've purchased a license for the [Polygon Geofencing add-on](https://shop.t
   </application>
 </manifest>
 ```
+>>>>>>> master
 
 ## Android Headless Mode with `enableHeadless: true`
 
@@ -203,7 +189,7 @@ BackgroundGeolocation.ready(Config(
 
 ## `background_fetch`
 
-`flutter_background_geolocation` installs a dependency `background_fetch` (also created by [Transistor Software](https://www.transistorsoft.com)).  You can optionally perform the [Android Setup](https://github.com/transistorsoft/flutter_background_fetch/blob/master/help/INSTALL-ANDROID.md) for it as well.
+[Transistor Software](https://www.transistorsoft.com) manages a helpful free plugin you can optionally add to your app named [`background_fetch`](https://pub.dev/packages/background_fetch).
 
 > [!TIP]
 > `background_fetch` is helpful for executing a periodic task (eg: every 15 minutes).  You could use `background_fetch` to periodically request the current location:

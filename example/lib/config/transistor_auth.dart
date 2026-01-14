@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
-import 'ENV.dart';
+import 'env.dart';
 import '../app.dart';
 
 void _onHttp(bg.HttpEvent event) async {
@@ -33,7 +33,7 @@ void _onHttp(bg.HttpEvent event) async {
 }
 
 class TransistorAuth {
-  static Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  static final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   static Future<bool> register() async {
     try {
