@@ -1,7 +1,7 @@
 # flutter_background_geolocation
 
  
-See the **[Migration Guide to 5.0.0](./MIGRATION-GUIDE-5.0.0.md)** for details about new config APIs (e.g., `LocationFilter`) and how to migrate from flat to compound config (legacy config is still supported).
+See the **[Migration Guide to 5.0.0](./help/MIGRATION-GUIDE-5.0.0.md)** for details about new config APIs (e.g., `LocationFilter`) and how to migrate from flat to compound config (legacy config is still supported).
 
 Be sure to see updated [Setup Guides](#-setup-guides)
 
