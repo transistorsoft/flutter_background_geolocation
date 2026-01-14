@@ -32,8 +32,11 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+<<<<<<< HEAD
   #config:
   #  enable-swift-package-manager: true
+=======
+>>>>>>> master
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

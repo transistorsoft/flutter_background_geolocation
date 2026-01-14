@@ -17,7 +17,6 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://developer.huawei.com/repo/' }
     }
 }
 
@@ -89,9 +88,9 @@ dependencies {
     // tslocationmanager requires a particular build based upon play-services-location version.
     def locationMajorVersion = playServicesLocationVersion.split('\\.')[0] as int
     if (locationMajorVersion >= 21) {
-        api(group: 'com.transistorsoft', name:'tslocationmanager-v21', version: '+')
+        api(group: 'com.transistorsoft', name:'tslocationmanager-v21', version: '3.+')
     } else {
-        api(group: 'com.transistorsoft', name:'tslocationmanager', version: '+')
+        api(group: 'com.transistorsoft', name:'tslocationmanager', version: '3.+')
     }
 
     // EventBus
