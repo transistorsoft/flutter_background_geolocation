@@ -43,6 +43,8 @@ Open the Xcode project `ios/Runner/Runner.xcworkspace`
 | *`Privacy - Location When in Use Usage Description`* | `String` | *CHANGEME: Location required when app is in use* |
 | *`Privacy - Motion Usage Description`* | `String` | *CHANGEME: Motion permission helps detect when device in in-motion* |
 
+![](https://dl.dropboxusercontent.com/s/wyoejgko6xq4pi4/iOS-permissions.png?dl=1)
+
 ### Or edit `Info.plist` directly
 
 :open_file_folder: `ios/Runner/Info.plist`
@@ -85,7 +87,7 @@ In your __`Info.plist`__, add the following key:
  __`TSLocationManagerLicense`__.  Paste the contents of your license key into the __`value`__.
 
 
-![](https://dl.dropboxusercontent.com/s/wyoejgko6xq4pi4/iOS-permissions.png?dl=1)
+
 
 ### Background Fetch
 
