@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 5.0.0 &mdash; 2026-01-14
+* [Release] 5.0.0.  
+* See [5.0.0 Migration Guide](https://github.com/transistorsoft/flutter_background_geolocation/tree/master/help/MIGRATION-GUIDE-5.0.0.md)
+* See [5.0.0 Discussion](https://github.com/transistorsoft/flutter_background_geolocation/discussions/1595)
+
 ## 5.0.0-beta.4 &mdash; 2025-12-02
 * Fix type-cast bug in GeofenceEvent while in headless-mode.
 
