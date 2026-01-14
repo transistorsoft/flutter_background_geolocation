@@ -10,10 +10,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.transistorsoft.flutter.backgroundgeolocation.streams.*;
 
