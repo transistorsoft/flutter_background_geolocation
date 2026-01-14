@@ -121,7 +121,7 @@ For versions of `flutter_background_geolocation` `<v5.0.0`:
 
 ### Polygon Geofencing Add-on
 
-If you've purchased a license for the [Polygon Geofencing add-on](https://shop.transistorsoft.com/products/polygon-geofencing), login to the customer dashboard and ensure you add the *Polygon Geofencing* entitlement to your license key.  Update your *Background Geolocation* license with the new key (as documented above).
+If you've purchased a license for the [Polygon Geofencing add-on](https://shop.transistorsoft.com/products/polygon-geofencing), login to the customer dashboard and ensure you enable the *[x] Polygon Geofencing* entitlement to your license key.  Update your *Background Geolocation* license with the new key (as documented above).
 
 ## Android Headless Mode with `enableHeadless: true`
 
