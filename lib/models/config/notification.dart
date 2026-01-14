@@ -476,25 +476,26 @@ class Notification {
   List<String>? actions;
 
   /// Convert supplied `Map` to `Notification` instance.
-  static fromMap(Map map) {
+  static Notification fromMap(Map map) {
+    final Map<String, dynamic> m = map.cast<String, dynamic>();
     return Notification(
-        layout: (map['layout'] != null) ? map['layout'] : null,
-        title: (map['title'] != null) ? map['title'] : null,
-        text: (map['text'] != null) ? map['text'] : null,
-        color: (map['color'] != null) ? map['color'] : null,
-        smallIcon: (map['smallIcon'] != null) ? map['smallIcon'] : null,
-        largeIcon: (map['largeIcon'] != null) ? map['largeIcon'] : null,
-        priority: (map['priority'] != null)
-            ? NotificationPriority.from(map['priority'])
+        layout: (m['layout'] != null) ? m['layout'] : null,
+        title: (m['title'] != null) ? m['title'] : null,
+        text: (m['text'] != null) ? m['text'] : null,
+        color: (m['color'] != null) ? m['color'] : null,
+        smallIcon: (m['smallIcon'] != null) ? m['smallIcon'] : null,
+        largeIcon: (m['largeIcon'] != null) ? m['largeIcon'] : null,
+        priority: (m['priority'] != null)
+            ? NotificationPriority.from(m['priority'])
             : null,
-        sticky: (map['sticky'] != null) ? map['sticky'] : null,
-        channelName: (map['channelName'] != null) ? map['channelName'] : null,
-        channelId: (map['channelId'] != null) ? map['channelId'] : null,
-        strings: (map['strings'] != null)
-            ? map['strings'].cast<String, String>()
+        sticky: (m['sticky'] != null) ? m['sticky'] : null,
+        channelName: (m['channelName'] != null) ? m['channelName'] : null,
+        channelId: (m['channelId'] != null) ? m['channelId'] : null,
+        strings: (m['strings'] != null)
+            ? m['strings'].cast<String, String>()
             : null,
         actions:
-            (map['actions'] != null) ? map['actions'].cast<String>() : null);
+            (m['actions'] != null) ? m['actions'].cast<String>() : null);
   }
 
   Notification(

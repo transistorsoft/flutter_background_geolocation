@@ -176,18 +176,19 @@ class Authorization {
   /// Token expiry time in seconds
   int? expires = -1;
 
-  static fromMap(Map map) {
+  static Authorization fromMap(Map map) {
+    final Map<String, dynamic> m = map.cast<String, dynamic>();
     return Authorization(
-        strategy: (map[_STRATEGY] != null) ? map[_STRATEGY] : STRATEGY_JWT,
-        accessToken: (map[_ACCESS_TOKEN] != null) ? map[_ACCESS_TOKEN] : null,
+        strategy: (m[_STRATEGY] != null) ? m[_STRATEGY] : STRATEGY_JWT,
+        accessToken: (m[_ACCESS_TOKEN] != null) ? m[_ACCESS_TOKEN] : null,
         refreshToken:
-            (map[_REFRESH_TOKEN] != null) ? map[_REFRESH_TOKEN] : null,
-        refreshUrl: (map[_REFRESH_URL] != null) ? map[_REFRESH_URL] : null,
+            (m[_REFRESH_TOKEN] != null) ? m[_REFRESH_TOKEN] : null,
+        refreshUrl: (m[_REFRESH_URL] != null) ? m[_REFRESH_URL] : null,
         refreshPayload:
-            (map[_REFRESH_PAYLOAD] != null) ? map[_REFRESH_PAYLOAD] : null,
+            (m[_REFRESH_PAYLOAD] != null) ? m[_REFRESH_PAYLOAD] : null,
         refreshHeaders:
-            (map[_REFRESH_HEADERS] != null) ? map[_REFRESH_HEADERS] : null,
-        expires: (map[_EXPIRES] != null) ? _ensureInt(map[_EXPIRES]) : -1);
+            (m[_REFRESH_HEADERS] != null) ? m[_REFRESH_HEADERS] : null,
+        expires: (m[_EXPIRES] != null) ? _ensureInt(m[_EXPIRES]) : -1);
   }
 
   Authorization(
