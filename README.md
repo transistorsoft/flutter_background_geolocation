@@ -52,7 +52,7 @@ Also available for [Cordova](https://github.com/transistorsoft/cordova-backgroun
 
 ```yaml
 dependencies:
-  flutter_background_geolocation: '^5.0.0-beta.2'
+  flutter_background_geolocation: '^5.0.0'
 ```
 
 ### Or latest from Git:
