@@ -19,7 +19,7 @@ The plugin's [Philosophy of Operation](https://github.com/transistorsoft/flutter
 
 - When the device is detected be **stationary**, the plugin will automatically turn off location-services to conserve energy.
 
-Also available for [Cordova](https://github.com/transistorsoft/cordova-background-geolocation-lt), [React Native](https://github.com/transistorsoft/react-native-background-geolocation), [NativeScript](https://github.com/transistorsoft/nativescript-background-geolocation-lt) and [pure native](https://github.com/transistorsoft/background-geolocation-lt) apps.
+Also available for [Cordova](https://github.com/transistorsoft/cordova-background-geolocation-lt), [React Native](https://github.com/transistorsoft/react-native-background-geolocation), [Capacitor](https://github.com/transistorsoft/capacitor-background-geolocation) and [pure native](https://github.com/transistorsoft/native-background-geolocation) apps.
 
 
 > [!NOTE]  
