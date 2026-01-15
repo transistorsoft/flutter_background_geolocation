@@ -15,14 +15,14 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack.git", from: "3.8.5")
-        .package(url: "https://github.com/transistorsoft/native-background-geolocation", from: "4.0.0")
+        .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack.git", from: "3.8.5"),
+        .package(url: "https://github.com/transistorsoft/native-background-geolocation", from: "4.0.0"),
         .package(url: "https://github.com/transistorsoft/transistor-background-fetch", from: "4.0.5")
     ],
     targets: [
         .target(
             name: "flutter_background_geolocation",
-            dependencies: ["TSLocationManager", "TSBackgroundFetch" "CocoaLumberjack"],
+            dependencies: ["TSLocationManager", "TSBackgroundFetch", "CocoaLumberjack"],
             cSettings: [
                 .headerSearchPath("include/flutter_background_geolocation")
             ],
