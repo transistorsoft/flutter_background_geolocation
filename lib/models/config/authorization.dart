@@ -181,8 +181,7 @@ class Authorization {
     return Authorization(
         strategy: (m[_STRATEGY] != null) ? m[_STRATEGY] : STRATEGY_JWT,
         accessToken: (m[_ACCESS_TOKEN] != null) ? m[_ACCESS_TOKEN] : null,
-        refreshToken:
-            (m[_REFRESH_TOKEN] != null) ? m[_REFRESH_TOKEN] : null,
+        refreshToken: (m[_REFRESH_TOKEN] != null) ? m[_REFRESH_TOKEN] : null,
         refreshUrl: (m[_REFRESH_URL] != null) ? m[_REFRESH_URL] : null,
         refreshPayload:
             (m[_REFRESH_PAYLOAD] != null) ? m[_REFRESH_PAYLOAD] : null,

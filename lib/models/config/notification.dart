@@ -491,11 +491,9 @@ class Notification {
         sticky: (m['sticky'] != null) ? m['sticky'] : null,
         channelName: (m['channelName'] != null) ? m['channelName'] : null,
         channelId: (m['channelId'] != null) ? m['channelId'] : null,
-        strings: (m['strings'] != null)
-            ? m['strings'].cast<String, String>()
-            : null,
-        actions:
-            (m['actions'] != null) ? m['actions'].cast<String>() : null);
+        strings:
+            (m['strings'] != null) ? m['strings'].cast<String, String>() : null,
+        actions: (m['actions'] != null) ? m['actions'].cast<String>() : null);
   }
 
   Notification(
