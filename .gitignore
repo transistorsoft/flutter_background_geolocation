@@ -14,3 +14,4 @@ example/android/key.properties
 doc/
 tmp/
 transistor_logback.db
+.build

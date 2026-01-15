@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 5.0.1 &mdash; 2026-01-14
+* [iOS] Fix syntax error in `Package.swift`
+
 ## 5.0.0 &mdash; 2026-01-14
 * [Release] 5.0.0.  
 * See [5.0.0 Migration Guide](https://github.com/transistorsoft/flutter_background_geolocation/tree/master/help/MIGRATION-GUIDE-5.0.0.md)
