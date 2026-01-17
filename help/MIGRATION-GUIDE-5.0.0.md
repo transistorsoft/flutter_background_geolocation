@@ -46,7 +46,7 @@ BackgroundGeolocation.ready(Config(
 ```dart
 BackgroundGeolocation.ready(Config(
   geolocation: GeoConfig(
-    desiredAccuracy: Config.DESIRED_ACCURACY_HIGH,
+    desiredAccuracy: DesiredAccuracy.high,
     distanceFilter: 50,
   ),
   app: AppConfig(
@@ -145,7 +145,7 @@ BackgroundGeolocation.ready(Config(
 ```dart
 BackgroundGeolocation.ready(Config(
   geolocation: GeoConfig(
-    desiredAccuracy: Config.DESIRED_ACCURACY_HIGH,
+    desiredAccuracy: DesiredAccuracy.high,
     distanceFilter: 10,
   ),
   app: AppConfig(
