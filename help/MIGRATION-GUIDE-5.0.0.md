@@ -96,6 +96,7 @@ BackgroundGeolocation.ready(Config(
     repositories {
         google()
         mavenCentral()
+-       maven { url 'https://developer.huawei.com/repo/' }
 -       // [required] background_geolocation
 -       maven(url = "${project(":flutter_background_geolocation").projectDir}/libs")
 -       // [required] background_fetch
