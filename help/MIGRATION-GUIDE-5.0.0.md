@@ -46,7 +46,7 @@ BackgroundGeolocation.ready(Config(
 ```dart
 BackgroundGeolocation.ready(Config(
   geolocation: GeoConfig(
-    desiredAccuracy: Config.DESIRED_ACCURACY_HIGH,
+    desiredAccuracy: DesiredAccuracy.high,
     distanceFilter: 50,
   ),
   app: AppConfig(
@@ -89,12 +89,23 @@ BackgroundGeolocation.ready(Config(
 1. **Update your dependency:**  
    Ensure you are using `flutter_background_geolocation` v5.0.0 or later.
 
-2. **Import new config classes:**  
-   ```dart
-   import 'package:flutter_background_geolocation/flutter_background_geolocation.dart';
-   ```
+2. __[Android]__ remove custom `maven url` from __`android/build.gradle`__.  These are no longer required:
 
-3. **Group related options:**  
+:open_file_folder: `android/build.gradle`
+```diff
+    repositories {
+        google()
+        mavenCentral()
+-       maven { url 'https://developer.huawei.com/repo/' }
+-       // [required] background_geolocation
+-       maven(url = "${project(":flutter_background_geolocation").projectDir}/libs")
+-       // [required] background_fetch
+-       maven(url = "${project(":background_fetch").projectDir}/libs")
+    }
+}
+```
+
+3. **Group related options:**
    - Move geolocation-related keys into `GeoConfig`
    - Move HTTP-related keys into `HttpConfig`
    - Move logging/debug keys into `LoggerConfig`
@@ -102,11 +113,11 @@ BackgroundGeolocation.ready(Config(
    - Move activity-recognition keys into `ActivityConfig`
    - Move persistence keys into `PersistenceConfig`
 
-4. **Replace flat keys:**  
+4. **Replace flat keys:**
    - Instead of passing all options to `Config(...)` directly, pass the relevant compound config objects.
    - Remove any duplicate or conflicting flat keys.
 
-5. **Check for breaking changes:**  
+5. **Check for breaking changes:**
    - Some keys may have been renamed, moved, or refactored.
    - See [Breaking Changes](#breaking-changes) below.
 
@@ -134,7 +145,7 @@ BackgroundGeolocation.ready(Config(
 ```dart
 BackgroundGeolocation.ready(Config(
   geolocation: GeoConfig(
-    desiredAccuracy: Config.DESIRED_ACCURACY_HIGH,
+    desiredAccuracy: DesiredAccuracy.high,
     distanceFilter: 10,
   ),
   app: AppConfig(
