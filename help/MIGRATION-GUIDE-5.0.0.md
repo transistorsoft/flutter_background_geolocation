@@ -105,13 +105,7 @@ BackgroundGeolocation.ready(Config(
 }
 ```
 
-
-3. **Import new config classes:**
-   ```dart
-   import 'package:flutter_background_geolocation/flutter_background_geolocation.dart';
-   ```
-
-4. **Group related options:**
+3. **Group related options:**
    - Move geolocation-related keys into `GeoConfig`
    - Move HTTP-related keys into `HttpConfig`
    - Move logging/debug keys into `LoggerConfig`
@@ -119,11 +113,11 @@ BackgroundGeolocation.ready(Config(
    - Move activity-recognition keys into `ActivityConfig`
    - Move persistence keys into `PersistenceConfig`
 
-5. **Replace flat keys:**
+4. **Replace flat keys:**
    - Instead of passing all options to `Config(...)` directly, pass the relevant compound config objects.
    - Remove any duplicate or conflicting flat keys.
 
-6. **Check for breaking changes:**
+5. **Check for breaking changes:**
    - Some keys may have been renamed, moved, or refactored.
    - See [Breaking Changes](#breaking-changes) below.
 
