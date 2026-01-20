@@ -18,19 +18,6 @@ If your app contains an `android/build.gradle`, you can control the version of G
 +    playServicesLocationVersion = "21.3.0"  // or higher / as desired
 +}
 
-<<<<<<< HEAD
-=======
-allprojects {  // <-- IMPORTANT:  allprojects
-    repositories {
-        google()
-        mavenCentral()
-+       // [required] flutter_background_geolocation
-+       maven { url "${project(':flutter_background_geolocation').projectDir}/libs" }
-+       // [required] background_fetch
-+       maven { url "${project(':background_fetch').projectDir}/libs" }
-    }
-}
->>>>>>> master
 ```
 
 ### `build.gradle.kts`
@@ -42,17 +29,6 @@ allprojects {
 +   ext {
 +       set("playServicesLocationVersion", "21.3.0") // or higher / as desired
 +   }
-<<<<<<< HEAD
-=======
-    repositories {
-        google()
-        mavenCentral()
-+       // [required] background_geolocation
-+       maven(url = "${project(":flutter_background_geolocation").projectDir}/libs")
-+       // [required] background_fetch
-+       maven(url = "${project(":background_fetch").projectDir}/libs")
-    }
->>>>>>> master
 }
 ```
 
@@ -129,17 +105,9 @@ If you've not yet purchased a license to unlock Android, you can purchase one [h
 </manifest>
 ```
 
-<<<<<<< HEAD
 ## `v5` Licensing.
 
 Version `5.0.0` of `flutter_background_geolocation` requires a new license-key format (previous license are no longer accepted).  You can generate your new license in the customer dashboard.
-=======
-### Huawei Mobile Services (HMS) Support
-:warning: Huawei HMS support ended in `v4.18.0` since they failed to release their SDKs with *Android 16KB page size* support.
-<!--
-If you've [purchased an *HMS Background Geolocation* License](https://shop.transistorsoft.com/collections/frontpage/products/huawei-background-geolocation) for installing the plugin on _Huawei_ devices without *Google Play Services* installed, add your *HMS Background Geolocation* license key:
--->
->>>>>>> master
 
 These new license keys now have the ability to unlock any purshased add-on, without the need to add a separate license key for each:
 - *Polygon Geofencing*
@@ -148,34 +116,12 @@ These new license keys now have the ability to unlock any purshased add-on, with
 
 ## Legacy License Keys
 
-<<<<<<< HEAD
 For versions of `flutter_background_geolocation` `<v5.0.0`:
 
 
 ### Polygon Geofencing Add-on
 
 If you've purchased a license for the [Polygon Geofencing add-on](https://shop.transistorsoft.com/products/polygon-geofencing), login to the customer dashboard and ensure you enable the *[x] Polygon Geofencing* entitlement to your license key.  Update your *Background Geolocation* license with the new key (as documented above).
-=======
-### Polygon Geofencing Add-on
-
-If you've purchased a license for the [Polygon Geofencing add-on](https://shop.transistorsoft.com/products/polygon-geofencing), add the following license key to your __`AndroidManifest`__ (Polygon Geofencing is fully functional in DEBUG builds so you can try before you buy):
-
-```diff
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.your.package.id">
-
-  <application>
-    <!-- flutter_background_geolocation licence -->
-    <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="YOUR_LICENCE_KEY_HERE" />
-    <!-- Background Geolocation Polygon Geofencing Licence -->
-+   <meta-data android:name="com.transistorsoft.locationmanager.polygon.license" android:value="YOUR_POLYGON_LICENCE_KEY_HERE" />
-    .
-    .
-    .
-  </application>
-</manifest>
-```
->>>>>>> master
 
 ## Android Headless Mode with `enableHeadless: true`
 
