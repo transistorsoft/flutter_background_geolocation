@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
 import '../app.dart';
-import '../config/ENV.dart';
+import '../config/env.dart';
 
 ////
 // For pretty-printing locations as JSON

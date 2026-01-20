@@ -15,7 +15,7 @@ import 'package:flutter_background_geolocation/flutter_background_geolocation.da
     as bg;
 import 'package:url_launcher/url_launcher.dart';
 
-import 'config/ENV.dart';
+import 'config/env.dart';
 import 'config/transistor_auth.dart';
 
 import 'registration_view.dart';

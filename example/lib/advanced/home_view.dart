@@ -8,7 +8,7 @@ import 'package:background_fetch/background_fetch.dart';
 import 'package:http/http.dart' as http;
 
 import '../app.dart';
-import '../config/ENV.dart';
+import '../config/env.dart';
 import 'map_view.dart';
 import 'event_list.dart';
 import './util/dialog.dart' as util;

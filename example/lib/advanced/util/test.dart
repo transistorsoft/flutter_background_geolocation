@@ -1,7 +1,7 @@
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart'
     as bg;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../config/ENV.dart';
+import '../../config/env.dart';
 
 class Test {
   /// My private test field-test config.
