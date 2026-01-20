@@ -3,6 +3,7 @@ allprojects {
         set("appCompatVersion", "1.4.2")             // or higher / as desired
         set("playServicesLocationVersion", "21.3.0") // or higher / as desired
         set("tslocationmanagerVersion", "4.0.0")
+        set("compileSdkVersion", 35)
     }
     repositories {
         google()
