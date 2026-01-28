@@ -1,6 +1,5 @@
 import Flutter
 import UIKit
-import TSBackgroundFetch
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {

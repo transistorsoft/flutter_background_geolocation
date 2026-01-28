@@ -670,7 +670,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
     bg.BackgroundGeolocation.setOdometer(0.0).catchError((error) {
       print('************ dispose [setOdometer] ERROR $error');
     });
-
   }
 
   void _handleTabChange() async {
