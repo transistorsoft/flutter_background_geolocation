@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/CocoaLumberjack/CocoaLumberjack.git", from: "3.8.5"),
-        .package(url: "https://github.com/transistorsoft/native-background-geolocation.git", from: "4.0.0"),
+        .package(url: "https://github.com/transistorsoft/native-background-geolocation.git", from: "4.0.10"),
         .package(url: "https://github.com/transistorsoft/transistor-background-fetch.git", from: "4.0.5")
     ],
     targets: [

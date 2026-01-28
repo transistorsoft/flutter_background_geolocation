@@ -151,8 +151,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             if (app != null) {
                 app.unregisterActivityLifecycleCallbacks(this);
             }
-            cancelStreamHandlersForAllMessengers();
-            BackgroundGeolocation.getInstance(mContext).onActivityDestroy();
+            cancelStreamHandlersForAllMessengers();            
         }
         mActivity = activity;
     }
@@ -218,8 +217,10 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         if (activity == null) {
             return;
         }
+        final BackgroundGeolocation bgGeo = BackgroundGeolocation.getInstance(mContext);
+        bgGeo.setActivity(activity);
         // Handle play-services connect errors.
-        BackgroundGeolocation.getInstance(mContext).onPlayServicesConnectError((new TSPlayServicesConnectErrorCallback() {
+        bgGeo.onPlayServicesConnectError((new TSPlayServicesConnectErrorCallback() {
             @Override
             public void onPlayServicesConnectError(int errorCode) {
                 handlePlayServicesConnectError(errorCode);
@@ -347,7 +348,6 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         }
     }
 
-    // experimental Flutter Headless (NOT READY)
     private void registerHeadlessTask(List<Object> callbacks, MethodChannel.Result result) {
         if (HeadlessTask.register(mContext, callbacks)) {
             result.success(true);
@@ -1079,10 +1079,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     @Override
     public void onActivityResumed(@NonNull Activity activity) {
-        if (!activity.equals(mActivity)) {
-            return;
-        }
-        TSScheduleManager.getInstance(activity).cancelOneShot(TerminateEvent.ACTION);
+
     }
     @Override
     public void onActivityStarted(Activity activity) {
@@ -1092,13 +1089,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
     @Override
     public void onActivityStopped(@NonNull Activity activity) {
-        if (!activity.equals(mActivity)) {
-            return;
-        }
-        TSConfig config = TSConfig.getInstance(activity);
-        if (config.getEnabled()) {
-            TSScheduleManager.getInstance(activity).oneShot(TerminateEvent.ACTION, 10000, true, false);
-        }
+
     }
 
     @Override
