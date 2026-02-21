@@ -6,14 +6,11 @@ allprojects {
         set("compileSdkVersion", 35)
     }
     repositories {
+        // background_geolocation
+        // [DEV] Sonatype SNAPSHOT url
+        //maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
         google()
         mavenCentral()
-        // [required] background_geolocation
-        // Sonatype SNAPSHOT url
-        //maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
-
-        // [required] background_fetch
-        //maven(url = "${project(":background_fetch").projectDir}/libs")
     }
 }
 
@@ -31,3 +28,14 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
+
+// development
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            cacheChangingModulesFor(0, "seconds")
+            cacheDynamicVersionsFor(0, "seconds")
+        }
+    }
+}
+
