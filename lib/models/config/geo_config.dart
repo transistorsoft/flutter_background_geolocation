@@ -336,11 +336,11 @@ enum LocationFilterPolicy {
   /// No filtering — accept all samples (useful for debugging or raw capture).
   passThrough,
 
-  /// Balanced (default) — applies moderate filtering to reject noisy samples.
+  /// Balanced — applies moderate filtering to reject noisy samples.
   /// Dynamically adjusts acceptance thresholds for incoming location samples,
   /// *not* the raw coordinates themselves.
   ///
-  /// When using `adjust` (the default), the SDK computes motion metrics such as
+  /// When using `adjust`, the SDK computes motion metrics such as
   /// distance deltas, implied speed, accuracy variance, and heading stability.
   /// It then applies adaptive gating rules to decide whether each sample should
   /// be accepted, ignored, or rejected as noise.
@@ -353,7 +353,8 @@ enum LocationFilterPolicy {
   /// untouched.
   adjust,
 
-  /// Aggressive — filters heavily to remove noise, preferring stability.
+  /// Aggressive (default) — filters heavily to remove noise, preferring stability.
+  /// This is the default policy when `policy` is not specified.
   conservative,
 }
 
@@ -363,9 +364,8 @@ class LocationFilter {
   final LocationFilterPolicy? policy;
 
   /// Enables the Kalman filter to smooth incoming location speed and position.
-  ///
   /// When `true`, a Kalman filter is applied to remove noise and stabilize
-  /// velocity and distance calculations. Defaults to `true`.
+  /// velocity and distance calculations. Defaults to `true` when not specified.
   final bool? useKalman;
 
   /// Enables verbose Kalman debug output in logs.
@@ -379,31 +379,31 @@ class LocationFilter {
 
   /// Number of samples in the rolling window used for burst averaging.
   ///
-  /// Higher values increase smoothing but add latency. Default: `5`.
+  /// Higher values increase smoothing but add latency. Defaults to `5` when not specified.
   final int? rollingWindow;
 
   /// Duration (in seconds) of each burst window used for averaging samples.
   ///
   /// The plugin groups locations received within this window into a single
-  /// averaged point. Default: `10` seconds.
+  /// averaged point. Defaults to `10` seconds when not specified.
   final double? burstWindow;
 
   /// Maximum distance (in meters) between samples considered part of the same burst.
   ///
   /// Prevents merging widely separated samples into a single average.
-  /// Default: `300`.
+  /// Defaults to `300` when not specified.
   final double? maxBurstDistance;
 
   /// Minimum acceptable accuracy (in meters) for a sample to be used in tracking.
   ///
   /// Locations less accurate than this threshold will be ignored.
-  /// Default: `100`.
+  /// Defaults to `100` when not specified.
   final double? trackingAccuracyThreshold;
 
   /// Maximum implied speed (in m/s) allowed before rejecting a location.
   ///
   /// Samples that would imply a speed greater than this value are ignored
-  /// as unrealistic outliers. Default: `60` (~216 km/h).
+  /// as unrealistic outliers. Defaults to `60` (~216 km/h) when not specified.
   final double? maxImpliedSpeed;
 
   /// Enables verbose debug logging for the filtering engine.
@@ -422,17 +422,17 @@ class LocationFilter {
   /// If both [useKalman] and [odometerUseKalmanFilter] are `true`, each
   /// subsystem (tracking and odometer) maintains its own Kalman instance.
   ///
-  /// Default: `true`.
+  /// Defaults to `true` when not specified.
   final bool? odometerUseKalmanFilter;
 
   /// Maximum horizontal accuracy (in meters) allowed to affect the odometer.
   ///
   /// Samples with `accuracy > odometerAccuracyThreshold` are ignored for
-  /// odometer updates. Default: `20`.
+  /// odometer updates. Defaults to `20` when not specified.
   final double? odometerAccuracyThreshold;
 
   const LocationFilter({
-    this.policy = LocationFilterPolicy.adjust,
+    this.policy,
     this.useKalman,
     this.kalmanDebug,
     this.kalmanProfile,
