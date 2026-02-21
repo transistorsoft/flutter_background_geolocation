@@ -21,7 +21,7 @@ class MainMenuButton extends StatefulWidget {
 class MainMenuButtonState extends State<MainMenuButton> {
   late BuildContext _context;
 
-  void _onClickSettings() {
+  void _onClickSettings() async {
     bg.BackgroundGeolocation.playSound(util.Dialog.getSoundId("OPEN"));
     Navigator.of(_context).push(MaterialPageRoute<Null>(
         fullscreenDialog: true,

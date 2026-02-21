@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/transistorsoft/native-background-geolocation.git",
       "state" : {
-        "revision" : "db90bd9d0cedf0bbab22b15f43cc1dda57e0c208",
-        "version" : "4.0.12"
+        "revision" : "04dfeb159cf4e61d6081036bdcaba9980ff3bd0c",
+        "version" : "4.0.18"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log",
       "state" : {
-        "revision" : "2778fd4e5a12a8aaa30a3ee8285f4ce54c5f3181",
-        "version" : "1.9.1"
+        "revision" : "bbd81b6725ae874c69e9b8c8804d462356b55523",
+        "version" : "1.10.1"
       }
     },
     {

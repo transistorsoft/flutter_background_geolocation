@@ -19,7 +19,7 @@ part of '../../flutter_background_geolocation.dart';
 /// These parameters control how often the SDK acquires locations, how accurately, how long tracking persists when stationary,
 /// and how it handles platform-specific permissions, filtering, and elasticity.
 ///
-/// ## Overviewd
+/// ## Overview
 ///
 /// [GeoConfig] is consumed via the [Config.geolocation] property when calling [BackgroundGeolocation.ready] or [BackgroundGeolocation.setConfig].
 ///
@@ -57,7 +57,7 @@ part of '../../flutter_background_geolocation.dart';
 ///
 ///       // Customize filtering and denoising of incoming locations.
 ///       filter: bg.LocationFilter(
-///         policy: bg.LocationFilterPolicy.adjust,
+///         policy: bg.LocationFilterPolicy.conservative,
 ///         maxImpliedSpeed: 60,
 ///         odometerAccuracyThreshold: 20,
 ///         trackingAccuracyThreshold: 100
@@ -77,7 +77,7 @@ part of '../../flutter_background_geolocation.dart';
 ///         'cancelButton': 'Cancel',
 ///         'settingsButton': 'Settings'
 ///       },
-///     ),///
+///     ),
 ///     // Additional compound config groups may be defined here:
 ///     http: bg.HttpConfig(
 ///       url: 'https://example.com/api/locations',
@@ -156,20 +156,20 @@ class MacroConfigGeolocation {}
 ///
 /// | Name                                 | Location Providers           | Description                             |
 /// |--------------------------------------|------------------------------|-----------------------------------------|
-/// | [DesiredAccuracy.navigation]        | (**iOS only**) GPS + Wifi + Cellular | Highest power; highest accuracy |
-/// | [DesiredAccuracy.high]              | GPS + Wifi + Cellular | Highest power; highest accuracy |
-/// | [DesiredAccuracy.medium]            | Wifi + Cellular | Medium power; Medium accuracy; |
-/// | [DesiredAccuracy.low]               | Wifi (low power) + Cellular | Lower power; No GPS |
-/// | [DesiredAccuracy.veryLow]          | Cellular only | Lowest power; lowest accuracy |
-/// | [DesiredAccuracy.lowest]   | (**iOS only**) Lowest power; lowest accuracy |
+/// | [DesiredAccuracy.navigation]         | (**iOS only**) GPS + Wifi + Cellular | Highest power; highest accuracy |
+/// | [DesiredAccuracy.high]               | GPS + Wifi + Cellular | Highest power; highest accuracy |
+/// | [DesiredAccuracy.medium]             | Wifi + Cellular | Medium power; Medium accuracy; |
+/// | [DesiredAccuracy.low]                | Wifi (low power) + Cellular | Lower power; No GPS |
+/// | [DesiredAccuracy.veryLow]            | Cellular only | Lowest power; lowest accuracy |
+/// | [DesiredAccuracy.lowest]             | (**iOS only**) Lowest power; lowest accuracy |
 ///
 ///  **Note**: Only **`DesiredAccuracy.high`** uses GPS.  `speed`, `heading` and `altitude` are available only from GPS.
 ///
 /// ## Example
 ///
 /// ```dart
-/// BackgroundGeoloction.ready(Config(
-///   desiredAccuracy: BackgroundGeolocation.DESIRED_ACCURACY_HIGH
+/// BackgroundGeolocation.ready(Config(
+///   desiredAccuracy: BackgroundGeolocation.DesiredAccuracy.high,
 /// ));
 /// ```
 /// For platform-specific information about location accuracy, see the corresponding API docs:
@@ -576,9 +576,12 @@ class MacroConfigStopTimeout {}
 /// ```
 ///
 /// {@endtemplate}
+/// @nodoc
 class MacroConfigFilter {}
 
 /// {@template location_filter.policy}
+/// If omitted, native defaults apply (currently `conservative`).
+///
 /// Defines the filtering policy applied to incoming raw GPS samples before they are
 /// accepted, averaged, or rejected by the [LocationFilter].
 ///
@@ -666,7 +669,7 @@ class MacroLocationFilterKalmanProfile {}
 class MacroConfigActivityRecognitionInterval {}
 
 /// {@template config.trigger_activities}
-/// Configures a comma-separated list of motion-activities which are allow to trigger location-tracking.
+/// Configures a comma-separated list of motion-activities which are allowed to trigger location-tracking.
 /// __⚠️ Warning:__ Requires that the user grant your app the "*Motion/Health*" permission.
 /// These are the comma-delimited list of [activity-names](https://developers.google.com/android/reference/com/google/android/gms/location/DetectedActivity) returned by the `ActivityRecognition` API which will trigger a state-change from **stationary** to **moving**.  By default, the plugin will trigger on **any** of the **moving-states**:
 ///
@@ -757,7 +760,7 @@ class MacroConfigDisableMotionActivityUpdates {}
 ///   activity: bg.ActivityConfig(
 ///     motionTriggerDelay: 30000,
 ///   ),
-/// ));f
+/// ));
 /// ```
 ///
 /// The following `logcat` shows an Android device detecting motion __`on_foot`__ but returning to __`still`__ before __`motionTriggerDelay`__ expires, cancelling the transition to the *moving* state (see `⏰ Cancel OneShot: MOTION_TRIGGER_DELAY`):
@@ -953,9 +956,9 @@ class MacroConfigGeofenceInitialTriggerEntry {}
 ///
 /// __`[Android only]`__ Enable high-accuracy for **geofence-only** mode (See [BackgroundGeolocation.startGeofences]).
 ///
-/// Defaults to `false`.  Runs Android's [BackgroundGeolocation.startGeofences] with a///foreground service* (along with its corresponding persitent notification;  See [Notification] for a list of available notification config options, including [Notification.text], [Notification.title]).
+/// Defaults to `false`.  Runs Android's [BackgroundGeolocation.startGeofences] with a foreground service (along with its corresponding persitent notification;  See [Notification] for a list of available notification config options, including [Notification.text], [Notification.title]).
 ///
-/// Configuring `geofenceModeHighAccuracy: true` will make Android geofence triggering///*far more responsive**.  In this mode, the usual config options to control location-services will be applied:
+/// Configuring `geofenceModeHighAccuracy: true` will make Android geofence triggering *far more responsive**.  In this mode, the usual config options to control location-services will be applied:
 ///
 /// ⚠️ Warning: Will consume more power.
 ///
@@ -1326,7 +1329,7 @@ class MacroConfigHttp {}
 ///
 /// ```dart
 /// // Listen to http events.
-/// BackkgroundGeolocation.onHttp((HttpEvent event) {
+/// BackgroundGeolocation.onHttp((HttpEvent event) {
 ///   print("[onHttp] $event");
 /// });
 ///
@@ -1980,7 +1983,7 @@ class MacroConfigPersistence {}
 /// ```dart
 /// BackgroundGeolocation.ready(Config(
 ///   http: HttpConfig(
-///     rRootProperty: 'data'
+///     rootProperty: 'data'
 ///   ),
 ///   persistence: PersistenceConfig(
 ///     locationTemplate: '{"lat":<%= latitude %>,"lng":<%= longitude %>}',
@@ -2017,7 +2020,7 @@ class MacroConfigPersistence {}
 /// | `uuid`                | `String` |Unique ID    |
 /// | `event`               | `String` |`motionchange,geofence,heartbeat,providerchange` |
 /// | `odometer`            | `Float`  | Meters      |
-/// | `odometer_error`      | 'Float`  | Meters      |
+/// | `odometer_error`      | `Float`  | Meters      |
 /// | `activity.type`       | `String` | `still,on_foot,running,on_bicycle,in_vehicle,unknown`|
 /// | `activity.confidence` | `Integer`| 0-100%      |
 /// | `battery.level`       | `Float`  | 0-100%      |
@@ -2531,7 +2534,7 @@ class MacroConfigHeartbeatInterval {}
 /// ```
 ///
 /// - The `START_TIME`, `END_TIME` are in **24h format**.
-/// - The `DAY` param corresponds to the `Locale.US`, such that **Sunday=1**; **Saturday=7**).
+/// - The `DAY` param corresponds to the `Locale.US`, such that **Sunday=1**; **Saturday=7**.
 /// - You may configure a single day (eg: `1`), a comma-separated list-of-days (eg: `2,4,6`) or a range (eg: `2-6`)
 ///
 /// ## Example
@@ -2545,7 +2548,7 @@ class MacroConfigHeartbeatInterval {}
 ///     schedule: [
 ///       '1 17:30-21:00',    // Sunday: 5:30pm-9:00pm
 ///       '2-6 9:00-17:00',   // Mon-Fri: 9:00am to 5:00pm
-///       '2,4,6 20:00-00:00',// Mon, Web, Fri: 8pm to midnight (next day)
+///       '2,4,6 20:00-00:00',// Mon, Wed, Fri: 8pm to midnight (next day)
 ///       '7 10:00-19:00'     // Sat: 10am-7pm
 ///     ]
 ///   )
@@ -2831,7 +2834,7 @@ class MacroConfigReset {}
 ///
 /// ### 1.  __`locationAuthorizationRequest: 'Always'`__:
 ///
-/// If your app requests __`locationAuthorizationRequest: 'Always'`__, the user must first authorize __`[Alow While Using App]`__, followed *immediately* by a second dialog prompting the user to upgrade location authorization with __`[Change to Always Allow]`__:
+/// If your app requests __`locationAuthorizationRequest: 'Always'`__, the user must first authorize __`[Allow While Using App]`__, followed *immediately* by a second dialog prompting the user to upgrade location authorization with __`[Change to Always Allow]`__:
 ///
 /// ![](https://dl.dropbox.com/s/0alq10i4pcm2o9q/ios-when-in-use-to-always-CHANGELOG.gif?dl=1)
 ///
@@ -2865,7 +2868,7 @@ class MacroConfigReset {}
 /// initPlatformState() async {
 ///   // Initially configure for 'WhenInUse'.
 ///   BackgroundGeolocation.ready(Config(
-///     geoloation: GeoConfig(
+///     geolocation: GeoConfig(
 ///       locationAuthorizationRequest: 'WhenInUse'
 ///     )
 ///     .
@@ -2875,7 +2878,7 @@ class MacroConfigReset {}
 /// }
 ///
 /// onClickStartTracking() async {
-///   // Initial location authorization dialog for "When in Use" authotization
+///   // Initial location authorization dialog for "When in Use" authorization
 ///   // will be shown here.
 ///   await BackgroundGeolocation.start();
 ///   // some time later -- could be immediately after, hours later, days later, etc.,
@@ -2931,7 +2934,7 @@ class MacroConfigReset {}
 ///
 /// ### 1.  __`locationAuthorizationRequest: 'Always'`__:
 ///
-/// If your app requests __`locationAuthorizationRequest: 'Always'`__, the user must first authorize __`[While using the app]`__, followed ///immediately* by the [AppConfig.backgroundPermissionRationale] dialog prompting the user to upgrade location permission with __`[Allow all the time]`__:
+/// If your app requests __`locationAuthorizationRequest: 'Always'`__, the user must first authorize __`[While using the app]`__, *followed immediately by* the [AppConfig.backgroundPermissionRationale] dialog prompting the user to upgrade location permission with __`[Allow all the time]`__:
 ///
 /// ![](https://dl.dropbox.com/s/343nbrzpaavfser/android11-location-authorization-rn.gif?dl=1)
 ///
