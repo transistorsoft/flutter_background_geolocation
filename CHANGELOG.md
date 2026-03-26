@@ -1,6 +1,10 @@
 # CHANGELOG
 
 ## Unreleased
+- Remove SwiftPM package references from Xcode project
+  The FlutterGeneratedPluginSwiftPackage references were left over from
+  when SwiftPM was enabled, causing module resolution conflicts with
+  CocoaPods.
 - Fix CocoaPods xcconfig integration and set iOS platform
   - Uncomment Pods xcconfig includes in Debug.xcconfig and Release.xcconfig
   - Add profile xcconfig include in Release.xcconfig
