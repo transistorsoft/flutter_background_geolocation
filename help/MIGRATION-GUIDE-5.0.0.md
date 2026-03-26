@@ -16,6 +16,8 @@ Version 5 introduces a new **Compound Config** format that replaces the legacy "
 The legacy **flat config** style remains fully supported for backward compatibility.  
 You can continue using your existing flat configuration if you prefer, though new features may only appear in the compound structure.
 
+Note: v5 also enables a new on-device LocationFilter by default (see **Breaking Changes** below) which can change `onLocation` behavior even if your previous config is unchanged.
+
 ---
 
 ## ⏩ Why Compound Config?
@@ -241,6 +243,42 @@ Each group is a separate Dart class. See API docs for details.
 ---
 
 ## ⚠️ Breaking Changes
+
+### LocationFilter enabled by default (behavior change in `onLocation`)
+
+v5 introduces an on-device **LocationFilter** (compound config: `geolocation.filter`).  This filter is **enabled by default** and can change which locations are delivered to `onLocation` and how distance deltas are smoothed/adjusted.
+
+**Default behavior (if you do not configure `geolocation.filter`):**
+- `geolocation.filter.useKalman: true`
+- `geolocation.filter.policy: Conservative`
+- `geolocation.filter.trackingAccuracyThreshold: 100` (meters)
+- `geolocation.filter.odometerAccuracyThreshold: 20` (meters)
+
+If your app uses **Low / Medium** desired accuracy (or operates in poor GPS conditions), the default thresholds/policy can reject many locations (eg: low-accuracy samples) and the reported `Location` stream may differ significantly from v4.
+
+#### Preserve v4 behavior (PassThrough / “passthrough mode”)
+
+To keep the original v4 behavior (deliver locations without the new pre-filter), configure **PassThrough**:
+
+```dart
+BackgroundGeolocation.ready(Config(
+  geolocation: GeoConfig(
+    // ...your existing geolocation config...
+    filter: LocationFilterConfig(
+      policy: LocationFilterPolicy.passThrough,
+      useKalman: false,                 // optional
+      trackingAccuracyThreshold: 0,      // optional: disables accuracy gate
+      odometerAccuracyThreshold: 0       // optional: disables accuracy gate
+    )
+  ),
+));
+```
+
+> Setting `*AccuracyThreshold` to `0` disables the accuracy-gate rejection.
+
+#### Recommended migration step
+
+After upgrading to v5, review your logs for location rejections/adjustments and tune `geolocation.filter` (policy, Kalman, and thresholds) to match your use-case.
 
 - **Some keys have new enum types:**  
   - `logLevel` is now a `LogLevel` enum (e.g., `LogLevel.info`), but legacy integer values are still supported for backward compatibility. You may use either the new enum or the legacy integer type.

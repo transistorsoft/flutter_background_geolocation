@@ -8,7 +8,7 @@ allprojects {
     repositories {
         // background_geolocation
         // [DEV] Sonatype SNAPSHOT url
-        //maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
+        maven(url = "https://central.sonatype.com/repository/maven-snapshots/")
         google()
         mavenCentral()
     }
@@ -30,12 +30,12 @@ tasks.register<Delete>("clean") {
 }
 
 // development
-allprojects {
-    configurations.all {
-        resolutionStrategy {
-            cacheChangingModulesFor(0, "seconds")
-            cacheDynamicVersionsFor(0, "seconds")
-        }
-    }
-}
+//allprojects {
+//    configurations.all {
+//        resolutionStrategy {
+//            cacheChangingModulesFor(0, "seconds")
+//            cacheDynamicVersionsFor(0, "seconds")
+//        }
+//    }
+//}
 
