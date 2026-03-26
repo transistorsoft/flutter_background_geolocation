@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## Unreleased
+- Disable SwiftPM for iOS to fix Xcode build failure
+  SwiftPM package targets compile before the Flutter framework is
+  generated, causing 'Flutter/Flutter.h' file not found errors when
+  building directly from Xcode. CocoaPods handles this build ordering
+  correctly.
+
 ## 5.0.7 &mdash; 2025-03-26
 * Fix `Package.swift`: bump ios min `.v12`
 
