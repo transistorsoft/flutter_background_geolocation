@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## Unreleased
+- example
 - Remove SwiftPM package references from Xcode project
   The FlutterGeneratedPluginSwiftPackage references were left over from
   when SwiftPM was enabled, causing module resolution conflicts with
