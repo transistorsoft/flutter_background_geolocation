@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 5.0.7 &mdash; 2025-03-26
+* Fix `Package.swift`: bump ios min `.v12`
+
 ## 5.0.6 &mdash; 2026-03-26
 * Fix `Package.swift` for SPM users.  The package name is renamed `BackgroundGeolocation`
 
