@@ -1,5 +1,8 @@
 # CHANGELOG
 
+## 5.0.6 &mdash; 2026-03-26
+* Fix `Package.swift` for SPM users.  The package name is renamed `BackgroundGeolocation`
+
 ## 5.0.5 &mdash; 2026-02-21
 * Support sparse updates on `LocationFilter`
 

@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/transistorsoft/native-background-geolocation.git",
       "state" : {
-        "revision" : "04dfeb159cf4e61d6081036bdcaba9980ff3bd0c",
-        "version" : "4.0.18"
+        "revision" : "617ec9de244a406dfc4ebaa771e2180509b2f3e1",
+        "version" : "4.0.29"
       }
     },
     {
