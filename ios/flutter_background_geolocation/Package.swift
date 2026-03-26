@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "flutter_background_geolocation",
     platforms: [
-        .iOS(.v12)
+        .iOS(.v13)
     ],
     products: [
         .library(
