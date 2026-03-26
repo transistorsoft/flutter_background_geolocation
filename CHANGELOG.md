@@ -1,6 +1,10 @@
 # CHANGELOG
 
 ## Unreleased
+- Fix CocoaPods xcconfig integration and set iOS platform
+  - Uncomment Pods xcconfig includes in Debug.xcconfig and Release.xcconfig
+  - Add profile xcconfig include in Release.xcconfig
+  - Set explicit platform :ios, '15.6' in Podfile
 - Disable SwiftPM for iOS to fix Xcode build failure
   SwiftPM package targets compile before the Flutter framework is
   generated, causing 'Flutter/Flutter.h' file not found errors when
