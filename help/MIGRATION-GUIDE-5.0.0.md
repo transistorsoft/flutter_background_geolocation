@@ -9,6 +9,52 @@
 
 Version 5 introduces a new **Compound Config** format that replaces the legacy "flat" config structure. This guide explains the migration steps, provides before/after examples, and details key differences.
 
+## 🔑 New License Key Format
+
+### Overview
+
+Version 9 uses a new **JWT-based license key** format. Your existing (legacy) license keys will **not** work with v9.
+
+> [!IMPORTANT]
+> Previous versions of the SDK did not require a license key on iOS. **v9 requires a license key on both iOS and Android.** See [iOS Setup](INSTALL-IOS.md) and [Android Setup](INSTALL-ANDROID.md) for license key configuration details.
+
+> [!NOTE]
+> Add-on products (eg: [`polygon-geofencing`](https://shop.transistorsoft.com/collections/frontpage/products/polygon-geofencing), `firebase`) are now **encoded as entitlements** inside the JWT key itself. You no longer need separate license keys for add-on products.
+
+### Getting Your New License Key
+
+1. Log in to the [Transistor Software Customer Dashboard](https://www.transistorsoft.com/shop/customers).
+2. Navigate to your product purchase.
+3. You will find **two license tabs**:
+   - **Legacy** — your old license key (for `flutter-background-geolocation` v4 and below)
+   - **New** — your new JWT license key (required for `flutter-background-geolocation` v5+)
+4. Copy the key from the **"New"** tab.
+
+### Applying Your License Key
+
+__[iOS]__ Add your JWT license key to your `Info.plist` under the key `TSLocationManagerLicense`. See [iOS Setup](INSTALL-IOS.md) for full details:
+
+:open_file_folder: `ios/App/App/Info.plist`
+```xml
+<key>TSLocationManagerLicense</key>
+<string>YOUR_JWT_LICENSE_KEY</string>
+```
+
+__[Android]__ Add your JWT license key to `AndroidManifest.xml`. See [Android Setup](INSTALL-ANDROID.md) for full details:
+
+:open_file_folder: `android/app/src/main/AndroidManifest.xml`
+```xml
+<manifest>
+    <application>
+        <meta-data android:name="com.transistorsoft.locationmanager.license" android:value="YOUR_JWT_LICENSE_KEY" />
+    </application>
+</manifest>
+```
+
+> [!WARNING]
+> If you previously configured a separate license key for [`polygon-geofencing`](https://shop.transistorsoft.com/collections/frontpage/products/polygon-geofencing), `firebase`, or any other add-on product, **remove it**. Add-on entitlements are now bundled into your single bgGeo JWT license key.
+>
+> 
 ---
 
 ## ⚙️ Compatibility
