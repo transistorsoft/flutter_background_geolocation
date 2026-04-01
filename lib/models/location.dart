@@ -320,6 +320,8 @@ class Location {
   ///
   ///   print("[onLocation] $location");
   /// });
+  /// ```
+  ///
   late Coords coords;
 
   /// Corresponding [GeofenceEvent] if this location was recorded due to a [Geofence] transition.
