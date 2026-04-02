@@ -538,41 +538,53 @@ class Test {
     }
 
     state = await bg.BackgroundGeolocation.reset(bg.Config(
-        disableMotionActivityUpdates: false,
-        debug: true,
-        logLevel: bg.Config.LOG_LEVEL_VERBOSE,
         transistorAuthorizationToken: token,
-        desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
-        distanceFilter: 50,
-        disableElasticity: false,
-        locationUpdateInterval: 1000,
-        locationAuthorizationRequest: "Always",
-        fastestLocationUpdateInterval: -1,
-        enableTimestampMeta: true,
-        stopTimeout: 1,
-        maxDaysToPersist: 14,
-        backgroundPermissionRationale: bg.PermissionRationale(
-            title:
-                "Allow {applicationName} to access this device's location even when the app is closed or not in use.",
-            message:
-                "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
-            positiveAction: 'Change to "{backgroundPermissionOptionLabel}"',
-            negativeAction: 'Cancel'),
-        notification: bg.Notification(
-            sticky: false,
-            layout: 'notification_layout',
-            channelId: 'my_channel_id',
-            actions: ["notificationButtonFoo", "notificationButtonBar"]),
-        schedule: schedule,
-        scheduleUseAlarmManager: true,
-        extras: {"foo": "bar"},
-        autoSync: true,
-        geofenceModeHighAccuracy: true,
-        motionTriggerDelay: 30000,
-        stopOnTerminate: false,
-        startOnBoot: true,
-        enableHeadless: true,
-        heartbeatInterval: -1));
+        geolocation: bg.GeoConfig(
+            desiredAccuracy: bg.DesiredAccuracy.high,
+            distanceFilter: 50,
+            disableElasticity: false,
+            locationUpdateInterval: 1000,
+            locationAuthorizationRequest: "Always",
+            fastestLocationUpdateInterval: -1,
+            enableTimestampMeta: true,
+            stopTimeout: 1,
+            geofenceModeHighAccuracy: true,
+        ),
+        activity: bg.ActivityConfig(
+            disableMotionActivityUpdates: false,
+            motionTriggerDelay: 30000,
+        ),
+        http: bg.HttpConfig(
+            autoSync: true,
+        ),
+        persistence: bg.PersistenceConfig(
+            maxDaysToPersist: 14,
+            extras: {"foo": "bar"},
+        ),
+        app: bg.AppConfig(
+            stopOnTerminate: false,
+            startOnBoot: true,
+            enableHeadless: true,
+            heartbeatInterval: -1,
+            schedule: schedule,
+            scheduleUseAlarmManager: true,
+            backgroundPermissionRationale: bg.PermissionRationale(
+                title:
+                    "Allow {applicationName} to access this device's location even when the app is closed or not in use.",
+                message:
+                    "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
+                positiveAction: 'Change to "{backgroundPermissionOptionLabel}"',
+                negativeAction: 'Cancel'),
+            notification: bg.Notification(
+                sticky: false,
+                layout: 'notification_layout',
+                channelId: 'my_channel_id',
+                actions: ["notificationButtonFoo", "notificationButtonBar"]),
+        ),
+        logger: bg.LoggerConfig(
+            debug: true,
+            logLevel: bg.LogLevel.verbose,
+        )));
 
     try {
       await bg.BackgroundGeolocation.setOdometer(0.0);

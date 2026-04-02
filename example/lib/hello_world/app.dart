@@ -91,28 +91,31 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
     // 2.  Configure the plugin
     bg.BackgroundGeolocation.ready(bg.Config(
             reset: true,
-            debug: true,
-            logLevel: bg.Config.LOG_LEVEL_VERBOSE,
-            desiredAccuracy: bg.Config.DESIRED_ACCURACY_HIGH,
-            distanceFilter: 10.0,
-            backgroundPermissionRationale: bg.PermissionRationale(
-                title:
-                    "Allow {applicationName} to access this device's location even when the app is closed or not in use.",
-                message:
-                    "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
-                positiveAction: 'Change to "{backgroundPermissionOptionLabel}"',
-                negativeAction: 'Cancel'),
-            url: "${ENV.TRACKER_HOST}/api/locations",
-            authorization: bg.Authorization(
-                // <-- demo server authenticates with JWT
-                strategy: bg.Authorization.STRATEGY_JWT,
-                accessToken: token.accessToken,
-                refreshToken: token.refreshToken,
-                refreshUrl: "${ENV.TRACKER_HOST}/api/refresh_token",
-                refreshPayload: {'refresh_token': '{refreshToken}'}),
-            stopOnTerminate: false,
-            startOnBoot: true,
-            enableHeadless: true))
+            transistorAuthorizationToken: token,
+            geolocation: bg.GeoConfig(
+                desiredAccuracy: bg.DesiredAccuracy.high,
+                distanceFilter: 10.0,
+            ),
+            http: bg.HttpConfig(
+                autoSync: true,
+            ),
+            app: bg.AppConfig(
+                stopOnTerminate: false,
+                startOnBoot: true,
+                enableHeadless: true,
+                backgroundPermissionRationale: bg.PermissionRationale(
+                    title:
+                        "Allow {applicationName} to access this device's location even when the app is closed or not in use.",
+                    message:
+                        "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
+                    positiveAction:
+                        'Change to "{backgroundPermissionOptionLabel}"',
+                    negativeAction: 'Cancel'),
+            ),
+            logger: bg.LoggerConfig(
+                logLevel: bg.LogLevel.verbose,
+                debug: true,
+            )))
         .then((bg.State state) {
       print("[ready] ${state.toMap()}");
       setState(() {
@@ -219,8 +222,8 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
   void _onAuthorization(bg.AuthorizationEvent event) async {
     print('[${bg.Event.AUTHORIZATION}] = $event');
 
-    bg.BackgroundGeolocation.setConfig(
-        bg.Config(url: '${ENV.TRACKER_HOST}/api/locations'));
+    bg.BackgroundGeolocation.setConfig(bg.Config(
+        http: bg.HttpConfig(url: '${ENV.TRACKER_HOST}/api/locations')));
   }
 
   void _onProviderChange(bg.ProviderChangeEvent event) {
