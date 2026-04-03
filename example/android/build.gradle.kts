@@ -30,12 +30,12 @@ tasks.register<Delete>("clean") {
 }
 
 // development
-//allprojects {
-//    configurations.all {
-//        resolutionStrategy {
-//            cacheChangingModulesFor(0, "seconds")
-//            cacheDynamicVersionsFor(0, "seconds")
-//        }
-//    }
-//}
+allprojects {
+    configurations.all {
+        resolutionStrategy {
+            cacheChangingModulesFor(0, "seconds")
+            cacheDynamicVersionsFor(0, "seconds")
+        }
+    }
+}
 

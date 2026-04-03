@@ -9,10 +9,16 @@ plugins {
 }
 
 // Load keystore properties for release signing.
+// 1. Try local key.properties (project-level, gitignored)
+// 2. Fall back to machine-level properties file (shared across checkouts)
 val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
+val machineKeystorePropertiesFile = file("${System.getProperty("user.home")}/Documents/Transistorsoft/apps/android/flutter-example-release.properties")
+
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+} else if (machineKeystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(machineKeystorePropertiesFile))
 }
 
 val backgroundGeolocation = project(":flutter_background_geolocation")
