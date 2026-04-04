@@ -1,186 +1,62 @@
-# flutter_background_geolocation
+<p align="center">
+  <img src="https://raw.githubusercontent.com/transistorsoft/assets/master/images/logos/transistor/transistor-logo-panel-dart.svg" alt="Background Geolocation for Flutter" width="635">
+</p>
 
- 
-See the **[Migration Guide to 5.0.0](./help/MIGRATION-GUIDE-5.0.0.md)** for details about new config APIs (e.g., `LocationFilter`) and how to migrate from flat to compound config (legacy config is still supported).
+# Background Geolocation for Flutter
 
-Be sure to see updated [Setup Guides](#-setup-guides)
+[![](https://img.shields.io/pub/v/flutter_background_geolocation.svg)](https://pub.dartlang.org/packages/flutter_background_geolocation) [![](https://img.shields.io/pub/dm/flutter_background_geolocation)](https://pub.dartlang.org/packages/flutter_background_geolocation)
 
----------------------------------------------------------
+The most sophisticated background **location-tracking & geofencing** SDK with battery-conscious motion-detection intelligence for **iOS** and **Android**.
 
-[![](https://dl.dropboxusercontent.com/s/nm4s5ltlug63vv8/logo-150-print.png?dl=1)](https://www.transistorsoft.com)
+The SDK uses **motion-detection** APIs (accelerometer, gyroscope, magnetometer) to detect when the device is *moving* or *stationary*:
 
--------------------------------------------------------------------------------
+- **Moving** — location recording starts automatically at the configured `distanceFilter` (metres)
+- **Stationary** — location services turn off automatically to conserve battery
 
-The *most* sophisticated background **location-tracking & geofencing** module with battery-conscious motion-detection intelligence for **iOS** and **Android**.
+> [!CAUTION]
+> This README references **`v5.x`**. If you're migrating from **`v4.x`**, see the [Migration Guide](help/MIGRATION-GUIDE-5.0.0.md).
 
-The plugin's [Philosophy of Operation](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Philosophy-of-Operation) is to use **motion-detection** APIs (using accelerometer, gyroscope and magnetometer) to detect when the device is *moving* and *stationary*.
+---
 
-- When the device is detected to be **moving**, the plugin will *automatically* start recording a location according to the configured `distanceFilter` (meters).
+## :books: Documentation
 
-- When the device is detected be **stationary**, the plugin will automatically turn off location-services to conserve energy.
+### <img src="assets/images/platforms/flutter.svg" width="20" height="20"> Flutter
+- [Setup](https://docs.transistorsoft.com/flutter/setup/)
+- [API Reference](https://docs.transistorsoft.com/flutter/BackgroundGeolocation/)
+- [Examples](https://docs.transistorsoft.com/flutter/examples/)
 
-Also available for [Cordova](https://github.com/transistorsoft/cordova-background-geolocation-lt), [React Native](https://github.com/transistorsoft/react-native-background-geolocation), [Capacitor](https://github.com/transistorsoft/capacitor-background-geolocation) and [pure native](https://github.com/transistorsoft/native-background-geolocation) apps.
+---
 
+## :open_file_folder: Example Apps
 
-> [!NOTE]  
->The **[Android module](https://www.transistorsoft.com/shop/products/flutter-background-geolocation)** requires [purchasing a license](https://www.transistorsoft.com/shop/products/flutter-background-geolocation).  However, it *will* work for **DEBUG** builds.  It will **not** work with **RELEASE** builds [without purchasing a license](https://www.transistorsoft.com/shop/products/flutter-background-geolocation).  This plugin is supported **full-time** and field-tested **daily** since 2013.
+See [`/example`](example/README.md) — example apps are included in this repo.
 
-----------------------------------------------------------------------------
+---
 
-[![Google Play](https://dl.dropboxusercontent.com/s/80rf906x0fheb26/google-play-icon.png?dl=1)](https://play.google.com/store/apps/details?id=com.transistorsoft.flutterbackgroundgeolocationexample)
+## :key: Licensing
 
-![Home](https://dl.dropboxusercontent.com/s/wa43w1n3xhkjn0i/home-framed-350.png?dl=1)
-![Settings](https://dl.dropboxusercontent.com/s/8oad228siog49kt/settings-framed-350.png?dl=1)
+> [!TIP]
+> The SDK is **fully functional in `DEBUG` builds** — no license required. Try before you buy.
 
-# Contents
-- ### 📚 [API Documentation](https://pub.dev/documentation/flutter_background_geolocation/latest/)
-- ### [Installing the Plugin](#-installing-the-plugin)
-- ### [Setup Guides](#-setup-guides)
-- ### [Using the plugin](#-using-the-plugin)
-- ### [v5 Migration Guide](help/MIGRATION-GUIDE-5.0.0.md)
-- ### [Example](#l-example)
-- ### [Debugging](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Debugging)
-- ### [Demo Application](#-demo-application)
-- ### [Testing Server](#-simple-testing-server)
+A license is required only for **`RELEASE` builds** on Android.
+[Purchase a license](https://shop.transistorsoft.com/products/flutter-background-geolocation)
 
+---
 
-## 🔷 Installing the Plugin
+## 📦 SDK availability
 
-📂 **`pubspec.yaml`**:
+<img src="https://raw.githubusercontent.com/transistorsoft/assets/master/images/logos/transistor/transistor-logo-panel-all.svg" width="300">
 
-**Note:** See [Versions](https://pub.dartlang.org/packages/flutter_background_geolocation/#-versions-tab-) for latest available version.
+| Platform | Package |
+|---|---|
+| <img src="assets/images/platforms/flutter.svg" width="16" height="16"> Flutter | **This repo** |
+| <img src="assets/images/platforms/react-native.svg" width="16" height="16"> [React Native](https://github.com/transistorsoft/react-native-background-geolocation) | `react-native-background-geolocation` |
+| <img src="assets/images/platforms/expo.svg" width="16" height="16"> [Expo](https://github.com/transistorsoft/react-native-background-geolocation) | `react-native-background-geolocation` |
+| <img src="assets/images/platforms/capacitor.svg" width="16" height="16"> [Capacitor](https://github.com/transistorsoft/capacitor-background-geolocation) | `@transistorsoft/capacitor-background-geolocation` |
+| <img src="assets/images/platforms/cordova.svg" width="16" height="16"> [Cordova](https://github.com/transistorsoft/cordova-background-geolocation-lt) | `cordova-background-geolocation-lt` |
+| <img src="assets/images/platforms/swift.svg" width="16" height="16"> [Swift / iOS](https://github.com/transistorsoft/background-geolocation) | `background-geolocation` |
+| <img src="assets/images/platforms/kotlin.svg" width="16" height="16"> [Kotlin / Android](https://github.com/transistorsoft/background-geolocation) | `background-geolocation` |
 
-```yaml
-dependencies:
-  flutter_background_geolocation: '^5.0.0'
-```
+---
 
-### Or latest from Git:
-
-```yaml
-dependencies:
-  flutter_background_geolocation:
-    git:
-      url: https://github.com/transistorsoft/flutter_background_geolocation.git
-```
-
-## 🔷 Setup Guides
-
-- [iOS](help/INSTALL-IOS.md)
-- [Android](help/INSTALL-ANDROID.md)
-
-
-## 🔷 Using the plugin ##
-
-```dart
-import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
-```
-
-> [!WARNING]
-> Note `as bg` in the `import`.  This is important to namespace the plugin's classes, which often use common class-names such as `Location`, `Config`, `State`.  You will access every `flutter_background_geolocation` class with the prefix `bg` (ie: "**b**ackground **g**eolocation").
-
-## 🔷 Example
-[Full Example](https://gist.github.com/christocracy/a0464846de8a9c27c7e9de5616082878)
-
-There are three main steps to using `BackgroundGeolocation`:
-
-1. Wire up event-listeners.
-2. Configure the plugin with `#ready`.
-3. `#start` the plugin.
-
-> [!WARNING]
-> Do not execute *any* API method which will require accessing location-services until the **[`.ready(config)`](https://pub.dev/documentation/flutter_background_geolocation/latest/flt_background_geolocation/BackgroundGeolocation/ready.html)** method resolves ([Read its API docs](https://pub.dev/documentation/flutter_background_geolocation/latest/flt_background_geolocation/BackgroundGeolocation/ready.html)), For example: 
->- `.getCurrentPosition` 
->- `.start`
-
-
-```dart
-
-import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  void initState() {
-    super.initState();
-
-    ////
-    // 1.  Listen to events (See docs for all 12 available events).
-    //
-
-    // Fired whenever a location is recorded
-    bg.BackgroundGeolocation.onLocation((bg.Location location) {
-      print('[location] - $location');
-    });
-
-    // Fired whenever the plugin changes motion-state (stationary->moving and vice-versa)
-    bg.BackgroundGeolocation.onMotionChange((bg.Location location) {
-      print('[motionchange] - $location');
-    });
-
-    // Fired whenever the state of location-services changes.  Always fired at boot
-    bg.BackgroundGeolocation.onProviderChange((bg.ProviderChangeEvent event) {
-      print('[providerchange] - $event');
-    });
-
-    ////
-    // 2.  Configure the plugin (See API docs for dozens of available options)
-    //
-    bg.BackgroundGeolocation.ready(bg.Config(
-        geolocation: bg.GeoConfig(
-          desiredAccuracy: bg.DesiredAccuracy.high
-          distanceFilter: 10.0,
-        ),
-        app: bg.AppConfig(
-          stopOnTerminate: false,
-          startOnBoot: true
-        ),
-        logger: bg.LoggerConfig(
-          debug: true,  // <-- Emit debug soundFX during development
-          logLevel: bg.LogLevel.verbose // <-- Emit verbose logs for development / debugging
-        )
-    )).then((bg.State state) {
-      // The SDK persists its enabled state between app restarts / device reboots.
-      if (!state.enabled) { 
-        ////
-        // 3.  Start the plugin (like the power switch of an electronic device)
-        //
-        bg.BackgroundGeolocation.start();
-      }
-    });
-  }
-}
-
-```
-
-## 🔷 Demo Application
-
-A fully-featured Demo App is available in the repo in the [`/example`](./example) folder.
-
-[![Google Play](https://dl.dropboxusercontent.com/s/80rf906x0fheb26/google-play-icon.png?dl=1)](https://play.google.com/store/apps/details?id=com.transistorsoft.flutterbackgroundgeolocationexample)
-
-![Home](https://dl.dropboxusercontent.com/s/wa43w1n3xhkjn0i/home-framed-350.png?dl=1)
-![Settings](https://dl.dropboxusercontent.com/s/8oad228siog49kt/settings-framed-350.png?dl=1)
-
-## 🔷 [Simple Testing Server](https://github.com/transistorsoft/background-geolocation-console)
-
-A simple Node-based [web-application](https://github.com/transistorsoft/background-geolocation-console) with SQLite database is available for field-testing and performance analysis.  If you're familiar with Node, you can have this server up-and-running in about **one minute**.
-
-![](https://dl.dropboxusercontent.com/s/px5rzz7wybkv8fs/background-geolocation-console-map.png?dl=1)
-
-![](https://dl.dropboxusercontent.com/s/tiy5b2oivt0np2y/background-geolocation-console-grid.png?dl=1)
-
-# Licensing
-
-The `flutter_background_geolocation` Flutter plugin is open source and
-licensed under the **Apache License 2.0**.
-
-This package is a Flutter wrapper around Transistor Software’s native
-Background Geolocation SDKs for iOS and Android
-(`TSLocationManager.xcframework` and `tslocationmanager.aar`).
-
-Those native SDKs are **commercial proprietary software** and require a
-valid license for production use.  See https://www.transistorsoft.com/shop/products/flutter-background-geolocation/license
-
-For purchase, see https://shop.transistorsoft.com
-
+MIT © [Transistor Software](https://www.transistorsoft.com)
