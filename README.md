@@ -13,8 +13,8 @@ The SDK uses **motion-detection** APIs (accelerometer, gyroscope, magnetometer) 
 - **Moving** — location recording starts automatically at the configured `distanceFilter` (metres)
 - **Stationary** — location services turn off automatically to conserve battery
 
-> [!CAUTION]
-> This README references **`v5.x`**. If you're migrating from **`v4.x`**, see the [Migration Guide](help/MIGRATION-GUIDE-5.0.0.md).
+> [!IMPORTANT]
+> This is **`v5`**. For the previous version see [`v4.x`](https://github.com/transistorsoft/flutter_background_geolocation/tree/4.18.3). **`v4.x`** license keys do **not** work with **`v5`** — log in to the [Customer Dashboard](https://shop.transistorsoft.com/customers) to generate a **`v5`** key. See the [Migration Guide](help/MIGRATION-GUIDE-5.0.0.md) for details.
 
 ---
 
