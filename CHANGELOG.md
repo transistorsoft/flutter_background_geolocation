@@ -1,20 +1,18 @@
 # CHANGELOG
 
-## Unreleased
-- example
-- Remove SwiftPM package references from Xcode project
-  The FlutterGeneratedPluginSwiftPackage references were left over from
-  when SwiftPM was enabled, causing module resolution conflicts with
-  CocoaPods.
-- Fix CocoaPods xcconfig integration and set iOS platform
-  - Uncomment Pods xcconfig includes in Debug.xcconfig and Release.xcconfig
-  - Add profile xcconfig include in Release.xcconfig
-  - Set explicit platform :ios, '15.6' in Podfile
-- Disable SwiftPM for iOS to fix Xcode build failure
-  SwiftPM package targets compile before the Flutter framework is
-  generated, causing 'Flutter/Flutter.h' file not found errors when
-  building directly from Xcode. CocoaPods handles this build ordering
-  correctly.
+## 5.1.0 &mdash; 2026-04-06
+
+### 🚀 Zero Third-Party Native Logging Dependencies
+
+The native `TSLocationManager` SDK no longer depends on **any** third-party logging frameworks on either platform:
+
+- **[iOS]** Removed `CocoaLumberjack` — replaced with a custom, zero-dependency SQLite-backed logger using `os_log` for console output.
+- **[Android]** Removed `slf4j` / `logback-android` — replaced with a custom SQLite-backed logger using the native Android `Log` API.
+
+This eliminates a long-standing source of dependency conflicts for apps that use these popular logging libraries at different versions. The SDK's logging behavior, output format, and `emailLog` / `uploadLog` functionality remain identical.
+
+* [iOS] Pin `TSLocationManager ~> 4.1.0`
+* [Android] Pin `tslocationmanager 4.1.+`
 
 ## 5.0.7 &mdash; 2025-03-26
 * Fix `Package.swift`: bump ios min `.v12`
