@@ -39,7 +39,7 @@ See [`/example`](example/README.md) — example apps are included in this repo.
 > The SDK is **fully functional in `DEBUG` builds** — no license required. Try before you buy.
 
 A license is required only for **`RELEASE` builds** on Android.
-[Purchase a license](https://docs.transistorsoft.com/purchase/?platform=flutter)
+[Purchase a license](https://docs.transistorsoft.com)
 
 ---
 
