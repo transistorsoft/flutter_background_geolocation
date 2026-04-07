@@ -18,8 +18,7 @@ Pod::Spec.new do |s|
   s.source_files = 'flutter_background_geolocation/Sources/flutter_background_geolocation/**/*.{h,m}'
   s.public_header_files = 'flutter_background_geolocation/Sources/flutter_background_geolocation/include/**/*.h'
   s.dependency 'Flutter'
-  s.dependency 'CocoaLumberjack', '~> 3.8.5'
-  s.dependency 'TSLocationManager', '~> 4.0.10'
+  s.dependency 'TSLocationManager', '~> 4.1.0'
 
   s.libraries           = 'sqlite3', 'z', 'stdc++'
   s.static_framework = true

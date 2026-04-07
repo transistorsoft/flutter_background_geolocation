@@ -1,30 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "cocoalumberjack",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
-      "state" : {
-        "revision" : "a9ed4b6f9bdedce7d77046f43adfb8ce1fd54114",
-        "version" : "3.9.0"
-      }
-    },
-    {
       "identity" : "native-background-geolocation",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/transistorsoft/native-background-geolocation.git",
       "state" : {
         "revision" : "db90bd9d0cedf0bbab22b15f43cc1dda57e0c208",
-        "version" : "4.0.12"
-      }
-    },
-    {
-      "identity" : "swift-log",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-log",
-      "state" : {
-        "revision" : "7ee16e465622412764b0ff0c1301801dc71b8f61",
-        "version" : "1.9.0"
+        "version" : "4.1.0"
       }
     },
     {
