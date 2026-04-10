@@ -175,49 +175,6 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
       print('[ready] ERROR: $error');
     });
 
-    /*
-    bg.BackgroundGeolocation.ready(bg.Config(
-        reset: false,  // <-- lets the Settings screen drive the config rather than re-applying each boot.
-        // Convenience option to automatically configure the SDK to post to Transistor Demo server.
-        transistorAuthorizationToken: token,
-        // Logging & Debug
-        debug: true,
-        logLevel: bg.Config.LOG_LEVEL_VERBOSE,
-        // Geolocation options
-        desiredAccuracy: bg.Config.DESIRED_ACCURACY_NAVIGATION,
-        distanceFilter: 10.0,
-        // Activity recognition options
-        stopTimeout: 5,
-        backgroundPermissionRationale: bg.PermissionRationale(
-          title: "Allow {applicationName} to access this device's location even when the app is closed or not in use.",
-          message: "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
-          positiveAction: 'Change to "{backgroundPermissionOptionLabel}"',
-          negativeAction: 'Cancel'
-        ),
-        // HTTP & Persistence
-        autoSync: true,
-        // Application options
-        stopOnTerminate: false,
-        startOnBoot: true,
-        enableHeadless: true,
-        heartbeatInterval: 60
-    )).then((bg.State state) async {
-      print('[ready] ${state.toMap()}');
-      print('[didDeviceReboot] ${state.didDeviceReboot}');
-      if (state.schedule!.isNotEmpty) {
-        bg.BackgroundGeolocation.startSchedule();
-      }
-      print("*** enabled: ${state.enabled}, switchState: ${_enabled}");
-
-      setState(() {
-        _enabled = state.enabled;
-        _isMoving = state.isMoving;
-      });
-    }).catchError((error) {
-      print('[ready] ERROR: $error');
-    });
-    */
-
     // Fetch currently selected tab.
     SharedPreferences prefs = await _prefs;
     int? tabIndex = prefs.getInt("tabIndex");
