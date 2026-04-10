@@ -257,14 +257,19 @@ class Location {
   /// Original `Map` data received from native code.
   late dynamic map;
 
-  /// Timestamp in __`ISO 8601`__ (UTC) format.
+  /// Timestamp provided by the native location API.
   ///
-  /// Eg: `2018-01-01T12:00:01.123Z'.
+  /// - When `PersistenceConfig.timestampFormat` is `"iso"` (default): ISO-8601 UTC `String` (eg `"2018-01-01T12:00:01.123Z"`).
+  /// - When `PersistenceConfig.timestampFormat` is `"epoch"`: epoch milliseconds `int`.
   ///
-  late String timestamp;
+  late dynamic timestamp;
 
-  /// Device Timestamp when this location was received in __`ISO 8601`__ (UTC) format.
-  late String recordedAt;
+  /// Timestamp when the SDK received the location from the native API.
+  ///
+  /// - When `PersistenceConfig.timestampFormat` is `"iso"` (default): ISO-8601 UTC `String`.
+  /// - When `PersistenceConfig.timestampFormat` is `"epoch"`: epoch milliseconds `int`.
+  ///
+  late dynamic recordedAt;
 
   /// The age of the location in milliseconds, relative to the Device system-time when the location was received.
   /// For example, if the reported `age` is `10000`, that location was recorded 10s ago, relative to the system-time.
@@ -376,13 +381,11 @@ class Location {
     battery = Battery(p['battery']);
     activity = Activity(p['activity']);
 
-    // timestamp is required for a valid Location.  Dummy payload provides it.
-    final dynamic ts = p['timestamp'];
-    timestamp = (ts is String) ? ts : (ts?.toString() ?? '');
+    // timestamp: String (ISO-8601) or int (epoch ms) depending on timestampFormat.
+    timestamp = p['timestamp'] ?? '';
 
     // recorded_at may be absent in dummy payloads.
-    final dynamic ra = p['recorded_at'];
-    recordedAt = (ra is String) ? ra : timestamp;
+    recordedAt = p['recorded_at'] ?? timestamp;
 
     // age may be absent.
     age = _mapDouble(p, 'age', fallback: 0.0);

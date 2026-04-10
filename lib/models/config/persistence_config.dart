@@ -38,6 +38,9 @@ class PersistenceConfig {
   /// {@macro config.geofence_template}
   final String? geofenceTemplate;
 
+  /// {@macro config.timestamp_format}
+  final String? timestampFormat;
+
   /// {@macro config.max_days_to_persist}
   final int? maxDaysToPersist;
 
@@ -59,6 +62,7 @@ class PersistenceConfig {
   const PersistenceConfig({
     this.locationTemplate,
     this.geofenceTemplate,
+    this.timestampFormat,
     this.maxDaysToPersist,
     this.maxRecordsToPersist,
     this.locationsOrderDirection,
@@ -71,6 +75,7 @@ class PersistenceConfig {
     return <String, dynamic>{
       if (locationTemplate != null) 'locationTemplate': locationTemplate,
       if (geofenceTemplate != null) 'geofenceTemplate': geofenceTemplate,
+      if (timestampFormat != null) 'timestampFormat': timestampFormat,
       if (maxDaysToPersist != null) 'maxDaysToPersist': maxDaysToPersist,
       if (maxRecordsToPersist != null)
         'maxRecordsToPersist': maxRecordsToPersist,
@@ -87,6 +92,7 @@ class PersistenceConfig {
       PersistenceConfig(
         locationTemplate: m['locationTemplate'],
         geofenceTemplate: m['geofenceTemplate'],
+        timestampFormat: m['timestampFormat'],
         maxDaysToPersist: _ensureInt(m['maxDaysToPersist']),
         maxRecordsToPersist: _ensureInt(m['maxRecordsToPersist']),
         locationsOrderDirection: m['locationsOrderDirection'],
