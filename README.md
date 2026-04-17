@@ -54,8 +54,8 @@ A license is required only for **`RELEASE` builds** on Android.
 | <img src="assets/images/platforms/expo.svg" width="16" height="16"> [Expo](https://github.com/transistorsoft/react-native-background-geolocation) | `react-native-background-geolocation` |
 | <img src="assets/images/platforms/capacitor.svg" width="16" height="16"> [Capacitor](https://github.com/transistorsoft/capacitor-background-geolocation) | `@transistorsoft/capacitor-background-geolocation` |
 | <img src="assets/images/platforms/cordova.svg" width="16" height="16"> [Cordova](https://github.com/transistorsoft/cordova-background-geolocation-lt) | `cordova-background-geolocation-lt` |
-| <img src="assets/images/platforms/swift.svg" width="16" height="16"> [Swift / iOS](https://github.com/transistorsoft/background-geolocation) | `background-geolocation` |
-| <img src="assets/images/platforms/kotlin.svg" width="16" height="16"> [Kotlin / Android](https://github.com/transistorsoft/background-geolocation) | `background-geolocation` |
+| <img src="assets/images/platforms/swift.svg" width="16" height="16"> [Swift / iOS](https://github.com/transistorsoft/native-background-geolocation) | `background-geolocation` |
+| <img src="assets/images/platforms/kotlin.svg" width="16" height="16"> [Kotlin / Android](https://github.com/transistorsoft/native-background-geolocation) | `background-geolocation` |
 
 ---
 
