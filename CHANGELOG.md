@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 5.1.2 &mdash; 2026-04-20
+* [Fixed][Android] App stuck on splash / logo after relaunch when the foreground service kept the process alive past Activity termination. Root cause: `HeadlessTask`'s static background `FlutterEngine` was never destroyed, so on main Activity reattach the stale engine conflicted with the freshly attaching main engine's plugin channels. `HeadlessTask.destroyBackgroundIsolate()` now runs when `BackgroundGeolocationModule.setActivity(activity)` receives a non-null Activity, clearing the background engine before the main engine attaches.
+* [Changed] Example `main.dart` — added boot-trace `print()` milestones to make stuck-splash reproductions immediately identify the Dart boot stage that hangs.
+* [Changed] Example bumps `background_fetch` to `^1.6.2` for the sibling fix that surfaced once the background engine started being properly destroyed (`MissingPluginException` on `com.transistorsoft/flutter_background_fetch/methods`).
+
 ## 5.1.1 &mdash; 2026-04-10
 * [Added] New config option `PersistenceConfig.timestampFormat` — set to `"epoch"` to receive `timestamp` and `recorded_at` as epoch milliseconds (`number`) instead of the default ISO-8601 UTC strings.
 * [Fixed][Android] `getCurrentPosition` timeout (408) with approximate (COARSE-only) location permission. With only approximate location granted, the SDK now resolves immediately with the first available location instead of waiting for samples that won't arrive.

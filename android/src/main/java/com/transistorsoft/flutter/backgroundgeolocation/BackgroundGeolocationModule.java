@@ -128,6 +128,12 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             }
             activity.getApplication().registerActivityLifecycleCallbacks(this);
 
+            // Tear down any lingering headless FlutterEngine spawned by
+            // HeadlessTask while the main Activity was gone.  Keeping it
+            // alive alongside the main engine risks plugin-channel conflicts
+            // that can block the main engine's boot (stuck splash / logo).
+            HeadlessTask.destroyBackgroundIsolate();
+
             mReady = false;
             mIsInitialized = false;
 
