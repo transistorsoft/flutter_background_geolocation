@@ -148,15 +148,24 @@ void backgroundFetchHeadlessTask(HeadlessTask task) async {
 }
 
 void main() {
+  print('⭐ main() START');
+
   WidgetsFlutterBinding.ensureInitialized();
+
+  print('⭐ ensureInitialized() DONE');
 
   /// Application selection:  Select the app to boot:
   /// - AdvancedApp
   /// - HelloWorldAp
   /// - HomeApp
   ///
+  print('⭐ Awaiting SharedPreferences...');
   SharedPreferences.getInstance().then((SharedPreferences prefs) {
+
+
     String? appName = prefs.getString("app");
+
+    print('⭐ SharedPreferences DONE, app=${prefs.getString("app")}');
 
     // Sanitize old-style registration system that only required username.
     // If we find a valid username but null orgname, reverse them.
@@ -167,6 +176,8 @@ void main() {
       prefs.setString("orgname", username);
       prefs.remove("username");
     }
+
+    print('⭐ About to runApp()');
 
     switch (appName) {
       case AdvancedApp.NAME:
@@ -179,12 +190,17 @@ void main() {
         // Default app.  Renders the application selector home page.
         runApp(HomeApp());
     }
+    print('⭐ runApp() RETURNED');
+
   });
   TransistorAuth.registerErrorHandler();
 
   /// Register BackgroundGeolocation headless-task.
   bg.BackgroundGeolocation.registerHeadlessTask(
       backgroundGeolocationHeadlessTask);
+
+  print('⭐ registerHeadlessTask() DONE');
+
 
   /// Register BackgroundFetch headless-task.
   BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);

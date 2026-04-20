@@ -51,6 +51,23 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
         return true;
     }
 
+    /**
+     * Destroy the background {@link FlutterEngine} spawned for headless-task
+     * execution.  Called when the main Activity re-attaches — the headless
+     * engine's purpose is to process events while the main isolate is gone,
+     * so keeping it alive after the main engine returns is both unnecessary
+     * and a source of plugin-channel conflicts that can block the main
+     * engine's boot (manifests as a stuck splash / logo on app relaunch
+     * while an FGS kept the process alive post-termination).
+     */
+    static synchronized void destroyBackgroundIsolate() {
+        if (sBackgroundFlutterEngine != null) {
+            Log.d(BackgroundGeolocation.TAG, "[HeadlessTask] destroying background isolate (main engine attaching)");
+            sBackgroundFlutterEngine.destroy();
+            sBackgroundFlutterEngine = null;
+        }
+    }
+
     @Override
     public void onMethodCall(MethodCall call, @NonNull MethodChannel.Result result) {
         Log.d(BackgroundGeolocation.TAG, "$ " + call.method);
