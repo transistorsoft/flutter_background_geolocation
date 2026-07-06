@@ -591,7 +591,36 @@ class BackgroundGeolocation {
     return Location(data);
   }
 
+  /// Retrieve a `List` of [Location] stored in the plugin's SQLite database.
+  ///
+  /// Provide an optional [LocationQuery] to page through a large table — constrain
+  /// results by [LocationQuery.limit], starting [LocationQuery.offset] (or
+  /// [LocationQuery.page]), and sort [LocationQuery.order].  Without a query, every
+  /// record is returned in a single call, which can exhaust memory on a table of
+  /// several thousand records — prefer paging for large datasets.  Size your paging
+  /// with [BackgroundGeolocation.count].
+  ///
+  /// ## Example
+  ///
+  /// ```dart
+  /// // All records
+  /// List locations = await BackgroundGeolocation.getLocations();
+  ///
+  /// // One page of 500, newest first
+  /// List page = await BackgroundGeolocation.getLocations(LocationQuery(
+  ///   limit: 500,
+  ///   page: 0,
+  ///   order: LocationQuery.ORDER_DESC
+  /// ));
+  /// ```
+  ///
+  static Future<List> getLocations([LocationQuery? query]) async {
+    return (await _methodChannel.invokeListMethod('getLocations', query?.toMap()))!;
+  }
+
   /// Retrive a List of [Location] currently stored in the plugin's SQLite database.
+  ///
+  /// An alias for [getLocations] with no query.
   ///
   /// ## Example
   ///
@@ -599,9 +628,7 @@ class BackgroundGeolocation {
   /// List locations = await BackgroundGeolocation.locations;
   /// ```
   ///
-  static Future<List> get locations async {
-    return (await _methodChannel.invokeListMethod('getLocations'))!;
-  }
+  static Future<List> get locations => getLocations();
 
   /// Retrive the count of all locations current stored in the plugin's SQLite database.
   ///
