@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## 5.4.0 &mdash; 2026-07-06
+
+### 🛡️ Reduced Foreground-Service Usage (Android)
+
+Geofencing and activity recognition (motion detection) no longer require a foreground service. These modes now run without a persistent notification — ahead of Google Play's **August 2026** policy that removes geofencing as an approved foreground-service `location` use-case.
+
+- **Run without foreground-service permissions.** You can remove `FOREGROUND_SERVICE` / `FOREGROUND_SERVICE_LOCATION` from your manifest. When absent, continuous location degrades gracefully to the OS significant-changes path (best-effort) instead of failing to start.
+- **Quieter by default.** Geofence-only and motion-only apps no longer show an ongoing notification.
+- **Opt back in via config** for apps that still need classic foreground-service delivery.
+
+Continuous high-frequency tracking (`trackingMode: LOCATION`) still uses a foreground service where permitted.
+
+* [Added] New `getLocations([LocationQuery query])` method — page through the location database, eg `getLocations(LocationQuery(limit: 500, page: 0, order: LocationQuery.ORDER_DESC))`. The `.locations` getter is retained as an alias for the unbounded read. Fixes out-of-memory crashes when reading a database holding thousands of records.
+* [iOS] Pin `TSLocationManager ~> 4.3.0`
+* [Android] Pin `tslocationmanager 4.3.+`
+
 ## 5.3.0 &mdash; 2026-06-22
 * [Added] New event `onLocationFilter` — fires when the tracking location-filter **rejects** a location (eg: horizontal accuracy worse than `LocationFilter.trackingAccuracyThreshold`, or a GPS spike under the `Conservative` policy: implausible implied-speed / statistical outlier). Rejected locations are **not** delivered to `onLocation`, so this is the only way to observe and adapt to them. The event provides the rejected `location`, a normalized `reason` (`"low-accuracy"` | `"implied-speed"` | `"outlier-capped"`), `accuracy`, and `trackingAccuracyThreshold`.
 * [iOS] Pin `TSLocationManager ~> 4.2.0`
