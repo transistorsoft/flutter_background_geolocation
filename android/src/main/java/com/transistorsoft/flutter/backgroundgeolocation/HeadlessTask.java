@@ -40,10 +40,12 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
     private Context mContext;
 
     // Deprecated V2
-    private MethodChannel mDispatchChannel;
+    // The dispatch channel and registration flag describe the static engine below —
+    // all three are torn down together in destroyBackgroundIsolate().
+    private static MethodChannel sDispatchChannel;
     private static FlutterEngine sBackgroundFlutterEngine;
 
-    private final AtomicBoolean mHeadlessTaskRegistered = new AtomicBoolean(false);
+    private static final AtomicBoolean sHeadlessTaskRegistered = new AtomicBoolean(false);
     private final List<HeadlessEvent> mEvents = new ArrayList<>();
     // Called by FLTBackgroundGeolocationPlugin
     static boolean register(final Context context, final List<Object> callbacks) {
@@ -66,13 +68,21 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
             sBackgroundFlutterEngine.destroy();
             sBackgroundFlutterEngine = null;
         }
+        // Reset the registration state referring to the destroyed engine.  The
+        // HeadlessTask instance is a process-lifetime EventBus singleton: leaving
+        // sHeadlessTaskRegistered=true here blocks startBackgroundIsolate() from
+        // ever booting a replacement engine, and every subsequent headless event
+        // dispatches into the dead DartExecutor ("FlutterJNI was detached") and
+        // is silently dropped for the life of the process.
+        sHeadlessTaskRegistered.set(false);
+        sDispatchChannel = null;
     }
 
     @Override
     public void onMethodCall(MethodCall call, @NonNull MethodChannel.Result result) {
         Log.d(BackgroundGeolocation.TAG, "$ " + call.method);
         if (call.method.equalsIgnoreCase("initialized")) {
-            mHeadlessTaskRegistered.set(true);
+            sHeadlessTaskRegistered.set(true);
             dispatch();
         } else {
             result.notImplemented();
@@ -103,9 +113,18 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
             startBackgroundIsolate();
         }
 
-        if (!mHeadlessTaskRegistered.get()) {
+        if (!sHeadlessTaskRegistered.get()) {
             // Queue up events while background isolate is starting
             Log.d(BackgroundGeolocation.TAG, "[HeadlessTask] waiting for client to initialize");
+            return;
+        }
+
+        // Snapshot the channel: destroyBackgroundIsolate() nulls it when the main
+        // Activity re-attaches.  If it's gone, leave the queued mEvents in place —
+        // they'll flush when the next isolate boots and calls "initialized".
+        MethodChannel dispatchChannel = sDispatchChannel;
+        if (dispatchChannel == null) {
+            Log.d(BackgroundGeolocation.TAG, "[HeadlessTask] dispatch channel destroyed; events queued for next isolate");
             return;
         }
 
@@ -116,7 +135,7 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
                     response.put("callbackId", sClientCallbackId);
                     response.put("event", event.getName());
                     response.put("params", getEventObject(event));
-                    mDispatchChannel.invokeMethod("", response);
+                    dispatchChannel.invokeMethod("", response);
                 } catch (JSONException | IllegalStateException e) {
                    // TODO TSLog.logger.error(TSLog.error(e.getMessage()));
                     e.printStackTrace();
@@ -182,23 +201,27 @@ public class HeadlessTask implements MethodChannel.MethodCallHandler, Runnable {
         FlutterApplicationInfo info = ApplicationInfoLoader.load(mContext);
         String appBundlePath = info.flutterAssetsDir;
 
-        AssetManager assets = mContext.getAssets();
-        if (appBundlePath != null && !mHeadlessTaskRegistered.get()) {
-            sBackgroundFlutterEngine = new FlutterEngine(mContext);
-            DartExecutor executor = sBackgroundFlutterEngine.getDartExecutor();
-            // Create the Transmitter channel
-            mDispatchChannel = new MethodChannel(executor, BackgroundGeolocationModule.PLUGIN_ID + "/headless", JSONMethodCodec.INSTANCE);
-            mDispatchChannel.setMethodCallHandler(this);
-
-            FlutterCallbackInformation callbackInfo = FlutterCallbackInformation.lookupCallbackInformation(sRegistrationCallbackId);
-
-            if (callbackInfo == null) {
-                // TODO TSLog.logger.error(TSLog.error("Fatal: failed to find callback: " + sRegistrationCallbackId));
-                return;
-            }
-            DartExecutor.DartCallback dartCallback = new DartExecutor.DartCallback(assets, appBundlePath, callbackInfo);
-            executor.executeDartCallback(dartCallback);
+        if (appBundlePath == null || sHeadlessTaskRegistered.get()) {
+            // Never fail silently here: a declined start means headless events queue forever.
+            Log.w(BackgroundGeolocation.TAG, "[HeadlessTask] cannot start background isolate (appBundlePath=" + appBundlePath + ", registered=" + sHeadlessTaskRegistered.get() + ")");
+            return;
         }
+
+        AssetManager assets = mContext.getAssets();
+        sBackgroundFlutterEngine = new FlutterEngine(mContext);
+        DartExecutor executor = sBackgroundFlutterEngine.getDartExecutor();
+        // Create the Transmitter channel
+        sDispatchChannel = new MethodChannel(executor, BackgroundGeolocationModule.PLUGIN_ID + "/headless", JSONMethodCodec.INSTANCE);
+        sDispatchChannel.setMethodCallHandler(this);
+
+        FlutterCallbackInformation callbackInfo = FlutterCallbackInformation.lookupCallbackInformation(sRegistrationCallbackId);
+
+        if (callbackInfo == null) {
+            // TODO TSLog.logger.error(TSLog.error("Fatal: failed to find callback: " + sRegistrationCallbackId));
+            return;
+        }
+        DartExecutor.DartCallback dartCallback = new DartExecutor.DartCallback(assets, appBundlePath, callbackInfo);
+        executor.executeDartCallback(dartCallback);
     }
     /**
      * Persist callbacks in Background-thread.
