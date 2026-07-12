@@ -34,6 +34,7 @@ import com.transistorsoft.locationmanager.http.TSAuthorization;
 import com.transistorsoft.locationmanager.http.TransistorAuthorizationToken;
 import com.transistorsoft.locationmanager.config.edit.Editor;
 import com.transistorsoft.locationmanager.data.LocationModel;
+import com.transistorsoft.locationmanager.data.LocationQuery;
 import com.transistorsoft.locationmanager.data.SQLQuery;
 import com.transistorsoft.locationmanager.device.DeviceInfo;
 import com.transistorsoft.locationmanager.device.DeviceSettingsRequest;
@@ -285,7 +286,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         } else if (call.method.equalsIgnoreCase(Actions.STOP_WATCH_POSITION)) {
             stopWatchPosition(result);
         } else if (call.method.equalsIgnoreCase(Actions.GET_LOCATIONS)) {
-            getLocations(result);
+            getLocations((Map) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(Actions.INSERT_LOCATION)) {
             insertLocation((Map) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(Actions.GET_COUNT)) {
@@ -574,8 +575,9 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         });
     }
 
-    private void getLocations(final MethodChannel.Result result) {
-        BackgroundGeolocation.getInstance(mContext).getLocations(new TSGetLocationsCallback() {
+    private void getLocations(Map params, final MethodChannel.Result result) {
+        LocationQuery query = LocationQuery.fromMap(params);
+        BackgroundGeolocation.getInstance(mContext).getLocations(query, new TSGetLocationsCallback() {
             @Override public void onSuccess(List<LocationModel> records) {
                 JSONArray rs = new JSONArray();
                 for (LocationModel location : records) {

@@ -136,7 +136,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     } else if ([self method:ACTION_STOP_WATCH_POSITION is:action]) {
         [self stopWatchPosition:[call.arguments longValue] result:result];        
     } else if ([self method:ACTION_GET_LOCATIONS is:action]) {
-        [self getLocations:result];
+        [self getLocations:call.arguments result:result];
     } else if ([self method:ACTION_INSERT_LOCATION is:action]) {
         [self insertLocation:call.arguments result:result];
     } else if ([self method:ACTION_GET_COUNT is:action]) {
@@ -426,8 +426,9 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 
 #pragma mark HTTP & Persistence Methods
 
-- (void) getLocations:(FlutterResult)result {
-    [_locationManager getLocations:^(NSArray* records) {
+- (void) getLocations:(NSDictionary*)params result:(FlutterResult)result {
+    LocationQuery *query = [[LocationQuery alloc] initWithDictionary:params];
+    [_locationManager getLocations:query success:^(NSArray* records) {
         result(records);
     } failure:^(NSString* error) {
         result([FlutterError errorWithCode:error message:nil details:nil]);

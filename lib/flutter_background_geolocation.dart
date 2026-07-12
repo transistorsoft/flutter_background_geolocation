@@ -53,6 +53,7 @@ part 'models/state.dart';
 part 'models/sensors.dart';
 part 'models/headless_event.dart';
 part 'models/sql_query.dart';
+part 'models/location_query.dart';
 part 'models/device_info.dart';
 part 'models/transistor_authorization_token.dart';
 part 'models/authorization_event.dart';
