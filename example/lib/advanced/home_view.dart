@@ -139,6 +139,7 @@ class HomeViewState extends State<HomeView> with TickerProviderStateMixin<HomeVi
         app: bg.AppConfig(          
           stopOnTerminate: false,
           startOnBoot: true,
+          enableHeadless: true,
           notification: bg.Notification(
             title: "Advanced Demo",
             text: "Tracking enabled",
