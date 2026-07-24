@@ -671,7 +671,28 @@ class BackgroundGeolocation {
         as FutureOr<bool>;
   }
 
-  /// TODO
+  /// Manually insert a location into the SDK's SQLite database.
+  ///
+  /// The record is stored *as given* — the SDK does not overwrite its `timestamp`, `activity`,
+  /// `is_moving`, `odometer` or `battery` with current device state. This is intended for importing
+  /// history or externally-sourced fixes the SDK did not record itself. The `params` map must contain
+  /// a `coords` map with `latitude` and `longitude`; a missing or unparseable `timestamp` defaults to
+  /// the current time. Returns the `uuid` of the inserted record — the SDK generates one when `params`
+  /// omits a `uuid`.
+  ///
+  /// `insertLocation` deliberately bypasses [PersistenceConfig.persistMode] — an explicit insert
+  /// always writes to the database. For recording the device's own position on demand, prefer
+  /// [getCurrentPosition].
+  ///
+  /// ## Example
+  /// ```dart
+  /// String uuid = await BackgroundGeolocation.insertLocation({
+  ///   "timestamp": "2024-01-15T10:30:00.000Z",
+  ///   "coords": {"latitude": 45.5152, "longitude": -73.6104},
+  ///   "extras": {"source": "import"}
+  /// });
+  /// print("[insertLocation] inserted record: $uuid");
+  /// ```
   static Future<String> insertLocation(Map<dynamic, dynamic> params) async {
     return (await _methodChannel.invokeMethod<String>('insertLocation', params))
         as FutureOr<String>;
