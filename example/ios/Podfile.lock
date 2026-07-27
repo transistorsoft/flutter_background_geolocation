@@ -10,7 +10,7 @@ PODS:
     - Flutter
     - FlutterMacOS
   - TSBackgroundFetch (4.1.1)
-  - TSLocationManager (4.4.0):
+  - TSLocationManager (4.4.1):
     - TSBackgroundFetch (~> 4.1.0)
   - url_launcher_ios (0.0.1):
     - Flutter
@@ -45,7 +45,7 @@ SPEC CHECKSUMS:
   flutter_background_geolocation: 9664088c8ffc13efdd8c4e8bfb6506a49ca94f61
   shared_preferences_foundation: 7036424c3d8ec98dfe75ff1667cb0cd531ec82bb
   TSBackgroundFetch: 18918b6449a1e3f01eb0f5b44d6d79ce6160a5a5
-  TSLocationManager: 0d8db0b8d6f3d3080aaf455c5302501d678407fa
+  TSLocationManager: 3a1a98741387935ee2ef5b48cc8a8cde9762b03a
   url_launcher_ios: 7a95fa5b60cc718a708b8f2966718e93db0cef1b
 
 PODFILE CHECKSUM: 52f307a50910a26b6208a471c39b40d1593a5700
