@@ -26,15 +26,15 @@ Version 5 uses a new **JWT-based license key** format. Your existing (legacy) li
 1. Log in to the [Transistor Software Customer Dashboard](https://www.transistorsoft.com/shop/customers).
 2. Navigate to your product purchase.
 3. You will find **two license tabs**:
-   - **Legacy** — your old license key (for `flutter-background-geolocation` v4 and below)
-   - **New** — your new JWT license key (required for `flutter-background-geolocation` v5+)
+   - **Legacy** — your old license key (for `flutter_background_geolocation` v4 and below)
+   - **New** — your new JWT license key (required for `flutter_background_geolocation` v5+)
 4. Copy the key from the **"New"** tab.
 
 ### Applying Your License Key
 
 __[iOS]__ Add your JWT license key to your `Info.plist` under the key `TSLocationManagerLicense`. See [iOS Setup](INSTALL-IOS.md) for full details:
 
-:open_file_folder: `ios/App/App/Info.plist`
+:open_file_folder: `ios/Runner/Info.plist`
 ```xml
 <key>TSLocationManagerLicense</key>
 <string>YOUR_JWT_LICENSE_KEY</string>
