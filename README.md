@@ -41,7 +41,7 @@ See [`/example`](example/README.md) — example apps are included in this repo.
 > Need to test a `RELEASE` build? [Generate a free 30-day trial license](https://transistorsoft.com/shop/trials/new).
 
 A license is required for **`RELEASE` builds** on both iOS and Android.
-[Purchase a license](https://docs.transistorsoft.com)
+[Purchase a license](https://docs.transistorsoft.com/purchase/?platform=flutter)
 
 ---
 
