@@ -38,7 +38,7 @@ See [`/example`](example/README.md) — example apps are included in this repo.
 > [!TIP]
 > The SDK is **fully functional in `DEBUG` builds** — no license required. Try before you buy.
 
-A license is required only for **`RELEASE` builds** on Android.
+A license is required for **`RELEASE` builds** on both iOS and Android.
 [Purchase a license](https://docs.transistorsoft.com)
 
 ---
