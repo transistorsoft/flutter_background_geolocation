@@ -13,10 +13,10 @@ Version 5 introduces a new **Compound Config** format that replaces the legacy "
 
 ### Overview
 
-Version 9 uses a new **JWT-based license key** format. Your existing (legacy) license keys will **not** work with v9.
+Version 5 uses a new **JWT-based license key** format. Your existing (legacy) license keys will **not** work with v5.
 
 > [!IMPORTANT]
-> Previous versions of the SDK did not require a license key on iOS. **v9 requires a license key on both iOS and Android.** See [iOS Setup](INSTALL-IOS.md) and [Android Setup](INSTALL-ANDROID.md) for license key configuration details.
+> Previous versions of the SDK did not require a license key on iOS. **v5 requires a license key on both iOS and Android.** See [iOS Setup](INSTALL-IOS.md) and [Android Setup](INSTALL-ANDROID.md) for license key configuration details.
 
 > [!NOTE]
 > Add-on products (eg: [`polygon-geofencing`](https://shop.transistorsoft.com/collections/frontpage/products/polygon-geofencing), `firebase`) are now **encoded as entitlements** inside the JWT key itself. You no longer need separate license keys for add-on products.
@@ -310,7 +310,7 @@ To keep the original v4 behavior (deliver locations without the new pre-filter),
 BackgroundGeolocation.ready(Config(
   geolocation: GeoConfig(
     // ...your existing geolocation config...
-    filter: LocationFilterConfig(
+    filter: LocationFilter(
       policy: LocationFilterPolicy.passThrough,
       useKalman: false,                 // optional
       trackingAccuracyThreshold: 0,      // optional: disables accuracy gate
