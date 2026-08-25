@@ -99,7 +99,7 @@ part of '../../flutter_background_geolocation.dart';
 ///     ),
 ///     logging: bg.LoggerConfig(
 ///       debug: true,
-///       logLevel: bg.LoggerConfig.LOG_LEVEL_VERBOSE
+///       logLevel: bg.LogLevel.verbose
 ///     )
 ///   );
 ///
@@ -134,7 +134,7 @@ part of '../../flutter_background_geolocation.dart';
 ///     desiredAccuracy: DesiredAccuracy.high,
 ///     distanceFilter: 10.0,
 ///     stopTimeout: 5,
-///     stationaryRadius: 150.0,
+///     stationaryRadius: 150,
 ///     locationTimeout: 60,
 ///   ),
 /// );
@@ -3369,7 +3369,7 @@ class MacroConfigBackgroundPermissionRationale {}
 /// final config = bg.Config(
 ///   logger: bg.LoggerConfig(
 ///     debug: true,
-///     logLevel: bg.LoggerConfig.LOG_LEVEL_VERBOSE,
+///     logLevel: bg.LogLevel.verbose,
 ///     logMaxDays: 7,
 ///   ),
 /// );
@@ -3381,7 +3381,7 @@ class MacroConfigBackgroundPermissionRationale {}
 /// final config = bg.Config(
 ///   logger: bg.LoggerConfig(
 ///     debug: false,
-///     logLevel: bg.LoggerConfig.LOG_LEVEL_INFO,
+///     logLevel: bg.LogLevel.info,
 ///     logMaxDays: 3,
 ///   ),
 /// );
@@ -3392,7 +3392,7 @@ class MacroConfigBackgroundPermissionRationale {}
 /// ```dart
 /// await bg.BackgroundGeolocation.setConfig(bg.Config(
 ///   logger: bg.LoggerConfig(
-///     logLevel: bg.LoggerConfig.LOG_LEVEL_OFF,
+///     logLevel: bg.LogLevel.off,
 ///   ),
 /// ));
 /// ```
@@ -3417,7 +3417,7 @@ class MacroConfigBackgroundPermissionRationale {}
 /// Config(
 ///   logger: LoggerConfig(
 ///     debug: true,
-///     logLevel: LoggerConfig.LOG_LEVEL_VERBOSE,
+///     logLevel: LogLevel.verbose,
 ///     logMaxDays: 3,
 ///   ),
 /// );

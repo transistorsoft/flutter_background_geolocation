@@ -23,10 +23,10 @@ part of '../../flutter_background_geolocation.dart';
 ///   // Configure the SDK with compound configuration objects.
 ///   bg.Config config = bg.Config(
 ///     geolocation: bg.GeoConfig(
-///       desiredAccuracy: bg.GeoConfig.DESIRED_ACCURACY_HIGH,
+///       desiredAccuracy: bg.DesiredAccuracy.high,
 ///       distanceFilter: 20.0,
 ///       stopTimeout: 5,
-///       stationaryRadius: 150.0,
+///       stationaryRadius: 150,
 ///     ),
 ///     activity: bg.ActivityConfig(
 ///       activityRecognitionInterval: 10000,
@@ -46,7 +46,7 @@ part of '../../flutter_background_geolocation.dart';
 ///       },
 ///     ),
 ///     persistence: bg.PersistenceConfig(
-///       persistMode: bg.PersistenceConfig.PERSIST_MODE_ALL,
+///       persistMode: bg.PersistMode.all,
 ///       maxDaysToPersist: 14,
 ///       extras: {'appVersion': '1.0.0'},
 ///     ),
@@ -58,7 +58,7 @@ part of '../../flutter_background_geolocation.dart';
 ///     ),
 ///     logger: bg.LoggerConfig(
 ///       debug: true,
-///       logLevel: bg.LoggerConfig.LOG_LEVEL_VERBOSE,
+///       logLevel: bg.LogLevel.verbose,
 ///       logMaxDays: 3,
 ///     ),
 ///   );
