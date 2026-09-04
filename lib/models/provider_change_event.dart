@@ -9,6 +9,14 @@ class ProviderChangeEvent {
   static const AUTHORIZATION_STATUS_ALWAYS = 3;
   static const AUTHORIZATION_STATUS_WHEN_IN_USE = 4;
 
+  /// Permanently denied — the OS will not show the permission dialog again and only
+  /// the device's Settings app can restore the permission.  Reported by
+  /// [BackgroundGeolocation.requestPermission] for the motion permission on both
+  /// platforms: Android promotes to this state after two user denials; on iOS a
+  /// single motion denial is already permanent (iOS never re-prompts), so a denied
+  /// motion request reports it immediately.
+  static const AUTHORIZATION_STATUS_DENIED_ALWAYS = 5;
+
   static const ACCURACY_AUTHORIZATION_FULL = 0;
   static const ACCURACY_AUTHORIZATION_REDUCED = 1;
 

@@ -615,7 +615,8 @@ class BackgroundGeolocation {
   /// ```
   ///
   static Future<List> getLocations([LocationQuery? query]) async {
-    return (await _methodChannel.invokeListMethod('getLocations', query?.toMap()))!;
+    return (await _methodChannel.invokeListMethod(
+        'getLocations', query?.toMap()))!;
   }
 
   /// Retrive a List of [Location] currently stored in the plugin's SQLite database.
@@ -996,43 +997,85 @@ class BackgroundGeolocation {
     return Sensors(data);
   }
 
-  /// Manually request location permission from the user with the configured [GeoConfig.locationAuthorizationRequest].
+  /// Requests location and motion permission — together, or each one separately.
   ///
-  /// The method will resolve successful if *either* __`WhenInUse`__ or __`Always`__ is authorized, regardless of [GeoConfig.locationAuthorizationRequest].  Otherwise an error will be returned (eg: user denies location permission).
+  /// With no argument, requests everything the current configuration requires:
+  /// location per [GeoConfig.locationAuthorizationRequest], then the motion
+  /// permission — the same set [start] requests — and resolves with the location
+  /// authorization status (the motion outcome stays silent).  Pass a [Permission]
+  /// to request one permission at a time and control exactly when each system
+  /// dialog appears:
   ///
-  /// If the user has already provided authorization for location-services, the method will resolve successfully immediately.
+  /// | Argument              | Requests                                | Resolves with |
+  /// |-----------------------|-----------------------------------------|---------------|
+  /// | *(none)*              | Location per configuration, then motion | The location status; motion silent |
+  /// | [Permission.location] | Location only — motion untouched        | The location status |
+  /// | [Permission.motion]   | Motion only                             | [ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS] when granted |
   ///
-  /// If iOS has *already* presented the location authorization dialog and the user has not currently authorized your desired [GeoConfig.locationAuthorizationRequest], the SDK will present an error dialog offering to direct the user to your app's Settings screen.
+  /// The location forms resolve when either __`WhenInUse`__ or __`Always`__ is
+  /// granted, regardless of the configured level, and resolve immediately when
+  /// permission is already granted.  Denial errors the `Future` with the bare
+  /// authorization status `int`.
+  ///
+  /// Each call is independently awaitable and the SDK serializes permission
+  /// requests internally — `await` one call, then issue the next, and each dialog
+  /// appears in order, never stacked.
+  ///
+  /// #### Android
+  ///
+  /// A motion denial errors with [ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED]
+  /// while a new request can still show the system dialog, and with
+  /// [ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED_ALWAYS] once Android
+  /// permanently denies the permission (two user denials) — after that, only the
+  /// device's app-settings screen can restore it.
+  ///
+  /// #### iOS
+  ///
+  /// The motion permission is one-shot — iOS never re-prompts.  A user denial
+  /// errors with [ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED_ALWAYS]: the
+  /// state is permanent and only the Settings app can restore it (the motion form
+  /// never errors with plain [ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED]).
+  /// The error can also carry
+  /// [ProviderChangeEvent.AUTHORIZATION_STATUS_RESTRICTED] (system-wide Fitness
+  /// Tracking is off or the hardware is absent — not recoverable from the app's
+  /// own Settings page) or
+  /// [ProviderChangeEvent.AUTHORIZATION_STATUS_NOT_DETERMINED] (no dialog could be
+  /// shown, e.g. the app was backgrounded).  If the location dialog has already
+  /// been shown and the current grant does not match the configured request, the
+  /// SDK presents an alert offering to direct the user to the app's Settings
+  /// screen.
   /// - To disable this behaviour, see [GeoConfig.disableLocationAuthorizationAlert].
   /// - To customize the text on this dialog, see [GeoConfig.locationAuthorizationAlert].
   ///
   /// ### ⚠️ Note:
-  /// - The SDK will **already request permission** from the user when you execute [start], [startGeofences], [getCurrentPosition], etc.  You **do not need to explicitly execute this method** with typical use-cases.
+  /// - The SDK will **already request permission** from the user when you execute [start], [startGeofences], [getCurrentPosition], etc.  Calling this method first resolves the dialogs ahead of time, so those methods find everything granted and show nothing.
   ///
   /// ## Example
+  ///
   /// ```dart
-  /// initPlatformState async {
-  ///   // Listen to onProviderChange to be notified when location authorization changes occur.
-  ///   BackgroundGeolocation.onProviderChange((event) {
-  ///     print("[providerchange] $event");
-  ///   });
+  /// // Request each permission separately:
+  /// int locationStatus = await BackgroundGeolocation.requestPermission(Permission.location);
+  /// print("[requestPermission] location: $locationStatus");
   ///
-  ///   // First ready the plugin with your configuration.
-  ///   let State = await BackgroundGeolocation.ready(Config(
-  ///     locationAuthorizationRequest: 'Always'
-  ///   ));
-  ///
-  ///   // Manually request permission with configured locationAuthorizationRequest.
-  ///   try {
-  ///     int status = await BackgroundGeolocation.requestPermission();
-  ///     if (status == ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS) {
-  ///       print("[requestPermission] Authorized Always $status");
-  ///     } else if (status == ProviderChangeEvent.AUTHORIZATION_STATUS_WHEN_IN_USE) {
-  ///       print("[requestPermission] Authorized WhenInUse: $status");
-  ///     }
-  ///   } catch(error) {
-  ///     print("[requestPermission] DENIED: $error");
+  /// try {
+  ///   int motionStatus = await BackgroundGeolocation.requestPermission(Permission.motion);
+  ///   print("[requestPermission] motion: $motionStatus");
+  /// } catch (status) {
+  ///   if (status == ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED_ALWAYS) {
+  ///     // Only the app-settings screen can restore the motion permission now.
   ///   }
+  /// }
+  ///
+  /// // Or request everything at once:
+  /// await BackgroundGeolocation.ready(Config(
+  ///   locationAuthorizationRequest: 'Always'
+  /// ));
+  ///
+  /// try {
+  ///   int status = await BackgroundGeolocation.requestPermission();
+  ///   print("[requestPermission] status: $status");
+  /// } catch (status) {
+  ///   print("[requestPermission] DENIED: $status");
   /// }
   /// ```
   ///
@@ -1043,14 +1086,15 @@ class BackgroundGeolocation {
   /// - [requestTemporaryFullAccuracy] (_iOS 14+_)
   /// - [AppConfig.backgroundPermissionRationale] (_Android 11+_)
   ///
-  static Future<int> requestPermission() async {
-    // For future, we will accept an optional String of a specific permission to request (NOT YET IMPLEMENTED)
-    // eg: "LOCATION_WHEN_IN_USE", "LOCATION_ALWAYS", "ACTIVITY_RECOGNITION"
-    // @see BackgroundGeolocationModule:
-    //    private void requestPermission(final String permission, final MethodChannel.Result result)
-    const permission = null;
-    return (await _methodChannel.invokeMethod<int>(
-        'requestPermission', permission))!;
+  static Future<int> requestPermission([Permission? permission]) async {
+    try {
+      return (await _methodChannel.invokeMethod<int>(
+          'requestPermission', permission?.value))!;
+    } on PlatformException catch (e) {
+      // (WO-007) Cross-platform contract: the Future errors with the bare
+      // authorization status (carried in the PlatformException details).
+      throw (e.details is int) ? e.details as int : e;
+    }
   }
 
   /// __`[iOS 14+]`__ iOS 14 has introduced a new __`[Precise: On]`__ switch on the location authorization dialog allowing users to disable high-accuracy location.
@@ -1956,4 +2000,29 @@ void _headlessCallbackDispatcher() {
   });
   // Signal to native side that the client dispatcher is ready to receive events.
   _headlessChannel.invokeMethod('initialized');
+}
+
+/// A specific permission to request via [BackgroundGeolocation.requestPermission].
+///
+/// | Name       | Value        | Description                                                |
+/// |------------|--------------|------------------------------------------------------------|
+/// | [location] | `"location"` | Location authorization per [GeoConfig.locationAuthorizationRequest] — motion untouched. |
+/// | [motion]   | `"motion"`   | Motion / activity-recognition permission alone.            |
+///
+/// Omitting the argument to [BackgroundGeolocation.requestPermission] requests
+/// everything the current configuration requires — location, then motion — exactly
+/// like [BackgroundGeolocation.start].
+enum Permission {
+  /// Location authorization, per [GeoConfig.locationAuthorizationRequest].
+  /// The motion permission is not requested.
+  location('location'),
+
+  /// The motion / activity-recognition permission alone — `ACTIVITY_RECOGNITION`
+  /// on Android 10+, Motion & Fitness on iOS.
+  motion('motion');
+
+  const Permission(this.value);
+
+  /// The wire value sent to the native SDK.
+  final String value;
 }

@@ -111,9 +111,33 @@ class MainMenuButtonState extends State<MainMenuButton> {
     await bg.BackgroundGeolocation.setConfig(bg.Config(
         geolocation: bg.GeoConfig(locationAuthorizationRequest: request)));
 
-    int status = await bg.BackgroundGeolocation.requestPermission();
-    print("[requestPermission] status: $status");
-    util.Dialog.alert(context, "Request Permission", "Authorization status: $status");
+    // (WO-007) Two-step flow: location first, then motion, each awaited separately —
+    // mirrors the native demo apps.  Compare against the one-shot storm by calling
+    // bg.BackgroundGeolocation.requestPermission() with no argument instead.
+    String locationResult;
+    try {
+      int status = await bg.BackgroundGeolocation.requestPermission(bg.Permission.location);
+      print("[requestPermission] location: $status");
+      locationResult = "$status";
+    } catch (status) {
+      print("[requestPermission] location DENIED: $status");
+      locationResult = "denied ($status)";
+    }
+
+    String motionResult;
+    try {
+      int status = await bg.BackgroundGeolocation.requestPermission(bg.Permission.motion);
+      print("[requestPermission] motion: $status");
+      motionResult = "$status";
+    } catch (status) {
+      print("[requestPermission] motion DENIED: $status");
+      motionResult = (status == bg.ProviderChangeEvent.AUTHORIZATION_STATUS_DENIED_ALWAYS)
+          ? "denied always ($status) — only the Settings app can restore it"
+          : "denied ($status)";
+    }
+
+    util.Dialog.alert(context, "Request Permission",
+        "location: $locationResult\nmotion: $motionResult");
 
     bg.ProviderChangeEvent providerState = await bg.BackgroundGeolocation.providerState;
     if ((providerState.status == bg.ProviderChangeEvent.AUTHORIZATION_STATUS_ALWAYS) && (providerState.accuracyAuthorization == bg.ProviderChangeEvent.ACCURACY_AUTHORIZATION_REDUCED)) {

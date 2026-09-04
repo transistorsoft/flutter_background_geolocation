@@ -226,9 +226,11 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     result([event toDictionary]);
 }
 
-/// NOTE: For future implementation, this method accepts an unused NSString* permission for future implementation of requesting individual permissions.
+/// (WO-007) permission ∈ @"location" | @"motion" | nil (nil = everything, the historical behaviour).
 - (void) requestPermission:(NSString*)permission result:(FlutterResult)result {
-    [_locationManager requestPermission:^(NSNumber *status) {
+    // A null Dart argument can decode as NSNull rather than nil — never hand that downstream.
+    NSString *selector = [permission isKindOfClass:NSString.class] ? permission : nil;
+    [_locationManager requestPermission:selector success:^(NSNumber *status) {
         result(status);
     } failure:^(NSNumber *status) {
         result([FlutterError errorWithCode:@"DENIED" message:nil details:status]);
