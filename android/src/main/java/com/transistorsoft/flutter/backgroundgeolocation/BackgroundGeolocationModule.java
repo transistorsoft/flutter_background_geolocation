@@ -934,7 +934,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             requestPermission(result);
             return;
         }
-        // NOT YET IMPLEMENTED.  For future implementation of requesting individual permissions.
+        // (WO-007) permission ∈ "location" | "motion" — the adapter's per-permission dispatcher.
         BackgroundGeolocation.getInstance(mContext).requestPermission(permission, new TSRequestPermissionCallback() {
             @Override public void onSuccess(int status) { result.success(status); }
             @Override public void onFailure(int status) { result.error("DENIED", null, status); }

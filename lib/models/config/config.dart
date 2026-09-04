@@ -108,6 +108,7 @@ class Config {
   static const int AUTHORIZATION_STATUS_DENIED = 2;
   static const int AUTHORIZATION_STATUS_ALWAYS = 3;
   static const int AUTHORIZATION_STATUS_WHEN_IN_USE = 4;
+  static const int AUTHORIZATION_STATUS_DENIED_ALWAYS = 5;
 
   static const int NOTIFICATION_PRIORITY_DEFAULT = 0;
   static const int NOTIFICATION_PRIORITY_HIGH = 1;
