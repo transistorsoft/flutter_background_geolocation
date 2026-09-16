@@ -178,6 +178,24 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         mActivity = activity;
     }
 
+    /**
+     * The engine outlived a configuration-change recreation of its Activity: adopt the new instance without the
+     * first-attach work of {@link #setActivity}, whose removeListeners() would silence the surviving Dart isolate's
+     * event streams.
+     */
+    void reattachActivity(@NonNull final Activity activity) {
+        if (mActivity == activity) return;
+        mActivity = activity;
+        // flutter#1715: we are inside FlutterActivity.onCreate, before its setContentView(), so hand the Activity over
+        // on the main thread once that returns.  A native SDK that already adopted the recreated Activity ignores it.
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override public void run() {
+                if (mActivity != activity) return;
+                BackgroundGeolocation.getInstance(mContext.getApplicationContext()).setActivity(activity);
+            }
+        });
+    }
+
     private void registerHandlersForAllMessengers() {
         synchronized (mMessengers) {
             for (BinaryMessenger messenger : mMessengers) {

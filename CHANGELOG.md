@@ -3,6 +3,7 @@
 ## Unreleased
 
 * [Fixed][Android] Intermittent black screen on launch — the app ran normally (Dart, routing, network) but never drew a frame — and, more rarely, a launch crash `RuntimeException: Window couldn't find content container view`. The plugin handed the `Activity` to the native SDK from a background thread while `FlutterActivity.onCreate` was still running, racing Android's own window setup in `setContentView()`. The hand-off now happens on the main thread. (#1715)
+* [Fixed][Android] Recreating the app's `Activity` for a configuration change was treated as app termination — for example toggling *Bold text* in Android's accessibility settings, which the default Flutter `android:configChanges` does not cover. The SDK entered headless mode while the app stayed on screen (location and other events went to the headless task instead of your listeners, until the app next went to the background), and with `stopOnTerminate: true` tracking stopped. Apps whose `FlutterEngine` outlives its `Activity` (add-to-app, cached engines) also never passed the recreated `Activity` to the native SDK.
 
 ## 5.7.0 &mdash; 2026-09-04
 
