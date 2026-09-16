@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* [Fixed][Android] Intermittent black screen on launch — the app ran normally (Dart, routing, network) but never drew a frame — and, more rarely, a launch crash `RuntimeException: Window couldn't find content container view`. The plugin handed the `Activity` to the native SDK from a background thread while `FlutterActivity.onCreate` was still running, racing Android's own window setup in `setContentView()`. The hand-off now happens on the main thread. (#1715)
+
 ## 5.7.0 &mdash; 2026-09-04
 
 * [Added] `requestPermission([Permission? permission])` accepts an optional `Permission.location` / `Permission.motion` — request location and motion separately, each independently awaitable, instead of the all-at-once dialog storm. Requires the WO-007 native SDK releases (against older native SDKs the per-permission forms fail as an ordinary denial). (WO-007)

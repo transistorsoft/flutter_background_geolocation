@@ -5,6 +5,8 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -145,8 +147,18 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
             BackgroundGeolocation.getThreadPool().execute(new Runnable() {
                 @Override public void run() {
-                    BackgroundGeolocation adapter = BackgroundGeolocation.getInstance(activity);
-                    adapter.setActivity(activity);
+                    // flutter#1715: never hand the Activity to the SDK from this thread.  We are still inside
+                    // FlutterActivity.onCreate, before its setContentView(): getInstance(activity) and
+                    // setActivity(activity) reach Window.getDecorView(), whose lazy installDecor() races the main
+                    // thread's and can leave the window on an empty DecorView (black screen) or crash setContentView().
+                    final BackgroundGeolocation adapter = BackgroundGeolocation.getInstance(mContext.getApplicationContext());
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override public void run() {
+                            // Detached, or replaced by another Activity, before the main thread got here.
+                            if (mActivity != activity) return;
+                            adapter.setActivity(activity);
+                        }
+                    });
                     adapter.removeListeners();
                     TSConfig config = TSConfig.getInstance(mContext.getApplicationContext());
                     config.setUseCLLocationAccuracy(true);
