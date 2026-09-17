@@ -427,8 +427,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             }
         } else {
             if (reset) {
-                config.reset();
-                if (!applyConfig(params, result)) {
+                if (!resetConfig(params, result)) {
                     return;
                 }
             } else if (params.containsKey(TSAuthorization.NAME)) {
@@ -464,15 +463,11 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     @SuppressWarnings("unchecked")
     private void reset(Object args, MethodChannel.Result result) {
-        TSConfig config = TSConfig.getInstance(mContext);
-        config.reset();
-
-        if (args != null) {
-            if (args.getClass() == HashMap.class) {
-                Map<String, Object> params = (HashMap) args;
-
-                if (!applyConfig(params, result)) return;
-            }
+        if (args != null && args.getClass() == HashMap.class) {
+            Map<String, Object> params = (HashMap) args;
+            if (!resetConfig(params, result)) return;
+        } else {
+            TSConfig.getInstance(mContext).reset();
         }
         resultWithState(result);
     }
@@ -1103,16 +1098,35 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
 
     private boolean applyConfig(Map<String, Object> params, MethodChannel.Result result) {
-        TSConfig config = TSConfig.getInstance(mContext);
+        JSONObject json = configJson(params, result);
+        if (json == null) return false;
+        TSConfig.getInstance(mContext).updateWithJSONObject(json);
+        return true;
+    }
 
+    /**
+     * Reset to the defaults and apply {@code params} as ONE commit.  A separate reset() followed by applyConfig() let
+     * the SDK's config listeners act on the defaults in between whenever the SDK was configured — reset(config) while
+     * tracking, or a new engine on a recreated Activity calling ready() again — opening the background-permission dialog for a WhenInUse app,
+     * the motion-permission dialog for disableMotionActivityUpdates, and switching out of significant-changes mode
+     * and back.
+     */
+    private boolean resetConfig(Map<String, Object> params, MethodChannel.Result result) {
+        JSONObject json = configJson(params, result);
+        if (json == null) return false;
+        TSConfig.getInstance(mContext).reset(json);
+        return true;
+    }
+
+    /** {@code params} (plus headlessJobService) as SDK config JSON, or null after reporting the error to Dart. */
+    private JSONObject configJson(Map<String, Object> params, MethodChannel.Result result) {
         try {
-            config.updateWithJSONObject(mapToJson(setHeadlessJobService(params)));
+            return mapToJson(setHeadlessJobService(params));
         } catch (JSONException e) {
             result.error(e.getMessage(), null, null);
             e.printStackTrace();
-            return false;
+            return null;
         }
-        return true;
     }
 
     private void resultWithState(@NonNull MethodChannel.Result result) {
