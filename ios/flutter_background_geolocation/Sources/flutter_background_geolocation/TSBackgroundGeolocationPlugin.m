@@ -342,7 +342,9 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
         return;
     }
     [_locationManager changePace:isMoving];
-    result(@(isMoving));
+    // (WO-033) The State the types declare, read after the void core call — the same read
+    // -getState: makes at :284.  This echoed the caller's own argument until now.
+    result([_locationManager getState]);
 }
 
 - (void) getCurrentPosition:(NSDictionary*)options result:(FlutterResult)result {

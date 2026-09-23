@@ -158,8 +158,8 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
     });
     print("[onClickChangePace] -> $_isMoving");
 
-    bg.BackgroundGeolocation.changePace(_isMoving).then((bool isMoving) {
-      print('[changePace] success $isMoving');
+    bg.BackgroundGeolocation.changePace(_isMoving).then((bg.State state) {
+      print('[changePace] success ${state.isMoving}');
     }).catchError((e) {
       print('[changePace] ERROR: ${e.code}');
     });
