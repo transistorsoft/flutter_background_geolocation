@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* [Fixed] `Sensors.magentometer` was misspelled — it is now `Sensors.magnetometer`. The old name
+  remains as a deprecated getter so existing code keeps compiling; it will be removed in a future
+  major. The value was always correct: only the Dart field name was wrong. (WO-035)
 * [Breaking] `changePace()` now resolves the `State` the API's other state-changing methods
   resolve, and which the documented contract has always described: `Future<State>` instead of
   `Future<bool>`. The old value was the boolean you had just passed in, so it told you nothing you
