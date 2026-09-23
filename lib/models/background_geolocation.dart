@@ -1198,10 +1198,12 @@ class BackgroundGeolocation {
   /// BackgroundGeolocation.removeListeners();
   /// ```
   ///
-  static Future<bool> removeListeners() async {
+  /// (WO-037) Resolves nothing, as the documented contract says and every other SDK does.  Until
+  /// now this returned `Future<bool>` — a constant `true` — a BREAKING change only for Dart code
+  /// that assigned the value.
+  static Future<void> removeListeners() async {
     await Future.wait(_subscriptions.map((sub) => sub.subscription.cancel()));
     _subscriptions.clear();
-    return true;
   }
 
   /// Removes a single event-listener.
