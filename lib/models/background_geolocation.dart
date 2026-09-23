@@ -475,9 +475,13 @@ class BackgroundGeolocation {
   /// BackgroundGeolocation.changePace(false); // <-- Location-services OFF ("stationary" state)
   /// ```
   ///
-  static Future<bool> changePace(bool isMoving) async {
-    return (await _methodChannel.invokeMethod<bool>('changePace', isMoving))
-        as FutureOr<bool>;
+  /// (WO-033) Resolves the [State], as the API's other state-changing methods do and as the
+  /// documented contract has always said.  Until now this returned `Future<bool>`, echoing the
+  /// argument the caller had just passed — a BREAKING change for Dart callers, who read
+  /// `state.isMoving` instead of the bare bool.
+  static Future<State> changePace(bool isMoving) async {
+    Map state = (await _methodChannel.invokeMapMethod('changePace', isMoving))!;
+    return State(state);
   }
 
   /// Retrieves the current [Location].

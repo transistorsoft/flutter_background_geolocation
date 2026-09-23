@@ -507,8 +507,10 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     private void changePace(@NonNull MethodCall call, final MethodChannel.Result result) {
         final boolean isMoving = (boolean) call.arguments;
         BackgroundGeolocation.getInstance(mContext).changePace(isMoving, new TSCallback() {
+            // (WO-033) The State the types declare, resolved once the adapter reports success —
+            // the same helper start() uses.  This echoed the caller's own argument until now.
             @Override public void onSuccess() {
-                result.success(isMoving);
+                resultWithState(result);
             }
             @Override public void onFailure(String error) {
                 result.error(error.toString(), null, null);
