@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+* [Breaking] `removeListeners()` is `Future<void>`, as the documented contract has always said and
+  as every other Background Geolocation SDK resolves it. It was `Future<bool>`, resolving a constant
+  `true` that carried no information. Only code that assigned the value — `bool ok = await
+  BackgroundGeolocation.removeListeners();` — is affected, and Dart's analyzer names every such
+  site. Ignoring the result, which is how the plugin's own examples call it, needs no change.
+  (WO-037)
 * [Fixed] `Sensors.magentometer` was misspelled — it is now `Sensors.magnetometer`. The old name
   remains as a deprecated getter so existing code keeps compiling; it will be removed in a future
   major. The value was always correct: only the Dart field name was wrong. (WO-035)
