@@ -2,6 +2,23 @@
 
 ## Unreleased
 
+* [Fixed] `Sensors.magentometer` was misspelled — it is now `Sensors.magnetometer`. The old name
+  remains as a deprecated getter so existing code keeps compiling; it will be removed in a future
+  major. The value was always correct: only the Dart field name was wrong. (WO-035)
+* [Breaking] `changePace()` now resolves the `State` the API's other state-changing methods
+  resolve, and which the documented contract has always described: `Future<State>` instead of
+  `Future<bool>`. The old value was the boolean you had just passed in, so it told you nothing you
+  did not already know.
+
+      // before
+      BackgroundGeolocation.changePace(true).then((bool isMoving) { ... });
+      // now
+      BackgroundGeolocation.changePace(true).then((bg.State state) { ... state.isMoving ... });
+
+  Only code that READS the resolved value is affected, and Dart's analyzer names every such site —
+  except an untyped closure (`.then((v) => print(v))`), which keeps compiling while `v` becomes a
+  `State`. Ignoring the result, which is how the plugin's own examples mostly call it, needs no
+  change. (WO-033)
 * [Fixed][Android] Intermittent black screen on launch — the app ran normally (Dart, routing, network) but never drew a frame — and, more rarely, a launch crash `RuntimeException: Window couldn't find content container view`. The plugin handed the `Activity` to the native SDK from a background thread while `FlutterActivity.onCreate` was still running, racing Android's own window setup in `setContentView()`. The hand-off now happens on the main thread. (#1715)
 * [Fixed][Android] Recreating the app's `Activity` for a configuration change was treated as app termination — for example toggling *Bold text* in Android's accessibility settings, which the default Flutter `android:configChanges` does not cover. The SDK entered headless mode while the app stayed on screen (location and other events went to the headless task instead of your listeners, until the app next came back to the foreground), and with `stopOnTerminate: true` tracking stopped. Apps whose `FlutterEngine` outlives its `Activity` (add-to-app, cached engines) also never passed the recreated `Activity` to the native SDK.
 * [Fixed][Android] Calling `reset(config)` while tracking could open the "Allow all the time" background-location dialog for a `WhenInUse` app, the motion-permission dialog for an app with `disableMotionActivityUpdates: true`, or switch `useSignificantChangesOnly` off and back on (with a spurious `enabledchange`) — even when the configuration had not changed. The configuration was reset to the defaults and yours re-applied in two steps, and the SDK acted on the defaults in between. `reset(config)` and `ready()` now apply your configuration as one change, so settings whose value has not changed are no longer switched to the default and back. This also keeps the recreation fix above from exposing `ready()` to the same problem when a default `FlutterActivity` is recreated and its new `FlutterEngine` runs `ready()` again. A configuration that cannot be serialized (such as a `NaN` number) is now rejected without first resetting the existing configuration.

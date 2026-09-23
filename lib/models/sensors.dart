@@ -15,7 +15,15 @@ class Sensors {
   late bool gyroscope;
 
   /// `true` if this device has a magnetometer (compass).
-  late bool magentometer;
+  late bool magnetometer;
+
+  /// @deprecated Misspelled.  Use [magnetometer].
+  ///
+  /// (WO-035) The field was `magentometer` until now — it read the correctly spelled native key
+  /// and stored it under a typo.  Kept as an alias so existing code compiles; it will go in a
+  /// future major.
+  @Deprecated('Use magnetometer — this was a typo')
+  bool get magentometer => magnetometer;
 
   /// __`[iOS only]`__ `true` if this iOS device has an **M7** co-processor (iPhone 5S+).
   bool? motionHardware;
@@ -27,7 +35,7 @@ class Sensors {
     this.platform = data["platform"];
     this.accelerometer = data["accelerometer"];
     this.gyroscope = data["gyroscope"];
-    this.magentometer = data["magnetometer"];
+    this.magnetometer = data["magnetometer"];
     if (data["motion_hardware"] != null) {
       this.motionHardware = data["motion_hardware"];
     }
@@ -37,6 +45,6 @@ class Sensors {
   }
 
   String toString() {
-    return '[Sensors platform: $platform, accelerometer: $accelerometer, gyroscope: $gyroscope, magnetometer: $magentometer]';
+    return '[Sensors platform: $platform, accelerometer: $accelerometer, gyroscope: $gyroscope, magnetometer: $magnetometer]';
   }
 }
