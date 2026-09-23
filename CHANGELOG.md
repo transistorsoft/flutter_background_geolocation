@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.8.0 &mdash; 2026-09-23
 
 * [Breaking] `removeListeners()` is `Future<void>`, as the documented contract has always said and
   as every other Background Geolocation SDK resolves it. It was `Future<bool>`, resolving a constant
@@ -32,6 +32,7 @@
 
 ### Native SDK versions
 
+* [iOS] Pin `TSLocationManager ~> 4.7.0`
 * [Android] Pin `tslocationmanager 4.6.+` (`TSConfig.reset(JSONObject)`)
 
 ## 5.7.0 &mdash; 2026-09-04
