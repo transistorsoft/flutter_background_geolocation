@@ -32,12 +32,8 @@
 
 ### Native SDK versions
 
-* [iOS] Pin `TSLocationManager ~> 4.7.0` — the synthetic `Location` the odometer setters resolve
-  while tracking is disabled now carries a `uuid`, as `Location.uuid` has always been declared
-  required. (WO-035)
+* [iOS] Pin `TSLocationManager ~> 4.7.0`
 * [Android] Pin `tslocationmanager 4.6.+` (`TSConfig.reset(JSONObject)`)
-* [Android] The same synthetic-`Location` `uuid`, and `coords` now present in the event's map
-  form as well as its JSON — React Native and Flutter read the map. (WO-035)
 
 ## 5.7.0 &mdash; 2026-09-04
 
