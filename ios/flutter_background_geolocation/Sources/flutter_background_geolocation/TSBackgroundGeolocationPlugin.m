@@ -698,12 +698,15 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 }
 
 - (void) registerHeadlessTask:(NSArray*)callbacks result:(FlutterResult)result {
-    // iOS:  No implementation should be necessary.
+    // iOS has no headless mode, but the call must still be answered:  an awaited
+    // registerHeadlessTask() would otherwise never complete.
+    result(@(YES));
 }
 
 - (void) registerPlugin:(NSString*)plugin result:(FlutterResult)result {
     TSConfig *config = [TSConfig sharedInstance];
     [config registerPlugin:plugin];
+    result(@(YES));
 }
 
 #pragma mark Util Methods
