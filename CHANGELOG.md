@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## Unreleased
+
+* [Fixed][iOS] `ready()` on a later launch no longer switches a persisted scheduler off. The
+  configuration was reset to the defaults and yours re-applied in two steps, and every configuration
+  listener saw the defaults in between: the empty default `schedule` stopped the scheduler and saved it
+  as off, so a scheduler started with `startSchedule()` never resumed on the next launch. `ready()` and
+  `reset(config)` now apply your configuration as one change, so settings whose value has not changed
+  are no longer switched to the default and back. Requires the TSLocationManager release that carries
+  WO-039. (WO-039)
+
 ## 5.8.0 &mdash; 2026-09-23
 
 * [Breaking] `removeListeners()` is `Future<void>`, as the documented contract has always said and
