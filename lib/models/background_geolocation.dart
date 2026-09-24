@@ -1757,7 +1757,7 @@ class BackgroundGeolocation {
   ///
   /// __Note:__ Requires [AppConfig.enableHeadless]:true.  See the [Android Headless Mode Guide](https://github.com/transistorsoft/flutter_background_geolocation/wiki/Android-Headless-Mode).
   ///
-  /// In **`main.dart`**, create a global function beside `void main() {}` (**Must** be defined as a distinct function, not an anonymous callback).  This `function` will receive *all* events from `BackgroundGeolocation` in the headless state, and provided with a [HeadlessEvent] containing a [HeadlessEvent.name] and [HeadlessEvent.event].
+  /// In **`main.dart`**, create a global function beside `void main() {}` (**Must** be defined as a distinct function, not an anonymous callback), annotated with `@pragma('vm:entry-point')` — without it, release builds can strip the function.  This `function` will receive *all* events from `BackgroundGeolocation` in the headless state, and provided with a [HeadlessEvent] containing a [HeadlessEvent.name] and [HeadlessEvent.event].
   ///
   /// After running your app with `runApp`, register your headless-task with [registerHeadlessTask].  Within your `callback`, you're free to interact with the complete `BackgroundGeolocation` API.
   ///
@@ -1767,61 +1767,64 @@ class BackgroundGeolocation {
   ///
   /// __`main.dart`__
   /// ```dart
+  /// import 'package:flutter/material.dart';
   /// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
   ///
-  /// /// Receives all events from BackgroundGeolocation while app is terminated:
-  /// void headlessTask(HeadlessEvent headlessEvent) async {
-  ///   print('[HeadlessTask]: ${headlessEvent}');
+  /// /// Receives all events from BackgroundGeolocation while app is terminated.
+  /// /// Must be a top-level or static function marked vm:entry-point, or release builds strip it.
+  /// @pragma('vm:entry-point')
+  /// void headlessTask(bg.HeadlessEvent headlessEvent) async {
+  ///   print('[HeadlessTask]: $headlessEvent');
   ///
   ///   // Implement a 'case' for only those events you're interested in.
   ///   switch(headlessEvent.name) {
-  ///     case Event.TERMINATE:
-  ///       State state = headlessEvent.event;
-  ///       print('- State: ${state}');
+  ///     case bg.Event.TERMINATE:
+  ///       bg.State state = headlessEvent.event;
+  ///       print('- State: $state');
   ///       break;
-  ///     case Event.HEARTBEAT:
-  ///       HeartbeatEvent event = headlessEvent.event;
-  ///       print('- HeartbeatEvent: ${event}');
+  ///     case bg.Event.HEARTBEAT:
+  ///       bg.HeartbeatEvent event = headlessEvent.event;
+  ///       print('- HeartbeatEvent: $event');
   ///       break;
-  ///     case Event.LOCATION:
-  ///       Location location = headlessEvent.event;
-  ///       print('- Location: ${location}');
+  ///     case bg.Event.LOCATION:
+  ///       bg.Location location = headlessEvent.event;
+  ///       print('- Location: $location');
   ///       break;
-  ///     case Event.MOTIONCHANGE:
-  ///       Location location = headlessEvent.event;
-  ///       print('- Location: ${location}');
+  ///     case bg.Event.MOTIONCHANGE:
+  ///       bg.Location location = headlessEvent.event;
+  ///       print('- Location: $location');
   ///       break;
-  ///     case Event.GEOFENCE:
-  ///       GeofenceEvent geofenceEvent = headlessEvent.event;
-  ///       print('- GeofenceEvent: ${geofenceEvent}');
+  ///     case bg.Event.GEOFENCE:
+  ///       bg.GeofenceEvent geofenceEvent = headlessEvent.event;
+  ///       print('- GeofenceEvent: $geofenceEvent');
   ///       break;
-  ///     case Event.GEOFENCESCHANGE:
-  ///       GeofencesChangeEvent event = headlessEvent.event;
-  ///       print('- GeofencesChangeEvent: ${event}');
+  ///     case bg.Event.GEOFENCESCHANGE:
+  ///       bg.GeofencesChangeEvent event = headlessEvent.event;
+  ///       print('- GeofencesChangeEvent: $event');
   ///       break;
-  ///     case Event.SCHEDULE:
-  ///       State state = headlessEvent.event;
-  ///       print('- State: ${state}');
+  ///     case bg.Event.SCHEDULE:
+  ///       bg.State state = headlessEvent.event;
+  ///       print('- State: $state');
   ///       break;
-  ///     case Event.ACTIVITYCHANGE:
-  ///       ActivityChangeEvent event = headlessEvent.event;
-  ///       print('ActivityChangeEvent: ${event}');
+  ///     case bg.Event.ACTIVITYCHANGE:
+  ///       bg.ActivityChangeEvent event = headlessEvent.event;
+  ///       print('ActivityChangeEvent: $event');
   ///       break;
-  ///     case Event.HTTP:
-  ///       HttpEvent response = headlessEvent.event;
-  ///       print('HttpEvent: ${response}');
+  ///     case bg.Event.HTTP:
+  ///       bg.HttpEvent response = headlessEvent.event;
+  ///       print('HttpEvent: $response');
   ///       break;
-  ///     case Event.POWERSAVECHANGE:
+  ///     case bg.Event.POWERSAVECHANGE:
   ///       bool enabled = headlessEvent.event;
-  ///       print('ProviderChangeEvent: ${enabled}');
+  ///       print('PowerSaveChangeEvent: $enabled');
   ///       break;
-  ///     case Event.CONNECTIVITYCHANGE:
-  ///       ConnectivityChangeEvent event = headlessEvent.event;
-  ///       print('ConnectivityChangeEvent: ${event}');
+  ///     case bg.Event.CONNECTIVITYCHANGE:
+  ///       bg.ConnectivityChangeEvent event = headlessEvent.event;
+  ///       print('ConnectivityChangeEvent: $event');
   ///       break;
-  ///     case Event.ENABLEDCHANGE:
+  ///     case bg.Event.ENABLEDCHANGE:
   ///       bool enabled = headlessEvent.event;
-  ///       print('EnabledChangeEvent: ${enabled}');
+  ///       print('EnabledChangeEvent: $enabled');
   ///       break;
   ///   }
   /// }
@@ -1830,7 +1833,7 @@ class BackgroundGeolocation {
   ///   runApp(HelloWorld());
   ///
   ///   // Register your headlessTask:
-  ///   BackgroundGeolocation.registerHeadlessTask(headlessTask);
+  ///   bg.BackgroundGeolocation.registerHeadlessTask(headlessTask);
   /// }
   /// ```
   ///
@@ -1857,16 +1860,17 @@ class BackgroundGeolocation {
   ///
   /// ```dart
   /// // NO!  This will not work.
-  /// BackgroundGeolocation.registerHeadlessTask((HeadlessEvent event) {
-  ///   print('${event}');
+  /// bg.BackgroundGeolocation.registerHeadlessTask((bg.HeadlessEvent event) {
+  ///   print('$event');
   /// });
   ///
   /// // YES!
-  /// void myHeadlessTask(HeadlessEvent headlessEvent) async {
-  ///   print('${event}');
+  /// @pragma('vm:entry-point')
+  /// void myHeadlessTask(bg.HeadlessEvent headlessEvent) async {
+  ///   print('$headlessEvent');
   /// }
   ///
-  /// BackgroundGeolocation.registerHeadlessTask(myHeadlessTask);
+  /// bg.BackgroundGeolocation.registerHeadlessTask(myHeadlessTask);
   ///
   /// ```
   ///

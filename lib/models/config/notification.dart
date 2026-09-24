@@ -60,7 +60,7 @@ class Notification {
   ///
   /// ![](https://dl.dropbox.com/s/whcb6q1gxxdk9t1/android-foreground-notification-transistor.png?dl=1)
   ///
-  /// Even if you have no experience with Android Layouts, it doesn't take much to figure out the basics.  You'll mostly be adding `<TextView />`, `<ImageView />` and `<Button />` elements.  The key thing to be aware of is the `android:id` of these elements and how these are referenced from [AppConfig.notification] configuration:  your `android:id` **must** be prefixed with the word `notification` (eg: `notificationText`).  There is one exception: `applicationName`, which the SDK will automatically render your Android application name.
+  /// Even if you have no experience with Android Layouts, it doesn't take much to figure out the basics.  You'll mostly be adding `<TextView />`, `<ImageView />` and `<Button />` elements.  The SDK finds each element by its `android:id`.  The special elements below have fixed ids, which the SDK fills in for you.  Your own elements may use any `android:id`:  you reference it from [strings] or [actions].  The `notification` prefix on the button ids below is only a naming convention.
   ///
   /// ## Layout Special Elements
   ///
@@ -77,12 +77,14 @@ class Notification {
   ///
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     layout: "my_notification_layout",  // <-- custom layout xml file
-  ///     title: "The Notification Title",
-  ///     text: "The Notification Text",
-  ///     smallIcon: "mipmap/my_small_icon", // <-- defaults to app icon
-  ///     largeIcon: "mipmap/my_large_icon"
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       layout: "my_notification_layout",  // <-- custom layout xml file
+  ///       title: "The Notification Title",
+  ///       text: "The Notification Text",
+  ///       smallIcon: "mipmap/my_small_icon", // <-- defaults to app icon
+  ///       largeIcon: "mipmap/my_large_icon"
+  ///     )
   ///   )
   /// ));
   /// ```
@@ -103,10 +105,12 @@ class Notification {
   ///
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     strings: {
-  ///       "myCustomElement": "My Custom Element Text"
-  ///     }
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       strings: {
+  ///         "myCustomElement": "My Custom Element Text"
+  ///       }
+  ///     )
   ///   )
   /// ));
   /// ```
@@ -129,11 +133,13 @@ class Notification {
   ///
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     actions: [  // <-- register button listeners
-  ///       "notificationButtonFoo",
-  ///       "notificationButtonBar"
-  ///     ]
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       actions: [  // <-- register button listeners
+  ///         "notificationButtonFoo",
+  ///         "notificationButtonBar"
+  ///       ]
+  ///     )
   ///   )
   /// ));
   ///
@@ -212,6 +218,16 @@ class Notification {
   ///         android:gravity="right"
   ///         android:orientation="horizontal">
   ///
+  ///         <TextView
+  ///             android:id="@+id/myCustomElement"
+  ///             style="@style/TextAppearance.Compat.Notification.Line2"
+  ///             android:layout_width="0dp"
+  ///             android:layout_height="wrap_content"
+  ///             android:layout_gravity="center_vertical"
+  ///             android:layout_weight="1"
+  ///             android:text="myCustomElement"
+  ///             android:textSize="12sp" />
+  ///
   ///         <Button
   ///             android:id="@+id/notificationButtonFoo"
   ///             style="@style/Widget.AppCompat.Button.Small"
@@ -248,14 +264,19 @@ class Notification {
   /// });
   ///
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     title: "The title",
-  ///     text: "The text",
-  ///     layout: "notification_layout",
-  ///     actions: [  // <-- register button listeners
-  ///       "notificationButtonFoo",
-  ///       "notificationButtonBar"
-  ///     ]
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       title: "The title",
+  ///       text: "The text",
+  ///       layout: "notification_layout",
+  ///       actions: [  // <-- register button listeners
+  ///         "notificationButtonFoo",
+  ///         "notificationButtonBar"
+  ///       ],
+  ///       strings: {
+  ///         "myCustomElement": "My Custom Element Text"
+  ///       }
+  ///     )
   ///   )
   /// ));
   /// ```
@@ -291,17 +312,21 @@ class Notification {
   /// ```dart
   /// // 1. drawable
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     smallIcon: "drawable/my_custom_notification_small_icon"
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       smallIcon: "drawable/my_custom_notification_small_icon"
+  ///     )
   ///   )
   /// ));
   ///
   /// // 2. mipmap
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     smallIcon: "mipmap/my_custom_notification_small_icon"
-  ///   }
-  /// });
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       smallIcon: "mipmap/my_custom_notification_small_icon"
+  ///     )
+  ///   )
+  /// ));
   /// ```
   ///
   /// ### ℹ️ See also:
@@ -319,17 +344,21 @@ class Notification {
   /// ```dart
   /// // 1. drawable
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     largeIcon: "drawable/my_custom_notification_large_icon"
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       largeIcon: "drawable/my_custom_notification_large_icon"
+  ///     )
   ///   )
-  /// });
+  /// ));
   ///
   /// // 2. mipmap
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     largeIcon: "mipmap/my_custom_notification_large_icon"
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       largeIcon: "mipmap/my_custom_notification_large_icon"
+  ///     )
   ///   )
-  /// });
+  /// ));
   /// ```
   ///
   /// ### ℹ️ See also:
@@ -353,8 +382,10 @@ class Notification {
   ///
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     priority: NotificationPriority.min
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       priority: NotificationPriority.min
+  ///     )
   ///   )
   /// ));
   /// ```
@@ -379,15 +410,19 @@ class Notification {
   ///
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     channelName: "Location Tracker"
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       channelName: "Location Tracker"
+  ///     )
   ///   )
   /// ));
   ///
   /// // or with #setConfig
-  /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     channelName: "My new channel name"
+  /// BackgroundGeolocation.setConfig(Config(
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       channelName: "My new channel name"
+  ///     )
   ///   )
   /// ));
   /// ```
@@ -422,10 +457,12 @@ class Notification {
   ///
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     strings: {
-  ///       "myCustomElement": "My Custom Element Text"
-  ///     }
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       strings: {
+  ///         "myCustomElement": "My Custom Element Text"
+  ///       }
+  ///     )
   ///   )
   /// ));
   /// ```
@@ -455,10 +492,12 @@ class Notification {
   /// ## Example
   /// ```dart
   /// BackgroundGeolocation.ready(Config(
-  ///   notification: Notification(
-  ///     actions: [  // <-- register button listeners
-  ///       "notificationButtonPause"
-  ///     ]
+  ///   app: AppConfig(
+  ///     notification: Notification(
+  ///       actions: [  // <-- register button listeners
+  ///         "notificationButtonPause"
+  ///       ]
+  ///     )
   ///   )
   /// ));
   ///
