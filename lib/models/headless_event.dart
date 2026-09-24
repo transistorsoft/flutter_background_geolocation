@@ -3,10 +3,14 @@ part of '../flutter_background_geolocation.dart';
 /// Event object provided to [BackgroundGeolocation.registerHeadlessTask]
 ///
 /// ## Example
-/// __`main.dart`
+/// __`main.dart`__
 ///
 /// ```dart
-/// void myHeadlessTask(HeadlessEvent headlessEvent) async {
+/// import 'package:flutter/material.dart';
+/// import 'package:flutter_background_geolocation/flutter_background_geolocation.dart' as bg;
+///
+/// @pragma('vm:entry-point')
+/// void myHeadlessTask(bg.HeadlessEvent headlessEvent) async {
 ///   print('[HeadlessTask]: ${headlessEvent}');
 ///
 ///   // Implement a `case` for only those events you're interested in.
@@ -49,7 +53,7 @@ part of '../flutter_background_geolocation.dart';
 ///       break;
 ///     case bg.Event.POWERSAVECHANGE:
 ///       bool enabled = headlessEvent.event;
-///       print('ProviderChangeEvent: ${enabled}');
+///       print('PowerSaveChangeEvent: ${enabled}');
 ///       break;
 ///     case bg.Event.CONNECTIVITYCHANGE:
 ///       bg.ConnectivityChangeEvent event = headlessEvent.event;
@@ -70,7 +74,7 @@ part of '../flutter_background_geolocation.dart';
 ///   runApp(HelloWorld());
 ///
 ///   // Register your headlessTask:
-///   BackgroundGeolocation.registerHeadlessTask(myHeadlessTask);
+///   bg.BackgroundGeolocation.registerHeadlessTask(myHeadlessTask);
 /// }
 /// ```
 ///
