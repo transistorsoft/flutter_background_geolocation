@@ -267,8 +267,9 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
             [config updateWithDictionary:params];
         } else {
             if (reset) {
-                [config reset];
-                [config updateWithDictionary:params];
+                // (WO-039) ONE commit: -reset then -updateWithDictionary: flashed the defaults at every
+                // listener, and `app.schedule = []` stopped a persisted scheduler on every launch.
+                [config resetWithDictionary:params];
             } else if ([params objectForKey:@"authorization"]) {
                 [config batchUpdate:^(TSConfig *config) {
                     [config.authorization updateWithDictionary:[params objectForKey:@"authorization"]];
@@ -321,8 +322,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 - (void) reset:(NSDictionary*)params result:(FlutterResult)result {
     TSConfig *config = [TSConfig sharedInstance];
     if (params) {
-        [config reset];
-        [config updateWithDictionary:params];
+        [config resetWithDictionary:params];   // (WO-039) one commit, as in -ready:
     } else {
         [config reset];
     }
