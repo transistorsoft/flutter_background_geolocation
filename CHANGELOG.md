@@ -9,6 +9,11 @@
   `reset(config)` now apply your configuration as one change, so settings whose value has not changed
   are no longer switched to the default and back. Requires the TSLocationManager release that carries
   WO-039. (WO-039)
+* [Fixed][iOS] `await BackgroundGeolocation.registerHeadlessTask(task)` never completed on iOS, so an
+  app awaiting it in `main()` before `runApp()` hung at startup. iOS has no headless mode and the
+  native side never answered the call; it now answers, and the `Future` resolves `true` as on Android.
+  The native answer to `registerPlugin`, which `BackgroundGeolocationFirebase.configure()` sends, was
+  missing in the same way and is now sent too.
 
 ## 5.8.0 &mdash; 2026-09-23
 
