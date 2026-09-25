@@ -836,11 +836,22 @@ class BackgroundGeolocation {
         'removeGeofence', identifier)) as FutureOr<bool>;
   }
 
-  /// Destroy all [Geofence].
+  /// Remove all monitored [Geofence] records, or a specific subset by identifier.
   ///
-  static Future<bool> removeGeofences() async {
-    return (await _methodChannel.invokeMethod<bool>('removeGeofences'))
-        as FutureOr<bool>;
+  /// ## Example
+  ///
+  /// ```dart
+  /// // Remove all geofences.
+  /// BackgroundGeolocation.removeGeofences();
+  ///
+  /// // Remove only these.
+  /// BackgroundGeolocation.removeGeofences(['HOME', 'WORK']);
+  /// ```
+  ///
+  static Future<bool> removeGeofences([List<String>? identifiers]) async {
+    // (WO-053) null (omitted) means all; the natives answer an error for anything but a list.
+    return (await _methodChannel.invokeMethod<bool>(
+        'removeGeofences', identifiers)) as FutureOr<bool>;
   }
 
   /// Retrieve all [Geofence].

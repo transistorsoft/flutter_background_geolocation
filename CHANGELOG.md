@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* [Added] `removeGeofences(identifiers)` removes only the named geofences, as on every other
+  Background Geolocation SDK: `BackgroundGeolocation.removeGeofences(['HOME', 'WORK'])`. The list is
+  optional; `removeGeofences()` still removes all of them. (WO-053)
 * [Fixed] `Config(transistorAuthorizationToken: token)` sent no upload URL when the same `Config`
   also carried `http: HttpConfig(...)`. The token's URL was set on your `HttpConfig` after it had been
   serialized, so it only arrived on a second `toMap()`: the app received the token's `authorization`
