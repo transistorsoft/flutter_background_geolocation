@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+* [Fixed] `Location.geofence` is a new `GeofenceTrigger` (`identifier`, `action`, `timestamp`,
+  `extras`), the summary the SDK attaches to a location recorded by a geofence transition. It was
+  typed as a `GeofenceEvent`, which that summary is not. Building a `Location` from a
+  `getLocations()` geofence record threw
+  *"type 'Null' is not a subtype of type 'Map<dynamic, dynamic>'"*, and `onGeofence` removed
+  `geofence` from `event.location` to avoid the same error.
+  Now `event.location.geofence` is populated. `location.geofence?.identifier`, `.action`,
+  `.timestamp` and `.extras` read as before. Code that named the type `GeofenceEvent`, or read
+  `.location` or `.geofence` through it, must change; those reads never returned a value. (WO-049)
+* [Changed] `State.reset` and `State.transistorAuthorizationToken` are deprecated. Both are `Config`
+  inputs that the SDK never reports back, so on a `State` they are `null` unless your own code set
+  them. They still work, so a `State` passed to `setConfig()` behaves as before. (WO-049)
 * [Fixed] `Config(transistorAuthorizationToken: token)` sent no upload URL when the same `Config`
   also carried `http: HttpConfig(...)`. The token's URL was set on your `HttpConfig` after it had been
   serialized, so it only arrived on a second `toMap()`: the app received the token's `authorization`
