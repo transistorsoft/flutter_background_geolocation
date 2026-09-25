@@ -224,6 +224,45 @@ class Activity {
   }
 }
 
+/// The geofence transition that caused a [Location] to be recorded, delivered as [Location.geofence].
+///
+/// A summary of the transition.  Unlike [GeofenceEvent], it carries no [Location] and no [Geofence].
+///
+class GeofenceTrigger {
+  /// [Geofence.identifier] of the [Geofence] which fired.
+  late String identifier;
+
+  /// The transition that fired the geofence (ENTER | EXIT | DWELL).
+  late String action;
+
+  /// ISO-8601 UTC timestamp of the geofence transition.
+  late String timestamp;
+
+  /// Optional [Geofence.extras].
+  Map? extras;
+
+  GeofenceTrigger(dynamic trigger) {
+    final Map t = _asMap(trigger);
+
+    // (WO-049) iOS omits a key it has no value for, and Android can send `"action": null`.
+    final dynamic i = t['identifier'];
+    identifier = (i is String) ? i : (i?.toString() ?? '');
+    final dynamic a = t['action'];
+    action = (a is String) ? a : (a?.toString() ?? '');
+    final dynamic ts = t['timestamp'];
+    timestamp = (ts is String) ? ts : (ts?.toString() ?? '');
+
+    if (t['extras'] is Map) {
+      extras = Map.from(t['extras']);
+    }
+  }
+
+  /// String representation of `GeofenceTrigger` for `print` to logs.
+  String toString() {
+    return '[GeofenceTrigger identifier: $identifier, action: $action, timestamp: $timestamp]';
+  }
+}
+
 /// Location object provided to:
 /// - [BackgroundGeolocation.onLocation]
 /// - [BackgroundGeolocation.onMotionChange],
@@ -329,11 +368,11 @@ class Location {
   ///
   late Coords coords;
 
-  /// Corresponding [GeofenceEvent] if this location was recorded due to a [Geofence] transition.
+  /// Corresponding [GeofenceTrigger] if this location was recorded due to a [Geofence] transition.
   ///
-  /// See [GeofenceEvent]
+  /// See [GeofenceTrigger]
   ///
-  GeofenceEvent? geofence;
+  GeofenceTrigger? geofence; // (WO-049) the cores send a trigger summary here, never a GeofenceEvent
 
   /// Device battery-level when this `Location` was recorded.
   ///
@@ -404,8 +443,8 @@ class Location {
     final dynamic e = p['event'];
     event = (e is String) ? e : (e?.toString() ?? '');
 
-    if (p['geofence'] != null) {
-      geofence = GeofenceEvent(p['geofence']);
+    if (p['geofence'] is Map) {
+      geofence = GeofenceTrigger(p['geofence']);
     }
 
     mock = _mapBool(p, 'mock', fallback: false);

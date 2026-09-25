@@ -124,6 +124,22 @@ class State extends Config {
   @override
   LoggerConfig get logger => super.logger ?? const LoggerConfig();
 
+  // (WO-049) Config inputs that no native State carries. Dart cannot drop an inherited member, so
+  // these are deprecated instead; they still read the field, so a State passed to setConfig()
+  // behaves as before.
+
+  /// Not part of the plugin's state: [Config.reset] is a [BackgroundGeolocation.ready] input.
+  @override
+  @Deprecated('reset is a ready() input; the native State never includes it')
+  bool? get reset => super.reset;
+
+  /// Not part of the plugin's state: [Config.transistorAuthorizationToken] is a configuration input.
+  @override
+  @Deprecated(
+      'transistorAuthorizationToken is a configuration input; the native State never includes it')
+  TransistorAuthorizationToken? get transistorAuthorizationToken =>
+      super.transistorAuthorizationToken;
+
   /// Whether the plugin is current stopped or started ([BackgroundGeolocation.stop] / [BackgroundGeolocation.start]).
   ///
   late bool enabled;

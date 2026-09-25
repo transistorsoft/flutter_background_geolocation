@@ -244,14 +244,12 @@ class GeofenceEvent {
   late Geofence geofence;
 
   GeofenceEvent(Map params) {
-    // Remove geofence from location to prevent recursive creation of GeofenceEvent.
-    Map locationData = params['location'];
-    locationData.remove("geofence");
-
     identifier = params['identifier'];
     action = params['action'];
     timestamp = params['timestamp'];
-    location = Location(locationData);
+    // (WO-049) The location keeps its `geofence`: Location builds a GeofenceTrigger from it, which
+    // cannot recurse, so there is nothing to strip.
+    location = Location(params['location']);
     extras = params['extras'];
 
     Map geofenceData = params['geofence'];
