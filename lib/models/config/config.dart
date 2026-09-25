@@ -635,16 +635,6 @@ class Config {
       }
     }
 
-    // Were we provided a Transistor token?  Auto-config the url and authorization.
-    if (transistorAuthorizationToken != null) {
-      if (http != null) {
-        http!.url = transistorAuthorizationToken!.locationsUrl;
-      } else {
-        url = transistorAuthorizationToken!.locationsUrl;
-      }
-      authorization = transistorAuthorizationToken!.authorizationConfig;
-    }
-
     // Geolocation Options
     if (desiredAccuracy != null) config['desiredAccuracy'] = desiredAccuracy;
     if (distanceFilter != null) config['distanceFilter'] = distanceFilter;
@@ -865,6 +855,19 @@ class Config {
     }
     if (notification != null) {
       config['notification'] = notification!.toMap();
+    }
+
+    // Were we provided a Transistor token?  Auto-config the url and authorization.
+    // (WO-048) Written into the map being sent, last, so the token wins over http.url and the
+    // flat url.  Setting http!.url instead came too late: http was serialized above already.
+    if (transistorAuthorizationToken != null) {
+      final token = transistorAuthorizationToken!;
+      config['http'] = <String, dynamic>{
+        ...?(config['http'] as Map<String, dynamic>?),
+        'url': token.locationsUrl,
+      };
+      config['authorization'] = token.authorizationConfig.toMap();
+      config.remove('url');
     }
     return config;
   }

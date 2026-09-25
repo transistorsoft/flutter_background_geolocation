@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+* [Fixed] `Config(transistorAuthorizationToken: token)` sent no upload URL when the same `Config`
+  also carried `http: HttpConfig(...)`. The token's URL was set on your `HttpConfig` after it had been
+  serialized, so it only arrived on a second `toMap()`: the app received the token's `authorization`
+  but not its `http.url`. The token now sets `http.url` in the configuration sent to the SDK, merged
+  into your `http` group, and wins over any `http.url` or `url` you passed, as on React Native. Your
+  `HttpConfig`, `url` and `authorization` are no longer modified. (WO-048)
 * [Fixed][iOS] `ready()` on a later launch no longer switches a persisted scheduler off. The
   configuration was reset to the defaults and yours re-applied in two steps, and every configuration
   listener saw the defaults in between: the empty default `schedule` stopped the scheduler and saved it
