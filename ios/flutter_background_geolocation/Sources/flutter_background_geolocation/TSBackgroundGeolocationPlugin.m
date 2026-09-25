@@ -158,7 +158,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     } else if ([self method:ACTION_REMOVE_GEOFENCE is:action]) {
         [self removeGeofence:call.arguments result:result];
     } else if ([self method:ACTION_REMOVE_GEOFENCES is:action]) {
-        [self removeGeofences:result];
+        [self removeGeofences:call.arguments result:result];
     } else if ([self method:ACTION_GET_GEOFENCES is:action]) {
         [self getGeofences:result];
     } else if ([self method:ACTION_GET_GEOFENCE is:action]) {
@@ -561,9 +561,22 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     }];
 }
 
-- (void) removeGeofences:(FlutterResult)result {
-    NSArray *geofences = @[];
-    [_locationManager removeGeofences:geofences success:^{
+- (void) removeGeofences:(id)identifiers result:(FlutterResult)result {
+    // (WO-053) An empty list means "remove all" to the core: only an omitted (nil) argument becomes @[],
+    // a malformed one answers an error.
+    if (!identifiers || identifiers == [NSNull null]) {
+        identifiers = @[];
+    } else if (![identifiers isKindOfClass:[NSArray class]]) {
+        result([FlutterError errorWithCode:@"removeGeofences: identifiers must be a List" message:nil details:nil]);
+        return;
+    }
+    for (NSUInteger n = 0; n < [identifiers count]; n++) {
+        if (![identifiers[n] isKindOfClass:[NSString class]]) {
+            result([FlutterError errorWithCode:[NSString stringWithFormat:@"removeGeofences: identifier at index %lu is not a String", (unsigned long)n] message:nil details:nil]);
+            return;
+        }
+    }
+    [_locationManager removeGeofences:identifiers success:^{
         result(@(YES));
     } failure:^(NSString* error) {
         result([FlutterError errorWithCode:error message:nil details:nil]);

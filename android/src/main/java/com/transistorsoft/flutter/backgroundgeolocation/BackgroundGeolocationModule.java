@@ -338,7 +338,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         } else if (call.method.equalsIgnoreCase(Actions.REMOVE_GEOFENCE)) {
             removeGeofence((String) call.arguments, result);
         } else if (call.method.equalsIgnoreCase(Actions.REMOVE_GEOFENCES)) {
-            removeGeofences(result);
+            removeGeofences(call.arguments, result);
         } else if (call.method.equalsIgnoreCase(Actions.GET_GEOFENCES)) {
             getGeofences(result);
         } else if (call.method.equalsIgnoreCase(Actions.GET_GEOFENCE)) {
@@ -732,8 +732,23 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         });
     }
 
-    private void removeGeofences(final MethodChannel.Result result) {
+    private void removeGeofences(Object args, final MethodChannel.Result result) {
+        // (WO-053) An empty list means "remove all" to the core: only an omitted (null) argument becomes [],
+        // a malformed one answers an error.
         List<String> identifiers = new ArrayList<>();
+        if (args instanceof List) {
+            List<?> list = (List<?>) args;
+            for (int n = 0; n < list.size(); n++) {
+                if (!(list.get(n) instanceof String)) {
+                    result.error("removeGeofences: identifier at index " + n + " is not a String", null, null);
+                    return;
+                }
+                identifiers.add((String) list.get(n));
+            }
+        } else if (args != null) {
+            result.error("removeGeofences: identifiers must be a List", null, null);
+            return;
+        }
         BackgroundGeolocation.getInstance(mContext).removeGeofences(identifiers, new TSCallback() {
             @Override public void onSuccess() { result.success(true); }
             @Override public void onFailure(String error) { result.error(error, null, null); }
