@@ -463,12 +463,9 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
     @SuppressWarnings("unchecked")
     private void reset(Object args, MethodChannel.Result result) {
-        if (args != null && args.getClass() == HashMap.class) {
-            Map<String, Object> params = (HashMap) args;
-            if (!resetConfig(params, result)) return;
-        } else {
-            TSConfig.getInstance(mContext).reset();
-        }
+        Map<String, Object> params = (args != null && args.getClass() == HashMap.class) ? (HashMap) args : new HashMap<>();
+        // A bare reset() takes the same path as the other bridges, so the core keeps headlessJobService.  (WO-061)
+        if (!resetConfig(params, result)) return;
         resultWithState(result);
     }
 

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+* [Fixed][Android] `reset()` without a config now switches the SDK's logging to the defaults. It
+  took a different path from `reset(config)`, one that skipped the change events the logger listens
+  to: `State.logger.logLevel` reported the default, Off, while the SDK kept logging at the level set
+  before, until the level next changed or the app restarted. The HTTP service kept its previous
+  `autoSyncThreshold` the same way. `reset()` now takes the same path as `reset(config)`, as on
+  React Native, Capacitor and Cordova. (WO-061)
 * [Added] `removeGeofences(identifiers)` removes only the named geofences, as on every other
   Background Geolocation SDK: `BackgroundGeolocation.removeGeofences(['HOME', 'WORK'])`. The list is
   optional; `removeGeofences()` still removes all of them. (WO-053)
