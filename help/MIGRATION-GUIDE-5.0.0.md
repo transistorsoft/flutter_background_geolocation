@@ -333,6 +333,8 @@ After upgrading to v5, review your logs for location rejections/adjustments and 
   - E.g., `debug` is now in `LoggerConfig`.
 - **Legacy flat config remains supported but deprecated:**  
   - Using the legacy flat config will show warnings at runtime, but will **not** result in an error. Migration to the new grouped config is recommended for future compatibility.
+- **`Location.age` is in seconds:**
+  - v4 reported an integer number of milliseconds; v5 reports seconds with millisecond precision (e.g. `1.234`). If your code compares `age` against a millisecond value, divide that value by 1000.
 
 ---
 

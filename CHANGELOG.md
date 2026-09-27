@@ -16,6 +16,9 @@
 * [Docs] `getCurrentPosition()`'s `timeout` defaults to `GeoConfig.locationTimeout`, `60` seconds
   unless you change it, not `30` as documented. The migration guide's mapping table now lists the
   flat `locationTimeout`, which moves to `geolocation`. (WO-072)
+* [Docs] `Location.age` is in seconds, with millisecond precision (e.g. `1.234`), not milliseconds
+  as documented. Every SDK has reported seconds since version 5; before that it was an integer
+  number of milliseconds. The migration guide now says so under Breaking Changes. (WO-065)
 * [Added] `removeGeofences(identifiers)` removes only the named geofences, as on every other
   Background Geolocation SDK: `BackgroundGeolocation.removeGeofences(['HOME', 'WORK'])`. The list is
   optional; `removeGeofences()` still removes all of them. (WO-053)
