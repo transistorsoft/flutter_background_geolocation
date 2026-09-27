@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.8.8 &mdash; 2026-09-27
 
 * [Fixed] `TransistorAuthorizationToken.findOrCreate()` no longer waits forever when the demo server
   refuses the registration with HTTP 403. The returned `Future` now completes with an `Error` whose
