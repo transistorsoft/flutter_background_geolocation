@@ -13,6 +13,9 @@
   has used since 4.10.2. The docs said `http://`, which Android 9+ and iOS refuse unless the app allows
   cleartext traffic or arbitrary loads. The `destroy()` example now passes the url, which the method
   requires. (WO-063)
+* [Docs] `getCurrentPosition()`'s `timeout` defaults to `GeoConfig.locationTimeout`, `60` seconds
+  unless you change it, not `30` as documented. The migration guide's mapping table now lists the
+  flat `locationTimeout`, which moves to `geolocation`. (WO-072)
 * [Added] `removeGeofences(identifiers)` removes only the named geofences, as on every other
   Background Geolocation SDK: `BackgroundGeolocation.removeGeofences(['HOME', 'WORK'])`. The list is
   optional; `removeGeofences()` still removes all of them. (WO-053)
