@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+* [Fixed][Android] `reset()` without a config now switches the SDK's logging to the defaults. It
+  took a different path from `reset(config)`, one that skipped the change events the logger listens
+  to: `State.logger.logLevel` reported the default, Off, while the SDK kept logging at the level set
+  before, until the level next changed or the app restarted. The HTTP service kept its previous
+  `autoSyncThreshold` the same way. `reset()` now takes the same path as `reset(config)`, as on
+  React Native, Capacitor and Cordova. (WO-061)
 * [Added] `removeGeofences(identifiers)` removes only the named geofences, as on every other
   Background Geolocation SDK: `BackgroundGeolocation.removeGeofences(['HOME', 'WORK'])`. The list is
   optional; `removeGeofences()` still removes all of them. (WO-053)
@@ -28,8 +34,7 @@
   listener saw the defaults in between: the empty default `schedule` stopped the scheduler and saved it
   as off, so a scheduler started with `startSchedule()` never resumed on the next launch. `ready()` and
   `reset(config)` now apply your configuration as one change, so settings whose value has not changed
-  are no longer switched to the default and back. Requires the TSLocationManager release that carries
-  WO-039. (WO-039)
+  are no longer switched to the default and back. Requires TSLocationManager 4.7.1. (WO-039)
 * [Fixed][iOS] `await BackgroundGeolocation.registerHeadlessTask(task)` never completed on iOS, so an
   app awaiting it in `main()` before `runApp()` hung at startup. iOS has no headless mode and the
   native side never answered the call; it now answers, and the `Future` resolves `true` as on Android.
@@ -68,7 +73,7 @@
 
 ### Native SDK versions
 
-* [iOS] Pin `TSLocationManager ~> 4.7.0`
+* [iOS] Pin `TSLocationManager ~> 4.7.1` (CocoaPods and Swift Package Manager) — `-[TSConfig resetWithDictionary:]` (WO-039) and the scheduler fixes (WO-038, WO-041, WO-043, WO-044)
 * [Android] Pin `tslocationmanager 4.6.+` (`TSConfig.reset(JSONObject)`)
 
 ## 5.7.0 &mdash; 2026-09-04
