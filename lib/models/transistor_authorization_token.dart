@@ -1,6 +1,6 @@
 part of '../flutter_background_geolocation.dart';
 
-/// Use [TransistorAuthorizationToken.findOrCreate] to generate an Authorization token suitable for configuring the SDK's [Authorization] with Transistor Software's Demo Server at [http://tracker.transistorsoft.com](http://tracker.transistorsoft.com).
+/// Use [TransistorAuthorizationToken.findOrCreate] to generate an Authorization token suitable for configuring the SDK's [Authorization] with Transistor Software's Demo Server at [https://tracker.transistorsoft.com](https://tracker.transistorsoft.com).
 ///
 /// You may also run your own instance of Demo Server locally.  See [background-geolocation-console](https://github.com/transistorsoft/background-geolocation-console)
 ///
@@ -28,7 +28,7 @@ part of '../flutter_background_geolocation.dart';
 ///
 /// To *view* your tracking results in the browser, use your configured "Organization Name" and visit:
 ///
-/// http://tracker.transistorsoft.com/my-organization-name
+/// https://tracker.transistorsoft.com/my-organization-name
 ///
 class TransistorAuthorizationToken {
   static const String _DUMMY_TOKEN = "DUMMY_TOKEN";
@@ -97,12 +97,12 @@ class TransistorAuthorizationToken {
     });
   }
 
-  /// Destroys the cached Transistor JSON Web Token used to authorize with the Demo Server at http://tracker.transistorsoft.com or your local instance of [background-geolocation-console](https://github.com/transistorsoft/background-geolocation-console)
+  /// Destroys the cached Transistor JSON Web Token used to authorize with the Demo Server at https://tracker.transistorsoft.com or your local instance of [background-geolocation-console](https://github.com/transistorsoft/background-geolocation-console)
   ///
   /// ## Example
   /// ```dart
-  /// // defaults to http://tracker.transistorsoft.com
-  /// await TransistorAuthorizationToken.destroy();
+  /// // The url the token was registered with.
+  /// await TransistorAuthorizationToken.destroy("https://tracker.transistorsoft.com");
   ///
   /// // If using a custom instance of Demo Server:
   /// /// await TransistorAuthorizationToken.destroy("http://192.168.0.100:9000");
@@ -116,7 +116,7 @@ class TransistorAuthorizationToken {
         'destroyTransistorToken', url));
   }
 
-  /// Returns a *JSON Web Token* ([JWT](https://jwt.io/)) suitable for [Authorization] with the Transistor Software demo server at http://tracker.transistorsoft.com.
+  /// Returns a *JSON Web Token* ([JWT](https://jwt.io/)) suitable for [Authorization] with the Transistor Software demo server at https://tracker.transistorsoft.com.
   ///
   /// This token is typically provided to [Config.transistorAuthorizationToken] when first configuring the SDK with [BackgroundGeolocation.ready].
   ///
@@ -124,7 +124,7 @@ class TransistorAuthorizationToken {
   ///
   /// ### __`@param {String} orgname`__
   ///
-  /// Represents a "company" or "organization"; a container for posting locations from multiple devices to the same account.  `orgname` is used for accessing your device results in web app, eg: http://tracker.transistorsoft.com/my-organization-name.
+  /// Represents a "company" or "organization"; a container for posting locations from multiple devices to the same account.  `orgname` is used for accessing your device results in web app, eg: https://tracker.transistorsoft.com/my-organization-name.
   ///
   /// ### __`@param {String} username`__
   ///
@@ -133,9 +133,9 @@ class TransistorAuthorizationToken {
   /// - `A310-my-username`
   /// - `iPhone 11,3-my-username`
   ///
-  /// ### __`@param {String} url [http://tracker.transistorsoft.com]`__
+  /// ### __`@param {String} url [https://tracker.transistorsoft.com]`__
   ///
-  /// The server to register with and receive authentication tokens from.  Defaults to `http://tracker.transistorsoft.com`.  If you have a local instance of [background-geolocation-console](https://github.com/transistorsoft/background-geolocation-console) running
+  /// The server to register with and receive authentication tokens from.  Defaults to `https://tracker.transistorsoft.com`.  If you have a local instance of [background-geolocation-console](https://github.com/transistorsoft/background-geolocation-console) running
   /// on your localhost, you would provide the __ip address__ of your server, eg: `http://192.168.0.100:9000`.
   ///
   /// --------------------------------------------------

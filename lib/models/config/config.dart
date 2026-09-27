@@ -444,7 +444,7 @@ class Config {
   @Deprecated('Use logger.logMaxDays (LoggerConfig)')
   int? logMaxDays;
 
-  /// *Convenience* option to automatically configures the SDK to upload locations to the Transistor Software demo server at http://tracker.transistorsoft.com (or your own local instance of [background-geolocation-console](https://github.com/transistorsoft/background-geolocation-console))
+  /// *Convenience* option to automatically configures the SDK to upload locations to the Transistor Software demo server at https://tracker.transistorsoft.com (or your own local instance of [background-geolocation-console](https://github.com/transistorsoft/background-geolocation-console))
   ///
   /// See [TransistorAuthorizationToken].  This option will **automatically configure** [HttpConfig.url] to point at the Demo server as well as well as the required [Authorization] configuration.
   ///
@@ -463,7 +463,7 @@ class Config {
   ///
   /// ```dart
   /// // Base url to Transistor Demo Server.
-  /// const String url = 'http://tracker.transistorsoft.com';
+  /// const String url = 'https://tracker.transistorsoft.com';
   ///
   /// // Register for an authorization token from server.
   /// TransistorAuthorizationToken token = await

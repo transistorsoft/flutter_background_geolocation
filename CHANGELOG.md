@@ -8,6 +8,11 @@
   before, until the level next changed or the app restarted. The HTTP service kept its previous
   `autoSyncThreshold` the same way. `reset()` now takes the same path as `reset(config)`, as on
   React Native, Capacitor and Cordova. (WO-061)
+* [Docs] `TransistorAuthorizationToken` and `Config.transistorAuthorizationToken` name the demo
+  server's default url with https, `https://tracker.transistorsoft.com`, the default `findOrCreate`
+  has used since 4.10.2. The docs said `http://`, which Android 9+ and iOS refuse unless the app allows
+  cleartext traffic or arbitrary loads. The `destroy()` example now passes the url, which the method
+  requires. (WO-063)
 * [Added] `removeGeofences(identifiers)` removes only the named geofences, as on every other
   Background Geolocation SDK: `BackgroundGeolocation.removeGeofences(['HOME', 'WORK'])`. The list is
   optional; `removeGeofences()` still removes all of them. (WO-053)
