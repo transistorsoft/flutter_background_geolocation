@@ -376,7 +376,8 @@ class Location {
   ///
   /// See [GeofenceTrigger]
   ///
-  GeofenceTrigger? geofence; // (WO-049) the cores send a trigger summary here, never a GeofenceEvent
+  GeofenceTrigger?
+      geofence; // (WO-049) the cores send a trigger summary here, never a GeofenceEvent
 
   /// Device battery-level when this `Location` was recorded.
   ///
