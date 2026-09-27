@@ -143,6 +143,8 @@ class TransistorAuthorizationToken {
   ///
   /// When the SDK receives the [TransistorAuthorizationToken] from `url`, it will be cached in persistant-storage within the native code.  If the SDK doesn't find a cached token on the client, it will automatically register for one from `url`, using the provided `orgname` and `username`.  Otherwise, the cached token will be immediately returned.
   ///
+  /// If the server refuses the registration (HTTP `403`), the returned `Future` completes with an [Error] whose `code` is `403`.  Any other failure, such as no network connection, returns a token whose `accessToken` is `DUMMY_TOKEN`.
+  ///
   ///
   /// ## Example
   /// ```dart
@@ -172,11 +174,13 @@ class TransistorAuthorizationToken {
           data[FIELD_REFRESH_TOKEN], data[FIELD_EXPIRES], url));
     }).catchError((error) {
       print("[TransistorAuthorizationToken findOrCreate] ERROR: $error");
-      if (error.code != "403") {
+      // (WO-064) Complete on every branch: the caller holds only completer.future, so a throw here
+      // left it waiting forever.  Not every error is a PlatformException (MissingPluginException).
+      if (error is PlatformException && error.code == "403") {
+        completer.completeError(Error(error));
+      } else {
         completer.complete(
             TransistorAuthorizationToken(_DUMMY_TOKEN, _DUMMY_TOKEN, -1, url));
-      } else {
-        throw Error(error);
       }
     });
     return completer.future as FutureOr<TransistorAuthorizationToken>;

@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+* [Fixed] `TransistorAuthorizationToken.findOrCreate()` no longer waits forever when the demo server
+  refuses the registration with HTTP 403. The returned `Future` now completes with an `Error` whose
+  `code` is `403`, as Capacitor and Cordova reject. It never completed on iOS, where every 403 took
+  that path, nor on Android when the server's response carried an `error` message; the error was
+  reported as uncaught instead. Any other failure still returns a token whose `accessToken` is
+  `DUMMY_TOKEN`, and so, now, does a call made where the plugin is not registered, which also waited
+  forever. (WO-064)
 * [Fixed][Android] `reset()` without a config now switches the SDK's logging to the defaults. It
   took a different path from `reset(config)`, one that skipped the change events the logger listens
   to: `State.logger.logLevel` reported the default, Off, while the SDK kept logging at the level set
