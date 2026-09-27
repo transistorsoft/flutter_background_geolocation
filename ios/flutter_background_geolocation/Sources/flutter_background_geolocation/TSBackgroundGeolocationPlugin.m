@@ -102,6 +102,9 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     }
     return self;
 }
+// (WO-078) Every rejection fills `message`: a failure string with no separate code goes in both code and message,
+// errorWithCode:text message:text.  Never change a code to do it: Dart and customers match on it ("404", "403").
+// Only the numeric location-error codes (LocationError) and requestPermission's status keep a nil message.
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     NSString *action = call.method;
 
@@ -435,7 +438,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     [_locationManager getLocations:query success:^(NSArray* records) {
         result(records);
     } failure:^(NSString* error) {
-        result([FlutterError errorWithCode:error message:nil details:nil]);
+        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
     }];
 }
 
@@ -443,7 +446,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     [_locationManager insertLocation: params success:^(NSString* uuid) {
         result(uuid);
     } failure:^(NSString* error) {
-        result([FlutterError errorWithCode:error message:nil details:nil]);
+        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
     }];
 }
 
@@ -493,7 +496,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     [_locationManager addGeofence:geofence success:^{
         result(@(YES));
     } failure:^(NSString *error) {
-        result([FlutterError errorWithCode:error message:nil details:nil]);
+        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
     }];
 }
 
@@ -512,7 +515,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     [_locationManager addGeofences:geofences success:^{
         result(@(YES));
     } failure:^(NSString *error) {
-        result([FlutterError errorWithCode:error message:nil details:nil]);
+        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
     }];
 }
 
@@ -557,7 +560,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     [_locationManager removeGeofence:identifier success:^{
         result(@(YES));
     } failure:^(NSString* error) {
-        result([FlutterError errorWithCode:error message:nil details:nil]);
+        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
     }];
 }
 
@@ -567,31 +570,34 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     if (!identifiers || identifiers == [NSNull null]) {
         identifiers = @[];
     } else if (![identifiers isKindOfClass:[NSArray class]]) {
-        result([FlutterError errorWithCode:@"removeGeofences: identifiers must be a List" message:nil details:nil]);
+        NSString *failure = @"removeGeofences: identifiers must be a List";
+        result([FlutterError errorWithCode:failure message:failure details:nil]);  // (WO-078)
         return;
     }
     for (NSUInteger n = 0; n < [identifiers count]; n++) {
         if (![identifiers[n] isKindOfClass:[NSString class]]) {
-            result([FlutterError errorWithCode:[NSString stringWithFormat:@"removeGeofences: identifier at index %lu is not a String", (unsigned long)n] message:nil details:nil]);
+            NSString *failure = [NSString stringWithFormat:@"removeGeofences: identifier at index %lu is not a String", (unsigned long)n];
+            result([FlutterError errorWithCode:failure message:failure details:nil]);  // (WO-078)
             return;
         }
     }
     [_locationManager removeGeofences:identifiers success:^{
         result(@(YES));
     } failure:^(NSString* error) {
-        result([FlutterError errorWithCode:error message:nil details:nil]);
+        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
     }];
 }
 
 - (void) getGeofence:(NSString*)identifier result:(FlutterResult)result {
     if (!identifier) {
-        result([FlutterError errorWithCode:[NSString stringWithFormat:@"Invalid identifier: %@", identifier] message:nil details:nil]);
+        NSString *failure = [NSString stringWithFormat:@"Invalid identifier: %@", identifier];
+        result([FlutterError errorWithCode:failure message:failure details:nil]);  // (WO-078)
         return;
     }
     [_locationManager getGeofence:identifier success:^(TSGeofence *geofence) {
         result([geofence toDictionary]);
     } failure:^(NSString *error) {
-        result([FlutterError errorWithCode:error message:nil details:nil]);
+        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
     }];
 }
 
@@ -601,13 +607,14 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
         for (TSGeofence *geofence in geofences) { [rs addObject:[geofence toDictionary]]; }
         result(rs);
     } failure:^(NSString* error) {
-        result([FlutterError errorWithCode:error message:nil details:nil]);
+        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
     }];
 }
 
 - (void) geofenceExists:(NSString*)identifier result:(FlutterResult)result {
     if (!identifier) {
-        result([FlutterError errorWithCode:[NSString stringWithFormat:@"Invalid identifier: %@", identifier] message:nil details:nil]);
+        NSString *failure = [NSString stringWithFormat:@"Invalid identifier: %@", identifier];
+        result([FlutterError errorWithCode:failure message:failure details:nil]);  // (WO-078)
         return;
     }
 
@@ -623,7 +630,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     [_locationManager getLog:query success:^(NSString* log) {
         result(log);
     } failure:^(NSString* error) {
-        result([FlutterError errorWithCode:error message:nil details:nil]);
+        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
     }];
 }
 
@@ -632,7 +639,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     if (success) {
         result(@(YES));
     } else {
-        result([FlutterError errorWithCode:@"UNKNOWN_ERROR" message:nil details:nil]);
+        result([FlutterError errorWithCode:@"UNKNOWN_ERROR" message:@"Failed to destroy log" details:nil]);  // (WO-078)
     }
 }
 
@@ -643,7 +650,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     [_locationManager emailLog:email query:query success:^{
         result(@(YES));
     } failure:^(NSString* error) {
-        result([FlutterError errorWithCode:error message:nil details:nil]);
+        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
     }];
 }
 
@@ -654,7 +661,7 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
     [_locationManager uploadLog:url query:query success:^{
         result(@(YES));
     } failure:^(NSString* error) {
-        result([FlutterError errorWithCode:error message:nil details:nil]);
+        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
     }];
 }
 
