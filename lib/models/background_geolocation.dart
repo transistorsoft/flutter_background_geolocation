@@ -492,7 +492,7 @@ class BackgroundGeolocation {
   ///
   /// ## Options
   ///
-  /// #### `@config {int seconds} timeout [30]` An optional location-timeout.  If the timeout expires before a [Location] is retrieved, an error will fire..
+  /// #### `@config {int seconds} timeout [60]` An optional location-timeout.  Defaults to [GeoConfig.locationTimeout], `60` seconds unless you change it.  If the timeout expires before a [Location] is retrieved, an error will fire..
   ///
   /// #### `@config {int millis} maximumAge [0]` Accept the last-recorded-location if no older than supplied value in milliseconds.
   ///

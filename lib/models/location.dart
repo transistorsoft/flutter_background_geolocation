@@ -311,9 +311,12 @@ class Location {
   ///
   late dynamic recordedAt;
 
-  /// The age of the location in milliseconds, relative to the Device system-time when the location was received.
-  /// For example, if the reported `age` is `10000`, that location was recorded 10s ago, relative to the system-time.
-  /// `location.timestamp` + `location.age` = Device system-time when location was recorded.
+  /// The age of the location in seconds, with millisecond precision: how long before the SDK received the location
+  /// the native API had fixed it.  For example, if the reported `age` is `10.0`, that location was fixed 10s before the
+  /// SDK received it.  [recordedAt] is the time the SDK received it.
+  ///
+  /// Before version 5, `age` was an integer number of milliseconds.  If your code compares it against a millisecond
+  /// value, divide that value by 1000.
   late double age;
 
   /// Event which caused this location to be recorded.
