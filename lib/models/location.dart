@@ -70,6 +70,7 @@ bool _mapBool(Map c, String key, {bool fallback = false}) =>
 class Coords {
   /// __`[iOS Only]`__ The current floor within a building.
   /// Only works in an environment containing indoor-tracking hardware (eg: bluetooth beacons).
+  /// `null` when the platform reports no floor, which is almost always; Android never reports one.
   int? floor;
 
   /// Latitude of the location.
