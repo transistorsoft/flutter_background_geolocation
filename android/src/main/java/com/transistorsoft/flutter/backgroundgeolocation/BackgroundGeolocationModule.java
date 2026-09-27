@@ -280,6 +280,9 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         GoogleApiAvailability.getInstance().getErrorDialog(mActivity, errorCode, 1001).show();
     }
 
+    // (WO-078) Every rejection fills `message`: a failure string with no separate code goes in both code and message,
+    // result.error(text, text, null).  Never change a code to do it: Dart and customers match on it ("404", "403").
+    // Only the numeric location-error codes (LocationError) and requestPermission's status keep a null message.
     @SuppressWarnings("unchecked")
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
@@ -396,7 +399,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         if (HeadlessTask.register(mContext, callbacks)) {
             result.success(true);
         } else {
-            result.error("Failed to registerHeadlessTask.  Callback IDs: " + callbacks.toString(), null, null);
+            String failure = "Failed to registerHeadlessTask.  Callback IDs: " + callbacks.toString();
+            result.error(failure, failure, null);  // (WO-078)
         }
     }
 
@@ -442,7 +446,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         BackgroundGeolocation.getInstance(mContext).ready(new TSCallback() {
             @Override public void onSuccess() { resultWithState(result); }
             @Override public void onFailure(String error) {
-                result.error(error, null, null);
+                result.error(error, error, null);  // (WO-078)
             }
         });
     }
@@ -451,7 +455,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         BackgroundGeolocation.getInstance(mContext).start(new TSCallback() {
             @Override public void onSuccess() { resultWithState(result); }
             @Override public void onFailure(String error) {
-                result.error(error, null, null);
+                result.error(error, error, null);  // (WO-078)
             }
         });
     }
@@ -472,7 +476,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     private void startGeofences(final MethodChannel.Result result) {
         BackgroundGeolocation.getInstance(mContext).startGeofences(new TSCallback() {
             @Override public void onSuccess() { resultWithState(result); }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
@@ -480,7 +484,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         if (BackgroundGeolocation.getInstance(mContext).startSchedule()) {
             resultWithState(result);
         } else {
-            result.error("Failed to start schedule.  Did you configure a #schedule?", null, null);
+            String failure = "Failed to start schedule.  Did you configure a #schedule?";
+            result.error(failure, failure, null);  // (WO-078)
         }
     }
 
@@ -496,7 +501,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                 resultWithState(result);
             }
             @Override public void onFailure(String error) {
-                result.error(error, null, null);
+                result.error(error, error, null);  // (WO-078)
             }
         });
     }
@@ -510,7 +515,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                 resultWithState(result);
             }
             @Override public void onFailure(String error) {
-                result.error(error.toString(), null, null);
+                String failure = error.toString();
+                result.error(failure, failure, null);  // (WO-078)
             }
         });
     }
@@ -539,7 +545,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                 try {
                     builder.setExtras(mapToJson((HashMap) extras));
                 } catch (JSONException e) {
-                    result.error(e.getMessage(), null, null);
+                    String failure = e.getMessage();
+                    result.error(failure, failure, null);  // (WO-078)
                     e.printStackTrace();
                     return;
                 }
@@ -577,7 +584,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             try {
                 builder.setExtras(mapToJson((Map) options.get("extras")));
             } catch (JSONException e) {
-                result.error(e.getMessage(), null, null);
+                String failure = e.getMessage();
+                result.error(failure, failure, null);  // (WO-078)
                 return;
             }
         }
@@ -594,7 +602,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
             @Override
             public void onFailure(String error) {
-                result.error(error, null, null);
+                result.error(error, error, null);  // (WO-078)
             }
         });
     }
@@ -610,7 +618,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                 try {
                     result.success(toList(rs));
                 } catch (JSONException e) {
-                    result.error(e.getMessage(), null, null);
+                    String failure = e.getMessage();
+                    result.error(failure, failure, null);  // (WO-078)
                 }
             }
             @Override public void onFailure(Integer error) { result.error(error.toString(), null, null); }
@@ -622,27 +631,28 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         try {
             json = mapToJson(params);
         } catch (JSONException e) {
-            result.error(e.getMessage(), null, null);
+            String failure = e.getMessage();
+            result.error(failure, failure, null);  // (WO-078)
             e.printStackTrace();
             return;
         }
         BackgroundGeolocation.getInstance(mContext).insertLocation(json, new TSInsertLocationCallback() {
             @Override public void onSuccess(String uuid) { result.success(uuid); }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
     private void getCount(final MethodChannel.Result result) {
         BackgroundGeolocation.getInstance(mContext).getCount(new TSGetCountCallback() {
             @Override public void onSuccess(Integer count) { result.success(count); }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
     private void destroyLocations(final MethodChannel.Result result) {
         BackgroundGeolocation.getInstance(mContext).destroyLocations(new TSCallback() {
             @Override public void onSuccess() { result.success(true); }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
@@ -667,10 +677,11 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                     }
                     result.success(toList(rs));
                 } catch (JSONException e) {
-                    result.error(e.getMessage(), null, null);
+                    String failure = e.getMessage();
+                    result.error(failure, failure, null);  // (WO-078)
                 }
             }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
@@ -693,10 +704,11 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         try {
             BackgroundGeolocation.getInstance(mContext).addGeofence(buildGeofence(params), new TSCallback() {
                 @Override public void onSuccess() { result.success(true); }
-                @Override public void onFailure(String error) { result.error(error, null, null); }
+                @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
             });
         } catch (TSGeofence.Exception e) {
-            result.error(e.getMessage(), null, null);
+            String failure = e.getMessage();
+            result.error(failure, failure, null);  // (WO-078)
         }
     }
 
@@ -706,7 +718,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             try {
                 geofences.add(buildGeofence(data.get(n)));
             } catch (TSGeofence.Exception e) {
-                result.error(e.getMessage(), null, null);
+                String failure = e.getMessage();
+                result.error(failure, failure, null);  // (WO-078)
                 return;
             }
         }
@@ -716,7 +729,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                 result.success(true);
             }
             @Override public void onFailure(String error) {
-                result.error(error, null, null);
+                result.error(error, error, null);  // (WO-078)
             }
         });
     }
@@ -725,7 +738,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         BackgroundGeolocation.getInstance(mContext).removeGeofence(identifier, new TSCallback() {
             @Override public void onSuccess() { result.success(true);
             }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
@@ -737,18 +750,20 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
             List<?> list = (List<?>) args;
             for (int n = 0; n < list.size(); n++) {
                 if (!(list.get(n) instanceof String)) {
-                    result.error("removeGeofences: identifier at index " + n + " is not a String", null, null);
+                    String failure = "removeGeofences: identifier at index " + n + " is not a String";
+                    result.error(failure, failure, null);  // (WO-078)
                     return;
                 }
                 identifiers.add((String) list.get(n));
             }
         } else if (args != null) {
-            result.error("removeGeofences: identifiers must be a List", null, null);
+            String failure = "removeGeofences: identifiers must be a List";
+            result.error(failure, failure, null);  // (WO-078)
             return;
         }
         BackgroundGeolocation.getInstance(mContext).removeGeofences(identifiers, new TSCallback() {
             @Override public void onSuccess() { result.success(true); }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
@@ -763,16 +778,18 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                     result.success(rs);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    result.error(e.getMessage(), null, null);
+                    String failure = e.getMessage();
+                    result.error(failure, failure, null);  // (WO-078)
                 }
             }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
     private void getGeofence(String identifier, final MethodChannel.Result result) {
         if (identifier == null) {
-            result.error("Invalid geofence identifier: " + identifier, null, null);
+            String failure = "Invalid geofence identifier: " + identifier;
+            result.error(failure, failure, null);  // (WO-078)
             return;
         }
         BackgroundGeolocation.getInstance(mContext).getGeofence(identifier, new TSGetGeofenceCallback() {
@@ -781,16 +798,18 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                     result.success(geofenceToMap(geofence));
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    result.error(e.getMessage(), null, null);
+                    String failure = e.getMessage();
+                    result.error(failure, failure, null);  // (WO-078)
                 }
             }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
     private void geofenceExists(String identifier, final MethodChannel.Result result) {
         if (identifier == null) {
-            result.error("Invalid geofence identifier: " + identifier, null, null);
+            String failure = "Invalid geofence identifier: " + identifier;
+            result.error(failure, failure, null);  // (WO-078)
             return;
         }
         BackgroundGeolocation.getInstance(mContext).geofenceExists(identifier, new TSGeofenceExistsCallback() {
@@ -868,13 +887,14 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         SQLQuery query = SQLQuery.fromMap(params);
         TSLog.getLog(query, new TSGetLogCallback() {
             @Override public void onSuccess(String log) { result.success(log); }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
     private void emailLog(List<Object> args, final MethodChannel.Result result) {
         if (mActivity == null) {
-            result.error("Activity is null", null, null);
+            String failure = "Activity is null";
+            result.error(failure, failure, null);  // (WO-078)
             return;
         }
 
@@ -885,7 +905,7 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
         TSLog.emailLog(mActivity, email, query, new TSEmailLogCallback() {
             @Override public void onSuccess() { result.success(true); }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
@@ -897,14 +917,14 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
         TSLog.uploadLog(mContext, url, query, new TSCallback() {
             @Override public void onSuccess() { result.success(true); }
-            @Override public void onFailure(String s) { result.error(s, null, null); }
+            @Override public void onFailure(String s) { result.error(s, s, null); }  // (WO-078)
         });
     }
 
     private void destroyLog(final MethodChannel.Result result) {
         TSLog.destroyLog(new TSCallback() {
             @Override public void onSuccess() { result.success(true); }
-            @Override public void onFailure(String error) { result.error(error, null, null); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
         });
     }
 
@@ -1137,7 +1157,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         try {
             return mapToJson(setHeadlessJobService(params));
         } catch (JSONException e) {
-            result.error(e.getMessage(), null, null);
+            String failure = e.getMessage();
+            result.error(failure, failure, null);  // (WO-078)
             e.printStackTrace();
             return null;
         }

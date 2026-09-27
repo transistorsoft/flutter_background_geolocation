@@ -15,6 +15,15 @@
   before, until the level next changed or the app restarted. The HTTP service kept its previous
   `autoSyncThreshold` the same way. `reset()` now takes the same path as `reset(config)`, as on
   React Native, Capacitor and Cordova. (WO-061)
+* [Fixed] A rejected call's `PlatformException.message` now carries the same string as its `code`,
+  on Android and iOS. Until now it was null for most failures, so `e.message` read null where every
+  other Background Geolocation SDK carries the reason. For most calls that string is a
+  human-readable reason; for some it is the SDK's own code (`"404"`) or a server's response body.
+  `code` is unchanged, so existing checks on it keep working. Location errors (`LocationError`)
+  and `requestPermission()`'s status are unchanged. The printed form changes from
+  `PlatformException(<text>, null, null, null)` to `PlatformException(<text>, <text>, null, null)`,
+  so a crash reporter that groups errors by that text may open new issues for existing ones.
+  (WO-078)
 * [Docs] `TransistorAuthorizationToken` and `Config.transistorAuthorizationToken` name the demo
   server's default url with https, `https://tracker.transistorsoft.com`, the default `findOrCreate`
   has used since 4.10.2. The docs said `http://`, which Android 9+ and iOS refuse unless the app allows
