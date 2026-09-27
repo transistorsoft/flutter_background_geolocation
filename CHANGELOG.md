@@ -35,6 +35,8 @@
   native side never answered the call; it now answers, and the `Future` resolves `true` as on Android.
   The native answer to `registerPlugin`, which `BackgroundGeolocationFirebase.configure()` sends, was
   missing in the same way and is now sent too.
+* [Docs] `Coords.floor` documents when it is `null`: whenever the platform reports no floor, which is
+  almost always, and always on Android. The type `int?` is unchanged. (WO-067)
 
 ## 5.8.0 &mdash; 2026-09-23
 
