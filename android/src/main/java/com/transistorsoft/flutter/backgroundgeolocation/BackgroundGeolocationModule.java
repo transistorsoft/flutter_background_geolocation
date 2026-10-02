@@ -719,18 +719,21 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         BackgroundGeolocation.getThreadPool().execute(new Runnable() {
             @Override public void run() {
                 List<TSGeofence> geofences = new ArrayList<>();
-                for (int n=0;n<data.size();n++) {
-                    try {
+                try {
+                    for (int n=0;n<data.size();n++) {
                         geofences.add(buildGeofence(data.get(n)));
-                    } catch (TSGeofence.Exception e) {
-                        final String failure = e.getMessage();
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override public void run() {
-                                result.error(failure, failure, null);  // (WO-078)
-                            }
-                        });
-                        return;
                     }
+                } catch (TSGeofence.Exception | RuntimeException e) {
+                    // (WO-107) Nothing may escape the pool's Runnable: an exception there kills the app, where on the
+                    // main thread the method channel answered it as an error.  A value of the wrong type
+                    // (buildGeofence's casts) is answered like an invalid geofence.
+                    final String failure = e.getMessage() != null ? e.getMessage() : e.toString();
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override public void run() {
+                            result.error(failure, failure, null);  // (WO-078)
+                        }
+                    });
+                    return;
                 }
 
                 BackgroundGeolocation.getInstance(mContext).addGeofences(geofences, new TSCallback() {
