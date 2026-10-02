@@ -501,22 +501,32 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 }
 
 - (void) addGeofences:(NSArray*)data result:(FlutterResult)result {
-    NSMutableArray *geofences = [NSMutableArray new];
-    for (NSDictionary *params in data) {
-        TSGeofence *geofence = [self buildGeofence:params];
-        if (geofence != nil) {
-            [geofences addObject:geofence];
-        } else {
-            NSString *error = [NSString stringWithFormat:@"Invalid geofence data: %@", params];
-            result([FlutterError errorWithCode:@"BUILD_GEOFENCE_ERROR" message:error details:nil]);
-            return;
+    // (WO-107) handleMethodCall runs on the main thread, and creating a polygon TSGeofence computes its minimum
+    // enclosing circle: build off it.  Every reply goes back to the main thread.
+    dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0), ^{
+        NSMutableArray *geofences = [NSMutableArray new];
+        for (NSDictionary *params in data) {
+            TSGeofence *geofence = [self buildGeofence:params];
+            if (geofence != nil) {
+                [geofences addObject:geofence];
+            } else {
+                NSString *error = [NSString stringWithFormat:@"Invalid geofence data: %@", params];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    result([FlutterError errorWithCode:@"BUILD_GEOFENCE_ERROR" message:error details:nil]);
+                });
+                return;
+            }
         }
-    }
-    [_locationManager addGeofences:geofences success:^{
-        result(@(YES));
-    } failure:^(NSString *error) {
-        result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
-    }];
+        [self->_locationManager addGeofences:geofences success:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                result(@(YES));
+            });
+        } failure:^(NSString *error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                result([FlutterError errorWithCode:error message:error details:nil]);  // (WO-078)
+            });
+        }];
+    });
 }
 
 -(TSGeofence*) buildGeofence:(NSDictionary*)params {
