@@ -712,24 +712,35 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         }
     }
 
-    private void addGeofences(@NonNull List<Map<String, Object>> data, final MethodChannel.Result result) {
-        List<TSGeofence> geofences = new ArrayList<>();
-        for (int n=0;n<data.size();n++) {
-            try {
-                geofences.add(buildGeofence(data.get(n)));
-            } catch (TSGeofence.Exception e) {
-                String failure = e.getMessage();
-                result.error(failure, failure, null);  // (WO-078)
-                return;
-            }
-        }
+    private void addGeofences(@NonNull final List<Map<String, Object>> data, final MethodChannel.Result result) {
+        // (WO-107) onMethodCall runs on the main thread, and building a polygon geofence computes its minimum
+        // enclosing circle: thousands of them held the UI until they were done.  Build on the SDK's pool; the
+        // SDK answers on the main thread, and a build failure is posted back to it.
+        BackgroundGeolocation.getThreadPool().execute(new Runnable() {
+            @Override public void run() {
+                List<TSGeofence> geofences = new ArrayList<>();
+                for (int n=0;n<data.size();n++) {
+                    try {
+                        geofences.add(buildGeofence(data.get(n)));
+                    } catch (TSGeofence.Exception e) {
+                        final String failure = e.getMessage();
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override public void run() {
+                                result.error(failure, failure, null);  // (WO-078)
+                            }
+                        });
+                        return;
+                    }
+                }
 
-        BackgroundGeolocation.getInstance(mContext).addGeofences(geofences, new TSCallback() {
-            @Override public void onSuccess() {
-                result.success(true);
-            }
-            @Override public void onFailure(String error) {
-                result.error(error, error, null);  // (WO-078)
+                BackgroundGeolocation.getInstance(mContext).addGeofences(geofences, new TSCallback() {
+                    @Override public void onSuccess() {
+                        result.success(true);
+                    }
+                    @Override public void onFailure(String error) {
+                        result.error(error, error, null);  // (WO-078)
+                    }
+                });
             }
         });
     }

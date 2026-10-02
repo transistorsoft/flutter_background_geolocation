@@ -2,6 +2,12 @@
 
 ## 5.8.8 &mdash; 2026-09-27
 
+* [Fixed] `addGeofences()` no longer blocks the main thread while it builds the geofences. The plugin
+  built every geofence, computing each polygon's enclosing circle, in its method-call handler, which
+  runs on the main thread on both Android and iOS, so adding thousands of polygons in one call held the
+  app's UI until they were built. They are now built on a background thread, and the call replies on
+  the main thread as before. The arguments themselves are still decoded on the main thread, so very
+  large adds still benefit from batching. (WO-107)
 * [Fixed] `TransistorAuthorizationToken.findOrCreate()` no longer waits forever when the demo server
   refuses the registration with HTTP 403. The returned `Future` now completes with an `Error` whose
   `code` is `403`, as Capacitor and Cordova reject. It never completed on iOS, where every 403 took
