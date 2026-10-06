@@ -1,14 +1,11 @@
 # CHANGELOG
 
-## Unreleased
+## 5.8.1 &mdash; 2026-10-06
 
 * [Fixed][Android] The build no longer fails on Android Gradle Plugin 9 with `Could not get unknown
   property 'applicationVariants'`. `android/background_geolocation.gradle`, which the app applies from
   its `android/app/build.gradle`, used an API that Android Gradle Plugin 9 removed. The script is now
   empty: it was meant to strip the SDK's debug sound files from release builds, which it no longer did.
-
-## 5.8.1 &mdash; 2026-10-05
-
 * [Fixed] `addGeofences()` no longer blocks the main thread while it builds the geofences. The plugin
   built every geofence, computing each polygon's enclosing circle, in its method-call handler, which
   runs on the main thread on both Android and iOS, so adding thousands of polygons in one call held the
