@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 5.8.8 &mdash; 2026-09-27
+## 5.8.1 &mdash; 2026-10-05
 
 * [Fixed] `addGeofences()` no longer blocks the main thread while it builds the geofences. The plugin
   built every geofence, computing each polygon's enclosing circle, in its method-call handler, which
@@ -8,6 +8,22 @@
   app's UI until they were built. They are now built on a background thread, and the call replies on
   the main thread as before. The arguments themselves are still decoded on the main thread, so very
   large adds still benefit from batching. (WO-107)
+* [iOS] Minimum `TSLocationManager` is now 4.7.2 (pinned `~> 4.7.2`, CocoaPods and Swift Package
+  Manager). Among its fixes: `stop()` now releases the location monitoring that an earlier run of the
+  app left registered with iOS, which kept waking a stopped app; `preventSuspend` no longer stops a few
+  minutes into the background; and `persistence.maxRecordsToPersist`, `maxDaysToPersist` or
+  `persistMode` set to a string that is not a whole number takes the setting's default, where iOS read
+  it as `0`.
+* [Android] Minimum `tslocationmanager` is now 4.6.2. The plugin pins that version in place of `4.6.+`,
+  and raises an older `ext.tslocationmanagerVersion` to it with a build warning. Among its fixes: a
+  location the SDK has already processed is no longer handed to it again after Android kills the app's
+  process; the SDK's foreground services no longer do work on the main thread for every location, which
+  Android could report as the app not responding (#1718); `stop()` no longer blocks the main thread for
+  longer the more geofences are stored; and a stationary-geofence EXIT is accepted whenever its
+  location is provably outside the region, however poor that location's accuracy.
+
+## 5.8.0 &mdash; 2026-09-27
+
 * [Fixed] `TransistorAuthorizationToken.findOrCreate()` no longer waits forever when the demo server
   refuses the registration with HTTP 403. The returned `Future` now completes with an `Error` whose
   `code` is `403`, as Capacitor and Cordova reject. It never completed on iOS, where every 403 took
@@ -75,9 +91,6 @@
   missing in the same way and is now sent too.
 * [Docs] `Coords.floor` documents when it is `null`: whenever the platform reports no floor, which is
   almost always, and always on Android. The type `int?` is unchanged. (WO-067)
-
-## 5.8.0 &mdash; 2026-09-23
-
 * [Breaking] `removeListeners()` is `Future<void>`, as the documented contract has always said and
   as every other Background Geolocation SDK resolves it. It was `Future<bool>`, resolving a constant
   `true` that carried no information. Only code that assigned the value — `bool ok = await
