@@ -575,10 +575,10 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
 }
 
 - (void) removeGeofences:(id)identifiers result:(FlutterResult)result {
-    // (WO-053) An empty list means "remove all" to the core: only an omitted (nil) argument becomes @[],
-    // a malformed one answers an error.
+    // (WO-055) An omitted (nil) argument is "remove all": the core is handed nil.  A list removes the ones it
+    // names, and an empty list none.  (WO-053) A malformed argument answers an error.
     if (!identifiers || identifiers == [NSNull null]) {
-        identifiers = @[];
+        identifiers = nil;
     } else if (![identifiers isKindOfClass:[NSArray class]]) {
         NSString *failure = @"removeGeofences: identifiers must be a List";
         result([FlutterError errorWithCode:failure message:failure details:nil]);  // (WO-078)
