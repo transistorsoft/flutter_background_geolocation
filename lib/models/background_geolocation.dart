@@ -838,6 +838,9 @@ class BackgroundGeolocation {
 
   /// Remove all monitored [Geofence] records, or a specific subset by identifier.
   ///
+  /// With no argument, removes every geofence. With a list of identifiers, removes only the
+  /// geofences it names. An empty list removes none.
+  ///
   /// ## Example
   ///
   /// ```dart
@@ -850,6 +853,7 @@ class BackgroundGeolocation {
   ///
   static Future<bool> removeGeofences([List<String>? identifiers]) async {
     // (WO-053) null (omitted) means all; the natives answer an error for anything but a list.
+    // (WO-055) An empty list is sent as one, and removes none.
     return (await _methodChannel.invokeMethod<bool>(
         'removeGeofences', identifiers)) as FutureOr<bool>;
   }

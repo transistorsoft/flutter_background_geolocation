@@ -1204,7 +1204,7 @@ class MacroConfigMaxImpliedSpeed {}
 /// | `addGeofence`       | `{Geofence}`                           | `BackgroundGeolocation.addGeofence({...})`                     |
 /// | `addGeofences`      | `[{Geofence}, ...]`                    | `BackgroundGeolocation.addGeofences([...])`                    |
 /// | `removeGeofence`    | `identifier:String`                    | `BackgroundGeolocation.removeGeofence(id)`                     |
-/// | `removeGeofences`   | none or `[identifier:String,...]`      | Remove all or list of geofences                                |
+/// | `removeGeofences`   | none or `[identifier:String,...]`      | Remove all, or the listed geofences; `[]` removes none         |
 /// | `uploadLog`         | `url:String`                           | Upload the plugin log to `url`                                 |
 /// | `destroyLog`        | none                                   | Delete the on-device plugin log                                |
 ///
