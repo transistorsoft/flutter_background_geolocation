@@ -852,8 +852,10 @@ class BackgroundGeolocation {
   /// ```
   ///
   static Future<bool> removeGeofences([List<String>? identifiers]) async {
+    // (WO-055) An empty list names none.  It never crosses to native, where both cores read an
+    // empty list as "remove all".
+    if (identifiers != null && identifiers.isEmpty) return true;
     // (WO-053) null (omitted) means all; the natives answer an error for anything but a list.
-    // (WO-055) An empty list is sent as one, and removes none.
     return (await _methodChannel.invokeMethod<bool>(
         'removeGeofences', identifiers)) as FutureOr<bool>;
   }

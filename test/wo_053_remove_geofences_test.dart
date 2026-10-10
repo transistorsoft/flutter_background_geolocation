@@ -1,6 +1,6 @@
 // (WO-053) removeGeofences() sends its identifiers over the channel: the list must arrive as sent
-// and an omitted one as null.  (WO-055) null is "remove all" to both natives; an empty list
-// removes none.
+// and an omitted one as null, which both natives read as "remove all".  (WO-055) An empty list
+// names none and never crosses: both cores read an empty list as "remove all".
 import 'package:flutter/services.dart';
 import 'package:flutter_background_geolocation/flutter_background_geolocation.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -39,8 +39,8 @@ void main() {
     expect(calls.single.arguments, isNull);
   });
 
-  test('WO-053 WO-055 removeGeofences([]) sends an empty list, not null', () async {
-    await BackgroundGeolocation.removeGeofences([]);
-    expect(calls.single.arguments, isEmpty);
+  test('WO-055 removeGeofences([]) answers true without calling the channel', () async {
+    expect(await BackgroundGeolocation.removeGeofences([]), true);
+    expect(calls, isEmpty);
   });
 }

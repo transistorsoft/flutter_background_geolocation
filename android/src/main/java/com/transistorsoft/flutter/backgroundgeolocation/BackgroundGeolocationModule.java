@@ -757,16 +757,8 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     }
 
     private void removeGeofences(Object args, final MethodChannel.Result result) {
-        TSCallback callback = new TSCallback() {
-            @Override public void onSuccess() { result.success(true); }
-            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
-        };
-        // (WO-055) An omitted (null) argument is "remove all" and goes to the core's no-list overload.  A list
-        // removes the ones it names, and an empty list none.  (WO-053) A malformed argument answers an error.
-        if (args == null) {
-            BackgroundGeolocation.getInstance(mContext).removeGeofences(callback);
-            return;
-        }
+        // (WO-053) An empty list means "remove all" to the core: only an omitted (null) argument becomes [],
+        // a malformed one answers an error.
         List<String> identifiers = new ArrayList<>();
         if (args instanceof List) {
             List<?> list = (List<?>) args;
@@ -778,12 +770,15 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
                 }
                 identifiers.add((String) list.get(n));
             }
-        } else {
+        } else if (args != null) {
             String failure = "removeGeofences: identifiers must be a List";
             result.error(failure, failure, null);  // (WO-078)
             return;
         }
-        BackgroundGeolocation.getInstance(mContext).removeGeofences(identifiers, callback);
+        BackgroundGeolocation.getInstance(mContext).removeGeofences(identifiers, new TSCallback() {
+            @Override public void onSuccess() { result.success(true); }
+            @Override public void onFailure(String error) { result.error(error, error, null); }  // (WO-078)
+        });
     }
 
     private void getGeofences(final MethodChannel.Result result) {
