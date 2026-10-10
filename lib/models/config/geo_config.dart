@@ -311,15 +311,15 @@ class GeoConfig {
 
 /// {@macro location_filter.kalman_profile}
 enum KalmanProfile {
-  /// Balanced for general-purpose movement (**default**).
+  /// The SDK's Kalman tuning (**default**).
   ///
   /// This is the default value if no profile is specified.
   defaultProfile(0),
 
-  /// Aggressive: responds faster to motion, with less smoothing.
+  /// Reserved. Currently applies the same tuning as `defaultProfile`.
   aggressive(1),
 
-  /// Conservative: maximum smoothing, slower to react to sudden changes.
+  /// Reserved. Currently applies the same tuning as `defaultProfile`.
   conservative(2);
 
   final int id;
