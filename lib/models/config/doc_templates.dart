@@ -638,22 +638,13 @@ class MacroConfigFilter {}
 class MacroLocationFilterPolicy {}
 
 /// {@template location_filter.kalman_profile}
-/// Specifies the preset tuning profile for the Kalman filter used in location denoising.
+/// Selects a preset tuning profile for the Kalman filter.
 ///
-/// Each profile adjusts the Kalman filter's process and measurement noise settings,
-/// trading off between responsiveness and smoothness:
+/// **Reserved:** in the current SDK the three profiles apply the same tuning on
+/// both iOS and Android, so changing this value has no effect. The value is
+/// accepted and stored.
 ///
-/// | Profile         | Behavior                                                            |
-/// |-----------------|---------------------------------------------------------------------|
-/// | `defaultProfile`| **Balanced** – General-purpose, suitable for most movement types.   |
-/// | `aggressive`    | **Aggressive** – Responds quickly to changes, less smoothing.       |
-/// | `conservative`  | **Conservative** – Maximum smoothing, slowest to react to changes.  |
-///
-/// - The `defaultProfile` is used if no profile is specified.
-/// - Select `aggressive` for fast-changing, dynamic motion where quick response is needed.
-/// - Select `conservative` for activities where smooth, stable tracks are preferred over rapid response.
-///
-/// This setting corresponds to Android’s `KalmanProfile` and iOS’ equivalent Kalman tuning.
+/// The `defaultProfile` is used if no profile is specified.
 ///
 /// {@endtemplate}
 /// @nodoc
