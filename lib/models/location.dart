@@ -335,12 +335,54 @@ class Location {
   ///
   late bool sample;
 
-  /// The current distance traveled.
+  /// Accumulated distance traveled in meters since the last odometer reset.
   ///
-  /// __See also:__
+  /// The SDK integrates the distance between each pair of accepted locations
+  /// to maintain a running total. This value survives app restarts unless
+  /// explicitly reset.
+  ///
+  /// ## How it's calculated
+  ///
+  /// - Every location the tracking filter accepts goes through the odometer's
+  ///   position filter, which follows the fixes as closely as their own speed
+  ///   warrants (`kalmanProfile`), and the odometer adds the distance between the
+  ///   positions it last added to.
+  /// - A location whose accuracy is worse than
+  ///   [LocationFilter.odometerAccuracyThreshold] is refused and moves
+  ///   nothing.
+  /// - Across a gap in the fixes (a tunnel, a garage, an app restart) the odometer
+  ///   adds the straight-line distance between the last position it added to and
+  ///   the first fix after the gap.
+  ///
+  /// ## When it increases
+  ///
+  /// - After the device moves and a new location is recorded.
+  /// - While the device is stationary, only when its fixes move beyond the hold
+  ///   radius their accuracy sets.
+  ///
+  /// ## When it does not increase
+  ///
+  /// - When a sample fails accuracy thresholds.
+  /// - While the device is stationary and its fixes wander within their accuracy.
+  /// - In geofences-only mode, and under `useSignificantChangesOnly`: the odometer
+  ///   runs only while location tracking is on.
+  ///
+  /// **See also**
+  /// - [LocationFilter]
+  /// - [LocationFilter.odometerAccuracyThreshold]
   /// - [BackgroundGeolocation.setOdometer]
   /// - [BackgroundGeolocation.odometer]
   ///
+  /// ## Example
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.onLocation((Location location) {
+  ///   print('Distance traveled: ${location.odometer}');
+  /// });
+  ///
+  /// // Reset at the start of a trip
+  /// await BackgroundGeolocation.setOdometer(0);
+  /// ```
   late double odometer;
 
   /// `true` if this `Location` was recored while the device was in-motion.
