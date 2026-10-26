@@ -96,9 +96,12 @@ static NSString *const ACTION_DESTROY_TRANSISTOR_TOKEN = @"destroyTransistorToke
         ready = NO;
         _locationManager = [TSLocationManager sharedInstance];
 
-        // Provide reference to rootViewController for #emailLog method.
-        UIViewController *root = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
-        _locationManager.viewController = root;
+        // Provide a view controller for the SDK's alerts.  (RN #2675) UIApplicationDelegate.window is optional: an app
+        // delegate that doesn't inherit FlutterAppDelegate may have none, and sending it -window throws.
+        id<UIApplicationDelegate> appDelegate = [[UIApplication sharedApplication] delegate];
+        if ([appDelegate respondsToSelector:@selector(window)]) {
+            _locationManager.viewController = appDelegate.window.rootViewController;
+        }
     }
     return self;
 }

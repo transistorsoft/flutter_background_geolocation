@@ -16,6 +16,10 @@
   pinned `4.7.0` exactly. An app that sets no `ext.tslocationmanagerVersion` of its own now picks up
   each native patch release at its next build, as it already does on iOS (`TSLocationManager`
   `~> 4.8.0`). An app that sets its own version keeps it.
+* [Fixed][iOS] An app whose `AppDelegate` doesn't inherit `FlutterAppDelegate` and has no `window`
+  property, for example one using the UIScene lifecycle, crashed with `-[AppDelegate window]:
+  unrecognized selector sent to instance` when the plugin was created. Apps on Flutter's own
+  `FlutterAppDelegate` were not affected.
 
 ## 5.9.0 &mdash; 2026-10-09
 
