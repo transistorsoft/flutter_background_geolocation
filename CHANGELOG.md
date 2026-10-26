@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.9.1 &mdash; 2026-10-26
 
 * [Changed] `removeGeofences([])` now removes no geofence. An empty list used to remove every
   geofence, as `removeGeofences()` with no argument does, so a call whose list turned out empty, for
@@ -16,6 +16,35 @@
   pinned `4.7.0` exactly. An app that sets no `ext.tslocationmanagerVersion` of its own now picks up
   each native patch release at its next build, as it already does on iOS (`TSLocationManager`
   `~> 4.8.0`). An app that sets its own version keeps it.
+* [Changed][Android] The odometer now integrates filtered positions (`tslocationmanager` 4.7.1), as
+  on iOS since `TSLocationManager` 4.8.1. A refused fix, a gap or a process restart no longer loses
+  the road travelled: across a signal loss (a tunnel, a garage) the distance is caught up as a
+  straight line; a parked device no longer adds GPS wander while the OS reports it stationary; and
+  when the device reports no speed, back-and-forth movement within a few tens of meters is not
+  counted. `LocationFilter.kalmanProfile` now selects how strongly the odometer smooths the path at
+  walking pace, and `odometerUseKalmanFilter: false` integrates the fixes themselves. At a stop, the
+  distance still held is added when the device next moves, not at the stationary `onMotionChange`,
+  so per-trip differences between motionchange records shift; a trip ended by `stop()` or
+  `setOdometer` loses the distance still held (0 to 24 m on our recordings). **Odometer values move
+  on upgrade:** on our recordings −0.6 to +1.7 % per trip at `distanceFilter: 0`, and up to +11.5 %
+  on a trip through a tunnel at the default `distanceFilter`. The `odometer_error` your server
+  receives becomes an uncertainty index with no confidence level, 5 to 15 times smaller than before
+  once the app next calls `setOdometer` (an upgraded install continues from its stored value until
+  then). If you bill on odometer values, compare a release build against your current one before
+  shipping. (WO-166)
+* [Fixed][Android] The range also brings what `tslocationmanager` 4.7.1 to 4.7.6 fixed: a polygon
+  geofence no longer loses its ENTER for the rest of a visit when the device enters the polygon's
+  circle outside the polygon and walks in later (WO-174); `Logger.uploadLog` now sends the
+  `authorization` token as well as `http.headers`, so an app that authenticates through
+  `authorization` no longer has its log upload refused (a pre-signed storage URL that refuses an
+  `Authorization` header now fails when `authorization` sets a token); a 307 or 308 redirect
+  answering location sync is now followed when its `Location` is a full URL or a relative path, to
+  the same host only, never from https to http, and at most 20 times in a row, where every sync
+  failed with status 0 and kept its locations; `Logger.emailLog` now grants the mail app read access
+  to the attached log; the SDK's foreground services no longer keep every start they are given,
+  which grew the app's heap by about 1 KB per location while the device moved (#1720); and while it
+  waits for `ready()` the SDK now holds at most 100 of each event, where an app reopened during
+  tracking that did not call `ready()` again held every location until it ran out of memory (#1720).
 * [Fixed][iOS] An app whose `AppDelegate` doesn't inherit `FlutterAppDelegate` and has no `window`
   property, for example one using the UIScene lifecycle, crashed with `-[AppDelegate window]:
   unrecognized selector sent to instance` when the plugin was created. Apps on Flutter's own

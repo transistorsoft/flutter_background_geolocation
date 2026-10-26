@@ -174,7 +174,70 @@ class GeoConfig {
   /// {@macro config.geofence_mode_high_accuracy}
   final bool? geofenceModeHighAccuracy; // boolean
 
-  /// {@macro config.filter}
+  /// Defines how raw GPS samples are filtered, denoised, and smoothed before being
+  /// recorded or used for odometer calculations.
+  ///
+  /// `LocationFilter` is supplied via [GeoConfig.filter] and provides
+  /// fine-grained control over how the SDK handles noisy or inconsistent
+  /// location data from the underlying platform.
+  ///
+  /// The native platform continuously produces raw `CLLocation` (iOS) or `Location`
+  /// (Android) samples. The filter applies rolling-window averaging,
+  /// and speed, distance, and accuracy constraints to produce smoother paths, reduce
+  /// jitter, and improve odometer stability.
+  ///
+  /// ## Filtering flow
+  ///
+  /// ![](https://dl.dropbox.com/scl/fi/71rkzdo2tr3qm651ulou8/location-filter-flowchart.svg?rlkey=16zxs3lnqvlrw137974jbsoj7&dl=1)
+  ///
+  /// | Field | Description |
+  /// |-------|-------------|
+  /// | **[LocationFilter.policy]** | Selects which filtering policy to apply. See [LocationFilterPolicy]. |
+  /// | **[LocationFilter.useKalman]** | Has no effect on delivered locations (default: `true`). |
+  /// | **[LocationFilter.kalmanDebug]** | Logs the odometer filter's values for each location (default: `false`). |
+  /// | **[LocationFilter.kalmanProfile]** | Selects how strongly the odometer smooths the path at slow speeds (see [KalmanProfile]). |
+  /// | **[LocationFilter.rollingWindow]** | Number of samples for rolling burst averaging. Larger values increase smoothness but reduce responsiveness. |
+  /// | **[LocationFilter.burstWindow]** | Duration of each averaging burst (seconds). Default: `10`. |
+  /// | **[LocationFilter.maxBurstDistance]** | Maximum distance (meters) for samples to be included in the same burst window. Default: `300`. |
+  /// | **[LocationFilter.trackingAccuracyThreshold]** | Maximum GPS horizontal accuracy (meters) required to accept a location. Default: `100`. |
+  /// | **[LocationFilter.maxImpliedSpeed]** | Maximum implied speed (m/s) before rejecting a sample as unrealistic. Default: `60` (~216 km/h). |
+  /// | **[LocationFilter.filterDebug]** | Enables verbose logging of filter decisions (`ACCEPTED`, `REJECTED`, etc). |
+  /// | **[LocationFilter.odometerUseKalmanFilter]** | Switches the odometer's position filter (default: `true`). |
+  /// | **[LocationFilter.odometerAccuracyThreshold]** | Maximum accuracy (meters) allowed for a sample to affect the odometer. Default: `20`. |
+  ///
+  /// ## Note
+  /// - Distances are in **meters**.
+  /// - Time fields are in **seconds** unless otherwise specified.
+  /// - Filtering affects **recorded** locations only — it does not influence real-time motion detection.
+  ///
+  /// ## Example 1
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.ready(Config(
+  ///   geolocation: GeoConfig(
+  ///     filter: LocationFilter(
+  ///       policy: LocationFilterPolicy.adjust,
+  ///       useKalman: true,
+  ///       kalmanProfile: KalmanProfile.defaultProfile,
+  ///       trackingAccuracyThreshold: 100.0,
+  ///       odometerAccuracyThreshold: 20.0
+  ///     )
+  ///   )
+  /// ));
+  /// ```
+  ///
+  /// ## Example 2
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.ready(Config(
+  ///   geolocation: GeoConfig(
+  ///     filter: LocationFilter(
+  ///       policy: LocationFilterPolicy.passThrough,
+  ///       useKalman: false
+  ///     )
+  ///   )
+  /// ));
+  /// ```
   final LocationFilter? filter; // compound object
 
   /// {@macro config.pauses_location_updates_automatically}
@@ -309,17 +372,25 @@ class GeoConfig {
       );
 }
 
-/// {@macro location_filter.kalman_profile}
+/// How strongly the odometer smooths the path while the device moves slowly.
+///
+/// `aggressive` follows the fixes most, `conservative` smooths most and cuts the
+/// most corners, `defaultProfile` sits between. At riding and driving speed the three
+/// agree; they differ at walking pace, between about 1 and 3 m/s, mostly with
+/// `distanceFilter: 0`. The profile applies only to the odometer.
+///
+/// If no profile is provided, `defaultProfile` is applied.
 enum KalmanProfile {
-  /// The SDK's Kalman tuning (**default**).
-  ///
-  /// This is the default value if no profile is specified.
+  /// The SDK's default: between the other two, for most apps.
   defaultProfile(0),
 
-  /// Reserved. Currently applies the same tuning as `defaultProfile`.
+  /// Follows the fixes most closely: the least smoothing, the most of a slow path
+  /// kept, and the most GPS wander counted.
   aggressive(1),
 
-  /// Reserved. Currently applies the same tuning as `defaultProfile`.
+  /// Smooths most: the steadiest total at riding and driving speed, the most
+  /// corners cut at walking pace, and 20 to 50 % short on short back-and-forth
+  /// paths.
   conservative(2);
 
   final int id;
@@ -331,26 +402,105 @@ enum KalmanProfile {
           orElse: () => KalmanProfile.defaultProfile);
 }
 
-/// {@macro location_filter.policy}
+/// Defines the filtering policy applied to incoming raw GPS samples before they
+/// are accepted, averaged, or rejected by the [LocationFilter].
+///
+/// The filtering policy determines how aggressively the plugin removes noisy,
+/// inaccurate, or redundant location updates. It represents the *first stage*
+/// in the SDK’s data-quality pipeline — before burst averaging,
+/// or other denoising steps are applied.
+///
+/// Choosing the correct policy depends on your app’s tolerance for jitter versus
+/// responsiveness:
+///
+/// - Fitness or vehicle-tracking apps often prefer stronger filtering.
+/// - Survey or scientific apps may prefer capturing unmodified raw samples.
+///
+/// **Profiles**
+///
+/// | Policy | Description | Use Case |
+/// |--------|-------------|----------|
+/// | [LocationFilterPolicy.passThrough] | **No filtering.** Every received sample is recorded, even if noisy or identical to the previous one. | Debugging, diagnostics, scenarios requiring raw data. |
+/// | [LocationFilterPolicy.adjust] | **Balanced filtering.** Smooths and rejects only clearly invalid samples. | Most use cases — walking, cycling, automotive tracking. |
+/// | [LocationFilterPolicy.conservative] | **Strict filtering.** Strongly smooths data and rejects high-variance samples, prioritizing stability over responsiveness. *(Default)* | Analytics, long-term background logging, noise-sensitive applications. |
+///
+/// **Notes**
+///
+/// - This policy affects only the SDK’s *internal* filtering pipeline.
+///   It does **not** modify the raw values returned to [BackgroundGeolocation.onLocation].
+/// - For more granular tuning, see [LocationFilter.trackingAccuracyThreshold],
+///   [LocationFilter.maxImpliedSpeed], and other [LocationFilter] fields.
+///
+/// **Examples**
+///
+/// ## Example 1
+///
+/// ```dart
+/// BackgroundGeolocation.ready(Config(
+///   geolocation: GeoConfig(
+///     filter: LocationFilter(
+///       policy: LocationFilterPolicy.adjust
+///     )
+///   )
+/// ));
+/// ```
+///
+/// ## Example 2
+///
+/// ```dart
+/// BackgroundGeolocation.ready(Config(
+///   geolocation: GeoConfig(
+///     filter: LocationFilter(
+///       policy: LocationFilterPolicy.passThrough
+///     )
+///   )
+/// ));
+/// ```
+///
+/// ## Example 3
+///
+/// ```dart
+/// BackgroundGeolocation.ready(Config(
+///   geolocation: GeoConfig(
+///     filter: LocationFilter(
+///       policy: LocationFilterPolicy.conservative
+///     )
+///   )
+/// ));
+/// ```
+///
+/// **See also**
+/// - [GeoConfig.filter]
+/// - [LocationFilter]
+/// - [KalmanProfile]
 enum LocationFilterPolicy {
   /// No filtering — accept all samples (useful for debugging or raw capture).
   passThrough,
 
   /// Balanced — applies moderate filtering to reject noisy samples.
-  /// Dynamically adjusts acceptance thresholds for incoming location samples,
-  /// *not* the raw coordinates themselves.
   ///
-  /// When using `adjust`, the SDK computes motion metrics such as
-  /// distance deltas, implied speed, accuracy variance, and heading stability.
-  /// It then applies adaptive gating rules to decide whether each sample should
-  /// be accepted, ignored, or rejected as noise.
+  /// Dynamically adjusts acceptance thresholds for incoming samples, but **never**
+  /// alters the raw latitude/longitude coordinates.
   ///
-  /// **No changes are made to latitude or longitude values.**
+  /// When using [LocationFilterPolicy.adjust], the SDK computes
+  /// motion metrics such as:
   ///
-  /// In effect, this policy “adjusts” the *criteria* for inclusion, not the
-  /// *positions* themselves. When [LocationFilter.useKalman] is enabled, samples may be
-  /// smoothed for noise reduction, but their physical coordinates remain
-  /// untouched.
+  /// - distance deltas
+  /// - implied speed
+  /// - accuracy variance
+  /// - heading stability
+  ///
+  /// It then applies adaptive gating rules to decide whether each sample should be:
+  ///
+  /// - accepted
+  /// - ignored
+  /// - rejected as noise
+  ///
+  /// **Coordinates are never modified.** This policy adjusts *which* samples are
+  /// included, not *how* they are positioned.
+  ///
+  /// [LocationFilter.useKalman] has no effect on delivered locations:
+  /// the physical coordinates of each accepted sample remain untouched.
   adjust,
 
   /// Aggressive (default) — filters heavily to remove noise, preferring stability.
@@ -358,23 +508,222 @@ enum LocationFilterPolicy {
   conservative,
 }
 
-/// {@macro config.filter}
+/// Filters, denoises, and smooths raw GPS samples before they are recorded or
+/// used for odometer calculations.
+///
+/// `LocationFilter` is supplied via [GeoConfig.filter] and provides
+/// fine-grained control over how the SDK handles noisy or inconsistent location
+/// data from the underlying platform.
+///
+/// ## Contents
+/// - [Overview](#overview)
+/// - [Policy scope](#policy-scope)
+/// - [Examples](#examples)
+///
+/// ---
+///
+/// ## Overview
+///
+/// The SDK applies several processing stages to each raw GPS sample before
+/// recording it: an accuracy gate, rolling-window burst detection, and speed
+/// and distance constraints; the odometer runs its own position filter on the
+/// samples that pass. Coordinates are never modified.
+///
+/// ![](https://dl.dropbox.com/scl/fi/71rkzdo2tr3qm651ulou8/location-filter-flowchart.svg?rlkey=16zxs3lnqvlrw137974jbsoj7&dl=1)
+///
+/// | Field | Description |
+/// |-------|-------------|
+/// | [policy] | Selects which filtering policy to apply. See [LocationFilterPolicy]. |
+/// | [useKalman] | Has no effect on delivered locations (default: `true`). |
+/// | [kalmanDebug] | Logs the odometer filter's values for each location (default: `false`). |
+/// | [kalmanProfile] | Selects how strongly the odometer smooths the path at slow speeds (see [KalmanProfile]). |
+/// | [rollingWindow] | Number of samples for rolling burst averaging. Larger values increase smoothness but reduce responsiveness. Default: `5`. |
+/// | [burstWindow] | Duration of each averaging burst (seconds). Default: `10`. |
+/// | [maxBurstDistance] | Maximum distance (meters) for samples included in the same burst window. Default: `300`. |
+/// | [trackingAccuracyThreshold] | Maximum GPS horizontal accuracy (meters) required to accept a location. Default: `100`. |
+/// | [maxImpliedSpeed] | Maximum implied speed (m/s) before rejecting a sample as unrealistic. Default: `60` (≈ 216 km/h). |
+/// | [filterDebug] | Enables verbose logging of filter decisions (default: `false`). |
+/// | [odometerUseKalmanFilter] | Switches the odometer's position filter (default: `true`). |
+/// | [odometerAccuracyThreshold] | Maximum accuracy (meters) allowed for a sample to affect the odometer. Default: `20`. |
+/// | [odometerPolicy] | Filtering policy for odometer samples — use `conservative` to reject GPS teleports entirely. Default: `adjust`. |
+///
+/// - Distances are in **meters**.
+/// - Time fields are in **seconds** unless noted otherwise.
+/// - Filtering affects **recorded** locations only — it does not influence real-time motion detection.
+///
+/// ## Example
+///
+/// ```dart
+/// BackgroundGeolocation.ready(Config(
+///   geolocation: GeoConfig(
+///     filter: LocationFilter(
+///       policy: LocationFilterPolicy.adjust,
+///       useKalman: true,
+///       kalmanProfile: KalmanProfile.defaultProfile,
+///       trackingAccuracyThreshold: 100.0,
+///       odometerAccuracyThreshold: 20.0
+///     )
+///   )
+/// ));
+/// ```
+///
+/// ---
+///
+/// ## Policy scope
+///
+/// [policy] controls only the **decision phase** — how the filter responds
+/// to a sample *after* its motion metrics are computed. Several fields apply
+/// regardless of the chosen policy:
+///
+/// | Field | Governed by `policy`? | Behaviour |
+/// |-------|:---------------------:|-----------|
+/// | [trackingAccuracyThreshold] | No | Accuracy gate. A fix whose accuracy is worse than this is **rejected before** the policy runs — under *every* policy, including `passThrough`. Set to `0` to disable the gate. |
+/// | [useKalman], [kalmanProfile] | — | Neither affects the tracking `policy`: `useKalman` has no effect on delivered locations, and `kalmanProfile` governs the odometer's filter. |
+/// | [maxBurstDistance], [burstWindow] | Yes | Define a GPS "spike" (a large jump in a short window). `conservative` rejects it, `adjust` caps it, `passThrough` lets it through. |
+/// | [maxImpliedSpeed] | Partly | Flags an implausible-speed spike (rejected only under `conservative`), and also applies a final per-step speed clamp under *every* policy. |
+/// | [rollingWindow] | Yes | Feeds the kinematic / outlier cap used by `adjust` and `conservative`; `passThrough` ignores it. |
+/// | [odometerPolicy], [odometerAccuracyThreshold], [odometerUseKalmanFilter] | — | Govern the separate **odometer** filter, not the tracking `policy`. |
+///
+/// Each policy differs only in how it treats anomalous or over-distance steps:
+///
+/// - **`passThrough`** — accept the sample as-is; no capping, no anomaly rejection.
+/// - **`adjust`** — cap the step (to [GeoConfig.distanceFilter] or the
+///   kinematic limit); never rejects.
+/// - **`conservative`** — reject implausible-speed or outlier steps; otherwise cap.
+///
+/// ## ⚠️ Warning
+///
+/// `passThrough` does **not** disable [trackingAccuracyThreshold]. To record
+/// every sample untouched, set `policy: LocationFilterPolicy.passThrough` **and**
+/// `trackingAccuracyThreshold: 0` — otherwise low-accuracy fixes are still rejected
+/// (and delivered to [BackgroundGeolocation.onLocationFilter]).
+///
+/// ## Examples
+///
+/// ```dart
+/// BackgroundGeolocation.ready(Config(
+///   geolocation: GeoConfig(
+///     filter: LocationFilter(
+///       policy: LocationFilterPolicy.passThrough,
+///       useKalman: false
+///     )
+///   )
+/// ));
+/// ```
 class LocationFilter {
-  /// {@macro location_filter.policy}
+  /// Selects the filtering policy applied to incoming raw GPS samples before they
+  /// are accepted, averaged, or rejected. Defaults to
+  /// `LocationFilterPolicy.conservative`.
+  ///
+  /// The filtering policy determines how aggressively the SDK removes noisy,
+  /// inaccurate, or redundant location updates. It is the first stage in the
+  /// data-quality pipeline — before burst averaging or other
+  /// denoising steps are applied.
+  ///
+  /// | Policy | Description | Use case |
+  /// |--------|-------------|----------|
+  /// | [LocationFilterPolicy.passThrough] | **No filtering.** Every received sample is recorded, even if noisy or identical to the previous one. | Debugging, diagnostics, scenarios requiring raw data. |
+  /// | [LocationFilterPolicy.adjust] | **Balanced filtering.** Smooths and caps only clearly invalid samples. | Most use cases — walking, cycling, automotive tracking. |
+  /// | [LocationFilterPolicy.conservative] | **Strict filtering.** Strongly smooths data and rejects high-variance samples, prioritizing stability over responsiveness. *(Default)* | Analytics, long-term background logging, noise-sensitive applications. |
+  ///
+  /// Choosing the correct policy depends on your app's tolerance for jitter versus
+  /// responsiveness:
+  /// - Fitness or vehicle-tracking apps often prefer `adjust` for lower latency.
+  /// - Survey or analytics apps may prefer `conservative` for maximum stability,
+  ///   or `passThrough` to capture unmodified raw samples.
+  ///
+  /// ## Note
+  /// This policy affects only the SDK's internal filtering pipeline. It does
+  /// **not** modify the raw values returned to [BackgroundGeolocation.onLocation].
+  /// For more granular tuning, see [LocationFilter.trackingAccuracyThreshold],
+  /// [LocationFilter.maxImpliedSpeed], and other [LocationFilter] fields.
+  ///
+  /// **See also**
+  /// - [GeoConfig.filter]
+  /// - [LocationFilter]
+  /// - [KalmanProfile]
+  ///
+  /// ## Example 1
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.ready(Config(
+  ///   geolocation: GeoConfig(
+  ///     filter: LocationFilter(
+  ///       policy: LocationFilterPolicy.adjust
+  ///     )
+  ///   )
+  /// ));
+  /// ```
+  ///
+  /// ## Example 2
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.ready(Config(
+  ///   geolocation: GeoConfig(
+  ///     filter: LocationFilter(
+  ///       policy: LocationFilterPolicy.passThrough
+  ///     )
+  ///   )
+  /// ));
+  /// ```
+  ///
+  /// ## Example 3
+  ///
+  /// ```dart
+  /// BackgroundGeolocation.ready(Config(
+  ///   geolocation: GeoConfig(
+  ///     filter: LocationFilter(
+  ///       policy: LocationFilterPolicy.conservative
+  ///     )
+  ///   )
+  /// ));
+  /// ```
   final LocationFilterPolicy? policy;
 
-  /// Enables the Kalman filter to smooth incoming location speed and position.
-  /// When `true`, a Kalman filter is applied to remove noise and stabilize
-  /// velocity and distance calculations. Defaults to `true` when not specified.
+  /// Has no effect on delivered locations. Defaults to `true`.
+  ///
+  /// The SDK records and delivers every accepted location with its original
+  /// coordinates. This flag switches a smoothing stage on the tracking path whose
+  /// output changes neither the locations the SDK records nor the filter's
+  /// decisions; it is kept so existing configurations stay valid. The odometer's
+  /// own filter is switched by `odometerUseKalmanFilter`.
   final bool? useKalman;
 
-  /// Enables verbose Kalman debug output in logs.
+  /// Logs the odometer filter's values for each location. Defaults to `false`.
   ///
-  /// When `true`, additional diagnostic data about the Kalman filter’s
-  /// internal state (e.g., variance, innovation) will be logged for each sample.
+  /// When enabled, each location the odometer sees adds one line to the SDK log at
+  /// the [LogLevel.debug] level: the filter's status, the distance added, the profile and
+  /// gain in force, the speed that set the gain, the prediction and update terms,
+  /// the distance to the anchor and the hold radius, and the filtered position's
+  /// own accuracy. Keep it off in production: it is one line per location.
   final bool? kalmanDebug;
 
-  /// {@macro location_filter.kalman_profile}
+  /// Selects how strongly the odometer smooths the path while the device moves
+  /// slowly. Defaults to `KalmanProfile.defaultProfile`.
+  ///
+  /// The odometer integrates a filtered position rather than the raw fixes. The
+  /// profile sets how closely that position follows each fix: `aggressive` follows
+  /// the fixes most, `conservative` smooths most and cuts the most corners,
+  /// `defaultProfile` sits between.
+  ///
+  /// - At riding and driving speed the three profiles agree. They differ at walking
+  ///   pace, between about 1 and 3 m/s, mostly with `distanceFilter: 0`, where every
+  ///   fix reaches the odometer. Below about 1 m/s the SDK's stationary detection
+  ///   decides and the three read the same.
+  /// - `conservative` can read 20 to 50 % short on short back-and-forth paths such
+  ///   as store aisles and corridors.
+  /// - How much a profile smooths depends on the accuracy each device reports, so
+  ///   the same profile smooths two devices differently.
+  /// - When parked, the profiles do not differ in the expected order:
+  ///   `conservative` can add the most distance at a stop.
+  /// - When the device reports no speed, the three read the same, and
+  ///   back-and-forth movement within a few tens of meters (about 45 m at a
+  ///   reported accuracy of 10 m) is not counted.
+  /// - Under the default `distanceFilter` the difference between profiles is a
+  ///   fraction of a percent.
+  ///
+  /// The profile applies only to the odometer. It changes neither which locations
+  /// are recorded nor their coordinates.
   final KalmanProfile? kalmanProfile;
 
   /// Number of samples in the rolling window used for burst averaging.
@@ -412,17 +761,17 @@ class LocationFilter {
   /// appear in logs.
   final bool? filterDebug;
 
-  /// Applies a Kalman filter **only to odometer calculations**, independent of [useKalman].
+  /// Switches the odometer's position filter. Defaults to `true`.
   ///
-  /// When `true`, the odometer’s distance accumulation logic smooths incoming
-  /// samples to reduce jitter and eliminate noise, without affecting recorded
-  /// track points. This is useful when you want smoother odometer readings
-  /// but wish to preserve the raw location stream for analysis or mapping.
+  /// `true`: the odometer integrates filtered positions. Every fix the tracking
+  /// filter accepts goes through a position filter whose gain follows the fix's own
+  /// speed, selected by `kalmanProfile`, and the odometer adds the distance between
+  /// the positions it last added to. `false`: the odometer integrates the fixes
+  /// themselves, with the same accuracy gate, gaps and stops.
   ///
-  /// If both [useKalman] and [odometerUseKalmanFilter] are `true`, each
-  /// subsystem (tracking and odometer) maintains its own Kalman instance.
-  ///
-  /// Defaults to `true` when not specified.
+  /// Neither setting changes the recorded locations, and neither reproduces the
+  /// odometer of earlier versions. [LocationFilter.useKalman] is independent
+  /// of this flag and has no effect on delivered locations.
   final bool? odometerUseKalmanFilter;
 
   /// Maximum horizontal accuracy (in meters) allowed to affect the odometer.
