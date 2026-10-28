@@ -25,6 +25,8 @@ apply plugin: 'com.android.library'
 def DEFAULT_COMPILE_SDK_VERSION                 = 35
 def DEFAULT_PLAY_SERVICES_LOCATION_VERSION      = "21.3.0"
 def DEFAULT_TSLOCATIONMANAGER_VERSION           = "4.7.+"
+// (WO-190) The bridge calls BackgroundGeolocation.getInstanceAsync, first in 4.7.8: an older pin is raised to it.
+def MIN_TSLOCATIONMANAGER_VERSION               = "4.7.8"
 
 def DEFAULT_HMS_LOCATION_VERSION                = "6.12.0.300"
 def DEFAULT_APP_COMPAT_VERSION                  = "1.6.1"
@@ -102,7 +104,7 @@ repositories {
 
 dependencies {
     def playServicesLocationVersion = safeExtGet('playServicesLocationVersion', DEFAULT_PLAY_SERVICES_LOCATION_VERSION)
-    def tslocationmanagerVersion = ensureTSLocationManagerVersion(safeExtGet('tslocationmanagerVersion', DEFAULT_TSLOCATIONMANAGER_VERSION), DEFAULT_TSLOCATIONMANAGER_VERSION)
+    def tslocationmanagerVersion = ensureTSLocationManagerVersion(safeExtGet('tslocationmanagerVersion', DEFAULT_TSLOCATIONMANAGER_VERSION), MIN_TSLOCATIONMANAGER_VERSION)
 
     implementation "com.google.android.gms:play-services-location:$playServicesLocationVersion"
 
