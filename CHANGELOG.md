@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## Unreleased
+
+* [Fixed][Android] An ANR at launch ("Input dispatching timed out") on a device where the SDK takes a long time to
+  load its stored configuration. The plugin builds the SDK on a background thread when the app starts, and the app's
+  first calls (`ready()`, and the `on*` event subscriptions) arrived on the main thread meanwhile and waited there for
+  the configuration to load, for as long as that took. They now wait without blocking the main thread, and still run
+  in the order they were made. Requires tslocationmanager with `BackgroundGeolocation.getInstanceAsync`.
+
 ## 5.9.1 &mdash; 2026-10-26
 
 * [Changed] `removeGeofences([])` now removes no geofence. An empty list used to remove every

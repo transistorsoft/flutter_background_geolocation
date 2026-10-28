@@ -23,7 +23,16 @@ class StreamHandler implements EventChannel.StreamHandler{
         //TSLog.logger.debug(path);
 
         mChannel = new EventChannel(messenger, path);
-        mChannel.setStreamHandler(this);
+        // (WO-190) Each subclass's onListen asks BackgroundGeolocation.getInstance on the main thread: listen and cancel
+        // wait for the SDK to be built as method calls do (BackgroundGeolocationModule.onMethodCall), in one order.
+        mChannel.setStreamHandler(new EventChannel.StreamHandler() {
+            @Override public void onListen(final Object args, final EventChannel.EventSink eventSink) {
+                BackgroundGeolocation.getInstanceAsync(mContext, adapter -> StreamHandler.this.onListen(args, eventSink));
+            }
+            @Override public void onCancel(final Object args) {
+                BackgroundGeolocation.getInstanceAsync(mContext, adapter -> StreamHandler.this.onCancel(args));
+            }
+        });
         return this;
     }
 
