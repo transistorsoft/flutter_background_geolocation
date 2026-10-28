@@ -250,8 +250,10 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         }
         if (streamHandlers == null) return;
 
-        for (EventChannel.StreamHandler handler : streamHandlers) {
-            handler.onCancel(null);
+        for (final EventChannel.StreamHandler handler : streamHandlers) {
+            // (WO-190) Through the same queue as the stream's own listen and cancel (StreamHandler.register), so it
+            // cannot overtake a listen still waiting for the SDK to be built.
+            BackgroundGeolocation.getInstanceAsync(mContext, adapter -> handler.onCancel(null));
         }
     }
 
@@ -261,15 +263,18 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
         if (activity == null) {
             return;
         }
-        final BackgroundGeolocation bgGeo = BackgroundGeolocation.getInstance(mContext);
-        bgGeo.setActivity(activity);
-        // Handle play-services connect errors.
-        bgGeo.onPlayServicesConnectError((new TSPlayServicesConnectErrorCallback() {
-            @Override
-            public void onPlayServicesConnectError(int errorCode) {
-                handlePlayServicesConnectError(errorCode);
-            }
-        }));
+        // (WO-190) onActivityStarted, on main, at launch: the SDK's pool may still be building the SDK (setActivity),
+        // and getInstance() would wait here for the class lock.  Through the same queue as Dart's calls.
+        BackgroundGeolocation.getInstanceAsync(mContext, bgGeo -> {
+            bgGeo.setActivity(activity);
+            // Handle play-services connect errors.
+            bgGeo.onPlayServicesConnectError((new TSPlayServicesConnectErrorCallback() {
+                @Override
+                public void onPlayServicesConnectError(int errorCode) {
+                    handlePlayServicesConnectError(errorCode);
+                }
+            }));
+        });
     }
 
     // Shows Google Play Services error dialog prompting user to install / update play-services.
@@ -283,9 +288,19 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
     // (WO-078) Every rejection fills `message`: a failure string with no separate code goes in both code and message,
     // result.error(text, text, null).  Never change a code to do it: Dart and customers match on it ("404", "403").
     // Only the numeric location-error codes (LocationError) and requestPermission's status keep a null message.
-    @SuppressWarnings("unchecked")
+    /**
+     * (WO-190) A call waits for the SDK to be built without blocking the main thread it arrives on, and calls keep their
+     * order.  Dart's first calls come while the SDK's pool may still be building it (setActivity), and ready() asks for
+     * TSConfig first: it used to wait here, on main, for the whole of TSConfig's constructor (an ANR where that takes
+     * seconds: react-native-background-geolocation #2677's class).  Built, a call runs at once, as before.
+     */
     @Override
-    public void onMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
+    public void onMethodCall(@NonNull final MethodCall call, @NonNull final MethodChannel.Result result) {
+        BackgroundGeolocation.getInstanceAsync(mContext, adapter -> handleMethodCall(call, result));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void handleMethodCall(@NonNull MethodCall call, @NonNull MethodChannel.Result result) {
         if (call.method.equalsIgnoreCase(ACTION_READY)) {
             Map<String, Object> params = (Map<String, Object>) call.arguments;
             ready(params, result);
