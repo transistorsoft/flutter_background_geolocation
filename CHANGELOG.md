@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Unreleased
+
+* [Changed][iOS] The podspec's iOS minimum is 15.0 (was 11.0). Xcode 27 refuses any deployment target below
+  15.0 as an error; Flutter's pod helper already makes a lower pod inherit the Runner's target, so an app that
+  builds today builds as before.
+
 ## 5.9.2 &mdash; 2026-10-29
 
 * [Fixed][Android] An ANR at launch ("Input dispatching timed out") on a device where the SDK takes a long time to

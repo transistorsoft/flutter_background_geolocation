@@ -24,6 +24,6 @@ Pod::Spec.new do |s|
   s.libraries           = 'sqlite3', 'z', 'stdc++'
   s.static_framework = true
   s.resource_bundles = {'TSLocationManagerPrivacy' => ['flutter_background_geolocation/Sources/flutter_background_geolocation/PrivacyInfo.xcprivacy']}
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '15.0'
 end
 
