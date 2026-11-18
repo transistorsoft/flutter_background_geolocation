@@ -18,7 +18,8 @@ Pod::Spec.new do |s|
   s.source_files = 'flutter_background_geolocation/Sources/flutter_background_geolocation/**/*.{h,m}'
   s.public_header_files = 'flutter_background_geolocation/Sources/flutter_background_geolocation/include/**/*.h'
   s.dependency 'Flutter'
-  tslm_version = ENV['TSLOCATIONMANAGER_VERSION'] || '~> 4.8.0'
+  # (WO-194) 4.9.0 is the first TSLocationManager that accepts TSBackgroundFetch 4.2 (4.2.1 or any later 4.x), at iOS 15.
+  tslm_version = ENV['TSLOCATIONMANAGER_VERSION'] || '~> 4.9.0'
   s.dependency 'TSLocationManager', tslm_version
 
   s.libraries           = 'sqlite3', 'z', 'stdc++'
