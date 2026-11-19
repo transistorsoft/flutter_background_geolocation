@@ -22,7 +22,7 @@ import 'dart:convert';
 import 'package:collection/collection.dart' show IterableExtension;
 
 import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart' show WidgetsFlutterBinding;
 
 part 'models/config/doc_templates.dart';
 part 'models/config/activity_config.dart';
