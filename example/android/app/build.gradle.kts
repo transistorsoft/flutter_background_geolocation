@@ -67,7 +67,7 @@ android {
             } else {
                 signingConfigs.getByName("debug")
             }
-            isShrinkResources = false   // <-- REQUIRED !!!
+            isShrinkResources = true
         }
     }
 }

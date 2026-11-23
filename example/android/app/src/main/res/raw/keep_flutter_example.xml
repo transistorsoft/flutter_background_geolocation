@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Resource-shrinking keep rules for this app (WO-200).
+  The SDK's debug sounds: this app runs with logger.debug: true, and a shrunk release build drops them otherwise.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@raw/tslocationmanager_*" />
