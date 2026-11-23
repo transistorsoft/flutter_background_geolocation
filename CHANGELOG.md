@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Unreleased
+
+* [Changed][Android] The Android setup no longer asks for `shrinkResources false`. Flutter release builds shrink resources by default, and the plugin now supports it; an app that set `shrinkResources false` for an older version can remove it. Resources you name only in your config (`app.notification.smallIcon`, `largeIcon`, `layout`) need a keep file in your app, and a release build that shrinks resources may leave out the SDK's debug sounds; `tools:keep="@raw/tslocationmanager_*"` keeps them. See help/INSTALL-ANDROID.md (WO-200)
+* [Changed][Android] The plugin's ProGuard rules no longer keep the SDK's `R` classes. Keeping them kept every SDK resource, so a release build that shrinks resources could not leave out the debug sounds (WO-200)
+
 ## 5.10.0 &mdash; 2026-11-18
 
 * [Changed][iOS] Requires TSLocationManager 4.9.0. TSLocationManager 4.9.0 requires TSBackgroundFetch 4.2.1 or any later 4.x, and iOS 15: your app's iOS deployment target must be 15.0 or later. CocoaPods: `~> 4.9.0` (was `~> 4.8.0`). Swift Package Manager: `.upToNextMinor(from: "4.9.0")` (was 4.8.0), transistor-background-fetch `from: "4.2.1"` (was 4.0.5), and the package's iOS minimum is 15 (was 13), which Xcode 26 needs to build against TSLocationManager 4.9.0. The plugin can now be used together with background_fetch 2.0.0 and later, which requires TSBackgroundFetch 4.2. After upgrading with CocoaPods, run `pod update TSLocationManager TSBackgroundFetch` in `ios/` (`pod install` alone keeps the versions in `Podfile.lock`). Use one package manager for both plugins (WO-194)
