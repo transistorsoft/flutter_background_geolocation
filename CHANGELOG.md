@@ -4,6 +4,12 @@
 
 * [Changed][Android] The Android setup no longer asks for `shrinkResources false`. Flutter release builds shrink resources by default, and the plugin now supports it; an app that set `shrinkResources false` for an older version can remove it. Resources you name only in your config (`app.notification.smallIcon`, `largeIcon`, `layout`) need a keep file in your app, and a release build that shrinks resources may leave out the SDK's debug sounds; `tools:keep="@raw/tslocationmanager_*"` keeps them. See help/INSTALL-ANDROID.md (WO-200)
 * [Changed][Android] The plugin's ProGuard rules no longer keep the SDK's `R` classes. Keeping them kept every SDK resource, so a release build that shrinks resources could not leave out the debug sounds (WO-200)
+* [Fixed][Android] A release build could lose the configuration passed to `ready()` on the app's first launch after
+  install, and run that session on the defaults: no `http.url`, so nothing uploaded, `stopOnTerminate: true`, and
+  headless tasks and logging off. The plugin's own start-up set-up ran on a background thread at the same moment and
+  could save the configuration from before `ready()` over it. The set-up now runs in the SDK's queue, ahead of the
+  app's first calls. Requires tslocationmanager 4.7.9 or later: an older `ext.tslocationmanagerVersion` in your
+  app's root `build.gradle` is raised to 4.7.9, with a warning in the build (WO-208)
 
 ## 5.10.0 &mdash; 2026-11-18
 

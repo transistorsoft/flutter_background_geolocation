@@ -145,28 +145,22 @@ public class BackgroundGeolocationModule  implements MethodChannel.MethodCallHan
 
             registerHandlersForAllMessengers();
 
-            BackgroundGeolocation.getThreadPool().execute(new Runnable() {
-                @Override public void run() {
-                    // flutter#1715: never hand the Activity to the SDK from this thread.  We are still inside
-                    // FlutterActivity.onCreate, before its setContentView(): getInstance(activity) and
-                    // setActivity(activity) reach Window.getDecorView(), whose lazy installDecor() races the main
-                    // thread's and can leave the window on an empty DecorView (black screen) or crash setContentView().
-                    final BackgroundGeolocation adapter = BackgroundGeolocation.getInstance(mContext.getApplicationContext());
-                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                        @Override public void run() {
-                            // Detached, or replaced by another Activity, before the main thread got here.
-                            if (mActivity != activity) return;
-                            adapter.setActivity(activity);
-                        }
-                    });
-                    adapter.removeListeners();
-                    TSConfig config = TSConfig.getInstance(mContext.getApplicationContext());
-                    config.setUseCLLocationAccuracy(true);
-                    Editor ed = config.edit();
-                    //ed.geo().setUseCLLocationAccuracy(true);
-                    ed.app().setHeadlessJobService(JOB_SERVICE_CLASS);
-                    ed.commit();
-                }
+            // (WO-208) The set-up commits config, so it runs in the SDK's own queue (setUpAsync, WO-209): Dart's calls,
+            // the streams' listens and cancels, and onActivityStarted's SDK work all go through getInstanceAsync, and
+            // so come after it.  On the SDK's pool it was unordered: a release build's first ready() could commit
+            // while it did, and the set-up's older copy of the config put the config from before ready() back.
+            BackgroundGeolocation.setUpAsync(mContext, adapter -> {
+                // flutter#1715: never hand the Activity to the SDK from this thread.  We are still inside
+                // FlutterActivity.onCreate, before its setContentView(): getInstance(activity) and
+                // setActivity(activity) reach Window.getDecorView(), whose lazy installDecor() races the main
+                // thread's and can leave the window on an empty DecorView (black screen) or crash setContentView().
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    // Detached, or replaced by another Activity, before the main thread got here.
+                    if (mActivity != activity) return;
+                    adapter.setActivity(activity);
+                });
+                adapter.removeListeners();
+                TSConfig.getInstance(mContext.getApplicationContext()).setUpForBridge(JOB_SERVICE_CLASS);
             });
         } else if (mActivity != null) {
             Application app = mActivity.getApplication();
