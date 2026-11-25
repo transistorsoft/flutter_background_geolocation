@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 5.10.1 &mdash; 2026-11-25
 
 * [Changed][Android] The Android setup no longer asks for `shrinkResources false`. Flutter release builds shrink resources by default, and the plugin now supports it; an app that set `shrinkResources false` for an older version can remove it. Resources you name only in your config (`app.notification.smallIcon`, `largeIcon`, `layout`) need a keep file in your app, and a release build that shrinks resources may leave out the SDK's debug sounds. See help/INSTALL-ANDROID.md (WO-200)
 * [Changed][Android] The plugin's ProGuard rules no longer keep the SDK's `R` classes. Keeping them kept every SDK resource, so a release build that shrinks resources could not leave out the debug sounds (WO-200)
