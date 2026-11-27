@@ -96,12 +96,12 @@ class Config {
   static const int LOG_LEVEL_DEBUG = 4;
   static const int LOG_LEVEL_VERBOSE = 5;
 
-  static const int DESIRED_ACCURACY_NAVIGATION = -2;
-  static const int DESIRED_ACCURACY_HIGH = -1;
-  static const int DESIRED_ACCURACY_MEDIUM = 10;
-  static const int DESIRED_ACCURACY_LOW = 100;
-  static const int DESIRED_ACCURACY_VERY_LOW = 1000;
-  static const int DESIRED_ACCURACY_LOWEST = 3000;
+  static const double DESIRED_ACCURACY_NAVIGATION = -2;
+  static const double DESIRED_ACCURACY_HIGH = -1;
+  static const double DESIRED_ACCURACY_MEDIUM = 10;
+  static const double DESIRED_ACCURACY_LOW = 100;
+  static const double DESIRED_ACCURACY_VERY_LOW = 1000;
+  static const double DESIRED_ACCURACY_LOWEST = 3000;
 
   static const int AUTHORIZATION_STATUS_NOT_DETERMINED = 0;
   static const int AUTHORIZATION_STATUS_RESTRICTED = 1;
